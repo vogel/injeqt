@@ -28,6 +28,7 @@ include_directories(${Qt5Core_INCLUDE_DIRS})
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
 set(INJEQT_SRCS
+	src/class-mapping.cpp
 	src/setter-injector.cpp
 )
 
