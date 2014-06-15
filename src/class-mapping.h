@@ -18,37 +18,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "setter-injector.h"
+#pragma once
 
-#include <QtCore/QMetaMethod>
-#include <QtCore/QObject>
-#include <utility>
+#include <map>
+
+class QByteArray;
+class QObject;
 
 namespace injeqt { namespace v1 {
 
-setter_injector::setter_injector(class_mapping mapping) :
-		_mapping{std::move(mapping)}
+class class_mapping
 {
-}
 
-void setter_injector::inject(QObject *object)
-{
-	auto metaObject = object->metaObject();
-	auto methodCount = metaObject->methodCount();
-	for (decltype(methodCount) i = 0; i < methodCount; i++)
-	{
-		auto method = metaObject->method(i);
-		auto tag = std::string{method.tag()};
-		if (tag != "injeqt_setter")
-			continue;
-		if (method.parameterCount() != 0)
-			continue;
-		auto parameterType = method.parameterTypes().at(0);
-		auto mapped = _mapping.mapped(parameterType);
-		if (!mapped)
-			continue;
-		method.invoke(object, Q_ARG(QObject *, mapped));
-	}
-}
+public:
+	explicit class_mapping(std::map<QByteArray, QObject *> mapping);
+
+	QObject * mapped(const QByteArray &name) const;
+
+private:
+	std::map<QByteArray, QObject *> _mapping;
+
+};
 
 }}

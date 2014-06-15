@@ -23,6 +23,10 @@ cmake_minimum_required(VERSION 2.8)
 
 find_package(Qt5Core 5.2 REQUIRED)
 
+include_directories(${Qt5Core_INCLUDE_DIRS})
+
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
 set(INJEQT_SRCS
 	src/setter-injector.cpp
 )
