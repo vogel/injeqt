@@ -20,6 +20,8 @@
 
 #include "class-mapping.h"
 
+#include <QtCore/QByteArray>
+
 namespace injeqt { namespace v1 {
 
 class_mapping::class_mapping(std::map<QByteArray, QObject *> mapping) :
