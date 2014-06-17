@@ -45,11 +45,30 @@ add_library(
 	${INJEQT_SRCS}
 )
 
+if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+	set(CMAKE_INSTALL_LIBDIR lib)
+endif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+
 install(TARGETS
 	injeqt
-	LIBRARY DESTINATION lib
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(DIRECTORY
 	include/ DESTINATION include/injeqt
+)
+
+set(prefix ${CMAKE_INSTALL_PREFIX})
+set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+set(includedir ${CMAKE_INSTALL_PREFIX}/include)
+set(LIBS "-lQt5Core")
+configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/libinjeqt.pc.in
+	${CMAKE_CURRENT_BINARY_DIR}/libinjeqt.pc
+	@ONLY
+)
+install(FILES
+	${CMAKE_CURRENT_BINARY_DIR}/libinjeqt.pc
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
