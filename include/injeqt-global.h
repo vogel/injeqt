@@ -22,7 +22,7 @@
 
 #include <QtCore/QtGlobal>
 
-#ifdef BUILD_INJEQT
+#ifdef injeqt_EXPORTS
 #define INJEQT_API Q_DECL_EXPORT
 #else
 #define INJEQT_API Q_DECL_IMPORT
