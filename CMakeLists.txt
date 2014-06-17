@@ -64,11 +64,11 @@ set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
 set(includedir ${CMAKE_INSTALL_PREFIX}/include)
 set(LIBS "-lQt5Core")
 configure_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/libinjeqt.pc.in
-	${CMAKE_CURRENT_BINARY_DIR}/libinjeqt.pc
+	${CMAKE_CURRENT_SOURCE_DIR}/injeqt.pc.in
+	${CMAKE_CURRENT_BINARY_DIR}/injeqt.pc
 	@ONLY
 )
 install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/libinjeqt.pc
+	${CMAKE_CURRENT_BINARY_DIR}/injeqt.pc
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
