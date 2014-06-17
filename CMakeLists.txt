@@ -45,3 +45,7 @@ install(TARGETS
 	injeqt
 	LIBRARY DESTINATION lib
 )
+
+install(DIRECTORY
+	include/ DESTINATION include/injeqt
+)
