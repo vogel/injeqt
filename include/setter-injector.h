@@ -21,6 +21,7 @@
 #pragma once
 
 #include "class-mapping.h"
+#include "injeqt-global.h"
 
 class QObject;
 
@@ -30,7 +31,7 @@ class QObject;
 
 namespace injeqt { namespace v1 {
 
-class setter_injector final
+class INJEQT_API setter_injector final
 {
 
 public:

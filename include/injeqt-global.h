@@ -20,26 +20,10 @@
 
 #pragma once
 
-#include "injeqt-global.h"
+#include <QtCore/QtGlobal>
 
-#include <map>
-
-class QByteArray;
-class QObject;
-
-namespace injeqt { namespace v1 {
-
-class INJEQT_API class_mapping
-{
-
-public:
-	explicit class_mapping(std::map<QByteArray, QObject *> mapping);
-
-	QObject * mapped(const QByteArray &name) const;
-
-private:
-	std::map<QByteArray, QObject *> _mapping;
-
-};
-
-}}
+#ifdef BUILD_INJEQT
+#define INJEQT_API Q_DECL_EXPORT
+#else
+#define INJEQT_API Q_DECL_IMPORT
+#endif

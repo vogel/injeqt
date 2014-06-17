@@ -28,7 +28,11 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(WARNINGS "-Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
+set(VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
+
+add_definitions(-DBUILD_INJEQT)
 
 set(INJEQT_SRCS
 	src/class-mapping.cpp
