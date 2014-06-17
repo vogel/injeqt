@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: injeqt
 Description: Dependency injection library for Qt5
 Version: @INJEQT_VERSION@
-Libs: -L${libdir} -libinjeqt@INJEQT_MAJOR@@INJEQT_MINOR@
+Libs: -L${libdir} -linjeqt@INJEQT_MAJOR@@INJEQT_MINOR@
 Libs.private: @LIBS@
 Cflags: -I${includedir}
