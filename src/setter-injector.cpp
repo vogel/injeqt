@@ -41,10 +41,12 @@ void setter_injector::inject(QObject *object)
 		auto tag = std::string{method.tag()};
 		if (tag != "injeqt_setter")
 			continue;
-		if (method.parameterCount() != 0)
+		if (method.parameterCount() != 1)
 			continue;
 		auto parameterType = method.parameterTypes().at(0);
-		auto mapped = _mapping.mapped(parameterType);
+		if (!parameterType.endsWith('*'))
+			continue;
+		auto mapped = _mapping.mapped(parameterType.left(parameterType.length() - 1));
 		if (!mapped)
 			continue;
 		method.invoke(object, Q_ARG(QObject *, mapped));
