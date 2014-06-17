@@ -37,3 +37,8 @@ add_library(
 	SHARED
 	${INJEQT_SRCS}
 )
+
+install(TARGETS
+	injeqt
+	LIBRARY DESTINATION lib
+)
