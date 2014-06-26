@@ -18,16 +18,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "dependency-extractor.h"
 
-#include <QtCore/QtGlobal>
+#include <QtCore/QMetaMethod>
+#include <QtCore/QMetaType>
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+namespace injeqt { namespace details {
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+std::vector<const QMetaObject *> dependency_extractor::extract_dependencies(const QMetaObject &metaObject) const
+{
+	auto result = std::vector<const QMetaObject *>{};
+	auto methodCount = metaObject.methodCount();
+	for (decltype(methodCount) i = 0; i < methodCount; i++)
+	{
+		auto method = metaObject.method(i);
+		auto tag = std::string{method.tag()};
+		if (tag != "injeqt_setter")
+			continue;
+		if (method.parameterCount() != 1)
+			continue; // todo: exception
+		auto parameterType = method.parameterType(0);
+		auto metaObject = QMetaType::metaObjectForType(parameterType);
+		if (!metaObject)
+			continue; // todo: exception
+		result.push_back(metaObject);
+	}
+
+	return result;
+}
+
+}}

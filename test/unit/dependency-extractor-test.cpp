@@ -18,16 +18,44 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "dependency-extractor.h"
+#include "dependency-extractor.cpp"
 
-#include <QtCore/QtGlobal>
+#include <QtTest/QtTest>
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+class C1 : public QObject
+{
+	Q_OBJECT
+};
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+class C2 : public QObject
+{
+	Q_OBJECT
+};
+
+class C3 : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void set_c1(C1 *c1) {}
+	injeqt_setter void set_c2(C2 *c2) {}
+
+};
+
+class test_dependency_extractor : public QObject
+{
+	Q_OBJECT
+
+private slots:
+	void shouldFindAllValidDependencies();
+};
+
+void test_dependency_extractor::shouldFindAllValidDependencies()
+{
+	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(C1::staticMetaObject);
+}
+
+QTEST_APPLESS_MAIN(test_dependency_extractor);
+
+#include "dependency-extractor-test.moc"

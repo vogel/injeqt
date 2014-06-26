@@ -25,10 +25,6 @@
 
 class QObject;
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
-
 namespace injeqt { namespace v1 {
 
 class INJEQT_API setter_injector final

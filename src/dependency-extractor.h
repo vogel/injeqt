@@ -20,14 +20,18 @@
 
 #pragma once
 
-#include <QtCore/QtGlobal>
+#include "injeqt-global.h"
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+#include <QtCore/QMetaObject>
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+namespace injeqt { namespace details {
+
+class dependency_extractor final
+{
+
+public:
+	std::vector<const QMetaObject *> extract_dependencies(const QMetaObject &metaObject) const;
+
+};
+
+}}

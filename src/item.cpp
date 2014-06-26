@@ -18,16 +18,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "item.h"
 
-#include <QtCore/QtGlobal>
+namespace injeqt { namespace details {
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+item::item(QMetaObject *type, std::vector<const QMetaObject *> dependencies) :
+	_type{type},
+	_dependencies{std::move(dependencies)}
+{
+}
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+QMetaObject * item::type() const
+{
+	return _type;
+}
+
+std::vector<const QMetaObject *> item::dependencies() const
+{
+	return _dependencies;
+}
+
+}}

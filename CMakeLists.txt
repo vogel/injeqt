@@ -22,6 +22,8 @@ project(injeqt)
 cmake_minimum_required(VERSION 2.8)
 
 find_package(Qt5Core 5.2 REQUIRED)
+set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(
 	${Qt5Core_INCLUDE_DIRS}
@@ -34,8 +36,14 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 
 set(INJEQT_SRCS
 	src/class-mapping.cpp
+	src/dependency-extractor.cpp
+	src/item.cpp
+	src/item-factory.cpp
+	src/module.cpp
 	src/setter-injector.cpp
 )
+
+add_subdirectory(test)
 
 add_library(
 	injeqt

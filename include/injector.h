@@ -20,14 +20,34 @@
 
 #pragma once
 
-#include <QtCore/QtGlobal>
+#include "injeqt-global.h"
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+#include <QtCore/QMetaObject>
+#include <map>
+#include <vector>
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+namespace injeqt { namespace v1 {
+
+class module;
+
+class INJEQT_API injector final
+{
+
+public:
+	explicit injector(std::vector<module *> modules);
+
+	template<typename T>
+	QObject * instance()
+	{
+		return instance(T::staticMetaObject());
+	}
+
+	QObject * instance(const QMetaObject &itemType);
+
+private:
+	std::vector<module *> _modules;
+	std::map<QMetaObject *, QObject *> _instances;
+
+};
+
+}}

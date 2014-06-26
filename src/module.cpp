@@ -18,16 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "module.h"
 
-#include <QtCore/QtGlobal>
+namespace injeqt { namespace v1 {
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+void module::add_item(QMetaObject *itemType)
+{
+}
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+}}

@@ -18,16 +18,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "item-factory.h"
 
-#include <QtCore/QtGlobal>
+#include "dependency-extractor.h"
+#include "item.h"
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+namespace injeqt { namespace details {
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+item item_factory::create_item(QMetaObject *metaObject) const
+{
+	return {metaObject, dependency_extractor{}.extract_dependencies(*metaObject)};
+}
+
+}}

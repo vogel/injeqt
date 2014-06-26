@@ -20,14 +20,25 @@
 
 #pragma once
 
-#include <QtCore/QtGlobal>
+#include "injeqt-global.h"
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+#include <QtCore/QMetaObject>
 
-#ifndef Q_MOC_RUN
-#  define injeqt_setter
-#endif
+namespace injeqt { namespace details {
+
+class item final
+{
+
+public:
+	item(QMetaObject *type, std::vector<const QMetaObject *> dependencies);
+
+	QMetaObject * type() const;
+	std::vector<const QMetaObject *> dependencies() const;
+
+private:
+	QMetaObject *_type;
+	std::vector<const QMetaObject *> _dependencies;
+
+};
+
+}}
