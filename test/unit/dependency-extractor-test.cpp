@@ -24,28 +24,41 @@
 #include <QtCore/QMetaType>
 #include <QtTest/QtTest>
 
-class C1 : public QObject
+class InjectableType1 : public QObject
 {
 	Q_OBJECT
 };
-Q_DECLARE_METATYPE(C1 *);
+Q_DECLARE_METATYPE(InjectableType1 *);
 
-class C2 : public QObject
+class InjectableType2 : public QObject
 {
 	Q_OBJECT
 };
-Q_DECLARE_METATYPE(C2 *)
+Q_DECLARE_METATYPE(InjectableType2 *)
 
-class C3 : public QObject
+class NonInjectableType1 : public QObject
+{
+	Q_OBJECT
+};
+
+class NonInjectableType2
+{
+};
+
+class ValidInjectedType : public QObject
 {
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void set_c1(C1 *c1) {}
-	injeqt_setter void set_c2(C2 *c2) {}
+	injeqt_setter void injeqtSetter1(InjectableType1 *) {}
+	injeqt_setter void injeqtSetter2(InjectableType2 *) {}
+	void noninjeqtSetter1(InjectableType1 *) {}
+	void noninjeqtSetter2(InjectableType2 *) {}
+	void noninjeqtSetter3(NonInjectableType1 *) {}
+	void noninjeqtSetter4(NonInjectableType2 *) {}
+	void noninjeqtSetter5(int) {}
 
 };
-Q_DECLARE_METATYPE(C3 *)
 
 class test_dependency_extractor : public QObject
 {
@@ -57,10 +70,10 @@ private slots:
 
 void test_dependency_extractor::shouldFindAllValidDependencies()
 {
-	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(C3::staticMetaObject);
+	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(ValidInjectedType::staticMetaObject);
 	QCOMPARE(dependencies.size(), 2UL);
-	QVERIFY(dependencies.find(&C1::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&C2::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&InjectableType1::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&InjectableType2::staticMetaObject) != std::end(dependencies));
 }
 
 QTEST_APPLESS_MAIN(test_dependency_extractor);
