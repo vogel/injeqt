@@ -43,6 +43,7 @@ set(INJEQT_SRCS
 	src/setter-injector.cpp
 )
 
+enable_testing()
 add_subdirectory(test)
 
 add_library(
