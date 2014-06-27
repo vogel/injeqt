@@ -36,11 +36,11 @@ std::set<const QMetaObject *> dependency_extractor::extract_dependencies(const Q
 		if (tag != "injeqt_setter")
 			continue;
 		if (method.parameterCount() != 1)
-			continue; // todo: exception
+			throw invalid_dependency{};
 		auto parameterType = method.parameterType(0);
 		auto metaObject = QMetaType::metaObjectForType(parameterType);
 		if (!metaObject)
-			continue; // todo: exception
+			throw invalid_dependency{};
 		result.insert(metaObject);
 	}
 

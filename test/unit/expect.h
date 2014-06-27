@@ -20,25 +20,23 @@
 
 #pragma once
 
-#include "injeqt-global.h"
+#include <functional>
+#include <QtTest/QTest>
 
-#include <QtCore/QMetaObject>
-#include <exception>
-#include <set>
-
-namespace injeqt { namespace details {
-
-class invalid_dependency final : public std::exception
+template<typename E>
+void expect(std::function<void()> call)
 {
-	virtual const char * what() const noexcept override { return "Invalid injeqt dependency"; }
-};
-
-class dependency_extractor final
-{
-
-public:
-	std::set<const QMetaObject *> extract_dependencies(const QMetaObject &metaObject) const;
-
-};
-
-}}
+	try
+	{
+		call();
+		QFAIL("Exception not thrown");
+	}
+	catch (E &e)
+	{
+		// OK
+	}
+	catch (...)
+	{
+		QFAIL("Unexpected exception thrown");
+	}
+}

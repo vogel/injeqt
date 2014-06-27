@@ -20,87 +20,106 @@
 
 #include "dependency-extractor.h"
 #include "dependency-extractor.cpp"
+#include "expect.h"
 
-#include <QtCore/QMetaType>
 #include <QtTest/QtTest>
 
-class InjectableType1 : public QObject
-{
-	Q_OBJECT
-};
-Q_DECLARE_METATYPE(InjectableType1 *);
-
-class InjectableType2 : public QObject
-{
-	Q_OBJECT
-};
-Q_DECLARE_METATYPE(InjectableType2 *)
-
-class InjectableType3 : public QObject
-{
-	Q_OBJECT
-};
-Q_DECLARE_METATYPE(InjectableType3 *)
-
-class NonInjectableType1 : public QObject
+class injectable_type1 : public QObject
 {
 	Q_OBJECT
 };
 
-class NonInjectableType2
+class injectable_type2 : public QObject
 {
+	Q_OBJECT
 };
 
-class ValidInjectedType : public QObject
+class injectable_type3 : public QObject
+{
+	Q_OBJECT
+};
+
+class valid_injected_type : public QObject
 {
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter1(InjectableType1 *) {}
-	injeqt_setter void injeqtSetter2(InjectableType2 *) {}
-	void noninjeqtSetter1(InjectableType1 *) {}
-	void noninjeqtSetter2(InjectableType2 *) {}
-	void noninjeqtSetter3(NonInjectableType1 *) {}
-	void noninjeqtSetter4(NonInjectableType2 *) {}
+	injeqt_setter void injeqtSetter1(injectable_type1 *) {}
+	injeqt_setter void injeqtSetter2(injectable_type2 *) {}
+	void noninjeqtSetter1(injectable_type1 *) {}
+	void noninjeqtSetter2(injectable_type2 *) {}
 	void noninjeqtSetter5(int) {}
 
 };
 
-class InheritingValidInjectedType : public ValidInjectedType
+class inheriting_valid_injected_type : public valid_injected_type
 {
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter3(InjectableType3 *) {}
+	injeqt_setter void injeqtSetter3(injectable_type3 *) {}
 
 };
 
+class too_many_parameters_invalid_injected_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void injeqtSetter1(injectable_type1 *, injectable_type2 *) {}
+
+};
+
+class non_registered_invalid_injected_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void injeqtSetter1(int) {}
+
+};
 
 class test_dependency_extractor : public QObject
 {
 	Q_OBJECT
 
 private slots:
-	void shouldFindAllValidDependencies();
-	void shouldFindAllValidDependenciesInHierarchy();
+	void should_find_all_valid_dependencies();
+	void should_find_all_valid_dependencies_in_hierarchy();
+	void should_fail_when_too_many_parameters();
+	void should_fail_when_type_not_registered();
 
 };
 
-void test_dependency_extractor::shouldFindAllValidDependencies()
+void test_dependency_extractor::should_find_all_valid_dependencies()
 {
-	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(ValidInjectedType::staticMetaObject);
+	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 2UL);
-	QVERIFY(dependencies.find(&InjectableType1::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&InjectableType2::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&injectable_type1::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&injectable_type2::staticMetaObject) != std::end(dependencies));
 }
 
-void test_dependency_extractor::shouldFindAllValidDependenciesInHierarchy()
+void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(InheritingValidInjectedType::staticMetaObject);
+	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 3UL);
-	QVERIFY(dependencies.find(&InjectableType1::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&InjectableType2::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&InjectableType3::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&injectable_type1::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&injectable_type2::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&injectable_type3::staticMetaObject) != std::end(dependencies));
+}
+
+void test_dependency_extractor::should_fail_when_too_many_parameters()
+{
+	expect<injeqt::details::invalid_dependency>([]{
+		auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
+	});
+}
+
+void test_dependency_extractor::should_fail_when_type_not_registered()
+{
+	expect<injeqt::details::invalid_dependency>([]{
+		auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(non_registered_invalid_injected_type::staticMetaObject);
+	});
 }
 
 QTEST_APPLESS_MAIN(test_dependency_extractor);
