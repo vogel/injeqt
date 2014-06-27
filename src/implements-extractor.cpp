@@ -18,22 +18,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "item-factory.h"
-
-#include "dependency-extractor.h"
 #include "implements-extractor.h"
-#include "item.h"
+
+#include <QtCore/QMetaMethod>
+#include <QtCore/QMetaType>
 
 namespace injeqt { namespace details {
 
-item item_factory::create_item(QMetaObject *metaObject) const
+std::set<const QMetaObject *> implements_extractor::extract_implements(const QMetaObject &metaObject) const
 {
-	return
+	auto result = std::set<const QMetaObject *>{};
+	auto superClass = &metaObject;
+	while (superClass && superClass->superClass()) // QObject is not interesting for us
 	{
-		metaObject,
-		implements_extractor{}.extract_implements(*metaObject),
-		dependency_extractor{}.extract_dependencies(*metaObject)
-	};
+		result.insert(superClass);
+		superClass = superClass->superClass();
+	}
+
+	return result;
 }
 
 }}

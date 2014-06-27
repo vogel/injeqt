@@ -18,22 +18,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "item-factory.h"
+#pragma once
 
-#include "dependency-extractor.h"
-#include "implements-extractor.h"
-#include "item.h"
+#include "injeqt-global.h"
+
+#include <QtCore/QMetaObject>
+#include <set>
 
 namespace injeqt { namespace details {
 
-item item_factory::create_item(QMetaObject *metaObject) const
+class implements_extractor final
 {
-	return
-	{
-		metaObject,
-		implements_extractor{}.extract_implements(*metaObject),
-		dependency_extractor{}.extract_dependencies(*metaObject)
-	};
-}
+
+public:
+	std::set<const QMetaObject *> extract_implements(const QMetaObject &metaObject) const;
+
+};
 
 }}

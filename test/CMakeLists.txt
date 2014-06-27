@@ -38,3 +38,4 @@ function (injeqt_add_test name_)
 endfunction ()
 
 injeqt_add_test(dependency-extractor-test unit/dependency-extractor-test.cpp)
+injeqt_add_test(implements-extractor-test unit/implements-extractor-test.cpp)
