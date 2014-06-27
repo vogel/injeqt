@@ -23,6 +23,7 @@
 #include "injeqt-global.h"
 
 #include <QtCore/QMetaObject>
+#include <set>
 
 namespace injeqt { namespace details {
 
@@ -30,7 +31,7 @@ class dependency_extractor final
 {
 
 public:
-	std::vector<const QMetaObject *> extract_dependencies(const QMetaObject &metaObject) const;
+	std::set<const QMetaObject *> extract_dependencies(const QMetaObject &metaObject) const;
 
 };
 

@@ -21,17 +21,20 @@
 #include "dependency-extractor.h"
 #include "dependency-extractor.cpp"
 
+#include <QtCore/QMetaType>
 #include <QtTest/QtTest>
 
 class C1 : public QObject
 {
 	Q_OBJECT
 };
+Q_DECLARE_METATYPE(C1 *);
 
 class C2 : public QObject
 {
 	Q_OBJECT
 };
+Q_DECLARE_METATYPE(C2 *)
 
 class C3 : public QObject
 {
@@ -42,6 +45,7 @@ public slots:
 	injeqt_setter void set_c2(C2 *c2) {}
 
 };
+Q_DECLARE_METATYPE(C3 *)
 
 class test_dependency_extractor : public QObject
 {
@@ -53,7 +57,10 @@ private slots:
 
 void test_dependency_extractor::shouldFindAllValidDependencies()
 {
-	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(C1::staticMetaObject);
+	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(C3::staticMetaObject);
+	QCOMPARE(dependencies.size(), 2UL);
+	QVERIFY(dependencies.find(&C1::staticMetaObject) != std::end(dependencies));
+	QVERIFY(dependencies.find(&C2::staticMetaObject) != std::end(dependencies));
 }
 
 QTEST_APPLESS_MAIN(test_dependency_extractor);

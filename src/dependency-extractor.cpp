@@ -25,9 +25,9 @@
 
 namespace injeqt { namespace details {
 
-std::vector<const QMetaObject *> dependency_extractor::extract_dependencies(const QMetaObject &metaObject) const
+std::set<const QMetaObject *> dependency_extractor::extract_dependencies(const QMetaObject &metaObject) const
 {
-	auto result = std::vector<const QMetaObject *>{};
+	auto result = std::set<const QMetaObject *>{};
 	auto methodCount = metaObject.methodCount();
 	for (decltype(methodCount) i = 0; i < methodCount; i++)
 	{
@@ -41,7 +41,7 @@ std::vector<const QMetaObject *> dependency_extractor::extract_dependencies(cons
 		auto metaObject = QMetaType::metaObjectForType(parameterType);
 		if (!metaObject)
 			continue; // todo: exception
-		result.push_back(metaObject);
+		result.insert(metaObject);
 	}
 
 	return result;

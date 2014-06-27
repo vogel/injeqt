@@ -23,6 +23,7 @@
 #include "injeqt-global.h"
 
 #include <QtCore/QMetaObject>
+#include <set>
 
 namespace injeqt { namespace details {
 
@@ -30,14 +31,14 @@ class item final
 {
 
 public:
-	item(QMetaObject *type, std::vector<const QMetaObject *> dependencies);
+	item(QMetaObject *type, std::set<const QMetaObject *> dependencies);
 
 	QMetaObject * type() const;
-	std::vector<const QMetaObject *> dependencies() const;
+	std::set<const QMetaObject *> dependencies() const;
 
 private:
 	QMetaObject *_type;
-	std::vector<const QMetaObject *> _dependencies;
+	std::set<const QMetaObject *> _dependencies;
 
 };
 
