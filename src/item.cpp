@@ -22,15 +22,21 @@
 
 namespace injeqt { namespace details {
 
-item::item(QMetaObject *type, std::set<const QMetaObject *> dependencies) :
+item::item(const QMetaObject *type, std::set<const QMetaObject *> implements, std::set<const QMetaObject *> dependencies) :
 	_type{type},
+	_implements{std::move(implements)},
 	_dependencies{std::move(dependencies)}
 {
 }
 
-QMetaObject * item::type() const
+const QMetaObject * item::type() const
 {
 	return _type;
+}
+
+std::set<const QMetaObject *> item::implements() const
+{
+	return _implements;
 }
 
 std::set<const QMetaObject *> item::dependencies() const

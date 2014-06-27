@@ -27,7 +27,7 @@ namespace injeqt { namespace details {
 
 item item_factory::create_item(QMetaObject *metaObject) const
 {
-	return {metaObject, dependency_extractor{}.extract_dependencies(*metaObject)};
+	return {metaObject, {metaObject}, dependency_extractor{}.extract_dependencies(*metaObject)};
 }
 
 }}

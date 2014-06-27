@@ -31,13 +31,15 @@ class item final
 {
 
 public:
-	item(QMetaObject *type, std::set<const QMetaObject *> dependencies);
+	item(const QMetaObject *type, std::set<const QMetaObject *> implements, std::set<const QMetaObject *> dependencies);
 
-	QMetaObject * type() const;
+	const QMetaObject * type() const;
+	std::set<const QMetaObject *> implements() const;
 	std::set<const QMetaObject *> dependencies() const;
 
 private:
-	QMetaObject *_type;
+	const QMetaObject * _type;
+	std::set<const QMetaObject *> _implements;
 	std::set<const QMetaObject *> _dependencies;
 
 };
