@@ -37,8 +37,9 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 set(INJEQT_SRCS
 	src/class-mapping.cpp
 	src/dependency-extractor.cpp
-	src/item.cpp
-	src/item-factory.cpp
+	src/implements-extractor.cpp
+	src/meta-object.cpp
+	src/meta-object-factory.cpp
 	src/module.cpp
 	src/setter-injector.cpp
 )

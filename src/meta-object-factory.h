@@ -23,24 +23,16 @@
 #include "injeqt-global.h"
 
 #include <QtCore/QMetaObject>
-#include <set>
 
 namespace injeqt { namespace details {
 
-class item final
+class meta_object;
+
+class meta_object_factory final
 {
 
 public:
-	item(const QMetaObject *type, std::set<const QMetaObject *> implements, std::set<const QMetaObject *> dependencies);
-
-	const QMetaObject * type() const;
-	std::set<const QMetaObject *> implements() const;
-	std::set<const QMetaObject *> dependencies() const;
-
-private:
-	const QMetaObject * _type;
-	std::set<const QMetaObject *> _implements;
-	std::set<const QMetaObject *> _dependencies;
+	meta_object create_meta_object(QMetaObject *metaObject) const;
 
 };
 

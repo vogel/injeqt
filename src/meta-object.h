@@ -18,30 +18,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "item.h"
+#pragma once
+
+#include "injeqt-global.h"
+
+#include <QtCore/QMetaObject>
+#include <set>
 
 namespace injeqt { namespace details {
 
-item::item(const QMetaObject *type, std::set<const QMetaObject *> implements, std::set<const QMetaObject *> dependencies) :
-	_type{type},
-	_implements{std::move(implements)},
-	_dependencies{std::move(dependencies)}
+class meta_object final
 {
-}
 
-const QMetaObject * item::type() const
-{
-	return _type;
-}
+public:
+	meta_object(const QMetaObject *type, std::set<const QMetaObject *> implements, std::set<const QMetaObject *> dependencies);
 
-std::set<const QMetaObject *> item::implements() const
-{
-	return _implements;
-}
+	const QMetaObject * type() const;
+	std::set<const QMetaObject *> implements() const;
+	std::set<const QMetaObject *> dependencies() const;
 
-std::set<const QMetaObject *> item::dependencies() const
-{
-	return _dependencies;
-}
+private:
+	const QMetaObject * _type;
+	std::set<const QMetaObject *> _implements;
+	std::set<const QMetaObject *> _dependencies;
+
+};
 
 }}

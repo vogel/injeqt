@@ -18,15 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "item-factory.h"
+#include "meta-object-factory.h"
 
 #include "dependency-extractor.h"
 #include "implements-extractor.h"
-#include "item.h"
+#include "meta-object.h"
 
 namespace injeqt { namespace details {
 
-item item_factory::create_item(QMetaObject *metaObject) const
+meta_object meta_object_factory::create_meta_object(QMetaObject *metaObject) const
 {
 	return
 	{
