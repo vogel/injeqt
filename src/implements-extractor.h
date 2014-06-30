@@ -31,7 +31,10 @@ class implements_extractor final
 {
 
 public:
-	std::set<const QMetaObject *> extract_implements(const QMetaObject &metaObject) const;
+	std::set<const QMetaObject *> extract_implements(const QMetaObject &meta_object) const;
+
+private:
+	bool is_qobject(const QMetaObject *meta_object) const;
 
 };
 

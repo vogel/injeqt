@@ -25,17 +25,22 @@
 
 namespace injeqt { namespace details {
 
-std::set<const QMetaObject *> implements_extractor::extract_implements(const QMetaObject &metaObject) const
+std::set<const QMetaObject *> implements_extractor::extract_implements(const QMetaObject &meta_object) const
 {
 	auto result = std::set<const QMetaObject *>{};
-	auto superClass = &metaObject;
-	while (superClass && superClass->superClass()) // QObject is not interesting for us
+	auto current = &meta_object;
+	while (current && !is_qobject(current))
 	{
-		result.insert(superClass);
-		superClass = superClass->superClass();
+		result.insert(current);
+		current = current->superClass();
 	}
 
 	return result;
+}
+
+bool implements_extractor::is_qobject(const QMetaObject *meta_object) const
+{
+	return !meta_object->superClass();
 }
 
 }}
