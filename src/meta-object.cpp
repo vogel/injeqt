@@ -22,7 +22,7 @@
 
 namespace injeqt { namespace internal {
 
-meta_object::meta_object(const QMetaObject *type, std::set<const QMetaObject *> implements, std::set<const QMetaObject *> dependencies) :
+meta_object::meta_object(const QMetaObject *type, std::set<const QMetaObject *> implements, std::map<const QMetaObject *, dependency> dependencies) :
 	_type{type},
 	_implements{std::move(implements)},
 	_dependencies{std::move(dependencies)}
@@ -39,7 +39,7 @@ std::set<const QMetaObject *> meta_object::implements() const
 	return _implements;
 }
 
-std::set<const QMetaObject *> meta_object::dependencies() const
+std::map<const QMetaObject *, dependency> meta_object::dependencies() const
 {
 	return _dependencies;
 }

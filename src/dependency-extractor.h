@@ -24,9 +24,11 @@
 
 #include <QtCore/QMetaObject>
 #include <exception>
-#include <set>
+#include <map>
 
 namespace injeqt { namespace internal {
+
+class dependency;
 
 class invalid_dependency final : public std::exception
 {
@@ -37,7 +39,7 @@ class dependency_extractor final
 {
 
 public:
-	std::set<const QMetaObject *> extract_dependencies(const QMetaObject &metaObject) const;
+	std::map<const QMetaObject *, dependency> extract_dependencies(const QMetaObject &meta_object) const;
 
 };
 

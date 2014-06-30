@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "dependency-extractor.h"
+#include "dependency.cpp"
 #include "dependency-extractor.cpp"
 #include "expect.h"
 

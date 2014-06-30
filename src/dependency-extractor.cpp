@@ -20,14 +20,17 @@
 
 #include "dependency-extractor.h"
 
+#include "dependency.h"
+#include "dependency-type.h"
+
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
 
 namespace injeqt { namespace internal {
 
-std::set<const QMetaObject *> dependency_extractor::extract_dependencies(const QMetaObject &metaObject) const
+std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &metaObject) const
 {
-	auto result = std::set<const QMetaObject *>{};
+	auto result = std::map<const QMetaObject *, dependency>{};
 	auto methodCount = metaObject.methodCount();
 	for (decltype(methodCount) i = 0; i < methodCount; i++)
 	{
@@ -41,7 +44,8 @@ std::set<const QMetaObject *> dependency_extractor::extract_dependencies(const Q
 		auto metaObject = QMetaType::metaObjectForType(parameterType);
 		if (!metaObject)
 			throw invalid_dependency{};
-		result.insert(metaObject);
+
+		result.emplace(metaObject, dependency{dependency_type::setter, *metaObject, method});
 	}
 
 	return result;
