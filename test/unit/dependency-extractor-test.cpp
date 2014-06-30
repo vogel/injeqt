@@ -20,9 +20,13 @@
 
 #include "dependency.cpp"
 #include "dependency-extractor.cpp"
+#include "dependency-type.h"
 #include "expect.h"
 
 #include <QtTest/QtTest>
+
+using namespace injeqt;
+using namespace injeqt::internal;
 
 class injectable_type1 : public QObject
 {
@@ -89,36 +93,66 @@ private slots:
 	void should_fail_when_too_many_parameters();
 	void should_fail_when_type_not_registered();
 
+private:
+	void verify_dependency(const std::map<const QMetaObject *, dependency> dependencies, const dependency &check);
+
 };
+
+void test_dependency_extractor::verify_dependency(const std::map< const QMetaObject *, dependency> dependencies, const dependency &to_verify)
+{
+	auto iterator = dependencies.find(std::addressof(to_verify.object()));
+	QVERIFY(iterator != std::end(dependencies));
+	QVERIFY(iterator->second == to_verify);
+}
 
 void test_dependency_extractor::should_find_all_valid_dependencies()
 {
-	auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(valid_injected_type::staticMetaObject);
+	auto dependencies = dependency_extractor{}.extract_dependencies(valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 2UL);
-	QVERIFY(dependencies.find(&injectable_type1::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&injectable_type2::staticMetaObject) != std::end(dependencies));
+	verify_dependency(dependencies, {
+		dependency_type::setter,
+		injectable_type1::staticMetaObject,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter1(injectable_type1*)"))
+	});
+	verify_dependency(dependencies, {
+		dependency_type::setter,
+		injectable_type2::staticMetaObject,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter2(injectable_type2*)"))
+	});
 }
 
 void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type::staticMetaObject);
+	auto dependencies = dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 3UL);
-	QVERIFY(dependencies.find(&injectable_type1::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&injectable_type2::staticMetaObject) != std::end(dependencies));
-	QVERIFY(dependencies.find(&injectable_type3::staticMetaObject) != std::end(dependencies));
+	verify_dependency(dependencies, {
+		dependency_type::setter,
+		injectable_type1::staticMetaObject,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter1(injectable_type1*)"))
+	});
+	verify_dependency(dependencies, {
+		dependency_type::setter,
+		injectable_type2::staticMetaObject,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter2(injectable_type2*)"))
+	});
+	verify_dependency(dependencies, {
+		dependency_type::setter,
+		injectable_type3::staticMetaObject,
+		inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter3(injectable_type3*)"))
+	});
 }
 
 void test_dependency_extractor::should_fail_when_too_many_parameters()
 {
-	expect<injeqt::internal::invalid_dependency>([]{
-		auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
+	expect<invalid_dependency>([]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
 	});
 }
 
 void test_dependency_extractor::should_fail_when_type_not_registered()
 {
-	expect<injeqt::internal::invalid_dependency>([]{
-		auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(non_registered_invalid_injected_type::staticMetaObject);
+	expect<invalid_dependency>([]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(non_registered_invalid_injected_type::staticMetaObject);
 	});
 }
 
