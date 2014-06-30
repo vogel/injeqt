@@ -38,6 +38,7 @@ set(INJEQT_SRCS
 	src/class-mapping.cpp
 	src/dependency.cpp
 	src/dependency-extractor.cpp
+	src/dependency-resolver.cpp
 	src/implements-extractor.cpp
 	src/injeqt-object.cpp
 	src/meta-object.cpp
