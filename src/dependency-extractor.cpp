@@ -28,24 +28,24 @@
 
 namespace injeqt { namespace internal {
 
-std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &metaObject) const
+std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &meta_object) const
 {
 	auto result = std::map<const QMetaObject *, dependency>{};
-	auto methodCount = metaObject.methodCount();
-	for (decltype(methodCount) i = 0; i < methodCount; i++)
+	auto method_count = meta_object.methodCount();
+	for (decltype(method_count) i = 0; i < method_count; i++)
 	{
-		auto method = metaObject.method(i);
+		auto method = meta_object.method(i);
 		auto tag = std::string{method.tag()};
 		if (tag != "injeqt_setter")
 			continue;
 		if (method.parameterCount() != 1)
 			throw invalid_dependency{};
-		auto parameterType = method.parameterType(0);
-		auto metaObject = QMetaType::metaObjectForType(parameterType);
-		if (!metaObject)
+		auto parameter_type = method.parameterType(0);
+		auto parameter_meta_object = QMetaType::metaObjectForType(parameter_type);
+		if (!parameter_meta_object)
 			throw invalid_dependency{};
 
-		result.emplace(metaObject, dependency{dependency_type::setter, *metaObject, method});
+		result.emplace(parameter_meta_object, dependency{dependency_type::setter, *parameter_meta_object, method});
 	}
 
 	return result;
