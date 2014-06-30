@@ -25,7 +25,7 @@
 #include <QtCore/QMetaObject>
 #include <set>
 
-namespace injeqt { namespace details {
+namespace injeqt { namespace internal {
 
 class implements_extractor final
 {

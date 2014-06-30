@@ -49,15 +49,15 @@ dependency_extrator
 		tag ?
 		optional/not optional?
 
-injeqt::details::factory
+injeqt::internal::factory
 
-injeqt::details::existing_item_factory
+injeqt::internal::existing_item_factory
 	::create<> return item
 
-injeqt::details::type_item_factory
+injeqt::internal::type_item_factory
 	::create<> return type->create
 
-injeqt::details::factory-item_factory
+injeqt::internal::factory-item_factory
 	::create<> return factory->create // ale factory musi być zrobione i zresolvovane!
 
 QObject * injector::instance(const QMetaObject &itemType)

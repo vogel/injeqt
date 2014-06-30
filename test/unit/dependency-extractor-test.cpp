@@ -93,7 +93,7 @@ private slots:
 
 void test_dependency_extractor::should_find_all_valid_dependencies()
 {
-	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(valid_injected_type::staticMetaObject);
+	auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 2UL);
 	QVERIFY(dependencies.find(&injectable_type1::staticMetaObject) != std::end(dependencies));
 	QVERIFY(dependencies.find(&injectable_type2::staticMetaObject) != std::end(dependencies));
@@ -101,7 +101,7 @@ void test_dependency_extractor::should_find_all_valid_dependencies()
 
 void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type::staticMetaObject);
+	auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 3UL);
 	QVERIFY(dependencies.find(&injectable_type1::staticMetaObject) != std::end(dependencies));
 	QVERIFY(dependencies.find(&injectable_type2::staticMetaObject) != std::end(dependencies));
@@ -110,15 +110,15 @@ void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy(
 
 void test_dependency_extractor::should_fail_when_too_many_parameters()
 {
-	expect<injeqt::details::invalid_dependency>([]{
-		auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
+	expect<injeqt::internal::invalid_dependency>([]{
+		auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
 	});
 }
 
 void test_dependency_extractor::should_fail_when_type_not_registered()
 {
-	expect<injeqt::details::invalid_dependency>([]{
-		auto dependencies = injeqt::details::dependency_extractor{}.extract_dependencies(non_registered_invalid_injected_type::staticMetaObject);
+	expect<injeqt::internal::invalid_dependency>([]{
+		auto dependencies = injeqt::internal::dependency_extractor{}.extract_dependencies(non_registered_invalid_injected_type::staticMetaObject);
 	});
 }
 

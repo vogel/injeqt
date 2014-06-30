@@ -26,7 +26,7 @@
 #include <exception>
 #include <set>
 
-namespace injeqt { namespace details {
+namespace injeqt { namespace internal {
 
 class invalid_dependency final : public std::exception
 {

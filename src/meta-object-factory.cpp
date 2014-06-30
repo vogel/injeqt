@@ -24,7 +24,7 @@
 #include "implements-extractor.h"
 #include "meta-object.h"
 
-namespace injeqt { namespace details {
+namespace injeqt { namespace internal {
 
 meta_object meta_object_factory::create_meta_object(QMetaObject *metaObject) const
 {

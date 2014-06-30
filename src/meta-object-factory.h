@@ -24,7 +24,7 @@
 
 #include <QtCore/QMetaObject>
 
-namespace injeqt { namespace details {
+namespace injeqt { namespace internal {
 
 class meta_object;
 

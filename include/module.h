@@ -26,7 +26,7 @@
 
 namespace injeqt { namespace v1 {
 
-namespace details { class item; }
+namespace internal { class item; }
 
 class INJEQT_API module final
 {
@@ -35,7 +35,7 @@ public:
 	void add_item(QMetaObject *itemType);
 
 private:
-	std::vector<details::item> _items;
+	std::vector<internal::item> _items;
 
 };
 
