@@ -23,6 +23,8 @@
 #include "injeqt-global.h"
 #include "meta-object.h"
 
+#include <memory>
+
 class QObject;
 
 namespace injeqt { namespace v1 {
@@ -31,14 +33,14 @@ class injeqt_object final
 {
 
 public:
-	injeqt_object(meta_object meta, QObject *object);
+	injeqt_object(meta_object meta, std::unique_ptr<QObject> object);
 
 	meta_object meta() const;
 	QObject * object() const;
 
 private:
 	meta_object _meta;
-	QObject *_object;
+	std::unique_ptr<QObject> _object;
 
 };
 

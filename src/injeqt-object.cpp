@@ -22,9 +22,9 @@
 
 namespace injeqt { namespace v1 {
 
-injeqt_object::injeqt_object(meta_object meta, QObject *object) :
+injeqt_object::injeqt_object(meta_object meta, std::unique_ptr<QObject> object) :
 	_meta{std::move(meta)},
-	_object{object}
+	_object{std::move(object)}
 {
 }
 
@@ -35,7 +35,7 @@ meta_object injeqt_object::meta() const
 
 QObject * injeqt_object::object() const
 {
-	return _object;
+	return _object.get();
 }
 
 }}

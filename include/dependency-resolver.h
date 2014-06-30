@@ -26,27 +26,27 @@
 #include <vector>
 
 class QMetaObject;
-class QObject;
 
 namespace injeqt { namespace v1 {
 
 class dependency;
+class injeqt_object;
 
 class dependency_resolver final
 {
 
 public:
 	const std::map<const QMetaObject *, dependency> resolve_dependencies(
-		QObject &object,
+		injeqt_object &object,
 		const std::map<const QMetaObject *, dependency> &to_resolve,
-		const std::vector<QObject *> &dependencies) const;
+		const std::vector<injeqt_object> &dependencies) const;
 
 private:
 	bool resolve_dependency(
-		QObject &object,
+		injeqt_object &object,
 		const QMetaObject *type,
 		const dependency &to_resolve,
-		const std::vector<QObject *> &dependencies) const;
+		const std::vector<injeqt_object> &dependencies) const;
 
 };
 

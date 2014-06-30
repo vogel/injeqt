@@ -22,14 +22,14 @@
 
 #include "dependency.h"
 #include "dependency-type.h"
-#include "implements-extractor.h"
+#include "injeqt-object.h"
 
 namespace injeqt { namespace v1 {
 
 const std::map<const QMetaObject *, dependency> dependency_resolver::resolve_dependencies(
-	QObject &object,
+	injeqt_object &object,
 	const std::map<const QMetaObject *, dependency> &to_resolve,
-	const std::vector<QObject *> &dependencies) const
+	const std::vector<injeqt_object> &dependencies) const
 {
 	auto result = std::map<const QMetaObject *, dependency>{};
 	for (auto &&to_resolve_item : to_resolve)
@@ -40,20 +40,20 @@ const std::map<const QMetaObject *, dependency> dependency_resolver::resolve_dep
 }
 
 bool dependency_resolver::resolve_dependency(
-	QObject &object,
+	injeqt_object &object,
 	const QMetaObject *type,
 	const dependency &to_resolve,
-	const std::vector<QObject *> &dependencies) const
+	const std::vector<injeqt_object> &dependencies) const
 {
 	if (to_resolve.type() != dependency_type::setter)
 		return false;
 
 	for (auto &&dependency : dependencies)
 	{
-		auto implements = implements_extractor{}.extract_implements(*dependency->metaObject());
+		auto implements = dependency.meta().implements();
 		if (implements.find(type) != std::end(implements))
 		{
-			to_resolve.setter_method().invoke(&object, Q_ARG(QObject *, dependency));
+			to_resolve.setter_method().invoke(object.object(), Q_ARG(QObject *, dependency.object()));
 			return true;
 		}
 	}
