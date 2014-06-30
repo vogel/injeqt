@@ -20,12 +20,14 @@
 
 #include "dependency.h"
 
+#include <QtCore/QMetaMethod>
+
 namespace injeqt { namespace internal {
 
-dependency::dependency(dependency_type type, const QMetaObject &object, const QMetaMethod &setter_method) :
+dependency::dependency(dependency_type type, const QMetaObject &object, QMetaMethod setter_method) :
 	_type{type},
 	_object(object),
-	_setter_method(setter_method)
+	_setter_method{std::move(setter_method)}
 {
 }
 
@@ -39,9 +41,38 @@ const QMetaObject & dependency::object() const
 	return _object;
 }
 
-const QMetaMethod & dependency::setter_method() const
+QMetaMethod dependency::setter_method() const
 {
 	return _setter_method;
+}
+
+bool operator == (const dependency &first, const dependency &second)
+{
+	printf("\n==1\n");
+	if (std::addressof(first) == std::addressof(second))
+		return true;
+
+	printf("\n==2\n");
+	if (first.type() != second.type())
+		return false;
+
+	printf("\n==3\n");
+	if (std::addressof(first.object()) != std::addressof(second.object()))
+		return false;
+
+	printf("\n==4\n");
+	printf("first: %s\n", first.setter_method().methodSignature().data());
+	printf("second: %s\n", second.setter_method().methodSignature().data());
+	if (first.setter_method() != second.setter_method())
+		return false;
+
+	printf("\n==5\n");
+	return true;
+}
+
+bool operator != (const dependency &first, const dependency &second)
+{
+	return !(first == second);
 }
 
 }}

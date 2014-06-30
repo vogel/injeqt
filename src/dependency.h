@@ -22,7 +22,8 @@
 
 #include "injeqt-global.h"
 
-class QMetaMethod;
+#include <QtCore/QMetaMethod>
+
 class QMetaObject;
 
 namespace injeqt { namespace internal {
@@ -33,17 +34,20 @@ class dependency final
 {
 
 public:
-	dependency(dependency_type type, const QMetaObject &object, const QMetaMethod &setter_method);
+	dependency(dependency_type type, const QMetaObject &object, QMetaMethod setter_method);
 
 	dependency_type type() const;
 	const QMetaObject & object() const;
-	const QMetaMethod & setter_method() const;
+	QMetaMethod setter_method() const;
 
 private:
 	dependency_type _type;
 	const QMetaObject &_object;
-	const QMetaMethod &_setter_method;
+	QMetaMethod _setter_method;
 
 };
+
+bool operator == (const dependency &first, const dependency &second);
+bool operator != (const dependency &first, const dependency &second);
 
 }}
