@@ -23,6 +23,8 @@
 
 #include <QtTest/QtTest>
 
+using namespace injeqt::internal;
+
 class direct_successor : public QObject
 {
 	Q_OBJECT
@@ -52,20 +54,20 @@ private slots:
 
 void test_implements_extractor::should_find_nothing_in_qobject()
 {
-	auto implements = injeqt::internal::implements_extractor{}.extract_implements(QObject::staticMetaObject);
+	auto implements = implements_extractor{}.extract_implements(QObject::staticMetaObject);
 	QCOMPARE(implements.size(), 0UL);
 }
 
 void test_implements_extractor::should_find_one_in_direct_successor()
 {
-	auto implements = injeqt::internal::implements_extractor{}.extract_implements(direct_successor::staticMetaObject);
+	auto implements = implements_extractor{}.extract_implements(direct_successor::staticMetaObject);
 	QCOMPARE(implements.size(), 1UL);
 	QVERIFY(implements.find(&direct_successor::staticMetaObject) != std::end(implements));
 }
 
 void test_implements_extractor::should_find_two_in_indirect_successor_1()
 {
-	auto implements = injeqt::internal::implements_extractor{}.extract_implements(indirect_successor_1::staticMetaObject);
+	auto implements = implements_extractor{}.extract_implements(indirect_successor_1::staticMetaObject);
 	QCOMPARE(implements.size(), 2UL);
 	QVERIFY(implements.find(&direct_successor::staticMetaObject) != std::end(implements));
 	QVERIFY(implements.find(&indirect_successor_1::staticMetaObject) != std::end(implements));
@@ -73,7 +75,7 @@ void test_implements_extractor::should_find_two_in_indirect_successor_1()
 
 void test_implements_extractor::should_find_three_in_indirect_successor_2()
 {
-	auto implements = injeqt::internal::implements_extractor{}.extract_implements(indirect_successor_2::staticMetaObject);
+	auto implements = implements_extractor{}.extract_implements(indirect_successor_2::staticMetaObject);
 	QCOMPARE(implements.size(), 3UL);
 	QVERIFY(implements.find(&direct_successor::staticMetaObject) != std::end(implements));
 	QVERIFY(implements.find(&indirect_successor_1::staticMetaObject) != std::end(implements));
