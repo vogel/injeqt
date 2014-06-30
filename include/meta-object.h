@@ -23,7 +23,6 @@
 #include "dependency.h"
 #include "injeqt-global.h"
 
-#include <map>
 #include <set>
 
 class QMetaObject;
@@ -34,16 +33,14 @@ class meta_object final
 {
 
 public:
-	meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements, std::map<const QMetaObject *, dependency> dependencies);
+	meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements);
 
 	const QMetaObject & type() const;
 	std::set<const QMetaObject *> implements() const;
-	std::map<const QMetaObject *, dependency> dependencies() const;
 
 private:
 	const QMetaObject & _type;
 	std::set<const QMetaObject *> _implements;
-	std::map<const QMetaObject *, dependency> _dependencies;
 
 };
 

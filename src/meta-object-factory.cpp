@@ -20,7 +20,6 @@
 
 #include "meta-object-factory.h"
 
-#include "dependency-extractor.h"
 #include "implements-extractor.h"
 #include "meta-object.h"
 
@@ -31,8 +30,7 @@ meta_object meta_object_factory::create_meta_object(const QMetaObject &meta_obje
 	return
 	{
 		meta_object,
-		implements_extractor{}.extract_implements(meta_object),
-		dependency_extractor{}.extract_dependencies(meta_object)
+		implements_extractor{}.extract_implements(meta_object)
 	};
 }
 
