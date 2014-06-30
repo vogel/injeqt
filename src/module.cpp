@@ -20,10 +20,23 @@
 
 #include "module.h"
 
+#include "meta-object.h"
+#include "meta-object-factory.h"
+
+#include <QtCore/QMetaObject>
+
+using namespace injeqt::internal;
+
 namespace injeqt { namespace v1 {
 
-void module::add_item(QMetaObject *itemType)
+void module::add_class(const QMetaObject &meta_object)
 {
+	_meta_objects.push_back(meta_object_factory{}.create_meta_object(meta_object));
+}
+
+const std::vector<meta_object> & module::meta_objects() const
+{
+	return _meta_objects;
 }
 
 }}

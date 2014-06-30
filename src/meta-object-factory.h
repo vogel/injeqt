@@ -32,7 +32,7 @@ class meta_object_factory final
 {
 
 public:
-	meta_object create_meta_object(QMetaObject *metaObject) const;
+	meta_object create_meta_object(const QMetaObject &metaObject) const;
 
 };
 

@@ -24,18 +24,26 @@
 
 #include <QtCore/QMetaObject>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal { class meta_object; } }
 
-namespace internal { class item; }
+namespace injeqt { namespace v1 {
 
 class INJEQT_API module final
 {
 
 public:
-	void add_item(QMetaObject *itemType);
+	template<typename T>
+	void add_class()
+	{
+		add_class(T::staticMetaObject);
+	}
+
+	void add_class(const QMetaObject &meta_object);
+
+	const std::vector<::injeqt::internal::meta_object> & meta_objects() const; // should not be in public api, fix that!
 
 private:
-	std::vector<internal::item> _items;
+	std::vector<::injeqt::internal::meta_object> _meta_objects;
 
 };
 

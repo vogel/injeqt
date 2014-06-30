@@ -26,13 +26,13 @@
 
 namespace injeqt { namespace internal {
 
-meta_object meta_object_factory::create_meta_object(QMetaObject *meta_object) const
+meta_object meta_object_factory::create_meta_object(const QMetaObject &meta_object) const
 {
 	return
 	{
 		meta_object,
-		implements_extractor{}.extract_implements(*meta_object),
-		dependency_extractor{}.extract_dependencies(*meta_object)
+		implements_extractor{}.extract_implements(meta_object),
+		dependency_extractor{}.extract_dependencies(meta_object)
 	};
 }
 
