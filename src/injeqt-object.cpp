@@ -20,7 +20,7 @@
 
 #include "injeqt-object.h"
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
 injeqt_object::injeqt_object(meta_object meta, QObject *object) :
 	_meta{std::move(meta)},

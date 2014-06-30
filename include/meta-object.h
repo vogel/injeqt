@@ -20,19 +20,30 @@
 
 #pragma once
 
+#include "dependency.h"
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaObject>
+#include <map>
+#include <set>
 
-namespace injeqt { namespace internal {
+class QMetaObject;
 
-class meta_object;
+namespace injeqt { namespace v1 {
 
-class meta_object_factory final
+class meta_object final
 {
 
 public:
-	meta_object create_meta_object(const QMetaObject &metaObject) const;
+	meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements, std::map<const QMetaObject *, dependency> dependencies);
+
+	const QMetaObject & type() const;
+	std::set<const QMetaObject *> implements() const;
+	std::map<const QMetaObject *, dependency> dependencies() const;
+
+private:
+	const QMetaObject & _type;
+	std::set<const QMetaObject *> _implements;
+	std::map<const QMetaObject *, dependency> _dependencies;
 
 };
 

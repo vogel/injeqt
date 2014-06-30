@@ -21,24 +21,18 @@
 #pragma once
 
 #include "injeqt-global.h"
-#include "meta-object.h"
 
-class QObject;
+#include <QtCore/QMetaObject>
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
-class injeqt_object final
+class meta_object;
+
+class meta_object_factory final
 {
 
 public:
-	injeqt_object(meta_object meta, QObject *object);
-
-	meta_object meta() const;
-	QObject * object() const;
-
-private:
-	meta_object _meta;
-	QObject *_object;
+	meta_object create_meta_object(const QMetaObject &metaObject) const;
 
 };
 

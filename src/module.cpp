@@ -25,8 +25,6 @@
 
 #include <QtCore/QMetaObject>
 
-using namespace injeqt::internal;
-
 namespace injeqt { namespace v1 {
 
 void module::add_class(const QMetaObject &meta_object)

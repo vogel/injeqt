@@ -22,7 +22,7 @@
 
 #include <QtCore/QMetaMethod>
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
 dependency::dependency(dependency_type type, const QMetaObject &object, QMetaMethod setter_method) :
 	_type{type},

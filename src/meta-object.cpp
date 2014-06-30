@@ -20,7 +20,7 @@
 
 #include "meta-object.h"
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
 meta_object::meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements, std::map<const QMetaObject *, dependency> dependencies) :
 	_type(type),

@@ -26,7 +26,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
 std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &meta_object) const
 {

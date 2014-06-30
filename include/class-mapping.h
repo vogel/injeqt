@@ -24,7 +24,7 @@
 
 #include <map>
 
-class QByteArray;
+class QMetaObject;
 class QObject;
 
 namespace injeqt { namespace v1 {

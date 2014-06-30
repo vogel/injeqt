@@ -23,18 +23,23 @@
 #include "injeqt-global.h"
 
 #include <QtCore/QMetaObject>
-#include <set>
+#include <exception>
+#include <map>
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
-class implements_extractor final
+class dependency;
+
+class invalid_dependency final : public std::exception
+{
+	virtual const char * what() const noexcept override { return "Invalid injeqt dependency"; }
+};
+
+class dependency_extractor final
 {
 
 public:
-	std::set<const QMetaObject *> extract_implements(const QMetaObject &meta_object) const;
-
-private:
-	bool is_qobject(const QMetaObject *meta_object) const;
+	std::map<const QMetaObject *, dependency> extract_dependencies(const QMetaObject &meta_object) const;
 
 };
 

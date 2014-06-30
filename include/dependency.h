@@ -26,7 +26,7 @@
 
 class QMetaObject;
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
 enum class dependency_type;
 

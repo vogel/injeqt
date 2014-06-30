@@ -28,38 +28,6 @@ injector::injector(std::vector<module *> modules) :
 
 }
 
-factory/creator?
-
-injeqt::item
-	QMetaObject *itemType
-	QObject *object
-	bool initialized (all subobjects set)
-
-injeqt::item_dependencies
-	QMetaObject *itemType
-	std::vector<QMetaObject *> dependents
-
-	-> use graph from kadu
-		what about bidirectional dependencies?
-		can be done, but not for factory
-
-dependency_extrator
-	QMetaObject
-		set ?
-		tag ?
-		optional/not optional?
-
-injeqt::internal::factory
-
-injeqt::internal::existing_item_factory
-	::create<> return item
-
-injeqt::internal::type_item_factory
-	::create<> return type->create
-
-injeqt::internal::factory-item_factory
-	::create<> return factory->create // ale factory musi być zrobione i zresolvovane!
-
 QObject * injector::instance(const QMetaObject &itemType)
 {
 	auto created = _instances.find(&itemType);

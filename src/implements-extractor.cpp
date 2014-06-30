@@ -23,7 +23,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
 std::set<const QMetaObject *> implements_extractor::extract_implements(const QMetaObject &meta_object) const
 {

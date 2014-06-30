@@ -21,25 +21,24 @@
 #pragma once
 
 #include "injeqt-global.h"
+#include "meta-object.h"
 
-#include <QtCore/QMetaObject>
-#include <exception>
-#include <map>
+class QObject;
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 {
 
-class dependency;
-
-class invalid_dependency final : public std::exception
-{
-	virtual const char * what() const noexcept override { return "Invalid injeqt dependency"; }
-};
-
-class dependency_extractor final
+class injeqt_object final
 {
 
 public:
-	std::map<const QMetaObject *, dependency> extract_dependencies(const QMetaObject &meta_object) const;
+	injeqt_object(meta_object meta, QObject *object);
+
+	meta_object meta() const;
+	QObject * object() const;
+
+private:
+	meta_object _meta;
+	QObject *_object;
 
 };
 

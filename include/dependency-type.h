@@ -20,31 +20,13 @@
 
 #pragma once
 
-#include "dependency.h"
 #include "injeqt-global.h"
 
-#include <map>
-#include <set>
+namespace injeqt { namespace v1 {
 
-class QMetaObject;
-
-namespace injeqt { namespace internal {
-
-class meta_object final
+enum class dependency_type
 {
-
-public:
-	meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements, std::map<const QMetaObject *, dependency> dependencies);
-
-	const QMetaObject & type() const;
-	std::set<const QMetaObject *> implements() const;
-	std::map<const QMetaObject *, dependency> dependencies() const;
-
-private:
-	const QMetaObject & _type;
-	std::set<const QMetaObject *> _implements;
-	std::map<const QMetaObject *, dependency> _dependencies;
-
+	setter
 };
 
 }}
