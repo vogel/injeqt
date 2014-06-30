@@ -48,25 +48,18 @@ QMetaMethod dependency::setter_method() const
 
 bool operator == (const dependency &first, const dependency &second)
 {
-	printf("\n==1\n");
 	if (std::addressof(first) == std::addressof(second))
 		return true;
 
-	printf("\n==2\n");
 	if (first.type() != second.type())
 		return false;
 
-	printf("\n==3\n");
 	if (std::addressof(first.object()) != std::addressof(second.object()))
 		return false;
 
-	printf("\n==4\n");
-	printf("first: %s\n", first.setter_method().methodSignature().data());
-	printf("second: %s\n", second.setter_method().methodSignature().data());
 	if (first.setter_method() != second.setter_method())
 		return false;
 
-	printf("\n==5\n");
 	return true;
 }
 
