@@ -40,6 +40,8 @@ public:
 		QObject &object,
 		const std::map<const QMetaObject *, dependency> &to_resolve,
 		const std::vector<QObject *> &dependencies) const;
+
+private:
 	bool resolve_dependency(
 		QObject &object,
 		const QMetaObject *type,
