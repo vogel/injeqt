@@ -39,11 +39,11 @@ std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependen
 		if (tag != "injeqt_setter")
 			continue;
 		if (method.parameterCount() != 1)
-			throw invalid_dependency{};
+			throw dependency_too_many_parameters_exception{std::string{meta_object.className()} + "::" + method.methodSignature().data()};
 		auto parameter_type = method.parameterType(0);
 		auto parameter_meta_object = QMetaType::metaObjectForType(parameter_type);
 		if (!parameter_meta_object)
-			throw invalid_dependency{};
+			throw dependency_not_qobject_exception{std::string{meta_object.className()} + "::" + method.methodSignature().data()};
 
 		result.emplace(parameter_meta_object, dependency{dependency_type::setter, *parameter_meta_object, method});
 	}

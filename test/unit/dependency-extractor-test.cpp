@@ -73,7 +73,7 @@ public slots:
 
 };
 
-class non_registered_invalid_injected_type : public QObject
+class non_qobject_invalid_injected_type : public QObject
 {
 	Q_OBJECT
 
@@ -90,7 +90,7 @@ private slots:
 	void should_find_all_valid_dependencies();
 	void should_find_all_valid_dependencies_in_hierarchy();
 	void should_fail_when_too_many_parameters();
-	void should_fail_when_type_not_registered();
+	void should_fail_when_type_not_qobject();
 
 private:
 	void verify_dependency(const std::map<const QMetaObject *, dependency> dependencies, const dependency &check);
@@ -143,15 +143,15 @@ void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy(
 
 void test_dependency_extractor::should_fail_when_too_many_parameters()
 {
-	expect<invalid_dependency>([]{
+	expect<dependency_too_many_parameters_exception>([]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
 	});
 }
 
-void test_dependency_extractor::should_fail_when_type_not_registered()
+void test_dependency_extractor::should_fail_when_type_not_qobject()
 {
-	expect<invalid_dependency>([]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(non_registered_invalid_injected_type::staticMetaObject);
+	expect<dependency_not_qobject_exception>([]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(non_qobject_invalid_injected_type::staticMetaObject);
 	});
 }
 

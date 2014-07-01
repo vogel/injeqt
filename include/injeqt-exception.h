@@ -20,28 +20,36 @@
 
 #pragma once
 
-#include "injeqt-exception.h"
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaObject>
 #include <exception>
-#include <map>
+#include <string>
 
 namespace injeqt { namespace v1 {
 
-class dependency;
-
-DEFINE_EXCEPTION(dependency_exception, injeqt_exception);
-DEFINE_EXCEPTION(dependency_too_many_parameters_exception, dependency_exception);
-DEFINE_EXCEPTION(dependency_not_qobject_exception, dependency_exception);
-DEFINE_EXCEPTION(dependency_duplicate_found_exception, dependency_exception);
-
-class dependency_extractor final
+class injeqt_exception : public std::exception
 {
 
 public:
-	std::map<const QMetaObject *, dependency> extract_dependencies(const QMetaObject &meta_object) const;
+	explicit injeqt_exception(std::string what = std::string{}) : _what{std::move(what)} {}
+	virtual ~injeqt_exception() {}
+
+	virtual const char * what() const noexcept override { return _what.c_str(); }
+
+private:
+	std::string _what;
 
 };
+
+#define DEFINE_EXCEPTION(name, parent) \
+class name : public parent \
+{ \
+ \
+public: \
+	explicit name(std::string what = std::string{}) : parent{std::move(what)} {} \
+	virtual ~name() {} \
+ \
+};
+
 
 }}
