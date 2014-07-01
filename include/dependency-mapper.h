@@ -22,42 +22,26 @@
 
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaMethod>
-
-class QMetaObject;
+#include <tuple>
+#include <unordered_map>
+#include <vector>
 
 namespace injeqt { namespace v1 {
 
-enum class dependency_type;
+class dependency;
+class injeqt_object;
 
-class dependency final
+class dependency_mapper final
 {
 
 public:
-	dependency(dependency_type type, const QMetaObject &object, QMetaMethod setter_method);
-
-	dependency_type type() const;
-	const QMetaObject & object() const;
-	QMetaMethod setter_method() const;
-
-private:
-	dependency_type _type;
-	const QMetaObject &_object;
-	QMetaMethod _setter_method;
+	std::tuple<std::unordered_map<dependency, const injeqt_object *>, std::vector<dependency>> map_dependencies(
+		const std::vector<dependency> &dependencies,
+		const std::vector<const injeqt_object *> &objects) const;
+	const injeqt_object * get_dependency(
+		const dependency &dependency,
+		const std::vector<const injeqt_object *> &objects) const;
 
 };
-
-bool operator == (const dependency &first, const dependency &second);
-bool operator != (const dependency &first, const dependency &second);
 
 }}
-
-namespace std {
-
-template<>
-struct hash<injeqt::v1::dependency>
-{
-	size_t operator() (const injeqt::v1::dependency& dependency) const;
-};
-
-}

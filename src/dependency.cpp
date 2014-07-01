@@ -21,6 +21,9 @@
 #include "dependency.h"
 
 #include <QtCore/QMetaMethod>
+#include <functional>
+#include <string>
+#include <type_traits>
 
 namespace injeqt { namespace v1 {
 
@@ -69,3 +72,19 @@ bool operator != (const dependency &first, const dependency &second)
 }
 
 }}
+
+namespace std {
+
+size_t hash<injeqt::v1::dependency>::operator() (const injeqt::v1::dependency &dependency) const
+{
+	using dependency_type_type = underlying_type<injeqt::v1::dependency_type>::type;
+	auto dependency_hash = hash<dependency_type_type>{};
+	auto string_hash = hash<string>{};
+	auto h = 0xcbf29ce484222325ULL;
+	h = (h ^ dependency_hash(static_cast<dependency_type_type>(dependency.type()))) * 0x100000001b3ULL;
+	h = (h ^ string_hash(string{dependency.object().className()})) * 0x100000001b3ULL;
+	h = (h ^ string_hash(string{dependency.setter_method().methodSignature().constData()})) * 0x100000001b3ULL;
+	return h;
+}
+
+}
