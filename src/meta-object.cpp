@@ -38,4 +38,9 @@ std::set<const QMetaObject *> meta_object::implements() const
 	return _implements;
 }
 
+bool meta_object::implements(const QMetaObject &type) const
+{
+	return _implements.find(std::addressof(type)) != std::end(_implements);
+}
+
 }}

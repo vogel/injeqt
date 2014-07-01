@@ -77,15 +77,15 @@ class test_dependency_resolver : public QObject
 	Q_OBJECT
 
 private slots:
-	void should_properly_resolver_one_dependency();
-	void should_properly_resolver_all_dependencies();
-	void should_properly_resolver_one_dependency_in_hierarchy();
-	void should_properly_resolver_all_dependencies_in_hierarchy();
+	void should_properly_resolve_one_dependency();
+	void should_properly_resolve_all_objects();
+	void should_properly_resolve_one_dependency_in_hierarchy();
+	void should_properly_resolve_all_objects_in_hierarchy();
 
 private:
 	template<typename T>
 	injeqt_object make_injeqt_object();
-	std::map<const QMetaObject *, dependency> create_dependency_map(bool include_inheriting) const;
+	std::vector<dependency> create_dependencies(bool include_inheriting) const;
 
 };
 
@@ -102,93 +102,88 @@ injeqt_object test_dependency_resolver::make_injeqt_object()
 	return object;
 }
 
-std::map<const QMetaObject *, dependency> test_dependency_resolver::create_dependency_map(bool include_inheriting) const
+std::vector<dependency> test_dependency_resolver::create_dependencies(bool include_inheriting) const
 {
-	auto result = std::map<const QMetaObject *, dependency>{};
-	result.emplace(std::addressof(injectable_type1::staticMetaObject), dependency{
+	auto result = std::vector<dependency>{};
+	result.emplace_back(
 		dependency_type::setter,
 		injectable_type1::staticMetaObject,
 		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter1(injectable_type1*)"))
-	});
-	result.emplace(std::addressof(injectable_type2::staticMetaObject), dependency{
+	);
+	result.emplace_back(
 		dependency_type::setter,
 		injectable_type2::staticMetaObject,
 		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter2(injectable_type2*)"))
-	});
+	);
 
 	if (include_inheriting)
-		result.emplace(std::addressof(injectable_type3::staticMetaObject), dependency{
+		result.emplace_back(
 			dependency_type::setter,
 			injectable_type3::staticMetaObject,
 			inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter3(injectable_type3*)"))
-		});
+		);
 
 	return result;
 }
 
-void test_dependency_resolver::should_properly_resolver_one_dependency()
+void test_dependency_resolver::should_properly_resolve_one_dependency()
 {
 	auto injected = make_injeqt_object<valid_injected_type>();
-	auto dependencies = std::vector<injeqt_object>{};
-	dependencies.emplace_back(make_injeqt_object<injectable_type1>());
-	auto dependency_map = create_dependency_map(false);
+	auto objects = std::vector<injeqt_object>{};
+	objects.emplace_back(make_injeqt_object<injectable_type1>());
+	auto dependencies = create_dependencies(false);
 
-	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependency_map, dependencies);
+	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependencies, objects);
 	QCOMPARE(unresolved.size(), 1UL);
-	QCOMPARE(unresolved.begin()->first, std::addressof(injectable_type2::staticMetaObject));
-	QCOMPARE(unresolved.begin()->second, dependency_map.find(std::addressof(injectable_type2::staticMetaObject))->second);
-	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i1, dependencies[0].object());
+	QCOMPARE(unresolved[0], dependencies[1]);
+	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i1, objects[0].object());
 	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i2, static_cast<QObject *>(nullptr));
 }
 
-void test_dependency_resolver::should_properly_resolver_all_dependencies()
+void test_dependency_resolver::should_properly_resolve_all_objects()
 {
 	auto injected = make_injeqt_object<valid_injected_type>();
-	auto dependencies = std::vector<injeqt_object>{};
-	dependencies.emplace_back(make_injeqt_object<injectable_type1>());
-	dependencies.emplace_back(make_injeqt_object<injectable_type2>());
-	auto dependency_map = create_dependency_map(false);
+	auto objects = std::vector<injeqt_object>{};
+	objects.emplace_back(make_injeqt_object<injectable_type1>());
+	objects.emplace_back(make_injeqt_object<injectable_type2>());
+	auto dependencies = create_dependencies(false);
 
-	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependency_map, dependencies);
+	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependencies, objects);
 	QVERIFY(unresolved.empty());
-	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i1, dependencies[0].object());
-	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i2, dependencies[1].object());
+	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i1, objects[0].object());
+	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i2, objects[1].object());
 }
 
-void test_dependency_resolver::should_properly_resolver_one_dependency_in_hierarchy()
+void test_dependency_resolver::should_properly_resolve_one_dependency_in_hierarchy()
 {
 	auto injected = make_injeqt_object<inheriting_valid_injected_type>();
-	auto dependencies = std::vector<injeqt_object>{};
-	dependencies.emplace_back(make_injeqt_object<injectable_type3>());
-	auto dependency_map = create_dependency_map(true);
+	auto objects = std::vector<injeqt_object>{};
+	objects.emplace_back(make_injeqt_object<injectable_type3>());
+	auto dependencies = create_dependencies(true);
 
-	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependency_map, dependencies);
+	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependencies, objects);
 	QCOMPARE(unresolved.size(), 2UL);
-	QVERIFY(unresolved.find(std::addressof(injectable_type1::staticMetaObject)) != std::end(unresolved));
-	QCOMPARE(unresolved.find(std::addressof(injectable_type1::staticMetaObject))->second,
-			 dependency_map.find(std::addressof(injectable_type1::staticMetaObject))->second);
-	QVERIFY(unresolved.find(std::addressof(injectable_type2::staticMetaObject)) != std::end(unresolved));
-	QCOMPARE(unresolved.find(std::addressof(injectable_type2::staticMetaObject))->second,
-			 dependency_map.find(std::addressof(injectable_type2::staticMetaObject))->second);
+	QCOMPARE(unresolved[0], dependencies[0]);
+	QCOMPARE(unresolved[1], dependencies[1]);
 	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i1, static_cast<QObject *>(nullptr));
 	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i2, static_cast<QObject *>(nullptr));
-	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i3, dependencies[0].object());
+	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i3, objects[0].object());
 }
 
-void test_dependency_resolver::should_properly_resolver_all_dependencies_in_hierarchy()
+void test_dependency_resolver::should_properly_resolve_all_objects_in_hierarchy()
 {
 	auto injected = make_injeqt_object<inheriting_valid_injected_type>();
-	auto dependencies = std::vector<injeqt_object>{};
-	dependencies.emplace_back(make_injeqt_object<injectable_type1>());
-	dependencies.emplace_back(make_injeqt_object<injectable_type2>());
-	dependencies.emplace_back(make_injeqt_object<injectable_type3>());
-	auto dependency_map = create_dependency_map(true);
+	auto objects = std::vector<injeqt_object>{};
+	objects.emplace_back(make_injeqt_object<injectable_type1>());
+	objects.emplace_back(make_injeqt_object<injectable_type2>());
+	objects.emplace_back(make_injeqt_object<injectable_type3>());
+	auto dependencies = create_dependencies(true);
 
-	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependency_map, dependencies);
+	auto unresolved = dependency_resolver{}.resolve_dependencies(injected, dependencies, objects);
 	QVERIFY(unresolved.empty());
-	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i1, dependencies[0].object());
-	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i2, dependencies[1].object());
-	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i3, dependencies[2].object());
+	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i1, objects[0].object());
+	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i2, objects[1].object());
+	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i3, objects[2].object());
 }
 
 QTEST_APPLESS_MAIN(test_dependency_resolver);

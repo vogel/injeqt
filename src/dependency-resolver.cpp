@@ -26,34 +26,32 @@
 
 namespace injeqt { namespace v1 {
 
-const std::map<const QMetaObject *, dependency> dependency_resolver::resolve_dependencies(
+const std::vector<dependency> dependency_resolver::resolve_dependencies(
 	injeqt_object &object,
-	const std::map<const QMetaObject *, dependency> &to_resolve,
-	const std::vector<injeqt_object> &dependencies) const
+	const std::vector<dependency> &dependencies,
+	const std::vector<injeqt_object> &objects) const
 {
-	auto result = std::map<const QMetaObject *, dependency>{};
-	for (auto &&to_resolve_item : to_resolve)
-		if (!resolve_dependency(object, to_resolve_item.first, to_resolve_item.second, dependencies))
-			result.insert(to_resolve_item);
+	auto result = std::vector<dependency>{};
+	for (auto &&dependency : dependencies)
+		if (!resolve_dependency(object, dependency, objects))
+			result.push_back(dependency);
 
 	return result;
 }
 
 bool dependency_resolver::resolve_dependency(
 	injeqt_object &object,
-	const QMetaObject *type,
-	const dependency &to_resolve,
-	const std::vector<injeqt_object> &dependencies) const
+	const dependency &dependency,
+	const std::vector<injeqt_object> &objects) const
 {
-	if (to_resolve.type() != dependency_type::setter)
+	if (dependency.type() != dependency_type::setter)
 		return false;
 
-	for (auto &&dependency : dependencies)
+	for (auto &&object2 : objects)
 	{
-		auto implements = dependency.meta().implements();
-		if (implements.find(type) != std::end(implements))
+		if (object2.meta().implements(dependency.object()))
 		{
-			to_resolve.setter_method().invoke(object.object(), Q_ARG(QObject *, dependency.object()));
+			dependency.setter_method().invoke(object.object(), Q_ARG(QObject *, object2.object()));
 			return true;
 		}
 	}

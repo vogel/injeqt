@@ -22,7 +22,6 @@
 
 #include "injeqt-global.h"
 
-#include <map>
 #include <vector>
 
 class QMetaObject;
@@ -36,17 +35,16 @@ class dependency_resolver final
 {
 
 public:
-	const std::map<const QMetaObject *, dependency> resolve_dependencies(
+	const std::vector<dependency> resolve_dependencies(
 		injeqt_object &object,
-		const std::map<const QMetaObject *, dependency> &to_resolve,
-		const std::vector<injeqt_object> &dependencies) const;
+		const std::vector<dependency> &dependencies,
+		const std::vector<injeqt_object> &objects) const;
 
 private:
 	bool resolve_dependency(
 		injeqt_object &object,
-		const QMetaObject *type,
-		const dependency &to_resolve,
-		const std::vector<injeqt_object> &dependencies) const;
+		const dependency &dependency,
+		const std::vector<injeqt_object> &objects) const;
 
 };
 

@@ -37,6 +37,7 @@ public:
 
 	const QMetaObject & type() const;
 	std::set<const QMetaObject *> implements() const;
+	bool implements(const QMetaObject &type) const;
 
 private:
 	const QMetaObject & _type;
