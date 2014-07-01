@@ -82,6 +82,16 @@ public slots:
 
 };
 
+class duplicate_dependency_invalid_injected_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void injeqtSetter1(injectable_type1 *) {}
+	injeqt_setter void injeqtSetter2(injectable_type1 *) {}
+
+};
+
 class test_dependency_extractor : public QObject
 {
 	Q_OBJECT
@@ -91,6 +101,7 @@ private slots:
 	void should_find_all_valid_dependencies_in_hierarchy();
 	void should_fail_when_too_many_parameters();
 	void should_fail_when_type_not_qobject();
+	void should_fail_when_duplicate_dependency();
 
 private:
 	void verify_dependency(const std::map<const QMetaObject *, dependency> dependencies, const dependency &check);
@@ -152,6 +163,13 @@ void test_dependency_extractor::should_fail_when_type_not_qobject()
 {
 	expect<dependency_not_qobject_exception>([]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(non_qobject_invalid_injected_type::staticMetaObject);
+	});
+}
+
+void test_dependency_extractor::should_fail_when_duplicate_dependency()
+{
+	expect<dependency_duplicated_exception>([]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_dependency_invalid_injected_type::staticMetaObject);
 	});
 }
 

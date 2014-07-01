@@ -34,7 +34,7 @@ class dependency;
 DEFINE_EXCEPTION(dependency_exception, injeqt_exception);
 DEFINE_EXCEPTION(dependency_too_many_parameters_exception, dependency_exception);
 DEFINE_EXCEPTION(dependency_not_qobject_exception, dependency_exception);
-DEFINE_EXCEPTION(dependency_duplicate_found_exception, dependency_exception);
+DEFINE_EXCEPTION(dependency_duplicated_exception, dependency_exception);
 
 class dependency_extractor final
 {

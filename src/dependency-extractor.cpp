@@ -28,6 +28,15 @@
 
 namespace injeqt { namespace v1 {
 
+namespace {
+
+std::string exception_message(const QMetaObject &meta_object, const QMetaMethod &method)
+{
+	return std::string{meta_object.className()} + "::" + method.methodSignature().data();
+}
+
+}
+
 std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &meta_object) const
 {
 	auto result = std::map<const QMetaObject *, dependency>{};
@@ -39,11 +48,13 @@ std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependen
 		if (tag != "injeqt_setter")
 			continue;
 		if (method.parameterCount() != 1)
-			throw dependency_too_many_parameters_exception{std::string{meta_object.className()} + "::" + method.methodSignature().data()};
+			throw dependency_too_many_parameters_exception{exception_message(meta_object, method)};
 		auto parameter_type = method.parameterType(0);
 		auto parameter_meta_object = QMetaType::metaObjectForType(parameter_type);
 		if (!parameter_meta_object)
-			throw dependency_not_qobject_exception{std::string{meta_object.className()} + "::" + method.methodSignature().data()};
+			throw dependency_not_qobject_exception{exception_message(meta_object, method)};
+		if (result.find(parameter_meta_object) != std::end(result))
+			throw dependency_duplicated_exception(exception_message(meta_object, method));
 
 		result.emplace(parameter_meta_object, dependency{dependency_type::setter, *parameter_meta_object, method});
 	}
