@@ -22,29 +22,32 @@
 
 #include "injeqt-global.h"
 
+#include <tuple>
+#include <unordered_map>
 #include <vector>
-
-class QMetaObject;
 
 namespace injeqt { namespace v1 {
 
 class dependency;
 class injeqt_object;
+class resolved_dependency;
+
+struct resolve_dependencies_result
+{
+	std::vector<dependency> unresolved;
+	std::vector<resolved_dependency> resolved;
+};
 
 class dependency_resolver final
 {
 
 public:
-	const std::vector<dependency> resolve_dependencies(
-		injeqt_object &object,
+	resolve_dependencies_result resolve_dependencies(
 		const std::vector<dependency> &dependencies,
-		const std::vector<injeqt_object> &objects) const;
-
-private:
-	bool resolve_dependency(
-		injeqt_object &object,
+		const std::vector<const injeqt_object *> &objects) const;
+	const injeqt_object * resolve_dependency(
 		const dependency &dependency,
-		const std::vector<injeqt_object> &objects) const;
+		const std::vector<const injeqt_object *> &objects) const;
 
 };
 

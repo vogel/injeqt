@@ -20,43 +20,38 @@
 
 #include "dependency-resolver.h"
 
-#include "dependency.h"
-#include "dependency-apply-method.h"
 #include "injeqt-object.h"
+#include "resolved-dependency.h"
 
 namespace injeqt { namespace v1 {
 
-const std::vector<dependency> dependency_resolver::resolve_dependencies(
-	injeqt_object &object,
+resolve_dependencies_result dependency_resolver::resolve_dependencies(
 	const std::vector<dependency> &dependencies,
-	const std::vector<injeqt_object> &objects) const
+	const std::vector<const injeqt_object *> &objects) const
 {
-	auto result = std::vector<dependency>{};
+	auto unresolved = std::vector<dependency>{};
+	auto resolved = std::vector<resolved_dependency>{};
 	for (auto &&dependency : dependencies)
-		if (!resolve_dependency(object, dependency, objects))
-			result.push_back(dependency);
-
-	return result;
+	{
+		auto mapped = resolve_dependency(dependency, objects);
+		if (mapped)
+			resolved.emplace_back(dependency, *mapped);
+		else
+			unresolved.emplace_back(dependency);
+	}
+	return {unresolved, resolved};
 }
 
-bool dependency_resolver::resolve_dependency(
-	injeqt_object &object,
-	const dependency &dependency,
-	const std::vector<injeqt_object> &objects) const
+const injeqt_object * dependency_resolver::resolve_dependency(
+	const dependency & dependency,
+	const std::vector<const injeqt_object *> &objects) const
 {
-	if (dependency.apply_method() != dependency_apply_method::setter)
-		return false;
-
-	for (auto &&object2 : objects)
-	{
-		if (object2.meta().implements(dependency.type()))
-		{
-			dependency.setter_method().invoke(object.object(), Q_ARG(QObject *, object2.object()));
-			return true;
-		}
-	}
-
-	return false;
+	auto it = std::find_if(std::begin(objects), std::end(objects),
+		[&dependency](const injeqt_object *object){ return object->meta().implements(dependency.type()); }
+	);
+	return it == std::end(objects)
+		? nullptr
+		: *it;
 }
 
 }}
