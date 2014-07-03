@@ -34,15 +34,15 @@ class dependency final
 {
 
 public:
-	dependency(dependency_apply_method apply_method, const QMetaObject &type, QMetaMethod setter_method);
+	dependency(const QMetaObject &type, dependency_apply_method apply_method, QMetaMethod setter_method);
 
-	dependency_apply_method apply_method() const;
 	const QMetaObject & type() const;
+	dependency_apply_method apply_method() const;
 	QMetaMethod setter_method() const;
 
 private:
-	dependency_apply_method _apply_method;
 	const QMetaObject &_type;
+	dependency_apply_method _apply_method;
 	QMetaMethod _setter_method;
 
 };

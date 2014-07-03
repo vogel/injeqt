@@ -56,7 +56,7 @@ std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependen
 		if (result.find(parameter_meta_object) != std::end(result))
 			throw dependency_duplicated_exception(exception_message(meta_object, method));
 
-		result.emplace(parameter_meta_object, dependency{dependency_apply_method::setter, *parameter_meta_object, method});
+		result.emplace(parameter_meta_object, dependency{*parameter_meta_object, dependency_apply_method::setter, method});
 	}
 
 	return result;
