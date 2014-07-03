@@ -92,7 +92,7 @@ public slots:
 
 };
 
-class test_dependency_extractor : public QObject
+class dependency_extractor_test : public QObject
 {
 	Q_OBJECT
 
@@ -108,14 +108,14 @@ private:
 
 };
 
-void test_dependency_extractor::verify_dependency(const std::map< const QMetaObject *, dependency> dependencies, const dependency &to_verify)
+void dependency_extractor_test::verify_dependency(const std::map< const QMetaObject *, dependency> dependencies, const dependency &to_verify)
 {
 	auto iterator = dependencies.find(std::addressof(to_verify.type()));
 	QVERIFY(iterator != std::end(dependencies));
 	QVERIFY(iterator->second == to_verify);
 }
 
-void test_dependency_extractor::should_find_all_valid_dependencies()
+void dependency_extractor_test::should_find_all_valid_dependencies()
 {
 	auto dependencies = dependency_extractor{}.extract_dependencies(valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 2UL);
@@ -131,7 +131,7 @@ void test_dependency_extractor::should_find_all_valid_dependencies()
 	});
 }
 
-void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy()
+void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy()
 {
 	auto dependencies = dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type::staticMetaObject);
 	QCOMPARE(dependencies.size(), 3UL);
@@ -152,27 +152,27 @@ void test_dependency_extractor::should_find_all_valid_dependencies_in_hierarchy(
 	});
 }
 
-void test_dependency_extractor::should_fail_when_too_many_parameters()
+void dependency_extractor_test::should_fail_when_too_many_parameters()
 {
 	expect<dependency_too_many_parameters_exception>([]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type::staticMetaObject);
 	});
 }
 
-void test_dependency_extractor::should_fail_when_type_not_qobject()
+void dependency_extractor_test::should_fail_when_type_not_qobject()
 {
 	expect<dependency_not_qobject_exception>([]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(non_qobject_invalid_injected_type::staticMetaObject);
 	});
 }
 
-void test_dependency_extractor::should_fail_when_duplicate_dependency()
+void dependency_extractor_test::should_fail_when_duplicate_dependency()
 {
 	expect<dependency_duplicated_exception>([]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_dependency_invalid_injected_type::staticMetaObject);
 	});
 }
 
-QTEST_APPLESS_MAIN(test_dependency_extractor);
+QTEST_APPLESS_MAIN(dependency_extractor_test);
 
 #include "dependency-extractor-test.moc"

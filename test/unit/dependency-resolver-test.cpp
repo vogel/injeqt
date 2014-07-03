@@ -72,7 +72,7 @@ public slots:
 
 };
 
-class test_dependency_resolver : public QObject
+class dependency_resolver_test : public QObject
 {
 	Q_OBJECT
 
@@ -90,7 +90,7 @@ private:
 };
 
 template<typename T>
-injeqt_object test_dependency_resolver::make_injeqt_object()
+injeqt_object dependency_resolver_test::make_injeqt_object()
 {
 	auto qobject = std::unique_ptr<QObject>(new T{});
 	auto object = injeqt_object
@@ -102,7 +102,7 @@ injeqt_object test_dependency_resolver::make_injeqt_object()
 	return object;
 }
 
-std::vector<dependency> test_dependency_resolver::create_dependencies(bool include_inheriting) const
+std::vector<dependency> dependency_resolver_test::create_dependencies(bool include_inheriting) const
 {
 	auto result = std::vector<dependency>{};
 	result.emplace_back(
@@ -126,7 +126,7 @@ std::vector<dependency> test_dependency_resolver::create_dependencies(bool inclu
 	return result;
 }
 
-void test_dependency_resolver::should_properly_resolve_one_dependency()
+void dependency_resolver_test::should_properly_resolve_one_dependency()
 {
 	auto injected = make_injeqt_object<valid_injected_type>();
 	auto objects = std::vector<injeqt_object>{};
@@ -140,7 +140,7 @@ void test_dependency_resolver::should_properly_resolve_one_dependency()
 	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i2, static_cast<QObject *>(nullptr));
 }
 
-void test_dependency_resolver::should_properly_resolve_all_objects()
+void dependency_resolver_test::should_properly_resolve_all_objects()
 {
 	auto injected = make_injeqt_object<valid_injected_type>();
 	auto objects = std::vector<injeqt_object>{};
@@ -154,7 +154,7 @@ void test_dependency_resolver::should_properly_resolve_all_objects()
 	QCOMPARE(static_cast<valid_injected_type *>(injected.object())->i2, objects[1].object());
 }
 
-void test_dependency_resolver::should_properly_resolve_one_dependency_in_hierarchy()
+void dependency_resolver_test::should_properly_resolve_one_dependency_in_hierarchy()
 {
 	auto injected = make_injeqt_object<inheriting_valid_injected_type>();
 	auto objects = std::vector<injeqt_object>{};
@@ -170,7 +170,7 @@ void test_dependency_resolver::should_properly_resolve_one_dependency_in_hierarc
 	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i3, objects[0].object());
 }
 
-void test_dependency_resolver::should_properly_resolve_all_objects_in_hierarchy()
+void dependency_resolver_test::should_properly_resolve_all_objects_in_hierarchy()
 {
 	auto injected = make_injeqt_object<inheriting_valid_injected_type>();
 	auto objects = std::vector<injeqt_object>{};
@@ -186,6 +186,6 @@ void test_dependency_resolver::should_properly_resolve_all_objects_in_hierarchy(
 	QCOMPARE(static_cast<inheriting_valid_injected_type *>(injected.object())->i3, objects[2].object());
 }
 
-QTEST_APPLESS_MAIN(test_dependency_resolver);
+QTEST_APPLESS_MAIN(dependency_resolver_test);
 
 #include "dependency-resolver-test.moc"
