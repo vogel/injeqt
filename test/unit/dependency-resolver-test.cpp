@@ -47,12 +47,19 @@ class injectable_type3 : public QObject
 	Q_OBJECT
 };
 
+class sublcass_injectable_type1 : public injectable_type1
+{
+	Q_OBJECT
+};
+
 class dependency_resolver_test : public QObject
 {
 	Q_OBJECT
 
 private slots:
 	void should_properly_resolve_simple_dependency();
+	void should_properly_resolve_subclass_dependency();
+	void should_not_resolve_superclass_dependency();
 
 private:
 	template<typename T>
@@ -91,6 +98,46 @@ void dependency_resolver_test::should_properly_resolve_simple_dependency()
 
 	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
 	QCOMPARE(resolved, std::addressof(object1));
+}
+
+void dependency_resolver_test::should_properly_resolve_subclass_dependency()
+{
+	auto object1 = make_injeqt_object<sublcass_injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object2),
+		std::addressof(object3),
+	};
+	auto to_resolve = dependency{
+		injectable_type1::staticMetaObject,
+		dependency_apply_method::setter,
+		QMetaMethod{}
+	};
+
+	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
+	QCOMPARE(resolved, std::addressof(object1));
+}
+
+void dependency_resolver_test::should_not_resolve_superclass_dependency()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object2),
+		std::addressof(object3),
+	};
+	auto to_resolve = dependency{
+		sublcass_injectable_type1::staticMetaObject,
+		dependency_apply_method::setter,
+		QMetaMethod{}
+	};
+
+	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
+	QCOMPARE(resolved, static_cast<injeqt_object *>(nullptr));
 }
 
 QTEST_APPLESS_MAIN(dependency_resolver_test);
