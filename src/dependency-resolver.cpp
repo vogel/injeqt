@@ -21,7 +21,7 @@
 #include "dependency-resolver.h"
 
 #include "dependency.h"
-#include "dependency-type.h"
+#include "dependency-apply-method.h"
 #include "injeqt-object.h"
 
 namespace injeqt { namespace v1 {
@@ -44,12 +44,12 @@ bool dependency_resolver::resolve_dependency(
 	const dependency &dependency,
 	const std::vector<injeqt_object> &objects) const
 {
-	if (dependency.type() != dependency_type::setter)
+	if (dependency.apply_method() != dependency_apply_method::setter)
 		return false;
 
 	for (auto &&object2 : objects)
 	{
-		if (object2.meta().implements(dependency.object()))
+		if (object2.meta().implements(dependency.type()))
 		{
 			dependency.setter_method().invoke(object.object(), Q_ARG(QObject *, object2.object()));
 			return true;

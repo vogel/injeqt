@@ -21,7 +21,7 @@
 #include "dependency-extractor.h"
 
 #include "dependency.h"
-#include "dependency-type.h"
+#include "dependency-apply-method.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
@@ -56,7 +56,7 @@ std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependen
 		if (result.find(parameter_meta_object) != std::end(result))
 			throw dependency_duplicated_exception(exception_message(meta_object, method));
 
-		result.emplace(parameter_meta_object, dependency{dependency_type::setter, *parameter_meta_object, method});
+		result.emplace(parameter_meta_object, dependency{dependency_apply_method::setter, *parameter_meta_object, method});
 	}
 
 	return result;

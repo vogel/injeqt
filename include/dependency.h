@@ -28,21 +28,21 @@ class QMetaObject;
 
 namespace injeqt { namespace v1 {
 
-enum class dependency_type;
+enum class dependency_apply_method;
 
 class dependency final
 {
 
 public:
-	dependency(dependency_type type, const QMetaObject &object, QMetaMethod setter_method);
+	dependency(dependency_apply_method apply_method, const QMetaObject &type, QMetaMethod setter_method);
 
-	dependency_type type() const;
-	const QMetaObject & object() const;
+	dependency_apply_method apply_method() const;
+	const QMetaObject & type() const;
 	QMetaMethod setter_method() const;
 
 private:
-	dependency_type _type;
-	const QMetaObject &_object;
+	dependency_apply_method _apply_method;
+	const QMetaObject &_type;
 	QMetaMethod _setter_method;
 
 };

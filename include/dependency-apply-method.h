@@ -24,7 +24,7 @@
 
 namespace injeqt { namespace v1 {
 
-enum class dependency_type
+enum class dependency_apply_method
 {
 	setter
 };

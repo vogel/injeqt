@@ -46,7 +46,7 @@ const injeqt_object * dependency_mapper::get_dependency(
 	const std::vector<const injeqt_object *> &objects) const
 {
 	auto it = std::find_if(std::begin(objects), std::end(objects),
-		[&dependency](const injeqt_object *object){ return object->meta().implements(dependency.object()); }
+		[&dependency](const injeqt_object *object){ return object->meta().implements(dependency.type()); }
 	);
 	return it == std::end(objects)
 		? nullptr

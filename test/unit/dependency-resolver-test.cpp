@@ -106,19 +106,19 @@ std::vector<dependency> test_dependency_resolver::create_dependencies(bool inclu
 {
 	auto result = std::vector<dependency>{};
 	result.emplace_back(
-		dependency_type::setter,
+		dependency_apply_method::setter,
 		injectable_type1::staticMetaObject,
 		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter1(injectable_type1*)"))
 	);
 	result.emplace_back(
-		dependency_type::setter,
+		dependency_apply_method::setter,
 		injectable_type2::staticMetaObject,
 		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter2(injectable_type2*)"))
 	);
 
 	if (include_inheriting)
 		result.emplace_back(
-			dependency_type::setter,
+			dependency_apply_method::setter,
 			injectable_type3::staticMetaObject,
 			inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter3(injectable_type3*)"))
 		);
