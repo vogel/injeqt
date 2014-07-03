@@ -22,3 +22,7 @@
 
 # Build directory
 build
+
+# KDevelop4 files
+*.kdev4
+.kdev*

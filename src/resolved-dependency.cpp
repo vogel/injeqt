@@ -22,7 +22,7 @@
 
 namespace injeqt { namespace v1 {
 
-resolved_dependency::resolved_dependency(dependency resolved, const injeqt_obejct &object) :
+resolved_dependency::resolved_dependency(dependency resolved, const injeqt_object &object) :
 	_resolved{std::move(resolved)},
 	_object(object)
 {
@@ -33,7 +33,7 @@ dependency resolved_dependency::resolved() const
 	return _resolved;
 }
 
-const injeqt_obejct & resolved_dependency::object() const
+const injeqt_object & resolved_dependency::object() const
 {
 	return _object;
 }
