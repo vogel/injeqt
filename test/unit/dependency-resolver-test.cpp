@@ -57,8 +57,8 @@ class dependency_resolver_test : public QObject
 	Q_OBJECT
 
 private slots:
-	void should_properly_resolve_simple_dependency();
-	void should_properly_resolve_subclass_dependency();
+	void should_resolve_simple_dependency();
+	void should_resolve_subclass_dependency();
 	void should_not_resolve_superclass_dependency();
 
 private:
@@ -80,7 +80,7 @@ injeqt_object dependency_resolver_test::make_injeqt_object()
 	return object;
 }
 
-void dependency_resolver_test::should_properly_resolve_simple_dependency()
+void dependency_resolver_test::should_resolve_simple_dependency()
 {
 	auto object1 = make_injeqt_object<injectable_type1>();
 	auto object2 = make_injeqt_object<injectable_type2>();
@@ -100,7 +100,7 @@ void dependency_resolver_test::should_properly_resolve_simple_dependency()
 	QCOMPARE(resolved, std::addressof(object1));
 }
 
-void dependency_resolver_test::should_properly_resolve_subclass_dependency()
+void dependency_resolver_test::should_resolve_subclass_dependency()
 {
 	auto object1 = make_injeqt_object<sublcass_injectable_type1>();
 	auto object2 = make_injeqt_object<injectable_type2>();
