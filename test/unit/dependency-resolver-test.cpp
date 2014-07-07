@@ -59,7 +59,16 @@ class dependency_resolver_test : public QObject
 private slots:
 	void should_resolve_simple_dependency();
 	void should_resolve_subclass_dependency();
+	void should_resolve_to_first_matching_dependency();
+	void should_resolve_to_first_matching_subclass_dependency();
 	void should_not_resolve_superclass_dependency();
+	void should_not_resolve_unmatching_dependency();
+	void should_resolve_no_dependencies_when_no_objects_available();
+	void should_resolve_all_dependencies();
+	void should_resolve_available_dependencies();
+	void should_resolve_available_dependencies_using_first_matching();
+	void should_resolve_available_dependencies_using_first_matching_subclass();
+	void should_resolve_available_dependencies_not_using_superclass();
 
 private:
 	template<typename T>
@@ -120,6 +129,48 @@ void dependency_resolver_test::should_resolve_subclass_dependency()
 	QCOMPARE(resolved, std::addressof(object1));
 }
 
+void dependency_resolver_test::should_resolve_to_first_matching_dependency()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object1b = make_injeqt_object<injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object2),
+		std::addressof(object1b)
+	};
+	auto to_resolve = dependency{
+		injectable_type1::staticMetaObject,
+		dependency_apply_method::setter,
+		QMetaMethod{}
+	};
+
+	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
+	QCOMPARE(resolved, std::addressof(object1));
+	QVERIFY(std::addressof(object1) != std::addressof(object1b));
+}
+
+void dependency_resolver_test::should_resolve_to_first_matching_subclass_dependency()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto subobject1 = make_injeqt_object<sublcass_injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(subobject1),
+		std::addressof(object1),
+		std::addressof(object2)
+	};
+	auto to_resolve = dependency{
+		injectable_type1::staticMetaObject,
+		dependency_apply_method::setter,
+		QMetaMethod{}
+	};
+
+	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
+	QCOMPARE(resolved, std::addressof(subobject1));
+	QVERIFY(std::addressof(object1) != std::addressof(subobject1));
+}
+
 void dependency_resolver_test::should_not_resolve_superclass_dependency()
 {
 	auto object1 = make_injeqt_object<injectable_type1>();
@@ -138,6 +189,231 @@ void dependency_resolver_test::should_not_resolve_superclass_dependency()
 
 	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
 	QCOMPARE(resolved, static_cast<injeqt_object *>(nullptr));
+}
+
+void dependency_resolver_test::should_not_resolve_unmatching_dependency()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object2),
+	};
+	auto to_resolve = dependency{
+		injectable_type3::staticMetaObject,
+		dependency_apply_method::setter,
+		QMetaMethod{}
+	};
+
+	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
+	QCOMPARE(resolved, static_cast<injeqt_object *>(nullptr));
+}
+
+void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_available()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{};
+	auto to_resolve = std::vector<dependency>{
+		{
+			injectable_type1::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type2::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type3::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		}
+	};
+
+	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
+	QVERIFY(result.resolved.empty());
+	QCOMPARE(result.unresolved, to_resolve);
+}
+
+void dependency_resolver_test::should_resolve_all_dependencies()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object2),
+		std::addressof(object3),
+	};
+	auto to_resolve = std::vector<dependency>{
+		{
+			injectable_type1::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type2::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type3::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		}
+	};
+
+	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
+	QCOMPARE(result.resolved.size(), 3ul);
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(1), object2}));
+	QCOMPARE(result.resolved.at(2), (resolved_dependency{to_resolve.at(2), object3}));
+	QVERIFY(result.unresolved.empty());
+}
+
+void dependency_resolver_test::should_resolve_available_dependencies()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object3),
+	};
+	auto to_resolve = std::vector<dependency>{
+		{
+			injectable_type1::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type2::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type3::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		}
+	};
+
+	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
+	QCOMPARE(result.resolved.size(), 2ul);
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.at(0), to_resolve.at(1));
+}
+
+void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object1b = make_injeqt_object<injectable_type1>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto object3b = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object1b),
+		std::addressof(object3),
+		std::addressof(object3b),
+	};
+	auto to_resolve = std::vector<dependency>{
+		{
+			injectable_type1::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type2::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type3::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		}
+	};
+
+	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
+	QCOMPARE(result.resolved.size(), 2ul);
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.at(0), to_resolve.at(1));
+	QVERIFY(std::addressof(object1) != std::addressof(object1b));
+	QVERIFY(std::addressof(object3) != std::addressof(object3b));
+}
+
+void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching_subclass()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto subobject1 = make_injeqt_object<sublcass_injectable_type1>();
+	auto object3 = make_injeqt_object<injectable_type3>();
+	auto object3b = make_injeqt_object<injectable_type3>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(subobject1),
+		std::addressof(object1),
+		std::addressof(object3),
+		std::addressof(object3b),
+	};
+	auto to_resolve = std::vector<dependency>{
+		{
+			injectable_type1::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type2::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type3::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		}
+	};
+
+	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
+	QCOMPARE(result.resolved.size(), 2ul);
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), subobject1}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.at(0), to_resolve.at(1));
+	QVERIFY(std::addressof(object1) != std::addressof(subobject1));
+	QVERIFY(std::addressof(object3) != std::addressof(object3b));
+}
+
+void dependency_resolver_test::should_resolve_available_dependencies_not_using_superclass()
+{
+	auto object1 = make_injeqt_object<injectable_type1>();
+	auto object2 = make_injeqt_object<injectable_type2>();
+	auto objects = std::vector<const injeqt_object *>{
+		std::addressof(object1),
+		std::addressof(object2)
+	};
+	auto to_resolve = std::vector<dependency>{
+		{
+			sublcass_injectable_type1::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		},
+		{
+			injectable_type2::staticMetaObject,
+			dependency_apply_method::setter,
+			QMetaMethod{}
+		}
+	};
+
+	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
+	QCOMPARE(result.resolved.size(), 1ul);
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(1), object2}));
+	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.at(0), to_resolve.at(0));
 }
 
 QTEST_APPLESS_MAIN(dependency_resolver_test);
