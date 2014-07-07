@@ -51,13 +51,3 @@ bool operator == (const dependency &first, const dependency &second);
 bool operator != (const dependency &first, const dependency &second);
 
 }}
-
-namespace std {
-
-template<>
-struct hash<injeqt::v1::dependency>
-{
-	size_t operator() (const injeqt::v1::dependency& dependency) const;
-};
-
-}
