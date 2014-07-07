@@ -27,6 +27,8 @@
 #include "meta-object-factory.cpp"
 #include "resolved-dependency.cpp"
 
+#include "utils.h"
+
 #include <QtCore/QMetaObject>
 #include <QtTest/QtTest>
 
@@ -70,24 +72,7 @@ private slots:
 	void should_resolve_available_dependencies_using_first_matching_subclass();
 	void should_resolve_available_dependencies_not_using_superclass();
 
-private:
-	template<typename T>
-	injeqt_object make_injeqt_object();
-
 };
-
-template<typename T>
-injeqt_object dependency_resolver_test::make_injeqt_object()
-{
-	auto qobject = std::unique_ptr<QObject>(new T{});
-	auto object = injeqt_object
-	{
-		meta_object_factory{}.create_meta_object(T::staticMetaObject),
-		std::move(qobject)
-	};
-
-	return object;
-}
 
 void dependency_resolver_test::should_resolve_simple_dependency()
 {

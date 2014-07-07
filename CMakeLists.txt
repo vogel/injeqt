@@ -45,6 +45,7 @@ set(INJEQT_SRCS
 	src/meta-object-factory.cpp
 	src/module.cpp
 	src/resolved-dependency.cpp
+	src/resolved-dependency-applicator.cpp
 	src/setter-injector.cpp
 )
 

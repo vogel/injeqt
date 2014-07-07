@@ -20,33 +20,31 @@
 
 #pragma once
 
+#include "injeqt-exception.h"
 #include "injeqt-global.h"
-#include "meta-object.h"
-
-#include <memory>
-
-class QObject;
+#include "resolved-dependency.h"
 
 namespace injeqt { namespace v1 {
 
-class injeqt_object final
+class injeqt_object;
+
+DEFINE_EXCEPTION(applicator_exception, injeqt_exception);
+DEFINE_EXCEPTION(applicator_unsupported_method_exception, applicator_exception);
+DEFINE_EXCEPTION(applicator_invalid_dependency_exception, applicator_exception);
+DEFINE_EXCEPTION(applicator_invalid_setter_exception, applicator_exception);
+DEFINE_EXCEPTION(applicator_non_matching_setter_exception, applicator_exception);
+DEFINE_EXCEPTION(applicator_failed_exception, applicator_exception);
+
+class resolved_dependency_applicator final
 {
 
 public:
-	injeqt_object(meta_object meta, std::unique_ptr<QObject> object);
+	resolved_dependency_applicator(std::vector<resolved_dependency> resolved_dependencies);
 
-	meta_object meta() const;
-	QObject * object() const;
-
-	template<typename T>
-	T * object_as() const
-	{
-		return qobject_cast<T *>(object());
-	}
+	void apply_on(injeqt_object &object);
 
 private:
-	meta_object _meta;
-	std::unique_ptr<QObject> _object;
+	std::vector<resolved_dependency> _resolved_dependencies;
 
 };
 

@@ -58,11 +58,11 @@ class valid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter1(injectable_type1 *) {}
-	injeqt_setter void injeqtSetter2(injectable_type2 *) {}
-	void noninjeqtSetter1(injectable_type1 *) {}
-	void noninjeqtSetter2(injectable_type2 *) {}
-	void noninjeqtSetter5(int) {}
+	injeqt_setter void setter_1(injectable_type1 *) {}
+	injeqt_setter void setter_2(injectable_type2 *) {}
+	void invalid_setter_1(injectable_type1 *) {}
+	void invalid_setter_2(injectable_type2 *) {}
+	void invalid_setter_3(int) {}
 
 };
 
@@ -80,7 +80,7 @@ class too_many_parameters_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter1(injectable_type1 *, injectable_type2 *) {}
+	injeqt_setter void setter_1(injectable_type1 *, injectable_type2 *) {}
 
 };
 
@@ -89,7 +89,7 @@ class non_qobject_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter1(int) {}
+	injeqt_setter void setter_1(int) {}
 
 };
 
@@ -98,8 +98,8 @@ class duplicate_dependency_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter1(injectable_type1 *) {}
-	injeqt_setter void injeqtSetter2(injectable_type1 *) {}
+	injeqt_setter void setter_1(injectable_type1 *) {}
+	injeqt_setter void setter_2(injectable_type1 *) {}
 
 };
 
@@ -108,8 +108,8 @@ class duplicate_sublass_dependency_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter1(sub_injectable_type1a *) {}
-	injeqt_setter void injeqtSetter2(sub_injectable_type1b *) {}
+	injeqt_setter void setter_1(sub_injectable_type1a *) {}
+	injeqt_setter void setter_2(sub_injectable_type1b *) {}
 
 };
 
@@ -144,12 +144,12 @@ void dependency_extractor_test::should_find_all_valid_dependencies()
 	verify_dependency(dependencies, {
 		injectable_type1::staticMetaObject,
 		dependency_apply_method::setter,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter1(injectable_type1*)"))
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
 	});
 	verify_dependency(dependencies, {
 		injectable_type2::staticMetaObject,
 		dependency_apply_method::setter,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter2(injectable_type2*)"))
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 	});
 }
 
@@ -160,12 +160,12 @@ void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy(
 	verify_dependency(dependencies, {
 		injectable_type1::staticMetaObject,
 		dependency_apply_method::setter,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter1(injectable_type1*)"))
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
 	});
 	verify_dependency(dependencies, {
 		injectable_type2::staticMetaObject,
 		dependency_apply_method::setter,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter2(injectable_type2*)"))
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 	});
 	verify_dependency(dependencies, {
 		injectable_type3::staticMetaObject,

@@ -20,34 +20,24 @@
 
 #pragma once
 
-#include "injeqt-global.h"
-#include "meta-object.h"
+#include "injeqt-object.h"
+#include "meta-object-factory.h"
 
-#include <memory>
-
-class QObject;
+#include <QtCore/QObject>
 
 namespace injeqt { namespace v1 {
 
-class injeqt_object final
+template<typename T>
+injeqt_object make_injeqt_object()
 {
-
-public:
-	injeqt_object(meta_object meta, std::unique_ptr<QObject> object);
-
-	meta_object meta() const;
-	QObject * object() const;
-
-	template<typename T>
-	T * object_as() const
+	auto qobject = std::unique_ptr<QObject>(new T{});
+	auto object = injeqt_object
 	{
-		return qobject_cast<T *>(object());
-	}
+		meta_object_factory{}.create_meta_object(T::staticMetaObject),
+		std::move(qobject)
+	};
 
-private:
-	meta_object _meta;
-	std::unique_ptr<QObject> _object;
-
-};
+	return object;
+}
 
 }}
