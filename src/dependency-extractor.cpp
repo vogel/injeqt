@@ -22,9 +22,12 @@
 
 #include "dependency.h"
 #include "dependency-apply-method.h"
+#include "implements-extractor.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
+#include <algorithm>
+#include <set>
 
 namespace injeqt { namespace v1 {
 
@@ -40,6 +43,7 @@ std::string exception_message(const QMetaObject &meta_object, const QMetaMethod 
 std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &meta_object) const
 {
 	auto result = std::map<const QMetaObject *, dependency>{};
+	auto used_dependencies = std::set<const QMetaObject *>{};
 	auto method_count = meta_object.methodCount();
 	for (decltype(method_count) i = 0; i < method_count; i++)
 	{
@@ -53,7 +57,13 @@ std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependen
 		auto parameter_meta_object = QMetaType::metaObjectForType(parameter_type);
 		if (!parameter_meta_object)
 			throw dependency_not_qobject_exception{exception_message(meta_object, method)};
-		if (result.find(parameter_meta_object) != std::end(result))
+
+		auto implements = implements_extractor{}.extract_implements(*parameter_meta_object);
+		auto used_dependencies_size = used_dependencies.size();
+		auto implements_size = implements.size();
+		used_dependencies.insert(std::begin(implements), std::end(implements));
+
+		if (used_dependencies_size + implements_size != used_dependencies.size())
 			throw dependency_duplicated_exception(exception_message(meta_object, method));
 
 		result.emplace(parameter_meta_object, dependency{*parameter_meta_object, dependency_apply_method::setter, method});

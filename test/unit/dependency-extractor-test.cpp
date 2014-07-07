@@ -22,12 +22,23 @@
 #include "dependency-apply-method.h"
 #include "dependency-extractor.cpp"
 #include "expect.h"
+#include "implements-extractor.cpp"
 
 #include <QtTest/QtTest>
 
 using namespace injeqt::v1;
 
 class injectable_type1 : public QObject
+{
+	Q_OBJECT
+};
+
+class sub_injectable_type1a : public injectable_type1
+{
+	Q_OBJECT
+};
+
+class sub_injectable_type1b : public injectable_type1
 {
 	Q_OBJECT
 };
@@ -92,6 +103,16 @@ public slots:
 
 };
 
+class duplicate_sublass_dependency_invalid_injected_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void injeqtSetter1(sub_injectable_type1a *) {}
+	injeqt_setter void injeqtSetter2(sub_injectable_type1b *) {}
+
+};
+
 class dependency_extractor_test : public QObject
 {
 	Q_OBJECT
@@ -102,6 +123,7 @@ private slots:
 	void should_fail_when_too_many_parameters();
 	void should_fail_when_type_not_qobject();
 	void should_fail_when_duplicate_dependency();
+	void should_fail_when_duplicate_subclass_dependency();
 
 private:
 	void verify_dependency(const std::map<const QMetaObject *, dependency> dependencies, const dependency &check);
@@ -170,6 +192,13 @@ void dependency_extractor_test::should_fail_when_duplicate_dependency()
 {
 	expect<dependency_duplicated_exception>([]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_dependency_invalid_injected_type::staticMetaObject);
+	});
+}
+
+void dependency_extractor_test::should_fail_when_duplicate_subclass_dependency()
+{
+	expect<dependency_duplicated_exception>([]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_sublass_dependency_invalid_injected_type::staticMetaObject);
 	});
 }
 
