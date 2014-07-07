@@ -38,4 +38,23 @@ const injeqt_object & resolved_dependency::object() const
 	return _object;
 }
 
+bool operator == (const resolved_dependency &first, const resolved_dependency &second)
+{
+	if (std::addressof(first) == std::addressof(second))
+		return true;
+
+	if (first.resolved() != second.resolved())
+		return false;
+
+	if (std::addressof(first.object()) != std::addressof(second.object()))
+		return false;
+
+	return true;
+}
+
+bool operator != (const resolved_dependency &first, const resolved_dependency &second)
+{
+	return !(first == second);
+}
+
 }}

@@ -42,4 +42,7 @@ private:
 
 };
 
+bool operator == (const resolved_dependency &first, const resolved_dependency &second);
+bool operator != (const resolved_dependency &first, const resolved_dependency &second);
+
 }}
