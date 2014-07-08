@@ -38,6 +38,10 @@ struct resolve_dependencies_result
 	std::vector<resolved_dependency> resolved;
 };
 
+// TODO: if required can be speed up by chaning vectors of dependencies
+// and objects to sorted vectors and to require objects to have item
+// for each class in hierarchy, not only the most specific one
+// that would change resolve time from n*n to n
 class dependency_resolver final
 {
 
