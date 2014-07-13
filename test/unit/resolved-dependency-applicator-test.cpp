@@ -39,6 +39,11 @@ class injectable_type1 : public QObject
 	Q_OBJECT
 };
 
+class sub_injectable_type1 : public injectable_type1
+{
+	Q_OBJECT
+};
+
 class injectable_type2 : public QObject
 {
 	Q_OBJECT
@@ -65,6 +70,20 @@ public slots:
 
 };
 
+class sub_valid_injected_type : public QObject
+{
+	Q_OBJECT
+
+public:
+	sub_injectable_type1 *_1 = nullptr;
+	injectable_type2 *_2 = nullptr;
+
+public slots:
+	injeqt_setter void setter_1(sub_injectable_type1 *a) { _1 = a; }
+	injeqt_setter void setter_2(injectable_type2 *a) { _2 = a;}
+
+};
+
 class valid_injected_type2 : public QObject
 {
 	Q_OBJECT
@@ -86,6 +105,8 @@ private slots:
 	void should_throw_with_invalid_method();
 	void should_throw_with_invalid_dependency();
 	void should_throw_with_null_dependency();
+	void should_throw_with_subclass_dependency();
+	void should_throw_with_superclass_dependency();
 	void should_throw_with_null_setter();
 	void should_throw_with_non_qobject_setter();
 	void should_throw_with_invalid_setter();
@@ -191,6 +212,44 @@ void resolved_dependency_applicator_test::should_throw_with_null_dependency()
 		}
 	};
 	auto injected_object = make_object_with_meta<valid_injected_type>();
+	expect<applicator_invalid_dependency_exception>([&]{
+		auto applicator = resolved_dependency_applicator{resolved_dependencies};
+	});
+}
+
+void resolved_dependency_applicator_test::should_throw_with_subclass_dependency()
+{
+	auto sub_object1 = make_object_with_meta<sub_injectable_type1>();
+	auto resolved_dependencies = std::vector<resolved_dependency>{
+		{
+			{
+				std::addressof(injectable_type1::staticMetaObject),
+				dependency_apply_method::setter,
+				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
+			},
+			sub_object1
+		}
+	};
+	auto injected_object = make_object_with_meta<valid_injected_type>();
+	expect<applicator_invalid_dependency_exception>([&]{
+		auto applicator = resolved_dependency_applicator{resolved_dependencies};
+	});
+}
+
+void resolved_dependency_applicator_test::should_throw_with_superclass_dependency()
+{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto resolved_dependencies = std::vector<resolved_dependency>{
+		{
+			{
+				std::addressof(sub_injectable_type1::staticMetaObject),
+				dependency_apply_method::setter,
+				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(sub_injectable_type*)"))
+			},
+			object1
+		}
+	};
+	auto injected_object = make_object_with_meta<sub_valid_injected_type>();
 	expect<applicator_invalid_dependency_exception>([&]{
 		auto applicator = resolved_dependency_applicator{resolved_dependencies};
 	});
