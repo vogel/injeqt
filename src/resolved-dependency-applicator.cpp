@@ -51,7 +51,7 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 	{
 		if (resolved.resolved().apply_method() != dependency_apply_method::setter)
 			throw applicator_unsupported_method_exception{};
-		if (!resolved.object().meta().implements(*resolved.resolved().type()))
+		if (std::addressof(resolved.object().meta().type()) != resolved.resolved().type())
 			throw applicator_invalid_dependency_exception{};
 		if (!resolved.object().object())
 			throw applicator_invalid_dependency_exception{};
@@ -66,7 +66,7 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 		if (!parameter_meta_object)
 			throw applicator_invalid_setter_exception{exception_message(method)};
 
-		if (!resolved.object().meta().implements(*parameter_meta_object))
+		if (std::addressof(resolved.object().meta().type()) != parameter_meta_object)
 			throw applicator_non_matching_setter_exception{exception_message(*resolved.object().object()->metaObject(), *parameter_meta_object)};
 	}
 }
