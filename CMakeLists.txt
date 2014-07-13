@@ -36,6 +36,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 
 set(INJEQT_SRCS
 	src/class-mapping.cpp
+	src/dependencies.cpp
 	src/dependency.cpp
 	src/dependency-extractor.cpp
 	src/dependency-resolver.cpp
