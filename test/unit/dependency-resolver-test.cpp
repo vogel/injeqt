@@ -23,9 +23,9 @@
 #include "dependency-apply-method.h"
 #include "dependency-resolver.cpp"
 #include "implements-extractor.cpp"
-#include "injeqt-object.cpp"
 #include "meta-object.cpp"
 #include "meta-object-factory.cpp"
+#include "object-with-meta.cpp"
 #include "resolved-dependency.cpp"
 
 #include "utils.h"
@@ -77,10 +77,10 @@ private slots:
 
 void dependency_resolver_test::should_resolve_simple_dependency()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2),
 		std::addressof(object3)
@@ -97,10 +97,10 @@ void dependency_resolver_test::should_resolve_simple_dependency()
 
 void dependency_resolver_test::should_resolve_subclass_dependency()
 {
-	auto object1 = make_injeqt_object<sublcass_injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<sublcass_injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2),
 		std::addressof(object3),
@@ -117,10 +117,10 @@ void dependency_resolver_test::should_resolve_subclass_dependency()
 
 void dependency_resolver_test::should_resolve_to_first_matching_dependency()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object1b = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object1b = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2),
 		std::addressof(object1b)
@@ -138,10 +138,10 @@ void dependency_resolver_test::should_resolve_to_first_matching_dependency()
 
 void dependency_resolver_test::should_resolve_to_first_matching_subclass_dependency()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto subobject1 = make_injeqt_object<sublcass_injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto subobject1 = make_object_with_meta<sublcass_injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(subobject1),
 		std::addressof(object1),
 		std::addressof(object2)
@@ -159,10 +159,10 @@ void dependency_resolver_test::should_resolve_to_first_matching_subclass_depende
 
 void dependency_resolver_test::should_not_resolve_superclass_dependency()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2),
 		std::addressof(object3),
@@ -174,14 +174,14 @@ void dependency_resolver_test::should_not_resolve_superclass_dependency()
 	};
 
 	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
-	QCOMPARE(resolved, static_cast<injeqt_object *>(nullptr));
+	QCOMPARE(resolved, static_cast<object_with_meta *>(nullptr));
 }
 
 void dependency_resolver_test::should_not_resolve_unmatching_dependency()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2),
 	};
@@ -192,15 +192,15 @@ void dependency_resolver_test::should_not_resolve_unmatching_dependency()
 	};
 
 	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
-	QCOMPARE(resolved, static_cast<injeqt_object *>(nullptr));
+	QCOMPARE(resolved, static_cast<object_with_meta *>(nullptr));
 }
 
 void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_available()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{};
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{};
 	auto to_resolve = std::vector<dependency>{
 		{
 			injectable_type1::staticMetaObject,
@@ -226,10 +226,10 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 
 void dependency_resolver_test::should_resolve_all_dependencies()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2),
 		std::addressof(object3),
@@ -262,9 +262,9 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 
 void dependency_resolver_test::should_resolve_available_dependencies()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object3),
 	};
@@ -296,11 +296,11 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 
 void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object1b = make_injeqt_object<injectable_type1>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto object3b = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object1b = make_object_with_meta<injectable_type1>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto object3b = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object1b),
 		std::addressof(object3),
@@ -336,11 +336,11 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_first
 
 void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching_subclass()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto subobject1 = make_injeqt_object<sublcass_injectable_type1>();
-	auto object3 = make_injeqt_object<injectable_type3>();
-	auto object3b = make_injeqt_object<injectable_type3>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto subobject1 = make_object_with_meta<sublcass_injectable_type1>();
+	auto object3 = make_object_with_meta<injectable_type3>();
+	auto object3b = make_object_with_meta<injectable_type3>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(subobject1),
 		std::addressof(object1),
 		std::addressof(object3),
@@ -376,9 +376,9 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_first
 
 void dependency_resolver_test::should_resolve_available_dependencies_not_using_superclass()
 {
-	auto object1 = make_injeqt_object<injectable_type1>();
-	auto object2 = make_injeqt_object<injectable_type2>();
-	auto objects = std::vector<const injeqt_object *>{
+	auto object1 = make_object_with_meta<injectable_type1>();
+	auto object2 = make_object_with_meta<injectable_type2>();
+	auto objects = std::vector<const object_with_meta *>{
 		std::addressof(object1),
 		std::addressof(object2)
 	};

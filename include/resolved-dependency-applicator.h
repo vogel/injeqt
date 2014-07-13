@@ -26,7 +26,7 @@
 
 namespace injeqt { namespace v1 {
 
-class injeqt_object;
+class object_with_meta;
 
 DEFINE_EXCEPTION(applicator_exception, injeqt_exception);
 DEFINE_EXCEPTION(applicator_unsupported_method_exception, applicator_exception);
@@ -41,7 +41,7 @@ class resolved_dependency_applicator final
 public:
 	resolved_dependency_applicator(std::vector<resolved_dependency> resolved_dependencies);
 
-	void apply_on(injeqt_object &object);
+	void apply_on(object_with_meta &object);
 
 private:
 	std::vector<resolved_dependency> _resolved_dependencies;

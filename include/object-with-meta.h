@@ -29,11 +29,11 @@ class QObject;
 
 namespace injeqt { namespace v1 {
 
-class injeqt_object final
+class object_with_meta final
 {
 
 public:
-	injeqt_object(meta_object meta, std::unique_ptr<QObject> object);
+	object_with_meta(meta_object meta, std::unique_ptr<QObject> object);
 
 	meta_object meta() const;
 	QObject * object() const;

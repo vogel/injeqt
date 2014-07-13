@@ -21,7 +21,7 @@
 #include "resolved-dependency-applicator.h"
 
 #include "dependency-apply-method.h"
-#include "injeqt-object.h"
+#include "object-with-meta.h"
 
 namespace injeqt { namespace v1 {
 
@@ -71,7 +71,7 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 	}
 }
 
-void resolved_dependency_applicator::apply_on(injeqt_object &object)
+void resolved_dependency_applicator::apply_on(object_with_meta &object)
 {
 	for (auto &&resolved :_resolved_dependencies)
 	{

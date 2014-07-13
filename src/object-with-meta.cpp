@@ -18,22 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "injeqt-object.h"
+#include "object-with-meta.h"
 
 namespace injeqt { namespace v1 {
 
-injeqt_object::injeqt_object(meta_object meta, std::unique_ptr<QObject> object) :
+object_with_meta::object_with_meta(meta_object meta, std::unique_ptr<QObject> object) :
 	_meta{std::move(meta)},
 	_object{std::move(object)}
 {
 }
 
-meta_object injeqt_object::meta() const
+meta_object object_with_meta::meta() const
 {
 	return _meta;
 }
 
-QObject * injeqt_object::object() const
+QObject * object_with_meta::object() const
 {
 	return _object.get();
 }

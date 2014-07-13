@@ -25,20 +25,20 @@
 
 namespace injeqt { namespace v1 {
 
-class injeqt_object;
+class object_with_meta;
 
 class resolved_dependency final
 {
 
 public:
-	resolved_dependency(dependency resolved, const injeqt_object &object);
+	resolved_dependency(dependency resolved, const object_with_meta &object);
 
 	dependency resolved() const;
-	const injeqt_object & object() const;
+	const object_with_meta & object() const;
 
 private:
 	dependency _resolved;
-	const injeqt_object &_object;
+	const object_with_meta &_object;
 
 };
 

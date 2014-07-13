@@ -20,18 +20,18 @@
 
 #pragma once
 
-#include "injeqt-object.h"
 #include "meta-object-factory.h"
+#include "object-with-meta.h"
 
 #include <QtCore/QObject>
 
 namespace injeqt { namespace v1 {
 
 template<typename T>
-injeqt_object make_injeqt_object()
+object_with_meta make_object_with_meta()
 {
 	auto qobject = std::unique_ptr<QObject>(new T{});
-	auto object = injeqt_object
+	auto object = object_with_meta
 	{
 		meta_object_factory{}.create_meta_object(T::staticMetaObject),
 		std::move(qobject)
