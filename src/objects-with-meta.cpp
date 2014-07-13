@@ -39,12 +39,12 @@ objects_with_meta::objects_with_meta(std::vector<const object_with_meta *> objec
 {
 }
 
-objects_with_meta::storage_type::const_iterator objects_with_meta::begin() const
+objects_with_meta::const_iterator objects_with_meta::begin() const
 {
 	return _content.begin();
 }
 
-objects_with_meta::storage_type::const_iterator objects_with_meta::end() const
+objects_with_meta::const_iterator objects_with_meta::end() const
 {
 	return _content.end();
 }

@@ -31,27 +31,39 @@ resolve_dependencies_result dependency_resolver::resolve_dependencies(
 {
 	auto unresolved = std::vector<dependency>{};
 	auto resolved = std::vector<resolved_dependency>{};
-	for (auto &&dependency : to_resolve)
+
+	auto to_resolve_it = begin(to_resolve);
+	auto to_resolve_end = end(to_resolve);
+	auto objects_it = begin(objects);
+	auto objects_end = end(objects);
+
+	while (to_resolve_it != to_resolve_end && objects_it != objects_end)
 	{
-		auto mapped = resolve_dependency(dependency, objects);
-		if (mapped)
-			resolved.emplace_back(dependency, *mapped);
+		auto to_resolve_address = to_resolve_it->type();
+		auto objects_address = std::addressof((*objects_it)->meta().type());
+		if (to_resolve_address == objects_address)
+		{
+			resolved.emplace_back(*to_resolve_it, **objects_it);
+			++to_resolve_it;
+			++objects_it;
+		}
+		else if (to_resolve_address < objects_address)
+		{
+			unresolved.emplace_back(*to_resolve_it);
+			++to_resolve_it;
+		}
 		else
-			unresolved.emplace_back(dependency);
+			++objects_it;
 	}
+
+	while (to_resolve_it != to_resolve_end)
+	{
+		unresolved.emplace_back(*to_resolve_it);
+		to_resolve_it++;
+	}
+
 	return {unresolved, resolved};
 }
 
-const object_with_meta * dependency_resolver::resolve_dependency(
-	const dependency & dependency,
-	const objects_with_meta &objects) const
-{
-	auto it = std::find_if(begin(objects), end(objects),
-		[&dependency](const object_with_meta *object){ return std::addressof(object->meta().type()) == std::addressof(dependency.type()); }
-	);
-	return it == end(objects)
-		? nullptr
-		: *it;
-}
 
 }}

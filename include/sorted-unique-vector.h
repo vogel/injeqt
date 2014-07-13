@@ -47,6 +47,7 @@ class sorted_unique_vector
 public:
 	using type = sorted_unique_vector<T, LessThanComparator, EqualityComparator>;
 	using storage_type = std::vector<T>;
+	using const_iterator = typename storage_type::const_iterator;
 	using size_type = typename storage_type::size_type;
 
 	/**
@@ -65,6 +66,16 @@ public:
 	{
 		std::stable_sort(std::begin(_content), std::end(_content), LessThanComparator);
 		ensure_unique(_content);
+	}
+
+	const_iterator begin() const
+	{
+		return std::begin(_content);
+	}
+
+	const_iterator end() const
+	{
+		return std::end(_content);
 	}
 
 	/**
@@ -152,7 +163,7 @@ private:
  * @return begin iterator to content of sorted_unique_vector.
  */
 template<typename T, bool (*LessThanComparator)(const T &, const T &), bool (*EqualityComparator)(const T &, const T &)>
-typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::storage_type::const_iterator begin(const sorted_unique_vector<T, LessThanComparator, EqualityComparator> &sorted_vector)
+typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::const_iterator begin(const sorted_unique_vector<T, LessThanComparator, EqualityComparator> &sorted_vector)
 {
 	return std::begin(sorted_vector.content());
 }
@@ -161,7 +172,7 @@ typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::storag
  * @return end iterator to content of sorted_unique_vector.
  */
 template<typename T, bool (*LessThanComparator)(const T &, const T &), bool (*EqualityComparator)(const T &, const T &)>
-typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::storage_type::const_iterator end(const sorted_unique_vector<T, LessThanComparator, EqualityComparator> &sorted_vector)
+typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::const_iterator end(const sorted_unique_vector<T, LessThanComparator, EqualityComparator> &sorted_vector)
 {
 	return std::end(sorted_vector.content());
 }

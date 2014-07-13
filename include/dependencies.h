@@ -33,12 +33,13 @@ class dependencies final
 	static bool equal_dependency(const dependency &left, const dependency &right);
 
 public:
-	using storage_type = sorted_unique_vector<dependency, less_than_dependency, equal_dependency>::storage_type;
+	using storage_type = sorted_unique_vector<dependency, less_than_dependency, equal_dependency>;
+	using const_iterator = typename storage_type::const_iterator;
 
 	dependencies(std::vector<dependency> dependencies);
 
-	storage_type::const_iterator begin() const;
-	storage_type::const_iterator end() const;
+	const_iterator begin() const;
+	const_iterator end() const;
 
 	bool empty() const;
 	bool contains(const dependency &d) const;
@@ -49,12 +50,12 @@ private:
 
 };
 
-inline typename dependencies::storage_type::const_iterator begin(const dependencies &d)
+inline typename dependencies::const_iterator begin(const dependencies &d)
 {
 	return d.begin();
 }
 
-inline typename dependencies::storage_type::const_iterator end(const dependencies &d)
+inline typename dependencies::const_iterator end(const dependencies &d)
 {
 	return d.end();
 }

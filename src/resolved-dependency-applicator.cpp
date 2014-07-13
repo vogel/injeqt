@@ -51,7 +51,7 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 	{
 		if (resolved.resolved().apply_method() != dependency_apply_method::setter)
 			throw applicator_unsupported_method_exception{};
-		if (!resolved.object().meta().implements(resolved.resolved().type()))
+		if (!resolved.object().meta().implements(*resolved.resolved().type()))
 			throw applicator_invalid_dependency_exception{};
 		if (!resolved.object().object())
 			throw applicator_invalid_dependency_exception{};

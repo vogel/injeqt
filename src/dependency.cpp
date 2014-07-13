@@ -24,14 +24,14 @@
 
 namespace injeqt { namespace v1 {
 
-dependency::dependency(const QMetaObject &type, dependency_apply_method apply_method, QMetaMethod setter_method) :
-	_type(type),
+dependency::dependency(const QMetaObject * type, dependency_apply_method apply_method, QMetaMethod setter_method) :
+	_type{type},
 	_apply_method{apply_method},
 	_setter_method{std::move(setter_method)}
 {
 }
 
-const QMetaObject & dependency::type() const
+const QMetaObject * dependency::type() const
 {
 	return _type;
 }
@@ -51,7 +51,7 @@ bool operator == (const dependency &first, const dependency &second)
 	if (std::addressof(first) == std::addressof(second))
 		return true;
 
-	if (std::addressof(first.type()) != std::addressof(second.type()))
+	if (first.type() != second.type())
 		return false;
 
 	if (first.apply_method() != second.apply_method())

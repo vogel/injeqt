@@ -26,12 +26,12 @@ namespace injeqt { namespace v1 {
 
 bool dependencies::less_than_dependency(const dependency &left, const dependency &right)
 {
-	return std::addressof(left.type()) < std::addressof(right.type());
+	return left.type() < right.type();
 }
 
 bool dependencies::equal_dependency(const dependency &left, const dependency &right)
 {
-	return std::addressof(left.type()) == std::addressof(right.type());
+	return left.type() == right.type();
 }
 
 dependencies::dependencies(std::vector<dependency> dependencies) :
@@ -39,12 +39,12 @@ dependencies::dependencies(std::vector<dependency> dependencies) :
 {
 }
 
-dependencies::storage_type::const_iterator dependencies::begin() const
+dependencies::const_iterator dependencies::begin() const
 {
 	return _content.begin();
 }
 
-dependencies::storage_type::const_iterator dependencies::end() const
+dependencies::const_iterator dependencies::end() const
 {
 	return _content.end();
 }

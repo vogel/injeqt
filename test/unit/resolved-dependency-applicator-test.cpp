@@ -111,7 +111,7 @@ void resolved_dependency_applicator_test::should_apply_one_dependency_when_one_p
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
 			},
@@ -133,7 +133,7 @@ void resolved_dependency_applicator_test::should_apply_all_dependencies_when_all
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
 			},
@@ -141,7 +141,7 @@ void resolved_dependency_applicator_test::should_apply_all_dependencies_when_all
 		},
 		{
 			{
-				injectable_type2::staticMetaObject,
+				std::addressof(injectable_type2::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 			},
@@ -162,7 +162,7 @@ void resolved_dependency_applicator_test::should_throw_with_invalid_method()
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				static_cast<dependency_apply_method>(-1),
 				QMetaMethod{}
 			},
@@ -180,7 +180,7 @@ void resolved_dependency_applicator_test::should_throw_with_null_dependency()
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type2::staticMetaObject,
+				std::addressof(injectable_type2::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 			},
@@ -202,7 +202,7 @@ void resolved_dependency_applicator_test::should_throw_with_invalid_dependency()
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type2::staticMetaObject,
+				std::addressof(injectable_type2::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 			},
@@ -221,7 +221,7 @@ void resolved_dependency_applicator_test::should_throw_with_null_setter()
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				QMetaMethod{}
 			},
@@ -240,7 +240,7 @@ void resolved_dependency_applicator_test::should_throw_with_non_qobject_setter()
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("int_setter(int)"))
 			},
@@ -259,7 +259,7 @@ void resolved_dependency_applicator_test::should_throw_with_invalid_setter()
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("double_setter(injectable_type1*, injectable_type2*)"))
 			},
@@ -279,7 +279,7 @@ void resolved_dependency_applicator_test::should_throw_with_non_matching_setter(
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 			},
@@ -299,7 +299,7 @@ void resolved_dependency_applicator_test::should_throw_when_applying_on_wrong_ob
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
-				injectable_type1::staticMetaObject,
+				std::addressof(injectable_type1::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
 			},
@@ -307,7 +307,7 @@ void resolved_dependency_applicator_test::should_throw_when_applying_on_wrong_ob
 		},
 		{
 			{
-				injectable_type2::staticMetaObject,
+				std::addressof(injectable_type2::staticMetaObject),
 				dependency_apply_method::setter,
 				valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
 			},

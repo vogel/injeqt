@@ -66,7 +66,7 @@ dependencies dependency_extractor::extract_dependencies(const QMetaObject &meta_
 		if (used_dependencies_size + implements_size != used_dependencies.size())
 			throw dependency_duplicated_exception(exception_message(meta_object, method));
 
-		result.emplace_back(*parameter_meta_object, dependency_apply_method::setter, method);
+		result.emplace_back(parameter_meta_object, dependency_apply_method::setter, method);
 	}
 
 	return result;
