@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "dependencies.h"
 #include "injeqt-exception.h"
 #include "injeqt-global.h"
 
@@ -28,8 +29,6 @@
 #include <map>
 
 namespace injeqt { namespace v1 {
-
-class dependency;
 
 DEFINE_EXCEPTION(dependency_exception, injeqt_exception);
 DEFINE_EXCEPTION(dependency_too_many_parameters_exception, dependency_exception);
@@ -40,7 +39,7 @@ class dependency_extractor final
 {
 
 public:
-	std::map<const QMetaObject *, dependency> extract_dependencies(const QMetaObject &meta_object) const;
+	dependencies extract_dependencies(const QMetaObject &meta_object) const;
 
 };
 

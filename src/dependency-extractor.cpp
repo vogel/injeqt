@@ -40,9 +40,9 @@ std::string exception_message(const QMetaObject &meta_object, const QMetaMethod 
 
 }
 
-std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependencies(const QMetaObject &meta_object) const
+dependencies dependency_extractor::extract_dependencies(const QMetaObject &meta_object) const
 {
-	auto result = std::map<const QMetaObject *, dependency>{};
+	auto result = std::vector<dependency>{};
 	auto used_dependencies = std::set<const QMetaObject *>{};
 	auto method_count = meta_object.methodCount();
 	for (decltype(method_count) i = 0; i < method_count; i++)
@@ -66,7 +66,7 @@ std::map<const QMetaObject *, dependency> dependency_extractor::extract_dependen
 		if (used_dependencies_size + implements_size != used_dependencies.size())
 			throw dependency_duplicated_exception(exception_message(meta_object, method));
 
-		result.emplace(parameter_meta_object, dependency{*parameter_meta_object, dependency_apply_method::setter, method});
+		result.emplace_back(*parameter_meta_object, dependency_apply_method::setter, method);
 	}
 
 	return result;

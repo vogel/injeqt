@@ -18,6 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "dependencies.cpp"
 #include "dependency.cpp"
 #include "dependency-apply-method.h"
 #include "dependency-extractor.cpp"
@@ -126,15 +127,14 @@ private slots:
 	void should_fail_when_duplicate_subclass_dependency();
 
 private:
-	void verify_dependency(const std::map<const QMetaObject *, dependency> dependencies, const dependency &check);
+	void verify_dependency(dependencies list, const dependency &check);
 
 };
 
-void dependency_extractor_test::verify_dependency(const std::map< const QMetaObject *, dependency> dependencies, const dependency &to_verify)
+void dependency_extractor_test::verify_dependency(dependencies list, const dependency &check)
 {
-	auto iterator = dependencies.find(std::addressof(to_verify.type()));
-	QVERIFY(iterator != std::end(dependencies));
-	QVERIFY(iterator->second == to_verify);
+	auto iterator = std::find(begin(list), end(list), check);
+	QVERIFY(iterator != end(list));
 }
 
 void dependency_extractor_test::should_find_all_valid_dependencies()
