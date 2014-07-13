@@ -26,12 +26,12 @@
 namespace injeqt { namespace v1 {
 
 resolve_dependencies_result dependency_resolver::resolve_dependencies(
-	const std::vector<dependency> &dependencies,
+	const dependencies &to_resolve,
 	const std::vector<const injeqt_object *> &objects) const
 {
 	auto unresolved = std::vector<dependency>{};
 	auto resolved = std::vector<resolved_dependency>{};
-	for (auto &&dependency : dependencies)
+	for (auto &&dependency : to_resolve)
 	{
 		auto mapped = resolve_dependency(dependency, objects);
 		if (mapped)

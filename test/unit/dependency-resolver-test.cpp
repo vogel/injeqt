@@ -18,6 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "dependencies.cpp"
 #include "dependency.cpp"
 #include "dependency-apply-method.h"
 #include "dependency-resolver.cpp"
@@ -220,7 +221,7 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 
 	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
 	QVERIFY(result.resolved.empty());
-	QCOMPARE(result.unresolved, to_resolve);
+	QCOMPARE(result.unresolved, dependencies{to_resolve});
 }
 
 void dependency_resolver_test::should_resolve_all_dependencies()
@@ -290,7 +291,7 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
 	QCOMPARE(result.unresolved.size(), 1ul);
-	QCOMPARE(result.unresolved.at(0), to_resolve.at(1));
+	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 }
 
 void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching()
@@ -328,7 +329,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_first
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
 	QCOMPARE(result.unresolved.size(), 1ul);
-	QCOMPARE(result.unresolved.at(0), to_resolve.at(1));
+	QCOMPARE(*result.unresolved.begin(), to_resolve.at(1));
 	QVERIFY(std::addressof(object1) != std::addressof(object1b));
 	QVERIFY(std::addressof(object3) != std::addressof(object3b));
 }
@@ -368,7 +369,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_first
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), subobject1}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
 	QCOMPARE(result.unresolved.size(), 1ul);
-	QCOMPARE(result.unresolved.at(0), to_resolve.at(1));
+	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 	QVERIFY(std::addressof(object1) != std::addressof(subobject1));
 	QVERIFY(std::addressof(object3) != std::addressof(object3b));
 }
@@ -398,7 +399,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 	QCOMPARE(result.resolved.size(), 1ul);
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(1), object2}));
 	QCOMPARE(result.unresolved.size(), 1ul);
-	QCOMPARE(result.unresolved.at(0), to_resolve.at(0));
+	QVERIFY(result.unresolved.contains(to_resolve.at(0)));
 }
 
 QTEST_APPLESS_MAIN(dependency_resolver_test);

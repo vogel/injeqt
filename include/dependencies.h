@@ -41,6 +41,7 @@ public:
 	storage_type::const_iterator end() const;
 
 	bool empty() const;
+	bool contains(const dependency &d) const;
 	typename storage_type::size_type size() const;
 
 private:
@@ -57,5 +58,8 @@ inline typename dependencies::storage_type::const_iterator end(const dependencie
 {
 	return d.end();
 }
+
+bool operator == (const dependency &first, const dependency &second);
+bool operator != (const dependency &first, const dependency &second);
 
 }}

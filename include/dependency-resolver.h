@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "dependencies.h"
 #include "injeqt-global.h"
 
 #include <tuple>
@@ -28,13 +29,12 @@
 
 namespace injeqt { namespace v1 {
 
-class dependency;
 class injeqt_object;
 class resolved_dependency;
 
 struct resolve_dependencies_result
 {
-	std::vector<dependency> unresolved;
+	dependencies unresolved;
 	std::vector<resolved_dependency> resolved;
 };
 
@@ -47,7 +47,7 @@ class dependency_resolver final
 
 public:
 	resolve_dependencies_result resolve_dependencies(
-		const std::vector<dependency> &dependencies,
+		const dependencies &to_resolve,
 		const std::vector<const injeqt_object *> &objects) const;
 	const injeqt_object * resolve_dependency(
 		const dependency &dependency,

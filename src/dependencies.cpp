@@ -54,9 +54,45 @@ bool dependencies::empty() const
 	return _content.empty();
 }
 
+bool dependencies::contains(const dependency &d) const
+{
+	auto lower_bound = std::lower_bound(begin(), end(), d, less_than_dependency);
+	if (lower_bound == end())
+		return false;
+
+	return *lower_bound == d;
+}
+
 typename dependencies::storage_type::size_type dependencies::size() const
 {
 	return _content.size();
+}
+
+bool operator == (const dependencies &first, const dependencies &second)
+{
+	if (std::addressof(first) == std::addressof(second))
+		return true;
+
+	if (first.size() != second.size())
+		return false;
+
+	auto first_it = begin(first);
+	auto second_it = begin(second);
+	auto finish = end(first);
+	while (first_it != finish)
+	{
+		if (*first_it != *second_it)
+			return false;
+		++first_it;
+		++second_it;
+	}
+
+	return true;
+}
+
+bool operator != (const dependencies &first, const dependencies &second)
+{
+	return !(first == second);
 }
 
 }}
