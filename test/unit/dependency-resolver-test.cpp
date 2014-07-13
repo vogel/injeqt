@@ -62,16 +62,16 @@ class dependency_resolver_test : public QObject
 
 private slots:
 	void should_resolve_simple_dependency();
-	void should_resolve_subclass_dependency();
-	void should_resolve_to_first_matching_dependency();
-	void should_resolve_to_first_matching_subclass_dependency();
+	void should_not_resolve_subclass_dependency();
+	void should_resolve_to_first_exact_dependency();
+	void should_resolve_to_first_exact_not_using_subclass_dependency();
 	void should_not_resolve_superclass_dependency();
 	void should_not_resolve_unmatching_dependency();
 	void should_resolve_no_dependencies_when_no_objects_available();
 	void should_resolve_all_dependencies();
 	void should_resolve_available_dependencies();
-	void should_resolve_available_dependencies_using_first_matching();
-	void should_resolve_available_dependencies_using_first_matching_subclass();
+	void should_resolve_available_dependencies_using_exact_matching();
+	void should_resolve_available_dependencies_using_exact_matching_not_using_subclass();
 	void should_resolve_available_dependencies_not_using_superclass();
 
 };
@@ -96,7 +96,7 @@ void dependency_resolver_test::should_resolve_simple_dependency()
 	QCOMPARE(resolved, std::addressof(object1));
 }
 
-void dependency_resolver_test::should_resolve_subclass_dependency()
+void dependency_resolver_test::should_not_resolve_subclass_dependency()
 {
 	auto object1 = make_object_with_meta<sublcass_injectable_type1>();
 	auto object2 = make_object_with_meta<injectable_type2>();
@@ -113,10 +113,10 @@ void dependency_resolver_test::should_resolve_subclass_dependency()
 	};
 
 	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
-	QCOMPARE(resolved, std::addressof(object1));
+	QCOMPARE(resolved, static_cast<object_with_meta *>(nullptr));
 }
 
-void dependency_resolver_test::should_resolve_to_first_matching_dependency()
+void dependency_resolver_test::should_resolve_to_first_exact_dependency()
 {
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto object1b = make_object_with_meta<injectable_type1>();
@@ -137,7 +137,7 @@ void dependency_resolver_test::should_resolve_to_first_matching_dependency()
 	QVERIFY(std::addressof(object1) != std::addressof(object1b));
 }
 
-void dependency_resolver_test::should_resolve_to_first_matching_subclass_dependency()
+void dependency_resolver_test::should_resolve_to_first_exact_not_using_subclass_dependency()
 {
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto subobject1 = make_object_with_meta<sublcass_injectable_type1>();
@@ -154,7 +154,7 @@ void dependency_resolver_test::should_resolve_to_first_matching_subclass_depende
 	};
 
 	auto resolved = dependency_resolver{}.resolve_dependency(to_resolve, objects);
-	QCOMPARE(resolved, std::addressof(subobject1));
+	QCOMPARE(resolved, std::addressof(object1));
 	QVERIFY(std::addressof(object1) != std::addressof(subobject1));
 }
 
@@ -295,7 +295,7 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 }
 
-void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching()
+void dependency_resolver_test::should_resolve_available_dependencies_using_exact_matching()
 {
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto object1b = make_object_with_meta<injectable_type1>();
@@ -335,7 +335,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_first
 	QVERIFY(std::addressof(object3) != std::addressof(object3b));
 }
 
-void dependency_resolver_test::should_resolve_available_dependencies_using_first_matching_subclass()
+void dependency_resolver_test::should_resolve_available_dependencies_using_exact_matching_not_using_subclass()
 {
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto subobject1 = make_object_with_meta<sublcass_injectable_type1>();
@@ -367,7 +367,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_first
 
 	auto result = dependency_resolver{}.resolve_dependencies(to_resolve, objects);
 	QCOMPARE(result.resolved.size(), 2ul);
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), subobject1}));
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));

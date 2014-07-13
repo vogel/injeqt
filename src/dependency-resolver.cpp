@@ -47,7 +47,7 @@ const object_with_meta * dependency_resolver::resolve_dependency(
 	const objects_with_meta &objects) const
 {
 	auto it = std::find_if(begin(objects), end(objects),
-		[&dependency](const object_with_meta *object){ return object->meta().implements(dependency.type()); }
+		[&dependency](const object_with_meta *object){ return std::addressof(object->meta().type()) == std::addressof(dependency.type()); }
 	);
 	return it == end(objects)
 		? nullptr
