@@ -24,17 +24,17 @@
 
 namespace injeqt { namespace v1 {
 
-bool objects_with_meta::less_than_object_with_meta(const object_with_meta &left, const object_with_meta &right)
+bool objects_with_meta::less_than_object_with_meta(const object_with_meta * const &left, const object_with_meta * const &right)
 {
-	return std::addressof(left.meta().type()) < std::addressof(right.meta().type());
+	return std::addressof(left->meta().type()) < std::addressof(right->meta().type());
 }
 
-bool objects_with_meta::equal_object_with_meta(const object_with_meta &left, const object_with_meta &right)
+bool objects_with_meta::equal_object_with_meta(const object_with_meta * const &left, const object_with_meta * const &right)
 {
-	return std::addressof(left.meta().type()) == std::addressof(right.meta().type());
+	return std::addressof(left->meta().type()) == std::addressof(right->meta().type());
 }
 
-objects_with_meta::objects_with_meta(std::vector<object_with_meta> objects_with_meta) :
+objects_with_meta::objects_with_meta(std::vector<const object_with_meta *> objects_with_meta) :
 	_content{std::move(objects_with_meta)}
 {
 }
@@ -54,7 +54,7 @@ bool objects_with_meta::empty() const
 	return _content.empty();
 }
 
-bool objects_with_meta::contains(const object_with_meta &d) const
+bool objects_with_meta::contains(const object_with_meta *d) const
 {
 	auto lower_bound = std::lower_bound(begin(), end(), d, less_than_object_with_meta);
 	if (lower_bound == end())

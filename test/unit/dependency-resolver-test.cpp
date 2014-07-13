@@ -26,6 +26,7 @@
 #include "meta-object.cpp"
 #include "meta-object-factory.cpp"
 #include "object-with-meta.cpp"
+#include "objects-with-meta.cpp"
 #include "resolved-dependency.cpp"
 
 #include "utils.h"

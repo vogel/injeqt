@@ -27,7 +27,7 @@ namespace injeqt { namespace v1 {
 
 resolve_dependencies_result dependency_resolver::resolve_dependencies(
 	const dependencies &to_resolve,
-	const std::vector<const object_with_meta *> &objects) const
+	const objects_with_meta &objects) const
 {
 	auto unresolved = std::vector<dependency>{};
 	auto resolved = std::vector<resolved_dependency>{};
@@ -44,12 +44,12 @@ resolve_dependencies_result dependency_resolver::resolve_dependencies(
 
 const object_with_meta * dependency_resolver::resolve_dependency(
 	const dependency & dependency,
-	const std::vector<const object_with_meta *> &objects) const
+	const objects_with_meta &objects) const
 {
-	auto it = std::find_if(std::begin(objects), std::end(objects),
+	auto it = std::find_if(begin(objects), end(objects),
 		[&dependency](const object_with_meta *object){ return object->meta().implements(dependency.type()); }
 	);
-	return it == std::end(objects)
+	return it == end(objects)
 		? nullptr
 		: *it;
 }

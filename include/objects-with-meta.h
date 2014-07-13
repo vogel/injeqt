@@ -29,19 +29,19 @@ class object_with_meta;
 
 class objects_with_meta final
 {
-	static bool less_than_object_with_meta(const object_with_meta &left, const object_with_meta &right);
-	static bool equal_object_with_meta(const object_with_meta &left, const object_with_meta &right);
+	static bool less_than_object_with_meta(const object_with_meta * const &left, const object_with_meta * const &right);
+	static bool equal_object_with_meta(const object_with_meta * const &left, const object_with_meta * const &right);
 
 public:
-	using storage_type = sorted_unique_vector<object_with_meta, less_than_object_with_meta, equal_object_with_meta>::storage_type;
+	using storage_type = sorted_unique_vector<const object_with_meta *, less_than_object_with_meta, equal_object_with_meta>::storage_type;
 
-	objects_with_meta(std::vector<object_with_meta> objects_with_meta);
+	objects_with_meta(std::vector<const object_with_meta *> objects_with_meta);
 
 	storage_type::const_iterator begin() const;
 	storage_type::const_iterator end() const;
 
 	bool empty() const;
-	bool contains(const object_with_meta &d) const;
+	bool contains(const object_with_meta *d) const;
 	typename storage_type::size_type size() const;
 
 private:
@@ -49,12 +49,12 @@ private:
 
 };
 
-inline typename objects_with_meta::storage_type::const_iterator begin(const object_with_meta &d)
+inline typename objects_with_meta::storage_type::const_iterator begin(const objects_with_meta &d)
 {
 	return d.begin();
 }
 
-inline typename objects_with_meta::storage_type::const_iterator end(const object_with_meta &d)
+inline typename objects_with_meta::storage_type::const_iterator end(const objects_with_meta &d)
 {
 	return d.end();
 }

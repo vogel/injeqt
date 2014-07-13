@@ -22,6 +22,7 @@
 
 #include "dependencies.h"
 #include "injeqt-global.h"
+#include "objects-with-meta.h"
 
 #include <tuple>
 #include <unordered_map>
@@ -48,10 +49,10 @@ class dependency_resolver final
 public:
 	resolve_dependencies_result resolve_dependencies(
 		const dependencies &to_resolve,
-		const std::vector<const object_with_meta *> &objects) const;
+		const objects_with_meta &objects) const;
 	const object_with_meta * resolve_dependency(
 		const dependency &dependency,
-		const std::vector<const object_with_meta *> &objects) const;
+		const objects_with_meta &objects) const;
 
 };
 
