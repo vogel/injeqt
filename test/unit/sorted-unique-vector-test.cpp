@@ -54,6 +54,12 @@ private slots:
 	void should_be_valid_after_merging_misc_unique_elements();
 	void should_be_valid_after_merging_greater_or_equal_elements();
 	void should_be_valid_after_merging_greater_elements();
+	void should_match_return_nothing_for_two_empty_vectors();
+	void should_match_return_only_unresolved_for_first_empty_vector();
+	void should_match_return_only_unresolved_for_second_empty_vector();
+	void should_match_return_only_unresolved_for_non_matching_vectors();
+	void should_match_return_only_resolved_for_matching_vectors();
+	void should_match_return_valid_data_for_partially_matching_vectors();
 
 };
 
@@ -239,6 +245,54 @@ void sorted_unique_vector_test::should_be_valid_after_merging_greater_elements()
 	QVERIFY(!data.empty());
 	QCOMPARE(data.size(), 6ul);
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5, 6, 7}));
+}
+
+void sorted_unique_vector_test::should_match_return_nothing_for_two_empty_vectors()
+{
+	auto result = match(suv_int{}, suv_int{});
+	QVERIFY(result.matched.empty());
+	QVERIFY(result.unmatched_1.empty());
+	QVERIFY(result.unmatched_2.empty());
+}
+
+void sorted_unique_vector_test::should_match_return_only_unresolved_for_first_empty_vector()
+{
+	auto result = match(suv_int{}, suv_int{});
+	QVERIFY(result.matched.empty());
+	QVERIFY(result.unmatched_1.empty());
+	QVERIFY(result.unmatched_2.empty());
+}
+
+void sorted_unique_vector_test::should_match_return_only_unresolved_for_second_empty_vector()
+{
+	auto result = match(suv_int{}, suv_int{std::vector<int>{1, 2, 3, 4, 5}});
+	QVERIFY(result.matched.empty());
+	QVERIFY(result.unmatched_1.empty());
+	QCOMPARE(result.unmatched_2.content(), (std::vector<int>{1, 2, 3, 4, 5}));
+}
+
+void sorted_unique_vector_test::should_match_return_only_unresolved_for_non_matching_vectors()
+{
+	auto result = match(suv_int{std::vector<int>{1, 2, 3, 4, 5}}, suv_int{});
+	QVERIFY(result.matched.empty());
+	QCOMPARE(result.unmatched_1.content(), (std::vector<int>{1, 2, 3, 4, 5}));
+	QVERIFY(result.unmatched_2.empty());
+}
+
+void sorted_unique_vector_test::should_match_return_only_resolved_for_matching_vectors()
+{
+	auto result = match(suv_int{std::vector<int>{1, 2, 3, 4, 5}}, suv_int{std::vector<int>{1, 2, 3, 4, 5}});
+	QCOMPARE(result.matched, (std::vector<std::pair<int, int>>{{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}));
+	QVERIFY(result.unmatched_1.empty());
+	QVERIFY(result.unmatched_2.empty());
+}
+
+void sorted_unique_vector_test::should_match_return_valid_data_for_partially_matching_vectors()
+{
+	auto result = match(suv_int{std::vector<int>{1, 2, 3}}, suv_int{std::vector<int>{2, 3, 4, 5}});
+	QCOMPARE(result.matched, (std::vector<std::pair<int, int>>{{2, 2}, {3, 3}}));
+	QCOMPARE(result.unmatched_1.content(), (std::vector<int>{1}));
+	QCOMPARE(result.unmatched_2.content(), (std::vector<int>{4, 5}));
 }
 
 QTEST_APPLESS_MAIN(sorted_unique_vector_test)
