@@ -40,16 +40,34 @@ namespace injeqt { namespace v1 {
  * @param LessThanComparator comparator used for sorting
  * @param EqualityComparator comparator used for uniqueness testing
  */
-template<typename T, bool (*LessThanComparator)(const T &, const T &), bool (*EqualityComparator)(const T &, const T &)>
+template<typename K, typename V, K (*KeyExtractor)(const V &)>
 class sorted_unique_vector
 {
 
 public:
-	using type = sorted_unique_vector<T, LessThanComparator, EqualityComparator>;
-	using storage_type = std::vector<T>;
+	using type = sorted_unique_vector<K, V, KeyExtractor>;
+	using value_type = V;
+	using key_type = K;
+	using storage_type = std::vector<value_type>;
 	using const_iterator = typename storage_type::const_iterator;
 	using size_type = typename storage_type::size_type;
 
+private:
+	static bool compare_keys(const value_type &v1, const value_type &v2)
+	{
+		auto k1 = KeyExtractor(v1);
+		auto k2 = KeyExtractor(v2);
+		return k1 < k2;
+	}
+
+	static bool keys_equal(const value_type &v1, const value_type &v2)
+	{
+		auto k1 = KeyExtractor(v1);
+		auto k2 = KeyExtractor(v2);
+		return k1 == k2;
+	}
+
+public:
 	/**
 	 * @short Create empty sorted_unique_vector.
 	 */
@@ -64,7 +82,7 @@ public:
 	sorted_unique_vector(storage_type storage) :
 			_content{std::move(storage)}
 	{
-		std::stable_sort(std::begin(_content), std::end(_content), LessThanComparator);
+		std::stable_sort(std::begin(_content), std::end(_content), compare_keys);
 		ensure_unique(_content);
 	}
 
@@ -86,7 +104,7 @@ public:
 	 * added if another one that compares equal (using EqualityComparator)
 	 * already exists.
 	 */
-	void add(T item)
+	void add(value_type item)
 	{
 		if (_content.empty())
 		{
@@ -94,8 +112,8 @@ public:
 			return;
 		}
 
-		auto upperBound = std::upper_bound(std::begin(_content), std::end(_content), item, LessThanComparator);
-		if (upperBound == std::begin(_content) || !EqualityComparator(*(upperBound - 1), item))
+		auto upperBound = std::upper_bound(std::begin(_content), std::end(_content), item, compare_keys);
+		if (upperBound == std::begin(_content) || !keys_equal(*(upperBound - 1), item))
 			_content.emplace(upperBound, std::move(item));
 	}
 
@@ -111,7 +129,7 @@ public:
 
 		std::merge(std::begin(_content), std::end(_content),
 			std::begin(sorted_vector._content), std::end(sorted_vector._content),
-			std::back_inserter(result), LessThanComparator);
+			std::back_inserter(result), compare_keys);
 		ensure_unique(result);
 
 		_content = std::move(result);
@@ -131,6 +149,18 @@ public:
 	bool empty() const
 	{
 		return _content.empty();
+	}
+
+	/**
+	 * @return true if element with value v is found
+	 */
+	bool contains(const value_type &v) const
+	{
+		auto lower_bound = std::lower_bound(begin(), end(), v, compare_keys);
+		if (lower_bound == end())
+			return false;
+
+		return *lower_bound == v;
 	}
 
 	/**
@@ -154,7 +184,7 @@ private:
 
 	void ensure_unique(storage_type &storage)
 	{
-		storage.erase(std::unique(std::begin(storage), std::end(storage), EqualityComparator), std::end(storage));
+		storage.erase(std::unique(std::begin(storage), std::end(storage), keys_equal), std::end(storage));
 	}
 
 };
@@ -162,8 +192,8 @@ private:
 /**
  * @return begin iterator to content of sorted_unique_vector.
  */
-template<typename T, bool (*LessThanComparator)(const T &, const T &), bool (*EqualityComparator)(const T &, const T &)>
-typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::const_iterator begin(const sorted_unique_vector<T, LessThanComparator, EqualityComparator> &sorted_vector)
+template<typename K, typename V, const K & (*KeyExtractor)(const V &)>
+typename sorted_unique_vector<K, V, KeyExtractor>::const_iterator begin(const sorted_unique_vector<K, V, KeyExtractor> &sorted_vector)
 {
 	return std::begin(sorted_vector.content());
 }
@@ -171,8 +201,8 @@ typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::const_
 /**
  * @return end iterator to content of sorted_unique_vector.
  */
-template<typename T, bool (*LessThanComparator)(const T &, const T &), bool (*EqualityComparator)(const T &, const T &)>
-typename sorted_unique_vector<T, LessThanComparator, EqualityComparator>::const_iterator end(const sorted_unique_vector<T, LessThanComparator, EqualityComparator> &sorted_vector)
+template<typename K, typename V, const K & (*KeyExtractor)(const V &)>
+typename sorted_unique_vector<K, V, KeyExtractor>::const_iterator end(const sorted_unique_vector<K, V, KeyExtractor> &sorted_vector)
 {
 	return std::end(sorted_vector.content());
 }

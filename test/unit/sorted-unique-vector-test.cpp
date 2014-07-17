@@ -28,17 +28,12 @@ class sorted_unique_vector_test : public QObject
 {
 	Q_OBJECT
 
-	static bool compare_int(const int &left, const int &right)
+	static int extract_key(const int &v)
 	{
-		return left < right;
+		return v;
 	}
 
-	static bool equal_int(const int &left, const int &right)
-	{
-		return left == right;
-	}
-
-	using suv_int = sorted_unique_vector<int, compare_int, equal_int>;
+	using suv_int = sorted_unique_vector<int, int, extract_key>;
 
 private slots:
 	void should_be_empty_after_default_construction();

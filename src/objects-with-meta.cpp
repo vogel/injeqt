@@ -24,14 +24,9 @@
 
 namespace injeqt { namespace v1 {
 
-bool objects_with_meta::less_than_object_with_meta(const object_with_meta * const &left, const object_with_meta * const &right)
+const QMetaObject * objects_with_meta::extract_key(const object_with_meta * const & object)
 {
-	return std::addressof(left->meta().type()) < std::addressof(right->meta().type());
-}
-
-bool objects_with_meta::equal_object_with_meta(const object_with_meta * const &left, const object_with_meta * const &right)
-{
-	return std::addressof(left->meta().type()) == std::addressof(right->meta().type());
+	return std::addressof(object->meta().type());
 }
 
 objects_with_meta::objects_with_meta(std::vector<const object_with_meta *> objects_with_meta) :
@@ -56,11 +51,7 @@ bool objects_with_meta::empty() const
 
 bool objects_with_meta::contains(const object_with_meta *d) const
 {
-	auto lower_bound = std::lower_bound(begin(), end(), d, less_than_object_with_meta);
-	if (lower_bound == end())
-		return false;
-
-	return *lower_bound == d;
+	return _content.contains(d);
 }
 
 typename objects_with_meta::storage_type::size_type objects_with_meta::size() const

@@ -24,14 +24,9 @@
 
 namespace injeqt { namespace v1 {
 
-bool dependencies::less_than_dependency(const dependency &left, const dependency &right)
+const QMetaObject * dependencies::extract_key(const dependency &dep)
 {
-	return left.type() < right.type();
-}
-
-bool dependencies::equal_dependency(const dependency &left, const dependency &right)
-{
-	return left.type() == right.type();
+	return dep.type();
 }
 
 dependencies::dependencies(std::vector<dependency> dependencies) :
@@ -56,11 +51,7 @@ bool dependencies::empty() const
 
 bool dependencies::contains(const dependency &d) const
 {
-	auto lower_bound = std::lower_bound(begin(), end(), d, less_than_dependency);
-	if (lower_bound == end())
-		return false;
-
-	return *lower_bound == d;
+	return _content.contains(d);
 }
 
 typename dependencies::storage_type::size_type dependencies::size() const
