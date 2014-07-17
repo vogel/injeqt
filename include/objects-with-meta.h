@@ -42,6 +42,7 @@ public:
 	const_iterator begin() const;
 	const_iterator end() const;
 
+	const storage_type & content() const;
 	bool empty() const;
 	bool contains(const object_with_meta *d) const;
 	typename storage_type::size_type size() const;

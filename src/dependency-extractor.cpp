@@ -69,7 +69,7 @@ dependencies dependency_extractor::extract_dependencies(const QMetaObject &meta_
 		result.emplace_back(parameter_meta_object, dependency_apply_method::setter, method);
 	}
 
-	return result;
+	return dependencies{result};
 }
 
 }}

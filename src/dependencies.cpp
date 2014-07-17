@@ -34,6 +34,11 @@ dependencies::dependencies(std::vector<dependency> dependencies) :
 {
 }
 
+dependencies::dependencies(dependencies::storage_type dependencies) :
+	_content{std::move(dependencies)}
+{
+}
+
 dependencies::const_iterator dependencies::begin() const
 {
 	return _content.begin();
@@ -42,6 +47,11 @@ dependencies::const_iterator dependencies::begin() const
 dependencies::const_iterator dependencies::end() const
 {
 	return _content.end();
+}
+
+const dependencies::storage_type & dependencies::content() const
+{
+	return _content;
 }
 
 bool dependencies::empty() const

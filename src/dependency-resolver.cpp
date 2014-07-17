@@ -29,40 +29,18 @@ resolve_dependencies_result dependency_resolver::resolve_dependencies(
 	const dependencies &to_resolve,
 	const objects_with_meta &objects) const
 {
-	auto unresolved = std::vector<dependency>{};
+	auto match_result = match(to_resolve.content(), objects.content());
 	auto resolved = std::vector<resolved_dependency>{};
 
-	auto to_resolve_it = begin(to_resolve);
-	auto to_resolve_end = end(to_resolve);
-	auto objects_it = begin(objects);
-	auto objects_end = end(objects);
+	for (auto &&match : match_result.matched)
+		if (match.second)
+			resolved.emplace_back(match.first, *match.second);
 
-	while (to_resolve_it != to_resolve_end && objects_it != objects_end)
+	return
 	{
-		auto to_resolve_address = to_resolve_it->type();
-		auto objects_address = std::addressof((*objects_it)->meta().type());
-		if (to_resolve_address == objects_address)
-		{
-			resolved.emplace_back(*to_resolve_it, **objects_it);
-			++to_resolve_it;
-			++objects_it;
-		}
-		else if (to_resolve_address < objects_address)
-		{
-			unresolved.emplace_back(*to_resolve_it);
-			++to_resolve_it;
-		}
-		else
-			++objects_it;
-	}
-
-	while (to_resolve_it != to_resolve_end)
-	{
-		unresolved.emplace_back(*to_resolve_it);
-		to_resolve_it++;
-	}
-
-	return {unresolved, resolved};
+		dependencies{match_result.unmatched_1},
+		resolved
+	};
 }
 
 

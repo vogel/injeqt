@@ -192,7 +192,7 @@ private:
 /**
  * @return begin iterator to content of sorted_unique_vector.
  */
-template<typename K, typename V, const K & (*KeyExtractor)(const V &)>
+template<typename K, typename V, K (*KeyExtractor)(const V &)>
 typename sorted_unique_vector<K, V, KeyExtractor>::const_iterator begin(const sorted_unique_vector<K, V, KeyExtractor> &sorted_vector)
 {
 	return std::begin(sorted_vector.content());
@@ -201,10 +201,68 @@ typename sorted_unique_vector<K, V, KeyExtractor>::const_iterator begin(const so
 /**
  * @return end iterator to content of sorted_unique_vector.
  */
-template<typename K, typename V, const K & (*KeyExtractor)(const V &)>
+template<typename K, typename V, K (*KeyExtractor)(const V &)>
 typename sorted_unique_vector<K, V, KeyExtractor>::const_iterator end(const sorted_unique_vector<K, V, KeyExtractor> &sorted_vector)
 {
 	return std::end(sorted_vector.content());
+}
+
+template<typename K, typename V1, typename V2, K (*KeyExtractor1)(const V1 &), K (*KeyExtractor2)(const V2 &)>
+struct match_result
+{
+	std::vector<std::pair<V1, V2>> matched;
+	sorted_unique_vector<K, V1, KeyExtractor1> unmatched_1;
+	sorted_unique_vector<K, V2, KeyExtractor2> unmatched_2;
+};
+
+template<typename K, typename V1, typename V2, K (*KeyExtractor1)(const V1 &), K (*KeyExtractor2)(const V2 &)>
+match_result<K, V1, V2, KeyExtractor1, KeyExtractor2>
+match(const sorted_unique_vector<K, V1, KeyExtractor1> &suv_1, const sorted_unique_vector<K, V2, KeyExtractor2> &suv_2)
+{
+	auto unmatched_1 = std::vector<V1>{};
+	auto unmatched_2 = std::vector<V2>{};
+	auto matched = std::vector<std::pair<V1, V2>>{};
+
+	auto suv_1_it = begin(suv_1);
+	auto suv_1_end = end(suv_1);
+	auto suv_2_it = begin(suv_2);
+	auto suv_2_end = end(suv_2);
+
+	while (suv_1_it != suv_1_end && suv_2_it != suv_2_end)
+	{
+		auto suv_1_key = KeyExtractor1(*suv_1_it);
+		auto suv_2_key = KeyExtractor2(*suv_2_it);
+		if (suv_1_key == suv_2_key)
+		{
+			matched.emplace_back(*suv_1_it, *suv_2_it);
+			++suv_1_it;
+			++suv_2_it;
+		}
+		else if (suv_1_key < suv_2_key)
+		{
+			unmatched_1.emplace_back(*suv_1_it);
+			++suv_1_it;
+		}
+		else if (suv_2_key < suv_1_key)
+		{
+			unmatched_2.emplace_back(*suv_2_it);
+			++suv_2_it;
+		}
+	}
+
+	while (suv_1_it != suv_1_end)
+	{
+		unmatched_1.emplace_back(*suv_1_it);
+		suv_1_it++;
+	}
+
+	while (suv_2_it != suv_2_end)
+	{
+		unmatched_2.emplace_back(*suv_2_it);
+		suv_2_it++;
+	}
+
+	return {matched, unmatched_1, unmatched_2};
 }
 
 /**

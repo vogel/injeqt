@@ -44,6 +44,11 @@ objects_with_meta::const_iterator objects_with_meta::end() const
 	return _content.end();
 }
 
+const objects_with_meta::storage_type & objects_with_meta::content() const
+{
+	return _content;
+}
+
 bool objects_with_meta::empty() const
 {
 	return _content.empty();

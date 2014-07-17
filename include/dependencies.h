@@ -37,11 +37,13 @@ public:
 	using storage_type = sorted_unique_vector<const QMetaObject *, dependency, extract_key>;
 	using const_iterator = typename storage_type::const_iterator;
 
-	dependencies(std::vector<dependency> dependencies);
+	explicit dependencies(std::vector<dependency> dependencies);
+	explicit dependencies(storage_type dependencies);
 
 	const_iterator begin() const;
 	const_iterator end() const;
 
+	const storage_type & content() const;
 	bool empty() const;
 	bool contains(const dependency &d) const;
 	typename storage_type::size_type size() const;
