@@ -22,10 +22,10 @@
 #include "implements-extractor.cpp"
 #include "meta-object.cpp"
 #include "meta-object-factory.cpp"
-#include "method.cpp"
 #include "object-with-meta.cpp"
 #include "resolved-dependency.cpp"
 #include "resolved-dependency-applicator.cpp"
+#include "setter-method.cpp"
 #include "type.cpp"
 
 #include "expect.h"
@@ -120,10 +120,10 @@ private:
 	type injectable_type1_type;
 	type injectable_type2_type;
 	type sub_injectable_type1_type;
-	method valid_injected_type_injectable_type1_setter;
-	method valid_injected_type_injectable_type2_setter;
-	method valid_injected_type_int_setter;
-	method valid_injected_type_double_setter;
+	setter_method valid_injected_type_injectable_type1_setter;
+	setter_method valid_injected_type_injectable_type2_setter;
+	setter_method valid_injected_type_int_setter;
+	setter_method valid_injected_type_double_setter;
 
 };
 
@@ -242,7 +242,7 @@ void resolved_dependency_applicator_test::should_throw_with_superclass_dependenc
 		{
 			{
 				sub_injectable_type1_type,
-				method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(sub_injectable_type*)"))}
+				setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(sub_injectable_type*)"))}
 			},
 			object1
 		}

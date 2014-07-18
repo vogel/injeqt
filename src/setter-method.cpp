@@ -18,29 +18,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include "injeqt-global.h"
-
-#include <QtCore/QMetaMethod>
+#include "setter-method.h"
 
 namespace injeqt { namespace v1 {
 
-class method final
+setter_method::setter_method()
 {
+}
 
-public:
-	method();
-	explicit method(QMetaMethod meta_method);
+setter_method::setter_method(QMetaMethod meta_method) :
+	_meta_method{meta_method}
+{
+}
 
-	QMetaMethod meta_method() const;
+QMetaMethod setter_method::meta_method() const
+{
+	return _meta_method;
+}
 
-private:
-	QMetaMethod _meta_method;
+bool operator == (const setter_method &x, const setter_method &y)
+{
+	return x.meta_method() == y.meta_method();
+}
 
-};
-
-bool operator == (const method &x, const method &y);
-bool operator != (const method &x, const method &y);
+bool operator != (const setter_method &x, const setter_method &y)
+{
+	return !(x == y);
+}
 
 }}

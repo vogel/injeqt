@@ -43,13 +43,13 @@ set(INJEQT_SRCS
 	src/implements-extractor.cpp
 	src/meta-object.cpp
 	src/meta-object-factory.cpp
-	src/method.cpp
 	src/module.cpp
 	src/object-with-meta.cpp
 	src/objects-with-meta.cpp
 	src/resolved-dependency.cpp
 	src/resolved-dependency-applicator.cpp
 	src/setter-injector.cpp
+	src/setter-method.cpp
 	src/type.cpp
 )
 

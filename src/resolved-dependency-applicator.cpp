@@ -53,7 +53,7 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 		if (!resolved.object().object())
 			throw applicator_invalid_dependency_exception{};
 
-		auto method = resolved.resolved().setter_method().meta_method();
+		auto method = resolved.resolved().setter().meta_method();
 		if (method.parameterCount() != 1)
 			throw applicator_invalid_setter_exception{exception_message(method)};
 		if (!method.enclosingMetaObject())
@@ -72,7 +72,7 @@ void resolved_dependency_applicator::apply_on(object_with_meta &object)
 {
 	for (auto &&resolved :_resolved_dependencies)
 	{
-		auto method = resolved.resolved().setter_method().meta_method();
+		auto method = resolved.resolved().setter().meta_method();
 		if (!object.meta().implements(type{method.enclosingMetaObject()}))
 			throw applicator_non_matching_setter_exception{exception_message(object.meta().main_type().meta_object(), method)};
 		if (!method.invoke(object.object(), Q_ARG(QObject *, resolved.object().object())))

@@ -21,7 +21,7 @@
 #pragma once
 
 #include "injeqt-global.h"
-#include "method.h"
+#include "setter-method.h"
 #include "type.h"
 
 namespace injeqt { namespace v1 {
@@ -30,14 +30,14 @@ class dependency final
 {
 
 public:
-	dependency(type required_type, method setter_method);
+	dependency(type required_type, setter_method setter);
 
 	type required_type() const;
-	method setter_method() const;
+	setter_method setter() const;
 
 private:
 	type _required_type;
-	method _setter_method;
+	setter_method _setter;
 
 };
 

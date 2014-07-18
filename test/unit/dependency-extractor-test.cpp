@@ -23,7 +23,7 @@
 #include "dependency-extractor.cpp"
 #include "expect.h"
 #include "implements-extractor.cpp"
-#include "method.cpp"
+#include "setter-method.cpp"
 #include "type.cpp"
 
 #include <QtTest/QtTest>
@@ -144,11 +144,11 @@ void dependency_extractor_test::should_find_all_valid_dependencies()
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, {
 		type{std::addressof(injectable_type1::staticMetaObject)},
-		method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))}
+		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))}
 	});
 	verify_dependency(dependencies, {
 		type{std::addressof(injectable_type2::staticMetaObject)},
-		method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))}
+		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))}
 	});
 }
 
@@ -158,15 +158,15 @@ void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy(
 	QCOMPARE(dependencies.size(), 3UL);
 	verify_dependency(dependencies, {
 		type{std::addressof(injectable_type1::staticMetaObject)},
-		method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))}
+		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))}
 	});
 	verify_dependency(dependencies, {
 		type{std::addressof(injectable_type2::staticMetaObject)},
-		method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))}
+		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))}
 	});
 	verify_dependency(dependencies, {
 		type{std::addressof(injectable_type3::staticMetaObject)},
-		method{inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter3(injectable_type3*)"))}
+		setter_method{inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter3(injectable_type3*)"))}
 	});
 }
 
