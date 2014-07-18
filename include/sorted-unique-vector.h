@@ -79,8 +79,21 @@ public:
 	 *
 	 * Copies content of storage, sorts it and removes duplicates.
 	 */
-	sorted_unique_vector(storage_type storage) :
+	explicit sorted_unique_vector(storage_type storage) :
 			_content{std::move(storage)}
+	{
+		std::stable_sort(std::begin(_content), std::end(_content), compare_keys);
+		ensure_unique(_content);
+	}
+
+	/**
+	 * @short Create sorted_unique_vector from given initialization list.
+	 * @param storage vector to get data from
+	 *
+	 * Copies content of storage, sorts it and removes duplicates.
+	 */
+	explicit sorted_unique_vector(std::initializer_list<value_type> values) :
+			_content{std::move(values)}
 	{
 		std::stable_sort(std::begin(_content), std::end(_content), compare_keys);
 		ensure_unique(_content);
@@ -262,7 +275,12 @@ match(const sorted_unique_vector<K, V1, KeyExtractor1> &suv_1, const sorted_uniq
 		suv_2_it++;
 	}
 
-	return {matched, unmatched_1, unmatched_2};
+	return
+	{
+		matched,
+		sorted_unique_vector<K, V1, KeyExtractor1>{unmatched_1},
+		sorted_unique_vector<K, V2, KeyExtractor2>{unmatched_2}
+	};
 }
 
 /**

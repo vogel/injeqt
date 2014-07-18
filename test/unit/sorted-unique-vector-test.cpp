@@ -74,7 +74,7 @@ void sorted_unique_vector_test::should_be_empty_after_default_construction()
 
 void sorted_unique_vector_test::should_be_empty_after_clear()
 {
-	auto data = suv_int{std::vector<int>{1, 4, 5, 2}};
+	auto data = suv_int{1, 4, 5, 2};
 
 	QVERIFY(!data.empty());
 	QCOMPARE(data.size(), 4ul);
@@ -87,7 +87,7 @@ void sorted_unique_vector_test::should_be_empty_after_clear()
 
 void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_vector()
 {
-	auto data = suv_int{std::vector<int>{1, 4, 5, 2}};
+	auto data = suv_int{1, 4, 5, 2};
 
 	QVERIFY(!data.empty());
 	QCOMPARE(data.size(), 4ul);
@@ -96,7 +96,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_vec
 
 void sorted_unique_vector_test::should_be_valid_after_conversion_from_non_unique_vector()
 {
-	auto data = suv_int{std::vector<int>{1, 4, 5, 2, 1, 4, 5, 2}};
+	auto data = suv_int{1, 4, 5, 2, 1, 4, 5, 2};
 
 	QVERIFY(!data.empty());
 	QCOMPARE(data.size(), 4ul);
@@ -105,7 +105,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_non_unique
 
 void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_sorted_vector()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 
 	QVERIFY(!data.empty());
 	QCOMPARE(data.size(), 4ul);
@@ -114,7 +114,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_sor
 
 void sorted_unique_vector_test::should_be_valid_after_conversion_from_non_unique_sorted_vector()
 {
-	auto data = suv_int{std::vector<int>{1, 1, 2, 2, 4, 4, 5, 5}};
+	auto data = suv_int{1, 1, 2, 2, 4, 4, 5, 5};
 
 	QVERIFY(!data.empty());
 	QCOMPARE(data.size(), 4ul);
@@ -123,7 +123,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_non_unique
 
 void sorted_unique_vector_test::should_be_valid_after_adding_less_than_smallest_element()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 	data.add(0);
 
 	QVERIFY(!data.empty());
@@ -133,7 +133,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_less_than_smallest_
 
 void sorted_unique_vector_test::should_be_valid_after_adding_smallest_element()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 	data.add(1);
 
 	QVERIFY(!data.empty());
@@ -143,7 +143,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_smallest_element()
 
 void sorted_unique_vector_test::should_be_valid_after_adding_medium_element()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 	data.add(3);
 
 	QVERIFY(!data.empty());
@@ -153,7 +153,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_medium_element()
 
 void sorted_unique_vector_test::should_be_valid_after_adding_largest_element()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 	data.add(5);
 
 	QVERIFY(!data.empty());
@@ -163,7 +163,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_largest_element()
 
 void sorted_unique_vector_test::should_be_valid_after_adding_greater_than_largest_element()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 	data.add(6);
 
 	QVERIFY(!data.empty());
@@ -173,7 +173,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_greater_than_larges
 
 void sorted_unique_vector_test::should_be_valid_after_merging_itself()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
+	auto data = suv_int{1, 2, 4, 5};
 	data.merge(data);
 
 	QVERIFY(!data.empty());
@@ -183,8 +183,8 @@ void sorted_unique_vector_test::should_be_valid_after_merging_itself()
 
 void sorted_unique_vector_test::should_be_valid_after_merging_lesser_elements()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
-	auto data_to_add = suv_int{std::vector<int>{0, -1, -2}};
+	auto data = suv_int{1, 2, 4, 5};
+	auto data_to_add = suv_int{0, -1, -2};
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
@@ -194,8 +194,8 @@ void sorted_unique_vector_test::should_be_valid_after_merging_lesser_elements()
 
 void sorted_unique_vector_test::should_be_valid_after_merging_lesser_or_equal_elements()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
-	auto data_to_add = suv_int{std::vector<int>{1, 0, -1, -2}};
+	auto data = suv_int{1, 2, 4, 5};
+	auto data_to_add = suv_int{1, 0, -1, -2};
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
@@ -205,8 +205,8 @@ void sorted_unique_vector_test::should_be_valid_after_merging_lesser_or_equal_el
 
 void sorted_unique_vector_test::should_be_valid_after_merging_misc_elements()
 {
-	auto data = suv_int{std::vector<int>{0, 5, 10, 1, 3, 2}};
-	auto data_to_add = suv_int{std::vector<int>{-1, 17, 2, 3, 4, 5}};
+	auto data = suv_int{0, 5, 10, 1, 3, 2};
+	auto data_to_add = suv_int{-1, 17, 2, 3, 4, 5};
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
@@ -216,8 +216,8 @@ void sorted_unique_vector_test::should_be_valid_after_merging_misc_elements()
 
 void sorted_unique_vector_test::should_be_valid_after_merging_misc_unique_elements()
 {
-	auto data = suv_int{std::vector<int>{0, 5, 10, 1, 3, 2}};
-	auto data_to_add = suv_int{std::vector<int>{-1, 17, 4}};
+	auto data = suv_int{0, 5, 10, 1, 3, 2};
+	auto data_to_add = suv_int{-1, 17, 4};
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
@@ -227,8 +227,8 @@ void sorted_unique_vector_test::should_be_valid_after_merging_misc_unique_elemen
 
 void sorted_unique_vector_test::should_be_valid_after_merging_greater_or_equal_elements()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
-	auto data_to_add = suv_int{std::vector<int>{7, 8, 6}};
+	auto data = suv_int{1, 2, 4, 5};
+	auto data_to_add = suv_int{7, 8, 6};
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
@@ -238,8 +238,8 @@ void sorted_unique_vector_test::should_be_valid_after_merging_greater_or_equal_e
 
 void sorted_unique_vector_test::should_be_valid_after_merging_greater_elements()
 {
-	auto data = suv_int{std::vector<int>{1, 2, 4, 5}};
-	auto data_to_add = suv_int{std::vector<int>{7, 5, 6}};
+	auto data = suv_int{1, 2, 4, 5};
+	auto data_to_add = suv_int{7, 5, 6};
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
@@ -265,7 +265,7 @@ void sorted_unique_vector_test::should_match_return_only_unresolved_for_first_em
 
 void sorted_unique_vector_test::should_match_return_only_unresolved_for_second_empty_vector()
 {
-	auto result = match(suv_int{}, suv_int{std::vector<int>{1, 2, 3, 4, 5}});
+	auto result = match(suv_int{}, suv_int{1, 2, 3, 4, 5});
 	QVERIFY(result.matched.empty());
 	QVERIFY(result.unmatched_1.empty());
 	QCOMPARE(result.unmatched_2.content(), (std::vector<int>{1, 2, 3, 4, 5}));
@@ -273,7 +273,7 @@ void sorted_unique_vector_test::should_match_return_only_unresolved_for_second_e
 
 void sorted_unique_vector_test::should_match_return_only_unresolved_for_non_matching_vectors()
 {
-	auto result = match(suv_int{std::vector<int>{1, 2, 3, 4, 5}}, suv_int{});
+	auto result = match(suv_int{1, 2, 3, 4, 5}, suv_int{});
 	QVERIFY(result.matched.empty());
 	QCOMPARE(result.unmatched_1.content(), (std::vector<int>{1, 2, 3, 4, 5}));
 	QVERIFY(result.unmatched_2.empty());
@@ -281,7 +281,7 @@ void sorted_unique_vector_test::should_match_return_only_unresolved_for_non_matc
 
 void sorted_unique_vector_test::should_match_return_only_resolved_for_matching_vectors()
 {
-	auto result = match(suv_int{std::vector<int>{1, 2, 3, 4, 5}}, suv_int{std::vector<int>{1, 2, 3, 4, 5}});
+	auto result = match(suv_int{1, 2, 3, 4, 5}, suv_int{1, 2, 3, 4, 5});
 	QCOMPARE(result.matched, (std::vector<std::pair<int, int>>{{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}));
 	QVERIFY(result.unmatched_1.empty());
 	QVERIFY(result.unmatched_2.empty());
@@ -289,7 +289,7 @@ void sorted_unique_vector_test::should_match_return_only_resolved_for_matching_v
 
 void sorted_unique_vector_test::should_match_return_valid_data_for_partially_matching_vectors()
 {
-	auto result = match(suv_int{std::vector<int>{1, 2, 3}}, suv_int{std::vector<int>{2, 3, 4, 5}});
+	auto result = match(suv_int{1, 2, 3}, suv_int{2, 3, 4, 5});
 	QCOMPARE(result.matched, (std::vector<std::pair<int, int>>{{2, 2}, {3, 3}}));
 	QCOMPARE(result.unmatched_1.content(), (std::vector<int>{1}));
 	QCOMPARE(result.unmatched_2.content(), (std::vector<int>{4, 5}));
