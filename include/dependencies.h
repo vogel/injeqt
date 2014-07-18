@@ -22,6 +22,7 @@
 
 #include "injeqt-global.h"
 #include "sorted-unique-vector.h"
+#include <QtWidgets/qgraphicsitem.h>
 
 namespace injeqt { namespace v1 {
 
@@ -62,7 +63,7 @@ inline typename dependencies::const_iterator end(const dependencies &d)
 	return d.end();
 }
 
-bool operator == (const dependency &first, const dependency &second);
-bool operator != (const dependency &first, const dependency &second);
+bool operator == (const dependency &x, const dependency &y);
+bool operator != (const dependency &x, const dependency &y);
 
 }}

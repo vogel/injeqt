@@ -69,26 +69,9 @@ typename dependencies::storage_type::size_type dependencies::size() const
 	return _content.size();
 }
 
-bool operator == (const dependencies &first, const dependencies &second)
+bool operator == (const dependencies &x, const dependencies &y)
 {
-	if (std::addressof(first) == std::addressof(second))
-		return true;
-
-	if (first.size() != second.size())
-		return false;
-
-	auto first_it = begin(first);
-	auto second_it = begin(second);
-	auto finish = end(first);
-	while (first_it != finish)
-	{
-		if (*first_it != *second_it)
-			return false;
-		++first_it;
-		++second_it;
-	}
-
-	return true;
+	return x.content() == y.content();
 }
 
 bool operator != (const dependencies &first, const dependencies &second)
