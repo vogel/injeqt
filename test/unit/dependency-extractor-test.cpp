@@ -73,7 +73,7 @@ class inheriting_valid_injected_type : public valid_injected_type
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void injeqtSetter3(injectable_type3 *) {}
+	injeqt_setter void setter_3(injectable_type3 *) {}
 
 };
 
@@ -119,6 +119,9 @@ class dependency_extractor_test : public QObject
 {
 	Q_OBJECT
 
+public:
+	dependency_extractor_test();
+
 private slots:
 	void should_find_all_valid_dependencies();
 	void should_find_all_valid_dependencies_in_hierarchy();
@@ -128,9 +131,38 @@ private slots:
 	void should_fail_when_duplicate_subclass_dependency();
 
 private:
+	type injectable_type1_type;
+	type injectable_type2_type;
+	type injectable_type3_type;
+	type valid_injected_type_type;
+	type inheriting_valid_injected_type_type;
+	type too_many_parameters_invalid_injected_type_type;
+	type non_qobject_invalid_injected_type_type;
+	type duplicate_dependency_invalid_injected_type_type;
+	type duplicate_sublass_dependency_invalid_injected_type_type;
+	setter_method valid_injected_type_setter_1;
+	setter_method valid_injected_type_setter_2;
+	setter_method inheriting_valid_injected_type_setter_3;
+
 	void verify_dependency(dependencies list, const dependency &check);
 
 };
+
+dependency_extractor_test::dependency_extractor_test() :
+	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
+	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
+	injectable_type3_type{std::addressof(injectable_type3::staticMetaObject)},
+	valid_injected_type_type{std::addressof(valid_injected_type::staticMetaObject)},
+	inheriting_valid_injected_type_type{std::addressof(inheriting_valid_injected_type::staticMetaObject)},
+	too_many_parameters_invalid_injected_type_type{std::addressof(too_many_parameters_invalid_injected_type::staticMetaObject)},
+	non_qobject_invalid_injected_type_type{std::addressof(non_qobject_invalid_injected_type::staticMetaObject)},
+	duplicate_dependency_invalid_injected_type_type{std::addressof(duplicate_dependency_invalid_injected_type::staticMetaObject)},
+	duplicate_sublass_dependency_invalid_injected_type_type{std::addressof(duplicate_sublass_dependency_invalid_injected_type::staticMetaObject)},
+	valid_injected_type_setter_1{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))},
+	valid_injected_type_setter_2{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))},
+	inheriting_valid_injected_type_setter_3{inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("setter_3(injectable_type3*)"))}
+{
+}
 
 void dependency_extractor_test::verify_dependency(dependencies list, const dependency &check)
 {
@@ -140,61 +172,46 @@ void dependency_extractor_test::verify_dependency(dependencies list, const depen
 
 void dependency_extractor_test::should_find_all_valid_dependencies()
 {
-	auto dependencies = dependency_extractor{}.extract_dependencies(type{std::addressof(valid_injected_type::staticMetaObject)});
+	auto dependencies = dependency_extractor{}.extract_dependencies(valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 2UL);
-	verify_dependency(dependencies, {
-		type{std::addressof(injectable_type1::staticMetaObject)},
-		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))}
-	});
-	verify_dependency(dependencies, {
-		type{std::addressof(injectable_type2::staticMetaObject)},
-		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))}
-	});
+	verify_dependency(dependencies, { injectable_type1_type, valid_injected_type_setter_1 });
+	verify_dependency(dependencies, { injectable_type2_type, valid_injected_type_setter_2 });
 }
 
 void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = dependency_extractor{}.extract_dependencies(type{std::addressof(inheriting_valid_injected_type::staticMetaObject)});
+	auto dependencies = dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 3UL);
-	verify_dependency(dependencies, {
-		type{std::addressof(injectable_type1::staticMetaObject)},
-		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))}
-	});
-	verify_dependency(dependencies, {
-		type{std::addressof(injectable_type2::staticMetaObject)},
-		setter_method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))}
-	});
-	verify_dependency(dependencies, {
-		type{std::addressof(injectable_type3::staticMetaObject)},
-		setter_method{inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("injeqtSetter3(injectable_type3*)"))}
-	});
+	verify_dependency(dependencies, { injectable_type1_type, valid_injected_type_setter_1 });
+	verify_dependency(dependencies, { injectable_type2_type, valid_injected_type_setter_2 });
+	verify_dependency(dependencies, { injectable_type3_type, inheriting_valid_injected_type_setter_3 });
 }
 
 void dependency_extractor_test::should_fail_when_too_many_parameters()
 {
-	expect<dependency_too_many_parameters_exception>([]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(type{std::addressof(too_many_parameters_invalid_injected_type::staticMetaObject)});
+	expect<dependency_too_many_parameters_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_type_not_qobject()
 {
-	expect<dependency_not_qobject_exception>([]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(type{std::addressof(non_qobject_invalid_injected_type::staticMetaObject)});
+	expect<dependency_not_qobject_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(non_qobject_invalid_injected_type_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_duplicate_dependency()
 {
-	expect<dependency_duplicated_exception>([]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(type{std::addressof(duplicate_dependency_invalid_injected_type::staticMetaObject)});
+	expect<dependency_duplicated_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_dependency_invalid_injected_type_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_duplicate_subclass_dependency()
 {
-	expect<dependency_duplicated_exception>([]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(type{std::addressof(duplicate_sublass_dependency_invalid_injected_type::staticMetaObject)});
+	expect<dependency_duplicated_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_sublass_dependency_invalid_injected_type_type);
 	});
 }
 

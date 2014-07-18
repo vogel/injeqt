@@ -60,6 +60,9 @@ class dependency_resolver_test : public QObject
 {
 	Q_OBJECT
 
+public:
+	dependency_resolver_test();
+
 private slots:
 	void should_resolve_no_dependencies_when_no_objects_available();
 	void should_resolve_all_dependencies();
@@ -68,7 +71,21 @@ private slots:
 	void should_resolve_available_dependencies_using_exact_matching_not_using_subclass();
 	void should_resolve_available_dependencies_not_using_superclass();
 
+private:
+	type injectable_type1_type;
+	type injectable_type2_type;
+	type injectable_type3_type;
+	type sublcass_injectable_type1_type;
+
 };
+
+dependency_resolver_test::dependency_resolver_test() :
+	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
+	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
+	injectable_type3_type{std::addressof(injectable_type3::staticMetaObject)},
+	sublcass_injectable_type1_type{std::addressof(sublcass_injectable_type1::staticMetaObject)}
+{
+}
 
 void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_available()
 {
@@ -76,19 +93,11 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 	auto object2 = make_object_with_meta<injectable_type2>();
 	auto object3 = make_object_with_meta<injectable_type3>();
 	auto objects = std::vector<const object_with_meta *>{};
-	auto to_resolve = std::vector<dependency>{
-		{
-			type{std::addressof(injectable_type1::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type2::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type3::staticMetaObject)},
-			{}
-		}
+	auto to_resolve = std::vector<dependency>
+	{
+		{ injectable_type1_type, {} },
+		{ injectable_type2_type, {} },
+		{ injectable_type3_type, {} }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -101,24 +110,17 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto object2 = make_object_with_meta<injectable_type2>();
 	auto object3 = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>{
+	auto objects = std::vector<const object_with_meta *>
+	{
 		std::addressof(object1),
 		std::addressof(object2),
 		std::addressof(object3),
 	};
-	auto to_resolve = std::vector<dependency>{
-		{
-			type{std::addressof(injectable_type1::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type2::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type3::staticMetaObject)},
-			{}
-		}
+	auto to_resolve = std::vector<dependency>
+	{
+		{ injectable_type1_type, {} },
+		{ injectable_type2_type, {} },
+		{ injectable_type3_type, {} }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -133,23 +135,16 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 {
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto object3 = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>{
+	auto objects = std::vector<const object_with_meta *>
+	{
 		std::addressof(object1),
 		std::addressof(object3),
 	};
-	auto to_resolve = std::vector<dependency>{
-		{
-			type{std::addressof(injectable_type1::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type2::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type3::staticMetaObject)},
-			{}
-		}
+	auto to_resolve = std::vector<dependency>
+	{
+		{ injectable_type1_type, {} },
+		{ injectable_type2_type, {} },
+		{ injectable_type3_type, {} }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -166,25 +161,18 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	auto object1b = make_object_with_meta<injectable_type1>();
 	auto object3 = make_object_with_meta<injectable_type3>();
 	auto object3b = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>{
+	auto objects = std::vector<const object_with_meta *>
+	{
 		std::addressof(object1),
 		std::addressof(object1b),
 		std::addressof(object3),
 		std::addressof(object3b),
 	};
-	auto to_resolve = std::vector<dependency>{
-		{
-			type{std::addressof(injectable_type1::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type2::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type3::staticMetaObject)},
-			{}
-		}
+	auto to_resolve = std::vector<dependency>
+	{
+		{ injectable_type1_type, {} },
+		{ injectable_type2_type, {} },
+		{ injectable_type3_type, {} }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -203,25 +191,18 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	auto subobject1 = make_object_with_meta<sublcass_injectable_type1>();
 	auto object3 = make_object_with_meta<injectable_type3>();
 	auto object3b = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>{
+	auto objects = std::vector<const object_with_meta *>
+	{
 		std::addressof(subobject1),
 		std::addressof(object1),
 		std::addressof(object3),
 		std::addressof(object3b),
 	};
-	auto to_resolve = std::vector<dependency>{
-		{
-			type{std::addressof(injectable_type1::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type2::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type3::staticMetaObject)},
-			{}
-		}
+	auto to_resolve = std::vector<dependency>
+	{
+		{ injectable_type1_type, {} },
+		{ injectable_type2_type, {} },
+		{ injectable_type3_type, {} }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -238,19 +219,15 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 {
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto object2 = make_object_with_meta<injectable_type2>();
-	auto objects = std::vector<const object_with_meta *>{
+	auto objects = std::vector<const object_with_meta *>
+	{
 		std::addressof(object1),
 		std::addressof(object2)
 	};
-	auto to_resolve = std::vector<dependency>{
-		{
-			type{std::addressof(sublcass_injectable_type1::staticMetaObject)},
-			{}
-		},
-		{
-			type{std::addressof(injectable_type2::staticMetaObject)},
-			{}
-		}
+	auto to_resolve = std::vector<dependency>
+	{
+		{ sublcass_injectable_type1_type, {} },
+		{ injectable_type2_type, {} }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
