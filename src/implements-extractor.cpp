@@ -22,9 +22,7 @@
 
 #include "type.h"
 
-#include <QtCore/QMetaMethod>
 #include <QtCore/QMetaObject>
-#include <QtCore/QMetaType>
 
 namespace injeqt { namespace v1 {
 

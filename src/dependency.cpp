@@ -20,8 +20,6 @@
 
 #include "dependency.h"
 
-#include <QtCore/QMetaMethod>
-
 namespace injeqt { namespace v1 {
 
 dependency::dependency(type required_type, dependency_apply_method apply_method, method setter_method) :

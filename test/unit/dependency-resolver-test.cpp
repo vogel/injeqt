@@ -33,7 +33,6 @@
 
 #include "utils.h"
 
-#include <QtCore/QMetaObject>
 #include <QtTest/QtTest>
 
 using namespace injeqt::v1;
