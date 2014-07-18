@@ -24,9 +24,9 @@
 
 namespace injeqt { namespace v1 {
 
-const QMetaObject * objects_with_meta::extract_key(const object_with_meta * const & object)
+type objects_with_meta::extract_key(const object_with_meta * const & object)
 {
-	return std::addressof(object->meta().type());
+	return object->meta().main_type();
 }
 
 objects_with_meta::objects_with_meta(std::vector<const object_with_meta *> objects_with_meta) :

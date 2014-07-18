@@ -25,12 +25,12 @@
 
 namespace injeqt { namespace v1 {
 
-meta_object meta_object_factory::create_meta_object(const QMetaObject &meta_object) const
+meta_object meta_object_factory::create_meta_object(type for_type) const
 {
 	return
 	{
-		meta_object,
-		implements_extractor{}.extract_implements(meta_object)
+		for_type,
+		implements_extractor{}.extract_implements(for_type)
 	};
 }
 

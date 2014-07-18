@@ -33,7 +33,7 @@ object_with_meta make_object_with_meta()
 	auto qobject = std::unique_ptr<QObject>(new T{});
 	auto object = object_with_meta
 	{
-		meta_object_factory{}.create_meta_object(T::staticMetaObject),
+		meta_object_factory{}.create_meta_object(type{std::addressof(T::staticMetaObject)}),
 		std::move(qobject)
 	};
 

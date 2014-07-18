@@ -23,12 +23,12 @@
 
 namespace injeqt { namespace v1 {
 
-type::type(const QMetaObject *const meta_object) :
+type::type(const QMetaObject *meta_object) :
 	_meta_object{meta_object}
 {
 }
 
-const QMetaObject * const type::meta_object() const
+const QMetaObject * type::meta_object() const
 {
 	return _meta_object;
 }

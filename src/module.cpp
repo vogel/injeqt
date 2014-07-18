@@ -27,9 +27,9 @@
 
 namespace injeqt { namespace v1 {
 
-void module::add_class(const QMetaObject &meta_object)
+void module::add_class(const type &with_type)
 {
-	_meta_objects.push_back(meta_object_factory{}.create_meta_object(meta_object));
+	_meta_objects.push_back(meta_object_factory{}.create_meta_object(with_type));
 }
 
 const std::vector<meta_object> & module::meta_objects() const

@@ -22,19 +22,22 @@
 
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaObject>
 #include <set>
 
+class QMetaObject;
+
 namespace injeqt { namespace v1 {
+
+class type;
 
 class implements_extractor final
 {
 
 public:
-	std::set<const QMetaObject *> extract_implements(const QMetaObject &meta_object) const;
+	std::set<type> extract_implements(const type &for_type) const;
 
 private:
-	bool is_qobject(const QMetaObject *meta_object) const;
+	bool is_qobject(const QMetaObject * const meta_object) const;
 
 };
 

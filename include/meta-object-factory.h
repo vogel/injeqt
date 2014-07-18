@@ -22,17 +22,16 @@
 
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaObject>
-
 namespace injeqt { namespace v1 {
 
 class meta_object;
+class type;
 
 class meta_object_factory final
 {
 
 public:
-	meta_object create_meta_object(const QMetaObject &metaObject) const;
+	meta_object create_meta_object(type for_type) const;
 
 };
 

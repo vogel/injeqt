@@ -24,9 +24,9 @@
 
 namespace injeqt { namespace v1 {
 
-const QMetaObject * dependencies::extract_key(const dependency &dep)
+type dependencies::extract_key(const dependency &dep)
 {
-	return dep.type();
+	return dep.required_type();
 }
 
 dependencies::dependencies(std::vector<dependency> dependencies) :

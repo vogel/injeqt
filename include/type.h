@@ -30,12 +30,12 @@ class type final
 {
 
 public:
-	explicit type(const QMetaObject *const meta_object);
+	explicit type(const QMetaObject * meta_object);
 
-	const QMetaObject * const meta_object() const;
+	const QMetaObject * meta_object() const;
 
 private:
-	const QMetaObject * const _meta_object;
+	const QMetaObject * _meta_object;
 
 };
 

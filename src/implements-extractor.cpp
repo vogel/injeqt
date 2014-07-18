@@ -20,25 +20,27 @@
 
 #include "implements-extractor.h"
 
+#include "type.h"
+
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
 
 namespace injeqt { namespace v1 {
 
-std::set<const QMetaObject *> implements_extractor::extract_implements(const QMetaObject &meta_object) const
+std::set<type> implements_extractor::extract_implements(const type &for_type) const
 {
-	auto result = std::set<const QMetaObject *>{};
-	auto current = &meta_object;
-	while (current && !is_qobject(current))
+	auto result = std::set<type>{};
+	auto meta_object = for_type.meta_object();
+	while (meta_object && !is_qobject(meta_object))
 	{
-		result.insert(current);
-		current = current->superClass();
+		result.insert(type{meta_object});
+		meta_object = meta_object->superClass();
 	}
 
 	return result;
 }
 
-bool implements_extractor::is_qobject(const QMetaObject *meta_object) const
+bool implements_extractor::is_qobject(const QMetaObject * const meta_object) const
 {
 	return !meta_object->superClass();
 }

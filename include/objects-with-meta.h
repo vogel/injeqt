@@ -22,8 +22,7 @@
 
 #include "injeqt-global.h"
 #include "sorted-unique-vector.h"
-
-class QMetaObject;
+#include "type.h"
 
 namespace injeqt { namespace v1 {
 
@@ -31,10 +30,10 @@ class object_with_meta;
 
 class objects_with_meta final
 {
-	static const QMetaObject * extract_key(const object_with_meta * const &);
+	static type extract_key(const object_with_meta * const &);
 
 public:
-	using storage_type = sorted_unique_vector<const QMetaObject *, const object_with_meta *, extract_key>;
+	using storage_type = sorted_unique_vector<type, const object_with_meta *, extract_key>;
 	using const_iterator = typename storage_type::const_iterator;
 
 	objects_with_meta(std::vector<const object_with_meta *> objects_with_meta);

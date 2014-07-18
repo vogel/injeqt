@@ -22,25 +22,25 @@
 
 namespace injeqt { namespace v1 {
 
-meta_object::meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements) :
-	_type(type),
+meta_object::meta_object(type main_type, std::set<type> implements) :
+	_main_type{std::move(main_type)},
 	_implements{std::move(implements)}
 {
 }
 
-const QMetaObject & meta_object::type() const
+type meta_object::main_type() const
 {
-	return _type;
+	return _main_type;
 }
 
-std::set<const QMetaObject *> meta_object::implements() const
+std::set<type> meta_object::implements() const
 {
 	return _implements;
 }
 
-bool meta_object::implements(const QMetaObject &type) const
+bool meta_object::implements(const type &query) const
 {
-	return _implements.find(std::addressof(type)) != std::end(_implements);
+	return _implements.find(query) != std::end(_implements);
 }
 
 }}

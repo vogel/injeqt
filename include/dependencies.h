@@ -23,18 +23,17 @@
 #include "injeqt-global.h"
 #include "sorted-unique-vector.h"
 
-class QMetaObject;
-
 namespace injeqt { namespace v1 {
 
 class dependency;
+class type;
 
 class dependencies final
 {
-	static const QMetaObject * extract_key(const dependency &dep);
+	static type extract_key(const dependency &dep);
 
 public:
-	using storage_type = sorted_unique_vector<const QMetaObject *, dependency, extract_key>;
+	using storage_type = sorted_unique_vector<type, dependency, extract_key>;
 	using const_iterator = typename storage_type::const_iterator;
 
 	explicit dependencies(std::vector<dependency> dependencies);

@@ -22,10 +22,9 @@
 
 #include "dependency.h"
 #include "injeqt-global.h"
+#include "type.h"
 
 #include <set>
-
-class QMetaObject;
 
 namespace injeqt { namespace v1 {
 
@@ -33,15 +32,15 @@ class meta_object final
 {
 
 public:
-	meta_object(const QMetaObject &type, std::set<const QMetaObject *> implements);
+	meta_object(type main_type, std::set<type> implements);
 
-	const QMetaObject & type() const;
-	std::set<const QMetaObject *> implements() const;
-	bool implements(const QMetaObject &type) const;
+	type main_type() const;
+	std::set<type> implements() const;
+	bool implements(const type &query) const;
 
 private:
-	const QMetaObject & _type;
-	std::set<const QMetaObject *> _implements;
+	type _main_type;
+	std::set<type> _implements;
 
 };
 

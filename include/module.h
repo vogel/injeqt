@@ -22,11 +22,10 @@
 
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaObject>
-
 namespace injeqt { namespace v1 {
 
 class meta_object;
+class type;
 
 class INJEQT_API module final
 {
@@ -38,7 +37,7 @@ public:
 		add_class(T::staticMetaObject);
 	}
 
-	void add_class(const QMetaObject &meta_object);
+	void add_class(const type &with_type);
 
 	const std::vector<meta_object> & meta_objects() const;
 

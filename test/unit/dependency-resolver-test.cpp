@@ -25,9 +25,11 @@
 #include "implements-extractor.cpp"
 #include "meta-object.cpp"
 #include "meta-object-factory.cpp"
+#include "method.cpp"
 #include "object-with-meta.cpp"
 #include "objects-with-meta.cpp"
 #include "resolved-dependency.cpp"
+#include "type.cpp"
 
 #include "utils.h"
 
@@ -78,19 +80,19 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 	auto objects = std::vector<const object_with_meta *>{};
 	auto to_resolve = std::vector<dependency>{
 		{
-			std::addressof(injectable_type1::staticMetaObject),
+			type{std::addressof(injectable_type1::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type2::staticMetaObject),
+			type{std::addressof(injectable_type2::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type3::staticMetaObject),
+			type{std::addressof(injectable_type3::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		}
 	};
 
@@ -111,19 +113,19 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 	};
 	auto to_resolve = std::vector<dependency>{
 		{
-			std::addressof(injectable_type1::staticMetaObject),
+			type{std::addressof(injectable_type1::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type2::staticMetaObject),
+			type{std::addressof(injectable_type2::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type3::staticMetaObject),
+			type{std::addressof(injectable_type3::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		}
 	};
 
@@ -145,19 +147,19 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	};
 	auto to_resolve = std::vector<dependency>{
 		{
-			std::addressof(injectable_type1::staticMetaObject),
+			type{std::addressof(injectable_type1::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type2::staticMetaObject),
+			type{std::addressof(injectable_type2::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type3::staticMetaObject),
+			type{std::addressof(injectable_type3::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		}
 	};
 
@@ -183,19 +185,19 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	};
 	auto to_resolve = std::vector<dependency>{
 		{
-			std::addressof(injectable_type1::staticMetaObject),
+			type{std::addressof(injectable_type1::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type2::staticMetaObject),
+			type{std::addressof(injectable_type2::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type3::staticMetaObject),
+			type{std::addressof(injectable_type3::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		}
 	};
 
@@ -223,19 +225,19 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	};
 	auto to_resolve = std::vector<dependency>{
 		{
-			std::addressof(injectable_type1::staticMetaObject),
+			type{std::addressof(injectable_type1::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type2::staticMetaObject),
+			type{std::addressof(injectable_type2::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type3::staticMetaObject),
+			type{std::addressof(injectable_type3::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		}
 	};
 
@@ -259,14 +261,14 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 	};
 	auto to_resolve = std::vector<dependency>{
 		{
-			std::addressof(sublcass_injectable_type1::staticMetaObject),
+			type{std::addressof(sublcass_injectable_type1::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		},
 		{
-			std::addressof(injectable_type2::staticMetaObject),
+			type{std::addressof(injectable_type2::staticMetaObject)},
 			dependency_apply_method::setter,
-			QMetaMethod{}
+			{}
 		}
 	};
 

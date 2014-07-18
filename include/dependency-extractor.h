@@ -24,11 +24,12 @@
 #include "injeqt-exception.h"
 #include "injeqt-global.h"
 
-#include <QtCore/QMetaObject>
 #include <exception>
 #include <map>
 
 namespace injeqt { namespace v1 {
+
+class type;
 
 DEFINE_EXCEPTION(dependency_exception, injeqt_exception);
 DEFINE_EXCEPTION(dependency_too_many_parameters_exception, dependency_exception);
@@ -39,7 +40,7 @@ class dependency_extractor final
 {
 
 public:
-	dependencies extract_dependencies(const QMetaObject &meta_object) const;
+	dependencies extract_dependencies(const type &for_type) const;
 
 };
 

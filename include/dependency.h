@@ -21,10 +21,8 @@
 #pragma once
 
 #include "injeqt-global.h"
-
-#include <QtCore/QMetaMethod>
-
-class QMetaObject;
+#include "method.h"
+#include "type.h"
 
 namespace injeqt { namespace v1 {
 
@@ -34,16 +32,16 @@ class dependency final
 {
 
 public:
-	dependency(const QMetaObject * type, dependency_apply_method apply_method, QMetaMethod setter_method);
+	dependency(type required_type, dependency_apply_method apply_method, method setter_method);
 
-	const QMetaObject * type() const;
+	type required_type() const;
 	dependency_apply_method apply_method() const;
-	QMetaMethod setter_method() const;
+	method setter_method() const;
 
 private:
-	const QMetaObject * _type;
+	type _required_type;
 	dependency_apply_method _apply_method;
-	QMetaMethod _setter_method;
+	method _setter_method;
 
 };
 
