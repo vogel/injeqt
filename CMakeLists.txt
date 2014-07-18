@@ -49,6 +49,7 @@ set(INJEQT_SRCS
 	src/resolved-dependency.cpp
 	src/resolved-dependency-applicator.cpp
 	src/setter-injector.cpp
+	src/type.cpp
 )
 
 enable_testing()
