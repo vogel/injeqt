@@ -21,7 +21,6 @@
 #include "dependency-extractor.h"
 
 #include "dependency.h"
-#include "dependency-apply-method.h"
 #include "implements-extractor.h"
 #include "method.h"
 #include "type.h"
@@ -69,7 +68,7 @@ dependencies dependency_extractor::extract_dependencies(const type &for_type) co
 		if (used_dependencies_size + implements_size != used_dependencies.size())
 			throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
 
-		result.emplace_back(type{parameter_meta_object}, dependency_apply_method::setter, method{probably_setter});
+		result.emplace_back(type{parameter_meta_object}, method{probably_setter});
 	}
 
 	return dependencies{result};

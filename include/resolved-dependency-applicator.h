@@ -29,7 +29,6 @@ namespace injeqt { namespace v1 {
 class object_with_meta;
 
 DEFINE_EXCEPTION(applicator_exception, injeqt_exception);
-DEFINE_EXCEPTION(applicator_unsupported_method_exception, applicator_exception);
 DEFINE_EXCEPTION(applicator_invalid_dependency_exception, applicator_exception);
 DEFINE_EXCEPTION(applicator_invalid_setter_exception, applicator_exception);
 DEFINE_EXCEPTION(applicator_non_matching_setter_exception, applicator_exception);

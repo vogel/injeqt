@@ -20,7 +20,6 @@
 
 #include "resolved-dependency-applicator.h"
 
-#include "dependency-apply-method.h"
 #include "object-with-meta.h"
 
 namespace injeqt { namespace v1 {
@@ -49,8 +48,6 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 {
 	for (auto &&resolved : _resolved_dependencies)
 	{
-		if (resolved.resolved().apply_method() != dependency_apply_method::setter)
-			throw applicator_unsupported_method_exception{};
 		if (resolved.object().meta().main_type() != resolved.resolved().required_type())
 			throw applicator_invalid_dependency_exception{};
 		if (!resolved.object().object())

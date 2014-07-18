@@ -20,7 +20,6 @@
 
 #include "dependencies.cpp"
 #include "dependency.cpp"
-#include "dependency-apply-method.h"
 #include "dependency-resolver.cpp"
 #include "implements-extractor.cpp"
 #include "meta-object.cpp"
@@ -80,17 +79,14 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 	auto to_resolve = std::vector<dependency>{
 		{
 			type{std::addressof(injectable_type1::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type2::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type3::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		}
 	};
@@ -113,17 +109,14 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 	auto to_resolve = std::vector<dependency>{
 		{
 			type{std::addressof(injectable_type1::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type2::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type3::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		}
 	};
@@ -147,17 +140,14 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	auto to_resolve = std::vector<dependency>{
 		{
 			type{std::addressof(injectable_type1::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type2::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type3::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		}
 	};
@@ -185,17 +175,14 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	auto to_resolve = std::vector<dependency>{
 		{
 			type{std::addressof(injectable_type1::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type2::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type3::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		}
 	};
@@ -225,17 +212,14 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	auto to_resolve = std::vector<dependency>{
 		{
 			type{std::addressof(injectable_type1::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type2::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type3::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		}
 	};
@@ -261,12 +245,10 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 	auto to_resolve = std::vector<dependency>{
 		{
 			type{std::addressof(sublcass_injectable_type1::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		},
 		{
 			type{std::addressof(injectable_type2::staticMetaObject)},
-			dependency_apply_method::setter,
 			{}
 		}
 	};

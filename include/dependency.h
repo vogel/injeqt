@@ -26,21 +26,17 @@
 
 namespace injeqt { namespace v1 {
 
-enum class dependency_apply_method;
-
 class dependency final
 {
 
 public:
-	dependency(type required_type, dependency_apply_method apply_method, method setter_method);
+	dependency(type required_type, method setter_method);
 
 	type required_type() const;
-	dependency_apply_method apply_method() const;
 	method setter_method() const;
 
 private:
 	type _required_type;
-	dependency_apply_method _apply_method;
 	method _setter_method;
 
 };

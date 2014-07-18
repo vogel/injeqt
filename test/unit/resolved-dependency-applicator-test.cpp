@@ -19,7 +19,6 @@
  */
 
 #include "dependency.cpp"
-#include "dependency-apply-method.h"
 #include "implements-extractor.cpp"
 #include "meta-object.cpp"
 #include "meta-object-factory.cpp"
@@ -107,7 +106,6 @@ private slots:
 	void should_apply_nothing_when_empty_list_passed();
 	void should_apply_one_dependency_when_one_passed();
 	void should_apply_all_dependencies_when_all_passed();
-	void should_throw_with_invalid_method();
 	void should_throw_with_invalid_dependency();
 	void should_throw_with_null_dependency();
 	void should_throw_with_subclass_dependency();
@@ -158,7 +156,6 @@ void resolved_dependency_applicator_test::should_apply_one_dependency_when_one_p
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type1_setter
 			},
 			object1
@@ -180,7 +177,6 @@ void resolved_dependency_applicator_test::should_apply_all_dependencies_when_all
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type1_setter
 			},
 			object1
@@ -188,7 +184,6 @@ void resolved_dependency_applicator_test::should_apply_all_dependencies_when_all
 		{
 			{
 				injectable_type2_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type2_setter
 			},
 			object2
@@ -202,32 +197,12 @@ void resolved_dependency_applicator_test::should_apply_all_dependencies_when_all
 	QCOMPARE(injected_object.object_as<valid_injected_type>()->_2, object2.object());
 }
 
-void resolved_dependency_applicator_test::should_throw_with_invalid_method()
-{
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto resolved_dependencies = std::vector<resolved_dependency>{
-		{
-			{
-				injectable_type1_type,
-				static_cast<dependency_apply_method>(-1),
-				{}
-			},
-			object1
-		}
-	};
-	auto injected_object = make_object_with_meta<valid_injected_type>();
-	expect<applicator_unsupported_method_exception>([&]{
-		auto applicator = resolved_dependency_applicator{resolved_dependencies};
-	});
-}
-
 void resolved_dependency_applicator_test::should_throw_with_null_dependency()
 {
 	auto resolved_dependencies = std::vector<resolved_dependency>{
 		{
 			{
 				injectable_type2_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type2_setter
 			},
 			{
@@ -249,7 +224,6 @@ void resolved_dependency_applicator_test::should_throw_with_subclass_dependency(
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type1_setter
 			},
 			sub_object1
@@ -268,7 +242,6 @@ void resolved_dependency_applicator_test::should_throw_with_superclass_dependenc
 		{
 			{
 				sub_injectable_type1_type,
-				dependency_apply_method::setter,
 				method{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(sub_injectable_type*)"))}
 			},
 			object1
@@ -287,7 +260,6 @@ void resolved_dependency_applicator_test::should_throw_with_invalid_dependency()
 		{
 			{
 				injectable_type2_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type2_setter
 			},
 			object1
@@ -306,7 +278,6 @@ void resolved_dependency_applicator_test::should_throw_with_null_setter()
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				{}
 			},
 			object1
@@ -325,7 +296,6 @@ void resolved_dependency_applicator_test::should_throw_with_non_qobject_setter()
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_int_setter
 			},
 			object1
@@ -344,7 +314,6 @@ void resolved_dependency_applicator_test::should_throw_with_invalid_setter()
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_double_setter
 			},
 			object1
@@ -364,7 +333,6 @@ void resolved_dependency_applicator_test::should_throw_with_non_matching_setter(
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type2_setter
 			},
 			object1
@@ -384,7 +352,6 @@ void resolved_dependency_applicator_test::should_throw_when_applying_on_wrong_ob
 		{
 			{
 				injectable_type1_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type1_setter
 			},
 			object1
@@ -392,7 +359,6 @@ void resolved_dependency_applicator_test::should_throw_when_applying_on_wrong_ob
 		{
 			{
 				injectable_type2_type,
-				dependency_apply_method::setter,
 				valid_injected_type_injectable_type2_setter
 			},
 			object2
