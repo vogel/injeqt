@@ -43,5 +43,4 @@ resolve_dependencies_result dependency_resolver::resolve_dependencies(
 	};
 }
 
-
 }}
