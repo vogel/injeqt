@@ -24,8 +24,6 @@
 
 #include <set>
 
-class QMetaObject;
-
 namespace injeqt { namespace v1 {
 
 class type;
@@ -35,9 +33,6 @@ class implements_extractor final
 
 public:
 	std::set<type> extract_implements(const type &for_type) const;
-
-private:
-	bool is_qobject(const QMetaObject * const meta_object) const;
 
 };
 

@@ -23,9 +23,20 @@
 #include "type.h"
 
 #include <QtCore/QMetaMethod>
+#include <QtCore/QMetaObject>
 #include <QtCore/QMetaType>
 
 namespace injeqt { namespace v1 {
+
+namespace
+{
+
+bool is_qobject(const QMetaObject * const meta_object)
+{
+	return !meta_object->superClass();
+}
+
+}
 
 std::set<type> implements_extractor::extract_implements(const type &for_type) const
 {
@@ -38,11 +49,6 @@ std::set<type> implements_extractor::extract_implements(const type &for_type) co
 	}
 
 	return result;
-}
-
-bool implements_extractor::is_qobject(const QMetaObject * const meta_object) const
-{
-	return !meta_object->superClass();
 }
 
 }}
