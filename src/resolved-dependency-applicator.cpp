@@ -74,7 +74,7 @@ void resolved_dependency_applicator::apply_on(object_with_meta &object)
 	{
 		auto setter = resolved.resolved().setter();
 		auto method = setter.meta_method();
-		if (!object.meta().implements(type{method.enclosingMetaObject()}))
+		if (object.meta().main_type() != setter.object_type())
 			throw applicator_non_matching_setter_exception{exception_message(object.meta().main_type().meta_object(), method)};
 		if (!setter.invoke(object, resolved.object()))
 			throw applicator_failed_exception{exception_message(object.meta().main_type().meta_object(), method)};

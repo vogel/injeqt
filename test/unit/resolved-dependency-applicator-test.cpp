@@ -132,7 +132,7 @@ private:
 };
 
 resolved_dependency_applicator_test::resolved_dependency_applicator_test() :
-	valid_injected_type_type{std::addressof(injectable_type1::staticMetaObject)},
+	valid_injected_type_type{std::addressof(valid_injected_type::staticMetaObject)},
 	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
 	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
 	sub_injectable_type1_type{std::addressof(sub_injectable_type1::staticMetaObject)},
