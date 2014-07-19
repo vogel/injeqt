@@ -22,15 +22,14 @@
 
 namespace injeqt { namespace v1 {
 
-dependency::dependency(type required_type, setter_method setter) :
-	_required_type{std::move(required_type)},
+dependency::dependency(setter_method setter) :
 	_setter{std::move(setter)}
 {
 }
 
 type dependency::required_type() const
 {
-	return _required_type;
+	return _setter.parameter_type();
 }
 
 setter_method dependency::setter() const
@@ -42,9 +41,6 @@ bool operator == (const dependency &first, const dependency &second)
 {
 	if (std::addressof(first) == std::addressof(second))
 		return true;
-
-	if (first.required_type() != second.required_type())
-		return false;
 
 	if (first.setter() != second.setter())
 		return false;

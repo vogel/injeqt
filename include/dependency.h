@@ -30,13 +30,12 @@ class dependency final
 {
 
 public:
-	dependency(type required_type, setter_method setter);
+	explicit dependency(setter_method setter);
 
 	type required_type() const;
 	setter_method setter() const;
 
 private:
-	type _required_type;
 	setter_method _setter;
 
 };

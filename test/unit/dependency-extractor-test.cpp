@@ -203,17 +203,17 @@ void dependency_extractor_test::should_find_all_valid_dependencies()
 {
 	auto dependencies = dependency_extractor{}.extract_dependencies(valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 2UL);
-	verify_dependency(dependencies, { injectable_type1_type, valid_injected_type_setter_1 });
-	verify_dependency(dependencies, { injectable_type2_type, valid_injected_type_setter_2 });
+	verify_dependency(dependencies, dependency{ valid_injected_type_setter_1 });
+	verify_dependency(dependencies, dependency{ valid_injected_type_setter_2 });
 }
 
 void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy()
 {
 	auto dependencies = dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 3UL);
-	verify_dependency(dependencies, { injectable_type1_type, inheriting_valid_injected_type_setter_1 });
-	verify_dependency(dependencies, { injectable_type2_type, inheriting_valid_injected_type_setter_2 });
-	verify_dependency(dependencies, { injectable_type3_type, inheriting_valid_injected_type_setter_3 });
+	verify_dependency(dependencies, dependency{ inheriting_valid_injected_type_setter_1 });
+	verify_dependency(dependencies, dependency{ inheriting_valid_injected_type_setter_2 });
+	verify_dependency(dependencies, dependency{ inheriting_valid_injected_type_setter_3 });
 }
 
 void dependency_extractor_test::should_fail_when_too_many_parameters()
