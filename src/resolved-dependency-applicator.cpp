@@ -70,12 +70,13 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 
 void resolved_dependency_applicator::apply_on(object_with_meta &object)
 {
-	for (auto &&resolved :_resolved_dependencies)
+	for (auto &&resolved : _resolved_dependencies)
 	{
-		auto method = resolved.resolved().setter().meta_method();
+		auto setter = resolved.resolved().setter();
+		auto method = setter.meta_method();
 		if (!object.meta().implements(type{method.enclosingMetaObject()}))
 			throw applicator_non_matching_setter_exception{exception_message(object.meta().main_type().meta_object(), method)};
-		if (!method.invoke(object.object(), Q_ARG(QObject *, resolved.object().object())))
+		if (!setter.invoke(object, resolved.object()))
 			throw applicator_failed_exception{exception_message(object.meta().main_type().meta_object(), method)};
 	}
 }

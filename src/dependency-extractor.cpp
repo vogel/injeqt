@@ -22,6 +22,7 @@
 
 #include "dependency.h"
 #include "implements-extractor.h"
+#include "object-with-meta.h"
 #include "setter-method.h"
 #include "type.h"
 

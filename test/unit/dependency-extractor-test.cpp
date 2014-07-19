@@ -23,6 +23,7 @@
 #include "dependency-extractor.cpp"
 #include "expect.h"
 #include "implements-extractor.cpp"
+#include "object-with-meta.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 

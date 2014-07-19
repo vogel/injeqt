@@ -20,6 +20,8 @@
 
 #include "setter-method.h"
 
+#include "object-with-meta.h"
+
 namespace injeqt { namespace v1 {
 
 setter_method::setter_method(type object_type, type parameter_type, QMetaMethod meta_method) :
@@ -42,6 +44,11 @@ type setter_method::parameter_type() const
 QMetaMethod setter_method::meta_method() const
 {
 	return _meta_method;
+}
+
+bool setter_method::invoke(const object_with_meta &on, const object_with_meta &parameter) const
+{
+	return _meta_method.invoke(on.object(), Q_ARG(QObject *, parameter.object()));
 }
 
 bool operator == (const setter_method &x, const setter_method &y)

@@ -27,6 +27,8 @@
 
 namespace injeqt { namespace v1 {
 
+class object_with_meta;
+
 class setter_method final
 {
 
@@ -36,6 +38,8 @@ public:
 	type object_type() const;
 	type parameter_type() const;
 	QMetaMethod meta_method() const;
+
+	bool invoke(const object_with_meta &on, const object_with_meta &parameter) const;
 
 private:
 	type _object_type;
