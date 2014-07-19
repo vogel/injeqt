@@ -117,6 +117,7 @@ private slots:
 	void should_throw_when_applying_on_wrong_object();
 
 private:
+	type valid_injected_type_type;
 	type injectable_type1_type;
 	type injectable_type2_type;
 	type sub_injectable_type1_type;
@@ -124,17 +125,45 @@ private:
 	setter_method valid_injected_type_injectable_type2_setter;
 	setter_method valid_injected_type_int_setter;
 	setter_method valid_injected_type_double_setter;
+	setter_method dummy_method;
 
 };
 
 resolved_dependency_applicator_test::resolved_dependency_applicator_test() :
+	valid_injected_type_type{std::addressof(injectable_type1::staticMetaObject)},
 	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
 	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
 	sub_injectable_type1_type{std::addressof(sub_injectable_type1::staticMetaObject)},
-	valid_injected_type_injectable_type1_setter{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))},
-	valid_injected_type_injectable_type2_setter{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))},
-	valid_injected_type_int_setter{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("int_setter(int)"))},
-	valid_injected_type_double_setter{valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("double_setter(injectable_type1*, injectable_type2*)"))}
+	valid_injected_type_injectable_type1_setter
+	{
+		valid_injected_type_type,
+		injectable_type1_type,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
+	},
+	valid_injected_type_injectable_type2_setter
+	{
+		valid_injected_type_type,
+		injectable_type2_type,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
+	},
+	valid_injected_type_int_setter
+	{
+		valid_injected_type_type,
+		injectable_type2_type,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("int_setter(int)"))
+	},
+	valid_injected_type_double_setter
+	{
+		valid_injected_type_type,
+		injectable_type2_type,
+		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("double_setter(injectable_type1*, injectable_type2*)"))
+	},
+	dummy_method
+	{
+		injectable_type1_type,
+		injectable_type2_type,
+		{}
+	}
 {
 }
 
@@ -242,7 +271,7 @@ void resolved_dependency_applicator_test::should_throw_with_null_setter()
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto resolved_dependencies = std::vector<resolved_dependency>
 	{
-		{ { injectable_type1_type, {} }, object1 }
+		{ { injectable_type1_type, dummy_method }, object1 }
 	};
 	auto injected_object = make_object_with_meta<valid_injected_type>();
 	expect<applicator_invalid_setter_exception>([&]{

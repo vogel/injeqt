@@ -76,6 +76,7 @@ private:
 	type injectable_type2_type;
 	type injectable_type3_type;
 	type sublcass_injectable_type1_type;
+	setter_method dummy_method;
 
 };
 
@@ -83,7 +84,13 @@ dependency_resolver_test::dependency_resolver_test() :
 	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
 	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
 	injectable_type3_type{std::addressof(injectable_type3::staticMetaObject)},
-	sublcass_injectable_type1_type{std::addressof(sublcass_injectable_type1::staticMetaObject)}
+	sublcass_injectable_type1_type{std::addressof(sublcass_injectable_type1::staticMetaObject)},
+	dummy_method
+	{
+		injectable_type1_type,
+		injectable_type2_type,
+		{}
+	}
 {
 }
 
@@ -95,9 +102,9 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 	auto objects = std::vector<const object_with_meta *>{};
 	auto to_resolve = std::vector<dependency>
 	{
-		{ injectable_type1_type, {} },
-		{ injectable_type2_type, {} },
-		{ injectable_type3_type, {} }
+		{ injectable_type1_type, dummy_method },
+		{ injectable_type2_type, dummy_method },
+		{ injectable_type3_type, dummy_method }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -118,9 +125,9 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 	};
 	auto to_resolve = std::vector<dependency>
 	{
-		{ injectable_type1_type, {} },
-		{ injectable_type2_type, {} },
-		{ injectable_type3_type, {} }
+		{ injectable_type1_type, dummy_method },
+		{ injectable_type2_type, dummy_method },
+		{ injectable_type3_type, dummy_method }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -142,9 +149,9 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	};
 	auto to_resolve = std::vector<dependency>
 	{
-		{ injectable_type1_type, {} },
-		{ injectable_type2_type, {} },
-		{ injectable_type3_type, {} }
+		{ injectable_type1_type, dummy_method },
+		{ injectable_type2_type, dummy_method },
+		{ injectable_type3_type, dummy_method }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -170,9 +177,9 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	};
 	auto to_resolve = std::vector<dependency>
 	{
-		{ injectable_type1_type, {} },
-		{ injectable_type2_type, {} },
-		{ injectable_type3_type, {} }
+		{ injectable_type1_type, dummy_method },
+		{ injectable_type2_type, dummy_method },
+		{ injectable_type3_type, dummy_method }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -200,9 +207,9 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	};
 	auto to_resolve = std::vector<dependency>
 	{
-		{ injectable_type1_type, {} },
-		{ injectable_type2_type, {} },
-		{ injectable_type3_type, {} }
+		{ injectable_type1_type, dummy_method },
+		{ injectable_type2_type, dummy_method },
+		{ injectable_type3_type, dummy_method }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);
@@ -226,8 +233,8 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 	};
 	auto to_resolve = std::vector<dependency>
 	{
-		{ sublcass_injectable_type1_type, {} },
-		{ injectable_type2_type, {} }
+		{ sublcass_injectable_type1_type, dummy_method },
+		{ injectable_type2_type, dummy_method }
 	};
 
 	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects);

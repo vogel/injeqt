@@ -22,13 +22,21 @@
 
 namespace injeqt { namespace v1 {
 
-setter_method::setter_method()
+setter_method::setter_method(type object_type, type parameter_type, QMetaMethod meta_method) :
+	_object_type{std::move(object_type)},
+	_parameter_type{std::move(parameter_type)},
+	_meta_method{std::move(meta_method)}
 {
 }
 
-setter_method::setter_method(QMetaMethod meta_method) :
-	_meta_method{meta_method}
+type setter_method::object_type() const
 {
+	return _object_type;
+}
+
+type setter_method::parameter_type() const
+{
+	return _parameter_type;
 }
 
 QMetaMethod setter_method::meta_method() const
@@ -38,7 +46,19 @@ QMetaMethod setter_method::meta_method() const
 
 bool operator == (const setter_method &x, const setter_method &y)
 {
-	return x.meta_method() == y.meta_method();
+	if (std::addressof(x) == std::addressof(y))
+		return true;
+
+	if (x.object_type() != y.object_type())
+		return false;
+
+	if (x.parameter_type() != y.parameter_type())
+		return false;
+
+	if (x.meta_method() != y.meta_method())
+		return false;
+
+	return true;
 }
 
 bool operator != (const setter_method &x, const setter_method &y)

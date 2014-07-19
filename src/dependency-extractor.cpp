@@ -68,7 +68,7 @@ dependencies dependency_extractor::extract_dependencies(const type &for_type) co
 		if (used_dependencies_size + implements_size != used_dependencies.size())
 			throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
 
-		result.emplace_back(type{parameter_meta_object}, setter_method{probably_setter});
+		result.emplace_back(type{parameter_meta_object}, setter_method{for_type, type{parameter_meta_object}, probably_setter});
 	}
 
 	return dependencies{result};

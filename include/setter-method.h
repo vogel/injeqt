@@ -21,6 +21,7 @@
 #pragma once
 
 #include "injeqt-global.h"
+#include "type.h"
 
 #include <QtCore/QMetaMethod>
 
@@ -30,12 +31,15 @@ class setter_method final
 {
 
 public:
-	setter_method();
-	explicit setter_method(QMetaMethod meta_method);
+	explicit setter_method(type object_type, type parameter_type, QMetaMethod meta_method);
 
+	type object_type() const;
+	type parameter_type() const;
 	QMetaMethod meta_method() const;
 
 private:
+	type _object_type;
+	type _parameter_type;
 	QMetaMethod _meta_method;
 
 };
