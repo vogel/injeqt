@@ -46,6 +46,11 @@ QMetaMethod setter_method::meta_method() const
 	return _meta_method;
 }
 
+std::string setter_method::signature() const
+{
+	return _meta_method.methodSignature().data();
+}
+
 bool setter_method::invoke(const object_with_meta &on, const object_with_meta &parameter) const
 {
 	return _meta_method.invoke(on.object(), Q_ARG(QObject *, parameter.object()));
@@ -62,7 +67,7 @@ bool operator == (const setter_method &x, const setter_method &y)
 	if (x.parameter_type() != y.parameter_type())
 		return false;
 
-	if (x.meta_method() != y.meta_method())
+	if (x.signature() != y.signature())
 		return false;
 
 	return true;

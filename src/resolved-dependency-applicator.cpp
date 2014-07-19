@@ -31,14 +31,14 @@ std::string exception_message(const QMetaMethod &method)
 	return std::string{method.methodSignature().data()};
 }
 
-std::string exception_message(const QMetaObject *meta_object, const QMetaMethod &method)
+std::string exception_message(const QMetaObject *meta_object, const setter_method &method)
 {
-	return std::string{meta_object->className()} + "::" + method.methodSignature().data();
+	return std::string{meta_object->className()} + "::" + method.signature();
 }
 
-std::string exception_message(const QMetaObject *meta_object1, const QMetaObject *meta_object12)
+std::string exception_message(const QMetaObject *meta_object1, const QMetaObject *meta_object2)
 {
-	return std::string{meta_object1->className()} + " - " + meta_object12->className();
+	return std::string{meta_object1->className()} + " - " + meta_object2->className();
 }
 
 }
@@ -73,11 +73,10 @@ void resolved_dependency_applicator::apply_on(object_with_meta &object)
 	for (auto &&resolved : _resolved_dependencies)
 	{
 		auto setter = resolved.resolved().setter();
-		auto method = setter.meta_method();
 		if (object.meta().main_type() != setter.object_type())
-			throw applicator_non_matching_setter_exception{exception_message(object.meta().main_type().meta_object(), method)};
+			throw applicator_non_matching_setter_exception{exception_message(object.meta().main_type().meta_object(), setter)};
 		if (!setter.invoke(object, resolved.object()))
-			throw applicator_failed_exception{exception_message(object.meta().main_type().meta_object(), method)};
+			throw applicator_failed_exception{exception_message(object.meta().main_type().meta_object(), setter)};
 	}
 }
 

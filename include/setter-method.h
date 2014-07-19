@@ -38,6 +38,7 @@ public:
 	type object_type() const;
 	type parameter_type() const;
 	QMetaMethod meta_method() const;
+	std::string signature() const;
 
 	bool invoke(const object_with_meta &on, const object_with_meta &parameter) const;
 
