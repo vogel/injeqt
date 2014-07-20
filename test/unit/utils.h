@@ -21,9 +21,9 @@
 #pragma once
 
 #include "meta-object-factory.h"
-#include "object-with-meta.h"
 
 #include <QtCore/QObject>
+#include <memory>
 
 namespace injeqt { namespace v1 {
 

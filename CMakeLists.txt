@@ -46,7 +46,6 @@ set(INJEQT_SRCS
 	src/meta-object.cpp
 	src/meta-object-factory.cpp
 	src/module.cpp
-	src/object-with-meta.cpp
 	src/resolved-dependency.cpp
 	src/setter-injector.cpp
 	src/setter-method.cpp

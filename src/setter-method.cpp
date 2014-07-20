@@ -22,7 +22,6 @@
 
 #include "meta-object.h"
 #include "meta-object-factory.h"
-#include "object-with-meta.h"
 
 namespace injeqt { namespace v1 {
 
