@@ -26,6 +26,8 @@ namespace injeqt { namespace v1 {
 type::type(const QMetaObject *meta_object) :
 	_meta_object{meta_object}
 {
+	if (!_meta_object)
+		throw invalid_type_exception{};
 }
 
 const QMetaObject * type::meta_object() const

@@ -20,11 +20,15 @@
 
 #pragma once
 
+#include "injeqt-exception.h"
 #include "injeqt-global.h"
 
 class QMetaObject;
 
 namespace injeqt { namespace v1 {
+
+DEFINE_EXCEPTION(type_exception, injeqt_exception);
+DEFINE_EXCEPTION(invalid_type_exception, type_exception);
 
 class type final
 {
