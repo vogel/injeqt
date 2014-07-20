@@ -20,21 +20,21 @@
 
 #include "dependency-resolver.h"
 
-#include "object-with-meta.h"
+#include "dependency.h"
+#include "implementations.h"
 #include "resolved-dependency.h"
 
 namespace injeqt { namespace v1 {
 
 resolve_dependencies_result dependency_resolver::resolve_dependencies(
 	const dependencies &to_resolve,
-	const objects_with_meta &objects) const
+	const implementations &resolve_with) const
 {
-	auto match_result = match(to_resolve.content(), objects.content());
+	auto match_result = match(to_resolve.content(), resolve_with.content());
 	auto resolved = std::vector<resolved_dependency>{};
 
 	for (auto &&match : match_result.matched)
-		if (match.second)
-			resolved.emplace_back(match.first, *match.second);
+		resolved.emplace_back(match.second, match.first.setter());
 
 	return
 	{

@@ -21,11 +21,13 @@
 #include "dependencies.cpp"
 #include "dependency.cpp"
 #include "dependency-resolver.cpp"
+#include "implementation.cpp"
+#include "implementation-availability.h"
+#include "implementations.cpp"
 #include "implements-extractor.cpp"
 #include "meta-object.cpp"
 #include "meta-object-factory.cpp"
 #include "object-with-meta.cpp"
-#include "objects-with-meta.cpp"
 #include "resolved-dependency.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
@@ -108,10 +110,7 @@ dependency_resolver_test::dependency_resolver_test() :
 
 void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_available()
 {
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto object2 = make_object_with_meta<injectable_type2>();
-	auto object3 = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>{};
+	auto objects = std::vector<implementation>{};
 	auto to_resolve = std::vector<dependency>
 	{
 		dependency{injectable_type1_setter},
@@ -119,21 +118,21 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects_with_meta{objects});
+	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QVERIFY(result.resolved.empty());
 	QCOMPARE(result.unresolved, dependencies{to_resolve});
 }
 
 void dependency_resolver_test::should_resolve_all_dependencies()
 {
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto object2 = make_object_with_meta<injectable_type2>();
-	auto object3 = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>
+	auto object1 = make_object<injectable_type1>();
+	auto object2 = make_object<injectable_type2>();
+	auto object3 = make_object<injectable_type3>();
+	auto objects = std::vector<implementation>
 	{
-		std::addressof(object1),
-		std::addressof(object2),
-		std::addressof(object3),
+		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
+		implementation{injectable_type2_type, implementation_availability::available, object2.get()},
+		implementation{injectable_type3_type, implementation_availability::available, object3.get()},
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -142,22 +141,22 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects_with_meta{objects});
+	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 3ul);
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(1), object2}));
-	QCOMPARE(result.resolved.at(2), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type2_setter}));
+	QCOMPARE(result.resolved.at(2), (resolved_dependency{objects.at(2), injectable_type3_setter}));
 	QVERIFY(result.unresolved.empty());
 }
 
 void dependency_resolver_test::should_resolve_available_dependencies()
 {
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto object3 = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>
+	auto object1 = make_object<injectable_type1>();
+	auto object3 = make_object<injectable_type3>();
+	auto objects = std::vector<implementation>
 	{
-		std::addressof(object1),
-		std::addressof(object3),
+		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
+		implementation{injectable_type3_type, implementation_availability::available, object3.get()}
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -166,26 +165,26 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects_with_meta{objects});
+	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 2ul);
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type3_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 }
 
 void dependency_resolver_test::should_resolve_available_dependencies_using_exact_matching()
 {
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto object1b = make_object_with_meta<injectable_type1>();
-	auto object3 = make_object_with_meta<injectable_type3>();
-	auto object3b = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>
+	auto object1 = make_object<injectable_type1>();
+	auto object1b = make_object<injectable_type1>();
+	auto object3 = make_object<injectable_type3>();
+	auto object3b = make_object<injectable_type3>();
+	auto objects = std::vector<implementation>
 	{
-		std::addressof(object1),
-		std::addressof(object1b),
-		std::addressof(object3),
-		std::addressof(object3b),
+		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
+		implementation{injectable_type1_type, implementation_availability::available, object1b.get()},
+		implementation{injectable_type3_type, implementation_availability::available, object3.get()},
+		implementation{injectable_type3_type, implementation_availability::available, object3b.get()},
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -194,10 +193,10 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects_with_meta{objects});
+	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 2ul);
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QCOMPARE(*result.unresolved.begin(), to_resolve.at(1));
 	QVERIFY(std::addressof(object1) != std::addressof(object1b));
@@ -206,16 +205,16 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 
 void dependency_resolver_test::should_resolve_available_dependencies_using_exact_matching_not_using_subclass()
 {
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto subobject1 = make_object_with_meta<sublcass_injectable_type1>();
-	auto object3 = make_object_with_meta<injectable_type3>();
-	auto object3b = make_object_with_meta<injectable_type3>();
-	auto objects = std::vector<const object_with_meta *>
+	auto object1 = make_object<injectable_type1>();
+	auto subobject1 = make_object<sublcass_injectable_type1>();
+	auto object3 = make_object<injectable_type3>();
+	auto object3b = make_object<injectable_type3>();
+	auto objects = std::vector<implementation>
 	{
-		std::addressof(subobject1),
-		std::addressof(object1),
-		std::addressof(object3),
-		std::addressof(object3b),
+		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
+		implementation{sublcass_injectable_type1_type, implementation_availability::available, subobject1.get()},
+		implementation{injectable_type3_type, implementation_availability::available, object3.get()},
+		implementation{injectable_type3_type, implementation_availability::available, object3b.get()}
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -224,10 +223,10 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects_with_meta{objects});
+	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 2ul);
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(0), object1}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{to_resolve.at(2), object3}));
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
+	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 	QVERIFY(std::addressof(object1) != std::addressof(subobject1));
@@ -236,12 +235,12 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 
 void dependency_resolver_test::should_resolve_available_dependencies_not_using_superclass()
 {
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto object2 = make_object_with_meta<injectable_type2>();
-	auto objects = std::vector<const object_with_meta *>
+	auto object1 = make_object<injectable_type1>();
+	auto object2 = make_object<injectable_type2>();
+	auto objects = std::vector<implementation>
 	{
-		std::addressof(object1),
-		std::addressof(object2)
+		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
+		implementation{injectable_type2_type, implementation_availability::available, object2.get()}
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -249,9 +248,9 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 		dependency{injectable_type2_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, objects_with_meta{objects});
+	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 1ul);
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{to_resolve.at(1), object2}));
+	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(1), injectable_type2_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QVERIFY(result.unresolved.contains(to_resolve.at(0)));
 }

@@ -20,6 +20,8 @@
 
 #include "setter-method.h"
 
+#include "meta-object.h"
+#include "meta-object-factory.h"
 #include "object-with-meta.h"
 
 namespace injeqt { namespace v1 {
@@ -64,9 +66,22 @@ std::string setter_method::signature() const
 	return _meta_method.methodSignature().data();
 }
 
-bool setter_method::invoke(const object_with_meta &on, const object_with_meta &parameter) const
+bool setter_method::invoke(QObject *on, QObject *parameter) const
 {
-	return _meta_method.invoke(on.object(), Q_ARG(QObject *, parameter.object()));
+	if (!on)
+		throw invoked_on_wrong_object_exception{};
+
+	if (type{on->metaObject()} != _object_type)
+		throw invoked_on_wrong_object_exception{};
+
+	if (!parameter)
+		throw invoked_with_wrong_object_exception{};
+
+	auto meta_parameter_type = meta_object_factory{}.create_meta_object(type{parameter->metaObject()});
+	if (!meta_parameter_type.implements(_parameter_type))
+		throw invoked_with_wrong_object_exception{};
+
+	return _meta_method.invoke(on, Q_ARG(QObject *, parameter));
 }
 
 bool operator == (const setter_method &x, const setter_method &y)

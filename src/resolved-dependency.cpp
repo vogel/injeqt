@@ -20,22 +20,44 @@
 
 #include "resolved-dependency.h"
 
+#include "implementation-availability.h"
+
 namespace injeqt { namespace v1 {
 
-resolved_dependency::resolved_dependency(dependency resolved, const object_with_meta &object) :
-	_resolved{std::move(resolved)},
-	_object(object)
+resolved_dependency::resolved_dependency(implementation resolved_with, setter_method setter) :
+	_resolved_with{std::move(resolved_with)},
+	_setter{std::move(setter)}
 {
+	if (_resolved_with.availability() == implementation_availability::ambiguous)
+		throw ambiguous_resolved_dependency_exception{};
+
+	if (_resolved_with.implemented_type() != setter.parameter_type())
+		throw non_matching_setter_exception{};
 }
 
-dependency resolved_dependency::resolved() const
+implementation resolved_dependency::resolved_with() const
 {
-	return _resolved;
+	return _resolved_with;
 }
 
-const object_with_meta & resolved_dependency::object() const
+setter_method resolved_dependency::setter() const
 {
-	return _object;
+	return _setter;
+}
+
+bool resolved_dependency::apply_on(QObject *on)
+{
+	if (!on)
+		throw inavalid_apply_on_object_exception{};
+
+	try
+	{
+		_setter.invoke(on, _resolved_with.object());
+	}
+	catch (invoked_on_wrong_object_exception &)
+	{
+		throw inavalid_apply_on_object_exception{};
+	}
 }
 
 bool operator == (const resolved_dependency &first, const resolved_dependency &second)
@@ -43,10 +65,10 @@ bool operator == (const resolved_dependency &first, const resolved_dependency &s
 	if (std::addressof(first) == std::addressof(second))
 		return true;
 
-	if (first.resolved() != second.resolved())
+	if (first.resolved_with() != second.resolved_with())
 		return false;
 
-	if (std::addressof(first.object()) != std::addressof(second.object()))
+	if (first.setter() != second.setter())
 		return false;
 
 	return true;

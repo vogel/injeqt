@@ -22,6 +22,8 @@
 #include "dependency.cpp"
 #include "dependency-extractor.cpp"
 #include "implements-extractor.cpp"
+#include "meta-object.cpp"
+#include "meta-object-factory.cpp"
 #include "object-with-meta.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"

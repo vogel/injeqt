@@ -22,15 +22,12 @@
 
 #include "dependencies.h"
 #include "injeqt-global.h"
-#include "objects-with-meta.h"
 
-#include <tuple>
-#include <unordered_map>
 #include <vector>
 
 namespace injeqt { namespace v1 {
 
-class object_with_meta;
+class implementations;
 class resolved_dependency;
 
 struct resolve_dependencies_result
@@ -43,7 +40,7 @@ class dependency_resolver final
 {
 
 public:
-	resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const objects_with_meta &objects) const;
+	resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with) const;
 
 };
 

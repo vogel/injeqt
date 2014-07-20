@@ -20,25 +20,31 @@
 
 #pragma once
 
-#include "dependency.h"
+#include "implementation.h"
 #include "injeqt-global.h"
+#include "setter-method.h"
 
 namespace injeqt { namespace v1 {
 
-class object_with_meta;
+DEFINE_EXCEPTION(invalid_resolved_dependency_exception, injeqt_exception);
+DEFINE_EXCEPTION(ambiguous_resolved_dependency_exception, invalid_resolved_dependency_exception);
+DEFINE_EXCEPTION(non_matching_setter_exception, invalid_resolved_dependency_exception);
+DEFINE_EXCEPTION(inavalid_apply_on_object_exception, invalid_resolved_dependency_exception);
 
 class resolved_dependency final
 {
 
 public:
-	explicit resolved_dependency(dependency resolved, const object_with_meta &object);
+	explicit resolved_dependency(implementation resolved_with, setter_method setter);
 
-	dependency resolved() const;
-	const object_with_meta & object() const;
+	implementation resolved_with() const;
+	setter_method setter() const;
+
+	bool apply_on(QObject *on);
 
 private:
-	dependency _resolved;
-	const object_with_meta &_object;
+	implementation _resolved_with;
+	setter_method _setter;
 
 };
 

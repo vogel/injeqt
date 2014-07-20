@@ -18,6 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "implements-extractor.cpp"
+#include "meta-object.cpp"
+#include "meta-object-factory.cpp"
 #include "object-with-meta.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
@@ -43,8 +46,11 @@ class test_type : public QObject
 {
 	Q_OBJECT
 
+public:
+	injectable_type1 *_1 = nullptr;
+
 public slots:
-	injeqt_setter void tagged_setter_1(injectable_type1 *) {}
+	injeqt_setter void tagged_setter_1(injectable_type1 *a) { _1 = a; }
 	injeqt_setter void tagged_int_setter(int) {}
 	injeqt_setter void tagged_invalid_setter(injectable_type1 *, injectable_type2 *) {}
 	void untagged_setter_1(injectable_type1 *) {}
@@ -68,6 +74,11 @@ private slots:
 	void should_throw_when_created_from_untagged_int_setter();
 	void should_throw_when_created_from_tagged_invalid_setter();
 	void should_throw_when_created_from_untagged_invalid_setter();
+	void should_throw_when_called_on_null_object();
+	void should_throw_when_called_on_wrong_object();
+	void should_throw_when_called_with_null_object();
+	void should_throw_when_called_with_wrong_object();
+	void should_invoke_have_results();
 
 private:
 	type injectable_type1_type;
@@ -132,6 +143,57 @@ void setter_method_test::should_throw_when_created_from_untagged_invalid_setter(
 	expect<setter_too_many_parameters_exception>([&]{
 		auto setter = setter_method{method<test_type>("untagged_invalid_setter(injectable_type1*,injectable_type2*)")};
 	});
+}
+
+void setter_method_test::should_throw_when_called_on_null_object()
+{
+	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto with = make_object<injectable_type1>();
+	expect<invoked_on_wrong_object_exception>([&]{
+		setter.invoke(nullptr, with.get());
+	});
+}
+
+void setter_method_test::should_throw_when_called_on_wrong_object()
+{
+	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto on = make_object<injectable_type1>();
+	auto with = make_object<injectable_type1>();
+	expect<invoked_on_wrong_object_exception>([&]{
+		setter.invoke(on.get(), with.get());
+	});
+}
+
+void setter_method_test::should_throw_when_called_with_null_object()
+{
+	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto on = make_object<injectable_type1>();
+	expect<invoked_on_wrong_object_exception>([&]{
+		setter.invoke(on.get(), nullptr);
+	});
+}
+
+void setter_method_test::should_throw_when_called_with_wrong_object()
+{
+	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto on = make_object<injectable_type1>();
+	auto with = make_object<test_type>();
+	expect<invoked_on_wrong_object_exception>([&]{
+		setter.invoke(on.get(), with.get());
+	});
+}
+
+void setter_method_test::should_invoke_have_results()
+{
+	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto on = make_object<test_type>();
+	auto with = make_object<injectable_type1>();
+
+	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<test_type *>(on.get())->_1);
+
+	setter.invoke(on.get(), with.get());
+
+	QCOMPARE(with.get(), static_cast<test_type *>(on.get())->_1);
 }
 
 QTEST_APPLESS_MAIN(setter_method_test)

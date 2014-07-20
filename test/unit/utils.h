@@ -34,18 +34,6 @@ std::unique_ptr<QObject> make_object()
 }
 
 template<typename T>
-object_with_meta make_object_with_meta()
-{
-	auto object = object_with_meta
-	{
-		meta_object_factory{}.create_meta_object(type{std::addressof(T::staticMetaObject)}),
-		make_object<T>()
-	};
-
-	return object;
-}
-
-template<typename T>
 QMetaMethod method(const char *signature)
 {
 	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature));

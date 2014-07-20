@@ -33,6 +33,8 @@ class object_with_meta;
 DEFINE_EXCEPTION(setter_exception, injeqt_exception);
 DEFINE_EXCEPTION(setter_too_many_parameters_exception, setter_exception);
 DEFINE_EXCEPTION(invalid_setter_exception, setter_exception);
+DEFINE_EXCEPTION(invoked_on_wrong_object_exception, setter_exception);
+DEFINE_EXCEPTION(invoked_with_wrong_object_exception, setter_exception);
 
 class setter_method final
 {
@@ -44,7 +46,7 @@ public:
 	type parameter_type() const;
 	std::string signature() const;
 
-	bool invoke(const object_with_meta &on, const object_with_meta &parameter) const;
+	bool invoke(QObject *on, QObject *parameter) const;
 
 private:
 	type _object_type;
