@@ -26,7 +26,7 @@ namespace injeqt { namespace v1 {
 
 namespace {
 
-std::string exception_message(const QMetaMethod &method)
+std::string exception_message_2(const QMetaMethod &method)
 {
 	return std::string{method.methodSignature().data()};
 }
@@ -55,13 +55,13 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 
 		auto method = resolved.resolved().setter().meta_method();
 		if (method.parameterCount() != 1)
-			throw applicator_invalid_setter_exception{exception_message(method)};
+			throw applicator_invalid_setter_exception{exception_message_2(method)};
 		if (!method.enclosingMetaObject())
-			throw applicator_invalid_setter_exception{exception_message(method)};
+			throw applicator_invalid_setter_exception{exception_message_2(method)};
 		auto parameter_type = method.parameterType(0);
 		auto parameter_meta_object = QMetaType::metaObjectForType(parameter_type);
 		if (!parameter_meta_object)
-			throw applicator_invalid_setter_exception{exception_message(method)};
+			throw applicator_invalid_setter_exception{exception_message_2(method)};
 
 		if (resolved.object().meta().main_type() != type{parameter_meta_object})
 			throw applicator_non_matching_setter_exception{exception_message(resolved.object().object()->metaObject(), parameter_meta_object)};

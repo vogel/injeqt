@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "injeqt-exception.h"
 #include "injeqt-global.h"
 #include "type.h"
 
@@ -29,10 +30,15 @@ namespace injeqt { namespace v1 {
 
 class object_with_meta;
 
+DEFINE_EXCEPTION(setter_exception, injeqt_exception);
+DEFINE_EXCEPTION(setter_too_many_parameters_exception, setter_exception);
+DEFINE_EXCEPTION(invalid_setter_exception, setter_exception);
+
 class setter_method final
 {
 
 public:
+	explicit setter_method(QMetaMethod meta_method);
 	explicit setter_method(type object_type, type parameter_type, QMetaMethod meta_method);
 
 	type object_type() const;

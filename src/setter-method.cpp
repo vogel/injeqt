@@ -24,6 +24,31 @@
 
 namespace injeqt { namespace v1 {
 
+namespace {
+
+std::string exception_message(const QMetaMethod &method)
+{
+	return method.enclosingMetaObject()
+		? std::string{method.enclosingMetaObject()->className()} + "::" + method.methodSignature().data()
+		: std::string{"<no-object>::"} + method.methodSignature().data();
+}
+
+}
+
+setter_method::setter_method(QMetaMethod meta_method)
+try :
+	_object_type{meta_method.enclosingMetaObject()},
+	_parameter_type{QMetaType::metaObjectForType(meta_method.parameterType(0))},
+	_meta_method{std::move(meta_method)}
+{
+	if (meta_method.parameterCount() != 1)
+		throw setter_too_many_parameters_exception(exception_message(meta_method));
+}
+catch (invalid_type_exception &e)
+{
+	throw invalid_setter_exception(exception_message(meta_method));
+}
+
 setter_method::setter_method(type object_type, type parameter_type, QMetaMethod meta_method) :
 	_object_type{std::move(object_type)},
 	_parameter_type{std::move(parameter_type)},
