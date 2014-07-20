@@ -58,12 +58,11 @@ try
 
 		auto setter = setter_method{probably_setter};
 		auto implements = implements_extractor{}.extract_implements(setter.parameter_type());
-		auto used_dependencies_size = used_dependencies.size();
-		auto implements_size = implements.size();
-		used_dependencies.insert(std::begin(implements), std::end(implements));
+		for (auto &&i : implements)
+			if (used_dependencies.find(i) != std::end(used_dependencies))
+				throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
 
-		if (used_dependencies_size + implements_size != used_dependencies.size())
-			throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
+		used_dependencies.insert(setter.parameter_type());
 
 		result.emplace_back(std::move(setter));
 	}
