@@ -27,11 +27,7 @@ namespace injeqt { namespace v1 {
 
 meta_object meta_object_factory::create_meta_object(type for_type) const
 {
-	return
-	{
-		for_type,
-		implements_extractor{}.extract_implements(for_type)
-	};
+	return meta_object{for_type, implements_extractor{}.extract_implements(for_type)};
 }
 
 }}

@@ -31,7 +31,7 @@ class resolved_dependency final
 {
 
 public:
-	resolved_dependency(dependency resolved, const object_with_meta &object);
+	explicit resolved_dependency(dependency resolved, const object_with_meta &object);
 
 	dependency resolved() const;
 	const object_with_meta & object() const;

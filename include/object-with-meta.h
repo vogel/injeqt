@@ -33,7 +33,7 @@ class object_with_meta final
 {
 
 public:
-	object_with_meta(meta_object meta, std::unique_ptr<QObject> object);
+	explicit object_with_meta(meta_object meta, std::unique_ptr<QObject> object);
 
 	meta_object meta() const;
 	QObject * object() const;

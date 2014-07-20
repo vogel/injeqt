@@ -37,7 +37,7 @@ class resolved_dependency_applicator final
 {
 
 public:
-	resolved_dependency_applicator(std::vector<resolved_dependency> resolved_dependencies);
+	explicit resolved_dependency_applicator(std::vector<resolved_dependency> resolved_dependencies);
 
 	void apply_on(object_with_meta &object);
 

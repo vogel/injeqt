@@ -36,7 +36,7 @@ public:
 	using storage_type = sorted_unique_vector<type, const object_with_meta *, extract_key>;
 	using const_iterator = typename storage_type::const_iterator;
 
-	objects_with_meta(std::vector<const object_with_meta *> objects_with_meta);
+	explicit objects_with_meta(std::vector<const object_with_meta *> objects_with_meta);
 
 	const_iterator begin() const;
 	const_iterator end() const;

@@ -32,7 +32,7 @@ class meta_object final
 {
 
 public:
-	meta_object(type main_type, std::set<type> implements);
+	explicit meta_object(type main_type, std::set<type> implements);
 
 	type main_type() const;
 	std::set<type> implements() const;
