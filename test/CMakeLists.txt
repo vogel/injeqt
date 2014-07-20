@@ -39,6 +39,7 @@ endfunction ()
 
 injeqt_add_test(dependency-extractor-test unit/dependency-extractor-test.cpp)
 injeqt_add_test(dependency-resolver-test unit/dependency-resolver-test.cpp)
+injeqt_add_test(implementation-test unit/implementation-test.cpp)
 injeqt_add_test(implements-extractor-test unit/implements-extractor-test.cpp)
 injeqt_add_test(resolved-dependency-applicator-test unit/resolved-dependency-applicator-test.cpp)
 injeqt_add_test(setter-method-test unit/setter-method-test.cpp)

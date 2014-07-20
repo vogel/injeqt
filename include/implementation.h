@@ -20,35 +20,38 @@
 
 #pragma once
 
-#include "meta-object-factory.h"
-#include "object-with-meta.h"
+#include "injeqt-exception.h"
+#include "injeqt-global.h"
+#include "type.h"
 
-#include <QtCore/QObject>
+class QObject;
 
 namespace injeqt { namespace v1 {
 
-template<typename T>
-std::unique_ptr<QObject> make_object()
-{
-	return std::unique_ptr<QObject>(new T{});
-}
+enum class implementation_availability;
 
-template<typename T>
-object_with_meta make_object_with_meta()
-{
-	auto object = object_with_meta
-	{
-		meta_object_factory{}.create_meta_object(type{std::addressof(T::staticMetaObject)}),
-		make_object<T>()
-	};
+DEFINE_EXCEPTION(invalid_implementation_exception, injeqt_exception);
+DEFINE_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
+DEFINE_EXCEPTION(invalid_implemented_type_exception, invalid_implementation_exception);
 
-	return object;
-}
-
-template<typename T>
-QMetaMethod method(const char *signature)
+class implementation final
 {
-	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature));
-}
+
+public:
+	explicit implementation(type implemented_type, implementation_availability availability, QObject *object);
+
+	type implemented_type() const;
+	implementation_availability availability() const;
+	QObject * object() const;
+
+private:
+	type _implemented_type;
+	implementation_availability _availability;
+	QObject *_object;
+
+};
+
+bool operator == (const implementation &x, const implementation &y);
+bool operator != (const implementation &x, const implementation &y);
 
 }}

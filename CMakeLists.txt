@@ -40,6 +40,7 @@ set(INJEQT_SRCS
 	src/dependency.cpp
 	src/dependency-extractor.cpp
 	src/dependency-resolver.cpp
+	src/implementation.cpp
 	src/implements-extractor.cpp
 	src/meta-object.cpp
 	src/meta-object-factory.cpp
