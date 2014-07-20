@@ -40,4 +40,10 @@ object_with_meta make_object_with_meta()
 	return object;
 }
 
+template<typename T>
+QMetaMethod method(const char *signature)
+{
+	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature));
+}
+
 }}

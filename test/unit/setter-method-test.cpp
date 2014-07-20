@@ -18,10 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "expect.h"
 #include "object-with-meta.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
+
+#include "expect.h"
+#include "utils.h"
 
 #include <QtTest/QtTest>
 
@@ -72,8 +74,6 @@ private:
 	type injectable_type2_type;
 	type test_type_type;
 
-	QMetaMethod method(const char *signature);
-
 };
 
 setter_method_test::setter_method_test() :
@@ -81,11 +81,6 @@ setter_method_test::setter_method_test() :
 	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
 	test_type_type{std::addressof(test_type::staticMetaObject)}
 {
-}
-
-QMetaMethod setter_method_test::method(const char *signature)
-{
-	return test_type::staticMetaObject.method(test_type::staticMetaObject.indexOfMethod(signature));
 }
 
 void setter_method_test::should_throw_when_created_with_empty_method()
@@ -97,7 +92,7 @@ void setter_method_test::should_throw_when_created_with_empty_method()
 
 void setter_method_test::should_create_valid_from_tagged_setter()
 {
-	auto setter = setter_method{method("tagged_setter_1(injectable_type1*)")};
+	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
 
 	QCOMPARE(setter.object_type(), test_type_type);
 	QCOMPARE(setter.parameter_type(), injectable_type1_type);
@@ -105,7 +100,7 @@ void setter_method_test::should_create_valid_from_tagged_setter()
 
 void setter_method_test::should_create_valid_from_untagged_setter()
 {
-	auto setter = setter_method{method("untagged_setter_1(injectable_type1*)")};
+	auto setter = setter_method{method<test_type>("untagged_setter_1(injectable_type1*)")};
 
 	QCOMPARE(setter.object_type(), test_type_type);
 	QCOMPARE(setter.parameter_type(), injectable_type1_type);
@@ -114,28 +109,28 @@ void setter_method_test::should_create_valid_from_untagged_setter()
 void setter_method_test::should_throw_when_created_from_tagged_int_setter()
 {
 	expect<invalid_setter_exception>([&]{
-		auto setter = setter_method{method("tagged_int_setter(int)")};
+		auto setter = setter_method{method<test_type>("tagged_int_setter(int)")};
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_untagged_int_setter()
 {
 	expect<invalid_setter_exception>([&]{
-		auto setter = setter_method{method("untagged_int_setter(int)")};
+		auto setter = setter_method{method<test_type>("untagged_int_setter(int)")};
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_tagged_invalid_setter()
 {
 	expect<setter_too_many_parameters_exception>([&]{
-		auto setter = setter_method{method("tagged_invalid_setter(injectable_type1*,injectable_type2*)")};
+		auto setter = setter_method{method<test_type>("tagged_invalid_setter(injectable_type1*,injectable_type2*)")};
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_untagged_invalid_setter()
 {
 	expect<setter_too_many_parameters_exception>([&]{
-		auto setter = setter_method{method("untagged_invalid_setter(injectable_type1*,injectable_type2*)")};
+		auto setter = setter_method{method<test_type>("untagged_invalid_setter(injectable_type1*,injectable_type2*)")};
 	});
 }
 

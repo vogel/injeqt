@@ -66,8 +66,6 @@ public:
 public slots:
 	injeqt_setter void setter_1(injectable_type1 *a) { _1 = a; }
 	injeqt_setter void setter_2(injectable_type2 *a) { _2 = a;}
-	void int_setter(int i) {}
-	void double_setter(injectable_type1 *, injectable_type2 *) {}
 
 };
 
@@ -110,10 +108,6 @@ private slots:
 	void should_throw_with_null_dependency();
 	void should_throw_with_subclass_dependency();
 	void should_throw_with_superclass_dependency();
-	void should_throw_with_null_setter();
-	void should_throw_with_non_qobject_setter();
-	void should_throw_with_invalid_setter();
-	void should_throw_with_non_matching_setter();
 	void should_throw_when_applying_on_wrong_object();
 
 private:
@@ -122,13 +116,8 @@ private:
 	type injectable_type2_type;
 	type sub_injectable_type1_type;
 	setter_method valid_injected_type_injectable_type1_setter;
-	setter_method valid_injected_type_injectable_type1_setter_non_matching;
-	setter_method valid_injected_type_sub_injectable_type1_setter;
 	setter_method valid_injected_type_injectable_type2_setter;
-	setter_method valid_injected_type_null_setter;
-	setter_method valid_injected_type_int_setter;
-	setter_method valid_injected_type_double_setter;
-	setter_method dummy_method;
+	setter_method sub_valid_injected_type_sub_injectable_type1_setter;
 };
 
 resolved_dependency_applicator_test::resolved_dependency_applicator_test() :
@@ -136,54 +125,9 @@ resolved_dependency_applicator_test::resolved_dependency_applicator_test() :
 	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
 	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
 	sub_injectable_type1_type{std::addressof(sub_injectable_type1::staticMetaObject)},
-	valid_injected_type_injectable_type1_setter
-	{
-		valid_injected_type_type,
-		injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
-	},
-	valid_injected_type_injectable_type1_setter_non_matching
-	{
-		valid_injected_type_type,
-		injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
-	},
-	valid_injected_type_sub_injectable_type1_setter
-	{
-		valid_injected_type_type,
-		sub_injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
-	},
-	valid_injected_type_injectable_type2_setter
-	{
-		valid_injected_type_type,
-		injectable_type2_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
-	},
-	valid_injected_type_null_setter
-	{
-		valid_injected_type_type,
-		injectable_type1_type,
-		{}
-	},
-	valid_injected_type_int_setter
-	{
-		valid_injected_type_type,
-		injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("int_setter(int)"))
-	},
-	valid_injected_type_double_setter
-	{
-		valid_injected_type_type,
-		injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("double_setter(injectable_type1*, injectable_type2*)"))
-	},
-	dummy_method
-	{
-		injectable_type1_type,
-		injectable_type2_type,
-		{}
-	}
+	valid_injected_type_injectable_type1_setter { method<valid_injected_type>("setter_1(injectable_type1*)") },
+	valid_injected_type_injectable_type2_setter { method<valid_injected_type>("setter_2(injectable_type2*)") },
+	sub_valid_injected_type_sub_injectable_type1_setter { method<sub_valid_injected_type>("setter_1(sub_injectable_type1*)") }
 {
 }
 
@@ -265,7 +209,7 @@ void resolved_dependency_applicator_test::should_throw_with_superclass_dependenc
 	auto object1 = make_object_with_meta<injectable_type1>();
 	auto resolved_dependencies = std::vector<resolved_dependency>
 	{
-		{ dependency{ valid_injected_type_sub_injectable_type1_setter }, object1 }
+		{ dependency{ sub_valid_injected_type_sub_injectable_type1_setter }, object1 }
 	};
 	auto injected_object = make_object_with_meta<sub_valid_injected_type>();
 	expect<applicator_invalid_dependency_exception>([&]{
@@ -282,59 +226,6 @@ void resolved_dependency_applicator_test::should_throw_with_invalid_dependency()
 	};
 	auto injected_object = make_object_with_meta<valid_injected_type>();
 	expect<applicator_invalid_dependency_exception>([&]{
-		auto applicator = resolved_dependency_applicator{resolved_dependencies};
-	});
-}
-
-void resolved_dependency_applicator_test::should_throw_with_null_setter()
-{
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto resolved_dependencies = std::vector<resolved_dependency>
-	{
-		{ dependency{ valid_injected_type_null_setter }, object1 }
-	};
-	auto injected_object = make_object_with_meta<valid_injected_type>();
-	expect<applicator_invalid_setter_exception>([&]{
-		auto applicator = resolved_dependency_applicator{resolved_dependencies};
-	});
-}
-
-void resolved_dependency_applicator_test::should_throw_with_non_qobject_setter()
-{
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto resolved_dependencies = std::vector<resolved_dependency>
-	{
-		{ dependency{ valid_injected_type_int_setter }, object1 }
-	};
-	auto injected_object = make_object_with_meta<valid_injected_type>();
-	expect<applicator_invalid_setter_exception>([&]{
-		auto applicator = resolved_dependency_applicator{resolved_dependencies};
-	});
-}
-
-void resolved_dependency_applicator_test::should_throw_with_invalid_setter()
-{
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto resolved_dependencies = std::vector<resolved_dependency>
-	{
-		{ dependency{ valid_injected_type_double_setter }, object1 }
-	};
-	auto injected_object = make_object_with_meta<valid_injected_type>();
-	expect<applicator_invalid_setter_exception>([&]{
-		auto applicator = resolved_dependency_applicator{resolved_dependencies};
-	});
-
-}
-
-void resolved_dependency_applicator_test::should_throw_with_non_matching_setter()
-{
-	auto object1 = make_object_with_meta<injectable_type1>();
-	auto resolved_dependencies = std::vector<resolved_dependency>
-	{
-		{ dependency{ valid_injected_type_injectable_type1_setter_non_matching }, object1 }
-	};
-	auto injected_object = make_object_with_meta<valid_injected_type>();
-	expect<applicator_non_matching_setter_exception>([&]{
 		auto applicator = resolved_dependency_applicator{resolved_dependencies};
 	});
 }

@@ -26,11 +26,6 @@ namespace injeqt { namespace v1 {
 
 namespace {
 
-std::string exception_message_2(const QMetaMethod &method)
-{
-	return std::string{method.methodSignature().data()};
-}
-
 std::string exception_message(const QMetaObject *meta_object, const setter_method &method)
 {
 	return std::string{meta_object->className()} + "::" + method.signature();
@@ -53,18 +48,9 @@ resolved_dependency_applicator::resolved_dependency_applicator(std::vector<resol
 		if (!resolved.object().object())
 			throw applicator_invalid_dependency_exception{};
 
-		auto method = resolved.resolved().setter().meta_method();
-		if (method.parameterCount() != 1)
-			throw applicator_invalid_setter_exception{exception_message_2(method)};
-		if (!method.enclosingMetaObject())
-			throw applicator_invalid_setter_exception{exception_message_2(method)};
-		auto parameter_type = method.parameterType(0);
-		auto parameter_meta_object = QMetaType::metaObjectForType(parameter_type);
-		if (!parameter_meta_object)
-			throw applicator_invalid_setter_exception{exception_message_2(method)};
-
-		if (resolved.object().meta().main_type() != type{parameter_meta_object})
-			throw applicator_non_matching_setter_exception{exception_message(resolved.object().object()->metaObject(), parameter_meta_object)};
+		auto setter = resolved.resolved().setter();
+		if (resolved.object().meta().main_type() != setter.parameter_type())
+			throw applicator_non_matching_setter_exception{exception_message(resolved.object().object()->metaObject(), setter.parameter_type().meta_object())};
 	}
 }
 

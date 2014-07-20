@@ -21,11 +21,13 @@
 #include "dependencies.cpp"
 #include "dependency.cpp"
 #include "dependency-extractor.cpp"
-#include "expect.h"
 #include "implements-extractor.cpp"
 #include "object-with-meta.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
+
+#include "expect.h"
+#include "utils.h"
 
 #include <QtTest/QtTest>
 
@@ -161,36 +163,11 @@ dependency_extractor_test::dependency_extractor_test() :
 	non_qobject_invalid_injected_type_type{std::addressof(non_qobject_invalid_injected_type::staticMetaObject)},
 	duplicate_dependency_invalid_injected_type_type{std::addressof(duplicate_dependency_invalid_injected_type::staticMetaObject)},
 	duplicate_sublass_dependency_invalid_injected_type_type{std::addressof(duplicate_sublass_dependency_invalid_injected_type::staticMetaObject)},
-	valid_injected_type_setter_1
-	{
-		valid_injected_type_type,
-		injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
-	},
-	valid_injected_type_setter_2
-	{
-		valid_injected_type_type,
-		injectable_type2_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
-	},
-	inheriting_valid_injected_type_setter_1
-	{
-		inheriting_valid_injected_type_type,
-		injectable_type1_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_1(injectable_type1*)"))
-	},
-	inheriting_valid_injected_type_setter_2
-	{
-		inheriting_valid_injected_type_type,
-		injectable_type2_type,
-		valid_injected_type::staticMetaObject.method(valid_injected_type::staticMetaObject.indexOfMethod("setter_2(injectable_type2*)"))
-	},
-	inheriting_valid_injected_type_setter_3
-	{
-		inheriting_valid_injected_type_type,
-		injectable_type3_type,
-		inheriting_valid_injected_type::staticMetaObject.method(inheriting_valid_injected_type::staticMetaObject.indexOfMethod("setter_3(injectable_type3*)"))
-	}
+	valid_injected_type_setter_1{ method<valid_injected_type>("setter_1(injectable_type1*)") },
+	valid_injected_type_setter_2{ method<valid_injected_type>("setter_2(injectable_type2*)") },
+	inheriting_valid_injected_type_setter_1{ method<valid_injected_type>("setter_1(injectable_type1*)") },
+	inheriting_valid_injected_type_setter_2{ method<valid_injected_type>("setter_2(injectable_type2*)") },
+	inheriting_valid_injected_type_setter_3{ method<inheriting_valid_injected_type>("setter_3(injectable_type3*)") }
 {
 }
 
