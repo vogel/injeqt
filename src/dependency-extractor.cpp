@@ -60,24 +60,29 @@ std::vector<setter_method> extract_setters(const type &for_type)
 	return result;
 }
 
+std::vector<type> extract_parameter_types(const std::vector<setter_method> &setters)
+{
+	auto result = std::vector<type>{};
+
+	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),
+		[](const setter_method &setter){ return setter.parameter_type(); }
+	);
+
+	return result;
+}
+
 }
 
 dependencies dependency_extractor::extract_dependencies(const type &for_type) const
 try
 {
 	auto setters = extract_setters(for_type);
-	auto types = std::vector<type>{};
-	std::transform(std::begin(setters), std::end(setters), std::back_inserter(types),
-		[](const setter_method &setter){ return setter.parameter_type(); }
-	);
+	auto parameter_types = extract_parameter_types(setters);
+	auto relations = type_relations_factory{}.create_type_relations(parameter_types);
 
-	auto relations = type_relations_factory{}.create_type_relations(types);
-	for (auto &&ambiguous : relations.ambiguous())
-	{
-		auto types_it = std::find(std::begin(types), std::end(types), ambiguous);
-		if (types_it != std::end(types))
-			throw dependency_duplicated_exception(exception_message(for_type.meta_object(), types_it->meta_object()));
-	}
+	auto matches = match(types{parameter_types}.content(), relations.ambiguous().content());
+	if (!matches.matched.empty())
+		throw dependency_duplicated_exception(exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object()));
 
 	auto result = std::vector<dependency>{};
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),
