@@ -24,6 +24,8 @@
 #include "implements-extractor.h"
 #include "setter-method.h"
 #include "type.h"
+#include "type-relations.h"
+#include "type-relations-factory.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
@@ -34,19 +36,15 @@ namespace injeqt { namespace v1 {
 
 namespace {
 
-std::string exception_message(const QMetaObject *meta_object, const QMetaMethod &method)
+std::string exception_message(const QMetaObject *meta_object, const QMetaObject *dependency_meta_object)
 {
-	return std::string{meta_object->className()} + "::" + method.methodSignature().data();
+	return std::string{meta_object->className()} + "::" + dependency_meta_object->className();
 }
 
-}
-
-dependencies dependency_extractor::extract_dependencies(const type &for_type) const
-try
+std::vector<setter_method> extract_setters(const type &for_type)
 {
-	auto result = std::vector<dependency>{};
-	auto may_conflict = std::set<type>{};
-	auto conflict = std::set<type>{};
+	auto result = std::vector<setter_method>{};
+
 	auto meta_object = for_type.meta_object();
 	auto method_count = meta_object->methodCount();
 	for (decltype(method_count) i = 0; i < method_count; i++)
@@ -56,20 +54,35 @@ try
 		if (tag != "injeqt_setter")
 			continue;
 
-		auto setter = setter_method{probably_setter};
-		auto implements = implements_extractor{}.extract_implements(setter.parameter_type());
-		if (may_conflict.find(setter.parameter_type()) != std::end(may_conflict))
-			throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
-
-		for (auto &&i : implements)
-			if (conflict.find(i) != std::end(conflict))
-				throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
-
-		std::copy(std::begin(implements), std::end(implements), std::inserter(may_conflict, begin(may_conflict)));
-		conflict.insert(setter.parameter_type());
-
-		result.emplace_back(std::move(setter));
+		result.emplace_back(setter_method{probably_setter});
 	}
+
+	return result;
+}
+
+}
+
+dependencies dependency_extractor::extract_dependencies(const type &for_type) const
+try
+{
+	auto setters = extract_setters(for_type);
+	auto types = std::vector<type>{};
+	std::transform(std::begin(setters), std::end(setters), std::back_inserter(types),
+		[](const setter_method &setter){ return setter.parameter_type(); }
+	);
+
+	auto relations = type_relations_factory{}.create_type_relations(types);
+	for (auto &&ambiguous : relations.ambiguous())
+	{
+		auto types_it = std::find(std::begin(types), std::end(types), ambiguous);
+		if (types_it != std::end(types))
+			throw dependency_duplicated_exception(exception_message(for_type.meta_object(), types_it->meta_object()));
+	}
+
+	auto result = std::vector<dependency>{};
+	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),
+		[](const setter_method &setter){ return dependency{setter}; }
+	);
 
 	return dependencies{result};
 }
