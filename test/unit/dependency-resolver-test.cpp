@@ -25,8 +25,6 @@
 #include "implementation-availability.h"
 #include "implementations.cpp"
 #include "implements-extractor.cpp"
-#include "meta-object.cpp"
-#include "meta-object-factory.cpp"
 #include "resolved-dependency.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"

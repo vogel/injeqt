@@ -20,21 +20,18 @@
 
 #include "module.h"
 
-#include "meta-object.h"
-#include "meta-object-factory.h"
-
 #include <QtCore/QMetaObject>
 
 namespace injeqt { namespace v1 {
 
 void module::add_class(const type &with_type)
 {
-	_meta_objects.push_back(meta_object_factory{}.create_meta_object(with_type));
+	_types.push_back(with_type);
 }
 
-const std::vector<meta_object> & module::meta_objects() const
+const std::vector<type> & module::types() const
 {
-	return _meta_objects;
+	return _types;
 }
 
 }}

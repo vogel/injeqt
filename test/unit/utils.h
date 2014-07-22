@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include "meta-object-factory.h"
-
+#include <QtCore/QMetaMethod>
 #include <QtCore/QObject>
 #include <memory>
 

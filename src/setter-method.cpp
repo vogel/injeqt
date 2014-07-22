@@ -20,8 +20,7 @@
 
 #include "setter-method.h"
 
-#include "meta-object.h"
-#include "meta-object-factory.h"
+#include "implements-extractor.h"
 
 namespace injeqt { namespace v1 {
 
@@ -73,11 +72,11 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 	if (type{on->metaObject()} != _object_type)
 		throw invoked_on_wrong_object_exception{};
 
-	if (!parameter)
+	if (!parameter || !parameter->metaObject())
 		throw invoked_with_wrong_object_exception{};
 
-	auto meta_parameter_type = meta_object_factory{}.create_meta_object(type{parameter->metaObject()});
-	if (!meta_parameter_type.implements(_parameter_type))
+	auto implements = implements_extractor{}.extract_implements(type{parameter->metaObject()});
+	if (implements.find(_parameter_type) == std::end(implements))
 		throw invoked_with_wrong_object_exception{};
 
 	return _meta_method.invoke(on, Q_ARG(QObject *, parameter));

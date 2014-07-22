@@ -21,11 +21,9 @@
 #pragma once
 
 #include "injeqt-global.h"
+#include "type.h"
 
 namespace injeqt { namespace v1 {
-
-class meta_object;
-class type;
 
 class INJEQT_API module final
 {
@@ -39,10 +37,10 @@ public:
 
 	void add_class(const type &with_type);
 
-	const std::vector<meta_object> & meta_objects() const;
+	const std::vector<type> & types() const;
 
 private:
-	std::vector<meta_object> _meta_objects;
+	std::vector<type> _types;
 
 };
 

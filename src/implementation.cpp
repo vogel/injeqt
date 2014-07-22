@@ -21,8 +21,7 @@
 #include "implementation.h"
 
 #include "implementation-availability.h"
-#include "meta-object.h"
-#include "meta-object-factory.h"
+#include "implements-extractor.h"
 
 #include <QtCore/QObject>
 
@@ -41,8 +40,8 @@ implementation::implementation(type implemented_type, implementation_availabilit
 
 	if (object)
 	{
-		auto meta_object = meta_object_factory{}.create_meta_object(type{object->metaObject()});
-		if (!meta_object.implements(implemented_type))
+		auto implements = implements_extractor{}.extract_implements(type{object->metaObject()});
+		if (implements.find(implemented_type) == std::end(implements))
 			throw invalid_implemented_type_exception{};
 	}
 }

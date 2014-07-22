@@ -19,8 +19,6 @@
  */
 
 #include "implements-extractor.cpp"
-#include "meta-object.cpp"
-#include "meta-object-factory.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 

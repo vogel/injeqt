@@ -20,8 +20,6 @@
 
 #include "implementation.cpp"
 #include "implements-extractor.cpp"
-#include "meta-object.cpp"
-#include "meta-object-factory.cpp"
 #include "type.cpp"
 
 #include "expect.h"
