@@ -45,7 +45,8 @@ dependencies dependency_extractor::extract_dependencies(const type &for_type) co
 try
 {
 	auto result = std::vector<dependency>{};
-	auto used_dependencies = std::set<type>{};
+	auto may_conflict = std::set<type>{};
+	auto conflict = std::set<type>{};
 	auto meta_object = for_type.meta_object();
 	auto method_count = meta_object->methodCount();
 	for (decltype(method_count) i = 0; i < method_count; i++)
@@ -57,11 +58,15 @@ try
 
 		auto setter = setter_method{probably_setter};
 		auto implements = implements_extractor{}.extract_implements(setter.parameter_type());
+		if (may_conflict.find(setter.parameter_type()) != std::end(may_conflict))
+			throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
+
 		for (auto &&i : implements)
-			if (used_dependencies.find(i) != std::end(used_dependencies))
+			if (conflict.find(i) != std::end(conflict))
 				throw dependency_duplicated_exception(exception_message(meta_object, probably_setter));
 
-		used_dependencies.insert(setter.parameter_type());
+		std::copy(std::begin(implements), std::end(implements), std::inserter(may_conflict, begin(may_conflict)));
+		conflict.insert(setter.parameter_type());
 
 		result.emplace_back(std::move(setter));
 	}
