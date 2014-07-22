@@ -94,10 +94,10 @@ private:
 };
 
 dependency_resolver_test::dependency_resolver_test() :
-	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
-	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
-	injectable_type3_type{std::addressof(injectable_type3::staticMetaObject)},
-	sublcass_injectable_type1_type{std::addressof(sublcass_injectable_type1::staticMetaObject)},
+	injectable_type1_type{make_type<injectable_type1>()},
+	injectable_type2_type{make_type<injectable_type2>()},
+	injectable_type3_type{make_type<injectable_type3>()},
+	sublcass_injectable_type1_type{make_type<sublcass_injectable_type1>()},
 	injectable_type1_setter{method<valid_type>("set_type1(injectable_type1*)")},
 	injectable_type2_setter{method<valid_type>("set_type2(injectable_type2*)")},
 	injectable_type3_setter{method<valid_type>("set_type3(injectable_type3*)")},

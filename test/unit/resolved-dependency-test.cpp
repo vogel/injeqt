@@ -88,10 +88,10 @@ private:
 };
 
 resolved_dependency_test::resolved_dependency_test() :
-	type_1_type{std::addressof(type_1::staticMetaObject)},
-	type_1_subtype_1_type{std::addressof(type_1_subtype_1::staticMetaObject)},
-	type_2_type{std::addressof(type_2::staticMetaObject)},
-	injected_type_type{std::addressof(injected_type::staticMetaObject)},
+	type_1_type{make_type<type_1>()},
+	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
+	type_2_type{make_type<type_2>()},
+	injected_type_type{make_type<injected_type>()},
 	setter_1_method{method<injected_type>("setter_1(type_1*)")},
 	setter_1_subtype_1_method{method<injected_type>("setter_1_subtype_1(type_1_subtype_1*)")},
 	setter_2_method{method<injected_type>("setter_2(type_2*)")}

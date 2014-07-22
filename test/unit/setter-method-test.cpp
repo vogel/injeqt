@@ -85,9 +85,9 @@ private:
 };
 
 setter_method_test::setter_method_test() :
-	injectable_type1_type{std::addressof(injectable_type1::staticMetaObject)},
-	injectable_type2_type{std::addressof(injectable_type2::staticMetaObject)},
-	test_type_type{std::addressof(test_type::staticMetaObject)}
+	injectable_type1_type{make_type<injectable_type1>()},
+	injectable_type2_type{make_type<injectable_type2>()},
+	test_type_type{make_type<test_type>()}
 {
 }
 

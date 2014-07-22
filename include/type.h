@@ -50,4 +50,10 @@ bool operator > (const type &x, const type &y);
 bool operator <= (const type &x, const type &y);
 bool operator >= (const type &x, const type &y);
 
+template<typename T>
+inline type make_type()
+{
+	return type{std::addressof(T::staticMetaObject)};
+}
+
 }}

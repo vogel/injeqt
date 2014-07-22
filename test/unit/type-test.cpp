@@ -49,7 +49,7 @@ void type_test::should_retun_valid_meta_object()
 
 void type_test::should_throw_when_created_with_null_meta_object()
 {
-	auto t = type{std::addressof(valid_type::staticMetaObject)};
+	auto t = make_type<valid_type>();
 
 	QCOMPARE(t.meta_object(), std::addressof(valid_type::staticMetaObject));
 }

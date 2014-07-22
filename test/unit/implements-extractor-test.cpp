@@ -63,10 +63,10 @@ private:
 };
 
 implements_extractor_test::implements_extractor_test() :
-	qobject_type{std::addressof(QObject::staticMetaObject)},
-	direct_successor_type{std::addressof(direct_successor::staticMetaObject)},
-	indirect_successor_1_type{std::addressof(indirect_successor_1::staticMetaObject)},
-	indirect_successor_2_type{std::addressof(indirect_successor_2::staticMetaObject)}
+	qobject_type{make_type<QObject>()},
+	direct_successor_type{make_type<direct_successor>()},
+	indirect_successor_1_type{make_type<indirect_successor_1>()},
+	indirect_successor_2_type{make_type<indirect_successor_2>()}
 {
 }
 
