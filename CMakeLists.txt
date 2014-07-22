@@ -48,6 +48,8 @@ set(INJEQT_SRCS
 	src/setter-injector.cpp
 	src/setter-method.cpp
 	src/type.cpp
+	src/type-relations.cpp
+	src/type-relations-factory.cpp
 )
 
 enable_testing()
