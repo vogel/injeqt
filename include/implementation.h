@@ -34,7 +34,7 @@ DEFINE_EXCEPTION(invalid_implementation_exception, injeqt_exception);
 DEFINE_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
 DEFINE_EXCEPTION(invalid_implemented_type_exception, invalid_implementation_exception);
 
-class implementation final
+class INJEQT_API implementation final
 {
 
 public:
@@ -51,7 +51,7 @@ private:
 
 };
 
-bool operator == (const implementation &x, const implementation &y);
-bool operator != (const implementation &x, const implementation &y);
+INJEQT_API bool operator == (const implementation &x, const implementation &y);
+INJEQT_API bool operator != (const implementation &x, const implementation &y);
 
 }}

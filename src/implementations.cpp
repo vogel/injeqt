@@ -62,4 +62,14 @@ typename implementations::storage_type::size_type implementations::size() const
 	return _content.size();
 }
 
+bool operator == (const implementations &x, const implementations &y)
+{
+	return x.content() == y.content();
+}
+
+bool operator != (const implementations &first, const implementations &second)
+{
+	return !(first == second);
+}
+
 }}

@@ -27,7 +27,7 @@
 
 namespace injeqt { namespace v1 {
 
-class injeqt_exception : public std::exception
+class INJEQT_API injeqt_exception : public std::exception
 {
 
 public:
@@ -42,7 +42,7 @@ private:
 };
 
 #define DEFINE_EXCEPTION(name, parent) \
-class name : public parent \
+class INJEQT_API name : public parent \
 { \
  \
 public: \

@@ -30,7 +30,7 @@ namespace injeqt { namespace v1 {
 DEFINE_EXCEPTION(type_exception, injeqt_exception);
 DEFINE_EXCEPTION(invalid_type_exception, type_exception);
 
-class type final
+class INJEQT_API type final
 {
 
 public:
@@ -43,12 +43,12 @@ private:
 
 };
 
-bool operator == (const type &x, const type &y);
-bool operator != (const type &x, const type &y);
-bool operator < (const type &x, const type &y);
-bool operator > (const type &x, const type &y);
-bool operator <= (const type &x, const type &y);
-bool operator >= (const type &x, const type &y);
+INJEQT_API bool operator == (const type &x, const type &y);
+INJEQT_API bool operator != (const type &x, const type &y);
+INJEQT_API bool operator < (const type &x, const type &y);
+INJEQT_API bool operator > (const type &x, const type &y);
+INJEQT_API bool operator <= (const type &x, const type &y);
+INJEQT_API bool operator >= (const type &x, const type &y);
 
 template<typename T>
 inline type make_type()

@@ -26,7 +26,7 @@
 
 namespace injeqt { namespace v1 {
 
-class implementations final
+class INJEQT_API implementations final
 {
 	static type extract_key(const implementation &i);
 
@@ -58,5 +58,8 @@ inline typename implementations::const_iterator end(const implementations &i)
 {
 	return i.end();
 }
+
+INJEQT_API bool operator == (const implementations &x, const implementations &y);
+INJEQT_API bool operator != (const implementations &x, const implementations &y);
 
 }}

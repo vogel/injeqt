@@ -36,7 +36,7 @@ DEFINE_EXCEPTION(dependency_too_many_parameters_exception, dependency_exception)
 DEFINE_EXCEPTION(dependency_not_qobject_exception, dependency_exception);
 DEFINE_EXCEPTION(dependency_duplicated_exception, dependency_exception);
 
-class dependency_extractor final
+class INJEQT_API dependency_extractor final
 {
 
 public:

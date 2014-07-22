@@ -29,7 +29,7 @@ namespace injeqt { namespace v1 {
 class dependency;
 class type;
 
-class dependencies final
+class INJEQT_API dependencies final
 {
 	static type extract_key(const dependency &dep);
 
@@ -63,7 +63,7 @@ inline typename dependencies::const_iterator end(const dependencies &d)
 	return d.end();
 }
 
-bool operator == (const dependency &x, const dependency &y);
-bool operator != (const dependency &x, const dependency &y);
+INJEQT_API bool operator == (const dependency &x, const dependency &y);
+INJEQT_API bool operator != (const dependency &x, const dependency &y);
 
 }}

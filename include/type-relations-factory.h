@@ -27,7 +27,7 @@ namespace injeqt { namespace v1 {
 
 class type_relations;
 
-class type_relations_factory final
+class INJEQT_API type_relations_factory final
 {
 
 public:

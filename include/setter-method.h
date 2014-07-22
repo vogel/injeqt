@@ -36,7 +36,7 @@ DEFINE_EXCEPTION(invalid_setter_exception, setter_exception);
 DEFINE_EXCEPTION(invoked_on_wrong_object_exception, setter_exception);
 DEFINE_EXCEPTION(invoked_with_wrong_object_exception, setter_exception);
 
-class setter_method final
+class INJEQT_API setter_method final
 {
 
 public:
@@ -55,11 +55,11 @@ private:
 
 };
 
-bool operator == (const setter_method &x, const setter_method &y);
-bool operator != (const setter_method &x, const setter_method &y);
+INJEQT_API bool operator == (const setter_method &x, const setter_method &y);
+INJEQT_API bool operator != (const setter_method &x, const setter_method &y);
 
 template<typename T>
-setter_method make_setter_method(const std::string &signature)
+inline setter_method make_setter_method(const std::string &signature)
 {
 	return setter_method{T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()))};
 }

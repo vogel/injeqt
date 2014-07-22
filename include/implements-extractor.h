@@ -28,7 +28,7 @@ namespace injeqt { namespace v1 {
 
 class type;
 
-class implements_extractor final
+class INJEQT_API implements_extractor final
 {
 
 public:
