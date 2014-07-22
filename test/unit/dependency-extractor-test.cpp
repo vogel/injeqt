@@ -26,7 +26,6 @@
 #include "type.cpp"
 
 #include "expect.h"
-#include "utils.h"
 
 #include <QtTest/QtTest>
 
@@ -194,17 +193,17 @@ dependency_extractor_test::dependency_extractor_test() :
 	duplicate_dependency_invalid_injected_type_type{make_type<duplicate_dependency_invalid_injected_type>()},
 	invalid_injected_type_with_superclass_type{make_type<invalid_injected_type_with_superclass>()},
 	invalid_injected_type_with_superclass_inverted_type{make_type<invalid_injected_type_with_superclass_inverted>()},
-	valid_injected_type_setter_1{method<valid_injected_type>("setter_1(injectable_type1*)")},
-	valid_injected_type_setter_2{method<valid_injected_type>("setter_2(injectable_type2*)")},
-	valid_injected_type_with_common_superclass_setter_1{method<valid_injected_type_with_common_superclass>("setter_1(sub_injectable_type1a*)")},
-	valid_injected_type_with_common_superclass_setter_2{method<valid_injected_type_with_common_superclass>("setter_2(sub_injectable_type1b*)")},
-	inheriting_valid_injected_type_setter_1{method<valid_injected_type>("setter_1(injectable_type1*)")},
-	inheriting_valid_injected_type_setter_2{method<valid_injected_type>("setter_2(injectable_type2*)")},
-	inheriting_valid_injected_type_setter_3{method<inheriting_valid_injected_type>("setter_3(injectable_type3*)")},
-	invalid_injected_type_with_superclass_setter_1{method<invalid_injected_type_with_superclass>("setter_1(injectable_type1*)")},
-	invalid_injected_type_with_superclass_setter_2{method<invalid_injected_type_with_superclass>("setter_2(sub_injectable_type1a*)")},
-	invalid_injected_type_with_superclass_inverted_setter_1{method<invalid_injected_type_with_superclass_inverted>("setter_1(injectable_type1*)")},
-	invalid_injected_type_with_superclass_inverted_setter_2{method<invalid_injected_type_with_superclass_inverted>("setter_2(sub_injectable_type1a*)")}
+	valid_injected_type_setter_1{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")},
+	valid_injected_type_setter_2{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")},
+	valid_injected_type_with_common_superclass_setter_1{make_setter_method<valid_injected_type_with_common_superclass>("setter_1(sub_injectable_type1a*)")},
+	valid_injected_type_with_common_superclass_setter_2{make_setter_method<valid_injected_type_with_common_superclass>("setter_2(sub_injectable_type1b*)")},
+	inheriting_valid_injected_type_setter_1{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")},
+	inheriting_valid_injected_type_setter_2{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")},
+	inheriting_valid_injected_type_setter_3{make_setter_method<inheriting_valid_injected_type>("setter_3(injectable_type3*)")},
+	invalid_injected_type_with_superclass_setter_1{make_setter_method<invalid_injected_type_with_superclass>("setter_1(injectable_type1*)")},
+	invalid_injected_type_with_superclass_setter_2{make_setter_method<invalid_injected_type_with_superclass>("setter_2(sub_injectable_type1a*)")},
+	invalid_injected_type_with_superclass_inverted_setter_1{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_1(injectable_type1*)")},
+	invalid_injected_type_with_superclass_inverted_setter_2{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_2(sub_injectable_type1a*)")}
 {
 }
 

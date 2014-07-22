@@ -100,7 +100,7 @@ void setter_method_test::should_throw_when_created_with_empty_method()
 
 void setter_method_test::should_create_valid_from_tagged_setter()
 {
-	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 
 	QCOMPARE(setter.object_type(), test_type_type);
 	QCOMPARE(setter.parameter_type(), injectable_type1_type);
@@ -108,7 +108,7 @@ void setter_method_test::should_create_valid_from_tagged_setter()
 
 void setter_method_test::should_create_valid_from_untagged_setter()
 {
-	auto setter = setter_method{method<test_type>("untagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("untagged_setter_1(injectable_type1*)");
 
 	QCOMPARE(setter.object_type(), test_type_type);
 	QCOMPARE(setter.parameter_type(), injectable_type1_type);
@@ -117,34 +117,34 @@ void setter_method_test::should_create_valid_from_untagged_setter()
 void setter_method_test::should_throw_when_created_from_tagged_int_setter()
 {
 	expect<invalid_setter_exception>([&]{
-		auto setter = setter_method{method<test_type>("tagged_int_setter(int)")};
+		auto setter = make_setter_method<test_type>("tagged_int_setter(int)");
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_untagged_int_setter()
 {
 	expect<invalid_setter_exception>([&]{
-		auto setter = setter_method{method<test_type>("untagged_int_setter(int)")};
+		auto setter = make_setter_method<test_type>("untagged_int_setter(int)");
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_tagged_invalid_setter()
 {
 	expect<setter_too_many_parameters_exception>([&]{
-		auto setter = setter_method{method<test_type>("tagged_invalid_setter(injectable_type1*,injectable_type2*)")};
+		auto setter = make_setter_method<test_type>("tagged_invalid_setter(injectable_type1*,injectable_type2*)");
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_untagged_invalid_setter()
 {
 	expect<setter_too_many_parameters_exception>([&]{
-		auto setter = setter_method{method<test_type>("untagged_invalid_setter(injectable_type1*,injectable_type2*)")};
+		auto setter = make_setter_method<test_type>("untagged_invalid_setter(injectable_type1*,injectable_type2*)");
 	});
 }
 
 void setter_method_test::should_throw_when_called_on_null_object()
 {
-	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 	auto with = make_object<injectable_type1>();
 	expect<invoked_on_wrong_object_exception>([&]{
 		setter.invoke(nullptr, with.get());
@@ -153,7 +153,7 @@ void setter_method_test::should_throw_when_called_on_null_object()
 
 void setter_method_test::should_throw_when_called_on_wrong_object()
 {
-	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 	auto on = make_object<injectable_type1>();
 	auto with = make_object<injectable_type1>();
 	expect<invoked_on_wrong_object_exception>([&]{
@@ -163,7 +163,7 @@ void setter_method_test::should_throw_when_called_on_wrong_object()
 
 void setter_method_test::should_throw_when_called_with_null_object()
 {
-	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 	auto on = make_object<injectable_type1>();
 	expect<invoked_on_wrong_object_exception>([&]{
 		setter.invoke(on.get(), nullptr);
@@ -172,7 +172,7 @@ void setter_method_test::should_throw_when_called_with_null_object()
 
 void setter_method_test::should_throw_when_called_with_wrong_object()
 {
-	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 	auto on = make_object<injectable_type1>();
 	auto with = make_object<test_type>();
 	expect<invoked_on_wrong_object_exception>([&]{
@@ -182,7 +182,7 @@ void setter_method_test::should_throw_when_called_with_wrong_object()
 
 void setter_method_test::should_invoke_have_results()
 {
-	auto setter = setter_method{method<test_type>("tagged_setter_1(injectable_type1*)")};
+	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 	auto on = make_object<test_type>();
 	auto with = make_object<injectable_type1>();
 

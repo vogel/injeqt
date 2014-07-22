@@ -32,10 +32,4 @@ std::unique_ptr<QObject> make_object()
 	return std::unique_ptr<QObject>(new T{});
 }
 
-template<typename T>
-QMetaMethod method(const char *signature)
-{
-	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature));
-}
-
 }}

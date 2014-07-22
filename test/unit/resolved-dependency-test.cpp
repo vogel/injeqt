@@ -92,9 +92,9 @@ resolved_dependency_test::resolved_dependency_test() :
 	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
 	type_2_type{make_type<type_2>()},
 	injected_type_type{make_type<injected_type>()},
-	setter_1_method{method<injected_type>("setter_1(type_1*)")},
-	setter_1_subtype_1_method{method<injected_type>("setter_1_subtype_1(type_1_subtype_1*)")},
-	setter_2_method{method<injected_type>("setter_2(type_2*)")}
+	setter_1_method{make_setter_method<injected_type>("setter_1(type_1*)")},
+	setter_1_subtype_1_method{make_setter_method<injected_type>("setter_1_subtype_1(type_1_subtype_1*)")},
+	setter_2_method{make_setter_method<injected_type>("setter_2(type_2*)")}
 {
 }
 
