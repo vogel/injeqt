@@ -21,7 +21,7 @@
 #pragma once
 
 #include "injeqt-global.h"
-#include "type.h"
+#include "types.h"
 
 namespace injeqt { namespace v1 {
 
@@ -29,14 +29,14 @@ class INJEQT_API type_relations final
 {
 
 public:
-	explicit type_relations(std::vector<type> unique, std::vector<type> ambiguous);
+	explicit type_relations(types unique, types ambiguous);
 
-	std::vector<type> unique() const;
-	std::vector<type> ambiguous() const;
+	types unique() const;
+	types ambiguous() const;
 
 private:
-	std::vector<type> _unique;
-	std::vector<type> _ambiguous;
+	types _unique;
+	types _ambiguous;
 
 };
 

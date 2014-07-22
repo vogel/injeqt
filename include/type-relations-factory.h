@@ -31,7 +31,7 @@ class INJEQT_API type_relations_factory final
 {
 
 public:
-	type_relations create_type_relations(const std::vector<type> &types);
+	type_relations create_type_relations(const std::vector<type> &main_types);
 
 };
 

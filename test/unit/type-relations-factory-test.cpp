@@ -22,6 +22,7 @@
 #include "type.cpp"
 #include "type-relations.cpp"
 #include "type-relations-factory.cpp"
+#include "types.cpp"
 
 #include <QtTest/QtTest>
 
@@ -88,7 +89,7 @@ private:
 	type type_2_type;
 	type type_2_sub_1_type;
 
-	void verify_type(const std::vector<type> &types, const type &t);
+	void verify_type(const types &in, const type &t);
 
 };
 
@@ -103,10 +104,10 @@ type_relations_factory_test::type_relations_factory_test() :
 {
 }
 
-void type_relations_factory_test::verify_type(const std::vector<type> &types, const type &t)
+void type_relations_factory_test::verify_type(const types &in, const type &t)
 {
-	auto it = std::find(std::begin(types), std::end(types), t);
-	QVERIFY(it != std::end(types));
+	auto it = std::find(std::begin(in), std::end(in), t);
+	QVERIFY(it != std::end(in));
 }
 
 void type_relations_factory_test::should_create_empty_relations_for_no_types()

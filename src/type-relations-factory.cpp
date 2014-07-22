@@ -27,10 +27,10 @@
 
 namespace injeqt { namespace v1 {
 
-type_relations type_relations_factory::create_type_relations(const std::vector<type> &types)
+type_relations type_relations_factory::create_type_relations(const std::vector<type> &main_types)
 {
 	auto type_count = std::map<type, std::size_t>();
-	for (auto &&main_type : types)
+	for (auto &&main_type : main_types)
 	{
 		auto implemented_types = implements_extractor{}.extract_implements(main_type);
 		for (auto &&implemented_type : implemented_types)
@@ -45,7 +45,7 @@ type_relations type_relations_factory::create_type_relations(const std::vector<t
 		else if (counted_type.second > 1)
 			ambiguous.push_back(counted_type.first);
 
-	return type_relations{std::move(unique), std::move(ambiguous)};
+	return type_relations{types{unique}, types{ambiguous}};
 }
 
 }}
