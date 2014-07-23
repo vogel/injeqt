@@ -80,7 +80,7 @@ try
 	auto parameter_types = extract_parameter_types(setters);
 	auto relations = type_relations_factory{}.create_type_relations(parameter_types);
 
-	auto matches = match(types{parameter_types}.content(), relations.ambiguous().content());
+	auto matches = match(types{parameter_types}, relations.ambiguous());
 	if (!matches.matched.empty())
 		throw dependency_duplicated_exception(exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object()));
 

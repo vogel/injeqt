@@ -50,7 +50,6 @@ set(INJEQT_SRCS
 	src/type.cpp
 	src/type-relations.cpp
 	src/type-relations-factory.cpp
-	src/types.cpp
 )
 
 enable_testing()

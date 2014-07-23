@@ -26,7 +26,6 @@
 #include "type.cpp"
 #include "type-relations.cpp"
 #include "type-relations-factory.cpp"
-#include "types.cpp"
 
 #include "expect.h"
 

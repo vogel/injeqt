@@ -22,7 +22,6 @@
 #include "type.cpp"
 #include "type-relations.cpp"
 #include "type-relations-factory.cpp"
-#include "types.cpp"
 
 #include <QtTest/QtTest>
 
