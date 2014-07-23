@@ -20,50 +20,18 @@
 
 #pragma once
 
+#include "dependency.h"
 #include "injeqt-global.h"
 #include "sorted-unique-vector.h"
-#include <QtWidgets/qgraphicsitem.h>
+#include "type.h"
 
 namespace injeqt { namespace v1 {
 
-class dependency;
-class type;
-
-class INJEQT_API dependencies final
+inline type type_from_dependency(const dependency &d)
 {
-	static type extract_key(const dependency &dep);
-
-public:
-	using storage_type = sorted_unique_vector<type, dependency, extract_key>;
-	using const_iterator = typename storage_type::const_iterator;
-
-	explicit dependencies(std::vector<dependency> dependencies);
-	explicit dependencies(storage_type dependencies);
-
-	const_iterator begin() const;
-	const_iterator end() const;
-
-	const storage_type & content() const;
-	bool empty() const;
-	bool contains(const dependency &d) const;
-	typename storage_type::size_type size() const;
-
-private:
-	storage_type _content;
-
-};
-
-inline typename dependencies::const_iterator begin(const dependencies &d)
-{
-	return d.begin();
+	return d.required_type();
 }
 
-inline typename dependencies::const_iterator end(const dependencies &d)
-{
-	return d.end();
-}
-
-INJEQT_API bool operator == (const dependency &x, const dependency &y);
-INJEQT_API bool operator != (const dependency &x, const dependency &y);
+using dependencies = sorted_unique_vector<type, dependency, type_from_dependency>;
 
 }}

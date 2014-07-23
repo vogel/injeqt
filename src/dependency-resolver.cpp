@@ -30,7 +30,7 @@ resolve_dependencies_result dependency_resolver::resolve_dependencies(
 	const dependencies &to_resolve,
 	const implementations &resolve_with) const
 {
-	auto match_result = match(to_resolve.content(), resolve_with.content());
+	auto match_result = match(to_resolve, resolve_with.content());
 	auto resolved = std::vector<resolved_dependency>{};
 
 	for (auto &&match : match_result.matched)
