@@ -21,13 +21,13 @@
 #pragma once
 
 #include "dependencies.h"
+#include "implementations.h"
 #include "injeqt-global.h"
 
 #include <vector>
 
 namespace injeqt { namespace v1 {
 
-class implementations;
 class resolved_dependency;
 
 struct INJEQT_API resolve_dependencies_result

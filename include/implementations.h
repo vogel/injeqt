@@ -26,40 +26,11 @@
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API implementations final
+inline type type_from_implementation(const implementation &i)
 {
-	static type extract_key(const implementation &i);
-
-public:
-	using storage_type = sorted_unique_vector<type, implementation, extract_key>;
-	using const_iterator = typename storage_type::const_iterator;
-
-	explicit implementations(std::vector<implementation> i);
-
-	const_iterator begin() const;
-	const_iterator end() const;
-
-	const storage_type & content() const;
-	bool empty() const;
-	bool contains(const implementation &i) const;
-	typename storage_type::size_type size() const;
-
-private:
-	storage_type _content;
-
-};
-
-inline typename implementations::const_iterator begin(const implementations &i)
-{
-	return i.begin();
+	return i.implemented_type();
 }
 
-inline typename implementations::const_iterator end(const implementations &i)
-{
-	return i.end();
-}
-
-INJEQT_API bool operator == (const implementations &x, const implementations &y);
-INJEQT_API bool operator != (const implementations &x, const implementations &y);
+using implementations = sorted_unique_vector<type, implementation, type_from_implementation>;
 
 }}

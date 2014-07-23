@@ -22,7 +22,6 @@
 #include "dependency-resolver.cpp"
 #include "implementation.cpp"
 #include "implementation-availability.h"
-#include "implementations.cpp"
 #include "implements-extractor.cpp"
 #include "resolved-dependency.cpp"
 #include "setter-method.cpp"
