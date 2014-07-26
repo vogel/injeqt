@@ -137,6 +137,45 @@ public slots:
 
 };
 
+class invalid_injected_type_depends_on_self : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void setter_1(invalid_injected_type_depends_on_self *) {}
+
+};
+
+class invalid_injected_type_depends_on_subtype_subtype;
+
+class invalid_injected_type_depends_on_subtype : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void setter_1(invalid_injected_type_depends_on_subtype_subtype *) {}
+
+};
+
+class invalid_injected_type_depends_on_subtype_subtype : public invalid_injected_type_depends_on_subtype
+{
+	Q_OBJECT
+};
+
+class invalid_injected_type_depends_on_supertype_supertype : public QObject
+{
+	Q_OBJECT
+};
+
+class invalid_injected_type_depends_on_supertype : public invalid_injected_type_depends_on_supertype_supertype
+{
+	Q_OBJECT
+
+public slots:
+	injeqt_setter void setter_1(invalid_injected_type_depends_on_supertype_supertype *) {}
+
+};
+
 class dependency_extractor_test : public QObject
 {
 	Q_OBJECT
@@ -153,6 +192,9 @@ private slots:
 	void should_fail_when_duplicate_dependency();
 	void should_fail_with_superclass_dependency();
 	void should_fail_with_superclass_inverted_dependency();
+	void should_fail_when_depends_on_self();
+	void should_fail_when_depends_on_subtype();
+	void should_fail_when_depends_on_supertype();
 
 private:
 	type injectable_type1_type;
@@ -166,6 +208,9 @@ private:
 	type duplicate_dependency_invalid_injected_type_type;
 	type invalid_injected_type_with_superclass_type;
 	type invalid_injected_type_with_superclass_inverted_type;
+	type invalid_injected_type_depends_on_self_type;
+	type invalid_injected_type_depends_on_subtype_type;
+	type invalid_injected_type_depends_on_supertype_type;
 	setter_method valid_injected_type_setter_1;
 	setter_method valid_injected_type_setter_2;
 	setter_method valid_injected_type_with_common_superclass_setter_1;
@@ -177,6 +222,9 @@ private:
 	setter_method invalid_injected_type_with_superclass_setter_2;
 	setter_method invalid_injected_type_with_superclass_inverted_setter_1;
 	setter_method invalid_injected_type_with_superclass_inverted_setter_2;
+	setter_method invalid_injected_type_depends_on_self_type_setter_1;
+	setter_method invalid_injected_type_depends_on_subtype_setter_1;
+	setter_method invalid_injected_type_depends_on_supertype_setter_1;
 
 	void verify_dependency(dependencies list, const dependency &check);
 
@@ -194,6 +242,9 @@ dependency_extractor_test::dependency_extractor_test() :
 	duplicate_dependency_invalid_injected_type_type{make_type<duplicate_dependency_invalid_injected_type>()},
 	invalid_injected_type_with_superclass_type{make_type<invalid_injected_type_with_superclass>()},
 	invalid_injected_type_with_superclass_inverted_type{make_type<invalid_injected_type_with_superclass_inverted>()},
+	invalid_injected_type_depends_on_self_type{make_type<invalid_injected_type_depends_on_self>()},
+	invalid_injected_type_depends_on_subtype_type{make_type<invalid_injected_type_depends_on_subtype>()},
+	invalid_injected_type_depends_on_supertype_type{make_type<invalid_injected_type_depends_on_supertype>()},
 	valid_injected_type_setter_1{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")},
 	valid_injected_type_setter_2{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")},
 	valid_injected_type_with_common_superclass_setter_1{make_setter_method<valid_injected_type_with_common_superclass>("setter_1(sub_injectable_type1a*)")},
@@ -204,7 +255,10 @@ dependency_extractor_test::dependency_extractor_test() :
 	invalid_injected_type_with_superclass_setter_1{make_setter_method<invalid_injected_type_with_superclass>("setter_1(injectable_type1*)")},
 	invalid_injected_type_with_superclass_setter_2{make_setter_method<invalid_injected_type_with_superclass>("setter_2(sub_injectable_type1a*)")},
 	invalid_injected_type_with_superclass_inverted_setter_1{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_1(injectable_type1*)")},
-	invalid_injected_type_with_superclass_inverted_setter_2{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_2(sub_injectable_type1a*)")}
+	invalid_injected_type_with_superclass_inverted_setter_2{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_2(sub_injectable_type1a*)")},
+	invalid_injected_type_depends_on_self_type_setter_1{make_setter_method<invalid_injected_type_depends_on_self>("setter_1(invalid_injected_type_depends_on_self*)")},
+	invalid_injected_type_depends_on_subtype_setter_1{make_setter_method<invalid_injected_type_depends_on_subtype>("setter_1(invalid_injected_type_depends_on_subtype_subtype*)")},
+	invalid_injected_type_depends_on_supertype_setter_1{make_setter_method<invalid_injected_type_depends_on_supertype>("setter_1(invalid_injected_type_depends_on_supertype_supertype*)")}
 {
 }
 
@@ -272,6 +326,27 @@ void dependency_extractor_test::should_fail_with_superclass_inverted_dependency(
 {
 	expect<dependency_duplicated_exception>([&]{
 		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_with_superclass_inverted_type);
+	});
+}
+
+void dependency_extractor_test::should_fail_when_depends_on_self()
+{
+	expect<dependency_on_self_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_depends_on_self_type);
+	});
+}
+
+void dependency_extractor_test::should_fail_when_depends_on_subtype()
+{
+	expect<dependency_on_subtype_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_depends_on_subtype_type);
+	});
+}
+
+void dependency_extractor_test::should_fail_when_depends_on_supertype()
+{
+	expect<dependency_on_supertype_exception>([&]{
+		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_depends_on_supertype_type);
 	});
 }
 
