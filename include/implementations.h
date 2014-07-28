@@ -28,7 +28,7 @@ namespace injeqt { namespace v1 {
 
 inline type type_from_implementation(const implementation &i)
 {
-	return i.implemented_type();
+	return i.interface_type();
 }
 
 using implementations = sorted_unique_vector<type, implementation, type_from_implementation>;

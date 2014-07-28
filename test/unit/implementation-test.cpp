@@ -101,7 +101,7 @@ void implementation_test::should_accept_ambiguous_with_null_object()
 {
 	auto i = implementation{type_1_type, implementation_availability::ambiguous, nullptr};
 
-	QCOMPARE(type_1_type, i.implemented_type());
+	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(implementation_availability::ambiguous, i.availability());
 	QCOMPARE(static_cast<QObject *>(nullptr), i.object());
 }
@@ -111,7 +111,7 @@ void implementation_test::should_accept_object_of_type()
 	auto object = make_object<type_1>();
 	auto i = implementation{type_1_type, implementation_availability::available, object.get()};
 
-	QCOMPARE(type_1_type, i.implemented_type());
+	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(implementation_availability::available, i.availability());
 	QCOMPARE(object.get(), i.object());
 }
@@ -121,7 +121,7 @@ void implementation_test::should_accept_object_of_sub_type()
 	auto object = make_object<type_1_subtype_1>();
 	auto i = implementation{type_1_type, implementation_availability::available, object.get()};
 
-	QCOMPARE(type_1_type, i.implemented_type());
+	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(implementation_availability::available, i.availability());
 	QCOMPARE(object.get(), i.object());
 }
@@ -131,7 +131,7 @@ void implementation_test::should_accept_object_of_sub_sub_type()
 	auto object = make_object<type_1_subtype_1_subtype_1>();
 	auto i = implementation{type_1_type, implementation_availability::available, object.get()};
 
-	QCOMPARE(type_1_type, i.implemented_type());
+	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(implementation_availability::available, i.availability());
 	QCOMPARE(object.get(), i.object());
 }
@@ -139,7 +139,7 @@ void implementation_test::should_accept_object_of_sub_sub_type()
 void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
-	expect<invalid_implemented_type_exception>([&]{
+	expect<invalid_interface_type_exception>([&]{
 		auto i = implementation{type_1_subtype_1_subtype_1_type, implementation_availability::available, object.get()};
 	});
 }
@@ -147,7 +147,7 @@ void implementation_test::should_not_accept_object_of_super_type()
 void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
-	expect<invalid_implemented_type_exception>([&]{
+	expect<invalid_interface_type_exception>([&]{
 		auto i = implementation{type_2_type, implementation_availability::available, object.get()};
 	});
 }

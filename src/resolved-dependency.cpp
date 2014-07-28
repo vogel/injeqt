@@ -31,7 +31,7 @@ resolved_dependency::resolved_dependency(implementation resolved_with, setter_me
 	if (_resolved_with.availability() == implementation_availability::ambiguous)
 		throw ambiguous_resolved_dependency_exception{};
 
-	if (_resolved_with.implemented_type() != setter.parameter_type())
+	if (_resolved_with.interface_type() != setter.parameter_type())
 		throw non_matching_setter_exception{};
 }
 

@@ -32,20 +32,20 @@ enum class implementation_availability;
 
 DEFINE_EXCEPTION(invalid_implementation_exception, injeqt_exception);
 DEFINE_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
-DEFINE_EXCEPTION(invalid_implemented_type_exception, invalid_implementation_exception);
+DEFINE_EXCEPTION(invalid_interface_type_exception, invalid_implementation_exception);
 
 class INJEQT_API implementation final
 {
 
 public:
-	explicit implementation(type implemented_type, implementation_availability availability, QObject *object);
+	explicit implementation(type interface_type, implementation_availability availability, QObject *object);
 
-	type implemented_type() const;
+	type interface_type() const;
 	implementation_availability availability() const;
 	QObject * object() const;
 
 private:
-	type _implemented_type;
+	type _interface_type;
 	implementation_availability _availability;
 	QObject *_object;
 

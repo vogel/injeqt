@@ -27,8 +27,8 @@
 
 namespace injeqt { namespace v1 {
 
-implementation::implementation(type implemented_type, implementation_availability availability, QObject *object) :
-	_implemented_type{std::move(implemented_type)},
+implementation::implementation(type interface_type, implementation_availability availability, QObject *object) :
+	_interface_type{std::move(interface_type)},
 	_availability{availability},
 	_object{object}
 {
@@ -41,14 +41,14 @@ implementation::implementation(type implemented_type, implementation_availabilit
 	if (object)
 	{
 		auto implements = implements_extractor{}.extract_implements(type{object->metaObject()});
-		if (implements.find(implemented_type) == std::end(implements))
-			throw invalid_implemented_type_exception{};
+		if (implements.find(interface_type) == std::end(implements))
+			throw invalid_interface_type_exception{};
 	}
 }
 
-type implementation::implemented_type() const
+type implementation::interface_type() const
 {
-	return _implemented_type;
+	return _interface_type;
 }
 
 implementation_availability implementation::availability() const
@@ -66,7 +66,7 @@ bool operator == (const implementation &x, const implementation &y)
 	if (std::addressof(x) == std::addressof(y))
 		return true;
 
-	if (x.implemented_type() != y.implemented_type())
+	if (x.interface_type() != y.interface_type())
 		return false;
 
 	if (x.availability() != y.availability())

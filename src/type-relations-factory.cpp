@@ -32,9 +32,9 @@ type_relations type_relations_factory::create_type_relations(const std::vector<t
 	auto type_count = std::map<type, std::size_t>();
 	for (auto &&main_type : main_types)
 	{
-		auto implemented_types = implements_extractor{}.extract_implements(main_type);
-		for (auto &&implemented_type : implemented_types)
-			type_count[implemented_type]++;
+		auto interface_types = implements_extractor{}.extract_implements(main_type);
+		for (auto &&interface_type : interface_types)
+			type_count[interface_type]++;
 	}
 
 	auto unique = std::vector<type>{};
