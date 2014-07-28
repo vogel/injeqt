@@ -40,6 +40,7 @@ set(INJEQT_SRCS
 	src/dependency-extractor.cpp
 	src/dependency-resolver.cpp
 	src/implementation.cpp
+	src/implemented-by.cpp
 	src/implements-extractor.cpp
 	src/module.cpp
 	src/resolved-dependency.cpp
