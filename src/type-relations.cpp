@@ -22,13 +22,13 @@
 
 namespace injeqt { namespace v1 {
 
-type_relations::type_relations(types unique, types ambiguous) :
+type_relations::type_relations(implemented_by_mapping unique, types ambiguous) :
 	_unique{std::move(unique)},
 	_ambiguous{std::move(ambiguous)}
 {
 }
 
-types type_relations::unique() const
+implemented_by_mapping type_relations::unique() const
 {
 	return _unique;
 }

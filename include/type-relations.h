@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "implemented-by-mapping.h"
 #include "injeqt-global.h"
 #include "types.h"
 
@@ -29,13 +30,13 @@ class INJEQT_API type_relations final
 {
 
 public:
-	explicit type_relations(types unique, types ambiguous);
+	explicit type_relations(implemented_by_mapping unique, types ambiguous);
 
-	types unique() const;
+	implemented_by_mapping unique() const;
 	types ambiguous() const;
 
 private:
-	types _unique;
+	implemented_by_mapping _unique;
 	types _ambiguous;
 
 };

@@ -20,6 +20,7 @@
 
 #include "dependency.cpp"
 #include "dependency-extractor.cpp"
+#include "implemented-by.cpp"
 #include "implements-extractor.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
