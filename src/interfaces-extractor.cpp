@@ -18,22 +18,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "interfaces-extractor.h"
 
-#include "injeqt-global.h"
+#include "type.h"
 
-#include <set>
+#include <QtCore/QMetaObject>
 
 namespace injeqt { namespace v1 {
 
-class type;
-
-class INJEQT_API implements_extractor final
+namespace
 {
 
-public:
-	std::set<type> extract_implements(const type &for_type) const;
+bool is_qobject(const QMetaObject * const meta_object)
+{
+	return !meta_object->superClass();
+}
 
-};
+}
+
+types interfaces_extractor::extract_interfaces(const type &for_type) const
+{
+	auto result = std::vector<type>{};
+	auto meta_object = for_type.meta_object();
+	while (meta_object && !is_qobject(meta_object))
+	{
+		result.emplace_back(meta_object);
+		meta_object = meta_object->superClass();
+	}
+
+	return types{result};
+}
 
 }}

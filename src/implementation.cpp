@@ -20,7 +20,7 @@
 
 #include "implementation.h"
 
-#include "implements-extractor.h"
+#include "interfaces-extractor.h"
 
 #include <QtCore/QObject>
 
@@ -35,8 +35,8 @@ implementation::implementation(type interface_type, QObject *object) :
 
 	if (object)
 	{
-		auto implements = implements_extractor{}.extract_implements(type{object->metaObject()});
-		if (implements.find(interface_type) == std::end(implements))
+		auto implements = interfaces_extractor{}.extract_interfaces(type{object->metaObject()});
+		if (!implements.contains(interface_type))
 			throw invalid_interface_type_exception{};
 	}
 }

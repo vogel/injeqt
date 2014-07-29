@@ -21,7 +21,7 @@
 #include "dependency.cpp"
 #include "dependency-resolver.cpp"
 #include "implementation.cpp"
-#include "implements-extractor.cpp"
+#include "interfaces-extractor.cpp"
 #include "resolved-dependency.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"

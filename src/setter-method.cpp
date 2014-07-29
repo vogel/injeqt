@@ -20,7 +20,7 @@
 
 #include "setter-method.h"
 
-#include "implements-extractor.h"
+#include "interfaces-extractor.h"
 
 namespace injeqt { namespace v1 {
 
@@ -75,8 +75,8 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 	if (!parameter || !parameter->metaObject())
 		throw invoked_with_wrong_object_exception{};
 
-	auto implements = implements_extractor{}.extract_implements(type{parameter->metaObject()});
-	if (implements.find(_parameter_type) == std::end(implements))
+	auto implements = interfaces_extractor{}.extract_interfaces(type{parameter->metaObject()});
+	if (!implements.contains(_parameter_type))
 		throw invoked_with_wrong_object_exception{};
 
 	return _meta_method.invoke(on, Q_ARG(QObject *, parameter));

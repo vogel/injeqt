@@ -39,10 +39,10 @@ set(INJEQT_SRCS
 	src/dependency.cpp
 	src/dependency-extractor.cpp
 	src/dependency-resolver.cpp
-	src/instantiate-helper.cpp
 	src/implementation.cpp
 	src/implemented-by.cpp
-	src/implements-extractor.cpp
+	src/instantiate-helper.cpp
+	src/interfaces-extractor.cpp
 	src/module.cpp
 	src/resolved-dependency.cpp
 	src/setter-injector.cpp

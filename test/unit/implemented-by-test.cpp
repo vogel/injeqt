@@ -19,7 +19,7 @@
  */
 
 #include "implemented-by.cpp"
-#include "implements-extractor.cpp"
+#include "interfaces-extractor.cpp"
 #include "type.cpp"
 
 #include "expect.h"
