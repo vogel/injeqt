@@ -20,17 +20,12 @@
 
 #include "resolved-dependency.h"
 
-#include "implementation-availability.h"
-
 namespace injeqt { namespace v1 {
 
 resolved_dependency::resolved_dependency(implementation resolved_with, setter_method setter) :
 	_resolved_with{std::move(resolved_with)},
 	_setter{std::move(setter)}
 {
-	if (_resolved_with.availability() == implementation_availability::ambiguous)
-		throw ambiguous_resolved_dependency_exception{};
-
 	if (_resolved_with.interface_type() != setter.parameter_type())
 		throw non_matching_setter_exception{};
 }

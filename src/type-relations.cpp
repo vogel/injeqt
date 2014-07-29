@@ -28,12 +28,12 @@ type_relations::type_relations(implemented_by_mapping unique, types ambiguous) :
 {
 }
 
-implemented_by_mapping type_relations::unique() const
+const implemented_by_mapping & type_relations::unique() const
 {
 	return _unique;
 }
 
-types type_relations::ambiguous() const
+const types & type_relations::ambiguous() const
 {
 	return _ambiguous;
 }

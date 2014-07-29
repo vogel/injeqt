@@ -21,7 +21,6 @@
 #include "dependency.cpp"
 #include "dependency-resolver.cpp"
 #include "implementation.cpp"
-#include "implementation-availability.h"
 #include "implements-extractor.cpp"
 #include "resolved-dependency.cpp"
 #include "setter-method.cpp"
@@ -125,9 +124,9 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 	auto object3 = make_object<injectable_type3>();
 	auto objects = std::vector<implementation>
 	{
-		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
-		implementation{injectable_type2_type, implementation_availability::available, object2.get()},
-		implementation{injectable_type3_type, implementation_availability::available, object3.get()},
+		implementation{injectable_type1_type, object1.get()},
+		implementation{injectable_type2_type, object2.get()},
+		implementation{injectable_type3_type, object3.get()},
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -150,8 +149,8 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	auto object3 = make_object<injectable_type3>();
 	auto objects = std::vector<implementation>
 	{
-		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
-		implementation{injectable_type3_type, implementation_availability::available, object3.get()}
+		implementation{injectable_type1_type, object1.get()},
+		implementation{injectable_type3_type, object3.get()}
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -176,10 +175,10 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	auto object3b = make_object<injectable_type3>();
 	auto objects = std::vector<implementation>
 	{
-		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
-		implementation{injectable_type1_type, implementation_availability::available, object1b.get()},
-		implementation{injectable_type3_type, implementation_availability::available, object3.get()},
-		implementation{injectable_type3_type, implementation_availability::available, object3b.get()},
+		implementation{injectable_type1_type, object1.get()},
+		implementation{injectable_type1_type, object1b.get()},
+		implementation{injectable_type3_type, object3.get()},
+		implementation{injectable_type3_type, object3b.get()},
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -206,10 +205,10 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	auto object3b = make_object<injectable_type3>();
 	auto objects = std::vector<implementation>
 	{
-		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
-		implementation{sublcass_injectable_type1_type, implementation_availability::available, subobject1.get()},
-		implementation{injectable_type3_type, implementation_availability::available, object3.get()},
-		implementation{injectable_type3_type, implementation_availability::available, object3b.get()}
+		implementation{injectable_type1_type, object1.get()},
+		implementation{sublcass_injectable_type1_type, subobject1.get()},
+		implementation{injectable_type3_type, object3.get()},
+		implementation{injectable_type3_type, object3b.get()}
 	};
 	auto to_resolve = std::vector<dependency>
 	{
@@ -234,8 +233,8 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 	auto object2 = make_object<injectable_type2>();
 	auto objects = std::vector<implementation>
 	{
-		implementation{injectable_type1_type, implementation_availability::available, object1.get()},
-		implementation{injectable_type2_type, implementation_availability::available, object2.get()}
+		implementation{injectable_type1_type, object1.get()},
+		implementation{injectable_type2_type, object2.get()}
 	};
 	auto to_resolve = std::vector<dependency>
 	{

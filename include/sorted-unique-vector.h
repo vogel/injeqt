@@ -60,6 +60,12 @@ private:
 		return k1 < k2;
 	}
 
+	static bool compare_with_key(const value_type &v, const key_type &k)
+	{
+		auto vk = KeyExtractor(v);
+		return vk < k;
+	}
+
 	static bool keys_equal(const value_type &v1, const value_type &v2)
 	{
 		auto k1 = KeyExtractor(v1);
@@ -174,6 +180,34 @@ public:
 			return false;
 
 		return *lower_bound == v;
+	}
+
+	/**
+	 * @return true if element with key k is found
+	 */
+	bool contains_key(const key_type &k) const
+	{
+		auto lower_bound = std::lower_bound(begin(), end(), k, compare_with_key);
+		if (lower_bound == end())
+			return false;
+
+		return true;
+	}
+
+	/**
+	 * @return item with key k
+	 */
+	const_iterator get(const key_type &k) const
+	{
+		auto lower_bound = std::lower_bound(begin(), end(), k, compare_with_key);
+		if (lower_bound == end())
+			return lower_bound;
+
+		auto vk = KeyExtractor(*lower_bound);
+		if (vk == k)
+			return lower_bound;
+		else
+			return end();
 	}
 
 	/**

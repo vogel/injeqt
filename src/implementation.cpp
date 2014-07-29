@@ -20,22 +20,17 @@
 
 #include "implementation.h"
 
-#include "implementation-availability.h"
 #include "implements-extractor.h"
 
 #include <QtCore/QObject>
 
 namespace injeqt { namespace v1 {
 
-implementation::implementation(type interface_type, implementation_availability availability, QObject *object) :
+implementation::implementation(type interface_type, QObject *object) :
 	_interface_type{std::move(interface_type)},
-	_availability{availability},
 	_object{object}
 {
-	if (availability == implementation_availability::ambiguous && object)
-		throw invalid_implementation_availability_exception{};
-
-	if (availability == implementation_availability::available && !object)
+	if (!object)
 		throw invalid_implementation_availability_exception{};
 
 	if (object)
@@ -51,11 +46,6 @@ type implementation::interface_type() const
 	return _interface_type;
 }
 
-implementation_availability implementation::availability() const
-{
-	return _availability;
-}
-
 QObject * implementation::object() const
 {
 	return _object;
@@ -67,9 +57,6 @@ bool operator == (const implementation &x, const implementation &y)
 		return true;
 
 	if (x.interface_type() != y.interface_type())
-		return false;
-
-	if (x.availability() != y.availability())
 		return false;
 
 	if (x.object() != y.object())

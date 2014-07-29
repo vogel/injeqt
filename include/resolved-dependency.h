@@ -27,7 +27,6 @@
 namespace injeqt { namespace v1 {
 
 DEFINE_EXCEPTION(invalid_resolved_dependency_exception, injeqt_exception);
-DEFINE_EXCEPTION(ambiguous_resolved_dependency_exception, invalid_resolved_dependency_exception);
 DEFINE_EXCEPTION(non_matching_setter_exception, invalid_resolved_dependency_exception);
 DEFINE_EXCEPTION(inavalid_apply_on_object_exception, invalid_resolved_dependency_exception);
 

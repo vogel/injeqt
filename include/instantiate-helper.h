@@ -20,14 +20,25 @@
 
 #pragma once
 
+#include "implementations.h"
+#include "implemented-by-mapping.h"
 #include "injeqt-global.h"
+#include "types.h"
 
 namespace injeqt { namespace v1 {
 
-enum class implementation_availability
+DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
+DEFINE_EXCEPTION(supertype_implementation_available, injeqt_exception);
+
+class instantiate_helper
 {
-	available,
-	ambiguous
+
+public:
+	types required_to_instantiate(
+		const type &type_to_instantiate,
+		const implemented_by_mapping &available_types,
+		const implementations &available_implementations);
+
 };
 
 }}
