@@ -19,7 +19,7 @@
  */
 
 #include "dependency.cpp"
-#include "dependency-extractor.cpp"
+#include "extract-dependencies.cpp"
 #include "implementation.cpp"
 #include "interfaces-extractor.cpp"
 #include "implemented-by.cpp"

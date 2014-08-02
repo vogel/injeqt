@@ -21,7 +21,7 @@
 #include "instantiate-helper.h"
 
 #include "dependency.h"
-#include "dependency-extractor.h"
+#include "extract-dependencies.h"
 #include "implemented-by.h"
 #include "interfaces-extractor.h"
 

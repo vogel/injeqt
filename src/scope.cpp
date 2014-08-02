@@ -20,7 +20,7 @@
 
 #include "scope.h"
 
-#include "dependency-extractor.h"
+#include "extract-dependencies.h"
 #include "dependency-resolver.h"
 #include "instantiate-helper.h"
 #include "interfaces-extractor.h"
