@@ -18,38 +18,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
 #include "instantiation-state.h"
-#include "injeqt-exception.h"
-#include "injeqt-global.h"
-
-#include <memory>
 
 namespace injeqt { namespace v1 {
 
-DEFINE_EXCEPTION(scope_exception, injeqt_exception);
-DEFINE_EXCEPTION(type_not_in_scope_exception, scope_exception);
-DEFINE_EXCEPTION(unresolved_dependencies_exception, scope_exception);
-
-class INJEQT_API scope final
+instantiation_state::instantiation_state(implemented_by_mapping available_types, implementations objects) :
+	_available_types{std::move(available_types)},
+	_objects{std::move(objects)}
 {
+}
 
-public:
-	explicit scope(instantiation_state state);
+const implemented_by_mapping & instantiation_state::available_types() const
+{
+	return _available_types;
+}
 
-	instantiation_state state() const;
+const implementations & instantiation_state::objects() const
+{
+	return _objects;
+}
 
-	QObject * get(const type &t);
+bool operator == (const instantiation_state &x, const instantiation_state &y)
+{
+	if (x.available_types() != y.available_types())
+		return false;
 
-private:
-	instantiation_state _state;
+	if (x.objects() != y.objects())
+		return false;
 
-	std::vector<std::unique_ptr<QObject>> _owned_objects;
+	return true;
+}
 
-};
-
-INJEQT_API bool operator == (const scope &x, const scope &y);
-INJEQT_API bool operator != (const scope &x, const scope &y);
+bool operator != (const instantiation_state &x, const instantiation_state &y)
+{
+	return !(x == y);
+}
 
 }}

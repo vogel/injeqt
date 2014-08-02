@@ -20,36 +20,29 @@
 
 #pragma once
 
-#include "instantiation-state.h"
+#include "implementations.h"
+#include "implemented-by-mapping.h"
 #include "injeqt-exception.h"
 #include "injeqt-global.h"
 
-#include <memory>
-
 namespace injeqt { namespace v1 {
 
-DEFINE_EXCEPTION(scope_exception, injeqt_exception);
-DEFINE_EXCEPTION(type_not_in_scope_exception, scope_exception);
-DEFINE_EXCEPTION(unresolved_dependencies_exception, scope_exception);
-
-class INJEQT_API scope final
+class INJEQT_API instantiation_state final
 {
 
 public:
-	explicit scope(instantiation_state state);
+	explicit instantiation_state(implemented_by_mapping available_types, implementations objects);
 
-	instantiation_state state() const;
-
-	QObject * get(const type &t);
+	const implemented_by_mapping & available_types() const;
+	const implementations & objects() const;
 
 private:
-	instantiation_state _state;
-
-	std::vector<std::unique_ptr<QObject>> _owned_objects;
+	implemented_by_mapping _available_types;
+	implementations _objects;
 
 };
 
-INJEQT_API bool operator == (const scope &x, const scope &y);
-INJEQT_API bool operator != (const scope &x, const scope &y);
+INJEQT_API bool operator == (const instantiation_state &x, const instantiation_state &y);
+INJEQT_API bool operator != (const instantiation_state &x, const instantiation_state &y);
 
 }}

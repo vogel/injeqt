@@ -28,34 +28,28 @@
 
 namespace injeqt { namespace v1 {
 
-scope::scope(implemented_by_mapping available_types, implementations objects) :
-	_available_types{std::move(available_types)},
-	_objects{std::move(objects)}
+scope::scope(instantiation_state state) :
+	_state{std::move(state)}
 {
 }
 
-implemented_by_mapping scope::available_types() const
+instantiation_state scope::state() const
 {
-	return _available_types;
-}
-
-implementations scope::objects() const
-{
-	return _objects;
+	return _state;
 }
 
 QObject * scope::get(const type &t)
 {
-	auto implementation_type_it = _available_types.get(t);
-	if (implementation_type_it == end(_available_types))
+	auto implementation_type_it = _state.available_types().get(t);
+	if (implementation_type_it == end(_state.available_types()))
 		throw type_not_in_scope_exception{};
 
 	auto implementation_type = implementation_type_it->implementation_type();
-	auto object_it = _objects.get(implementation_type);
-	if (object_it != end(_objects))
+	auto object_it = _state.objects().get(implementation_type);
+	if (object_it != end(_state.objects()))
 		return object_it->object();
 
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _available_types, _objects);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _state.available_types(), _state.objects());
 
 	auto new_objects = std::vector<implementation>{};
 	auto objects_to_resolve = std::vector<implementation>{};
@@ -72,13 +66,13 @@ QObject * scope::get(const type &t)
 			new_objects.emplace_back(interface, instance);
 	}
 
-	auto merged_objects = _objects;
-	merged_objects.merge(implementations{new_objects});
+	auto objects = _state.objects();
+	objects.merge(implementations{new_objects});
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
 		auto to_resolve = extract_dependencies(object_to_resolve.interface_type());
-		auto resolved_dependencies = resolve_dependencies(to_resolve, merged_objects);
+		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
 		if (!resolved_dependencies.unresolved.empty())
 			throw unresolved_dependencies_exception{};
 
@@ -86,16 +80,13 @@ QObject * scope::get(const type &t)
 			resolved.apply_on(object_to_resolve.object());
 	}
 
-	_objects = merged_objects;
-	return _objects.get(implementation_type)->object();
+	_state = instantiation_state{_state.available_types(), objects};
+	return _state.objects().get(implementation_type)->object();
 }
 
 bool operator == (const scope &x, const scope &y)
 {
-	if (x.available_types() != y.available_types())
-		return false;
-
-	if (x.objects() != y.objects())
+	if (x.state() != y.state())
 		return false;
 
 	return true;
