@@ -28,6 +28,7 @@
 namespace injeqt { namespace v1 {
 
 DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
+DEFINE_EXCEPTION(subtype_implementation_available, injeqt_exception);
 DEFINE_EXCEPTION(supertype_implementation_available, injeqt_exception);
 
 class instantiate_helper

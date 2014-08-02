@@ -125,7 +125,8 @@ private slots:
 	void should_return_type_when_simple_mapping_and_empty_implementation();
 	void should_return_subtype_when_inheriting_mapping_and_empty_implementation();
 	void should_return_nothing_when_simple_mapping_and_implementation();
-	void should_return_nothing_when_inheriting_mapping_and_only_subtype_implementation();
+	void should_throw_when_inheriting_mapping_and_only_subtype_implementation();
+	void should_throw_when_inheriting_mapping_and_only_supertype_implementation();
 	void should_return_nothing_when_inheriting_mapping_and_subtype_implementation();
 	void should_throw_when_inheriting_mapping_and_supertype_implementation_available();
 	void should_return_type_with_dependencies_when_simple_mapping_and_empty_implementation();
@@ -227,7 +228,7 @@ void instantiate_helper_test::should_return_nothing_when_simple_mapping_and_impl
 	QCOMPARE(result, types{});
 }
 
-void instantiate_helper_test::should_return_nothing_when_inheriting_mapping_and_only_subtype_implementation()
+void instantiate_helper_test::should_throw_when_inheriting_mapping_and_only_subtype_implementation()
 {
 	auto type_1_subtype_1_object = make_object<type_1_subtype_1>();
 	auto available_implementations = implementations
@@ -235,8 +236,22 @@ void instantiate_helper_test::should_return_nothing_when_inheriting_mapping_and_
 		implementation{type_1_subtype_1_type, type_1_subtype_1_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_1_type, inheriting_mapping, available_implementations);
-	QCOMPARE(result, types{});
+	expect<subtype_implementation_available>([&]{
+		auto result = instantiate_helper{}.required_to_instantiate(type_1_type, inheriting_mapping, available_implementations);
+	});
+}
+
+void instantiate_helper_test::should_throw_when_inheriting_mapping_and_only_supertype_implementation()
+{
+	auto type_1_object = make_object<type_1>();
+	auto available_implementations = implementations
+	{
+		implementation{type_1_type, type_1_object.get()}
+	};
+
+	expect<supertype_implementation_available>([&]{
+		auto result = instantiate_helper{}.required_to_instantiate(type_1_subtype_1_type, inheriting_mapping, available_implementations);
+	});
 }
 
 void instantiate_helper_test::should_return_nothing_when_inheriting_mapping_and_subtype_implementation()

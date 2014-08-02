@@ -57,7 +57,10 @@ types instantiate_helper::required_to_instantiate(
 		for (auto &&interface : implements)
 		{
 			if (available_implementations.contains_key(interface))
-				throw supertype_implementation_available{};
+				if (interface == current_implementation_type)
+					throw subtype_implementation_available{};
+				else
+					throw supertype_implementation_available{};
 			future_available.insert(interface);
 		}
 
