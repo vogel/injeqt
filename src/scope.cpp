@@ -21,7 +21,7 @@
 #include "scope.h"
 
 #include "extract-dependencies.h"
-#include "interfaces-extractor.h"
+#include "extract-interfaces.h"
 #include "required-to-instantiate.h"
 #include "resolved-dependency.h"
 #include "resolve-dependencies.h"
@@ -66,7 +66,7 @@ QObject * scope::get(const type &t)
 
 		_owned_objects.push_back(std::move(unique_ptr_instance));
 
-		auto interfaces = interfaces_extractor{}.extract_interfaces(type_to_instantiate);
+		auto interfaces = extract_interfaces(type_to_instantiate);
 		objects_to_resolve.emplace_back(type_to_instantiate, instance);
 		for (auto &&interface : interfaces)
 			new_objects.emplace_back(interface, instance);

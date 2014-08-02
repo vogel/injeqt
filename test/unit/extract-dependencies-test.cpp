@@ -20,8 +20,8 @@
 
 #include "dependency.cpp"
 #include "extract-dependencies.cpp"
+#include "extract-interfaces.cpp"
 #include "implemented-by.cpp"
-#include "interfaces-extractor.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 #include "type-relations.cpp"

@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "interfaces-extractor.cpp"
+#include "extract-interfaces.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 

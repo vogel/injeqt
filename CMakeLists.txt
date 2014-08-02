@@ -38,9 +38,9 @@ set(INJEQT_SRCS
 	src/class-mapping.cpp
 	src/dependency.cpp
 	src/extract-dependencies.cpp
+	src/extract-interfaces.cpp
 	src/implementation.cpp
 	src/implemented-by.cpp
-	src/interfaces-extractor.cpp
 	src/module.cpp
 	src/required-to-instantiate.cpp
 	src/resolved-dependency.cpp

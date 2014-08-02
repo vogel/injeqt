@@ -25,12 +25,6 @@
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API interfaces_extractor final
-{
-
-public:
-	types extract_interfaces(const type &for_type) const;
-
-};
+INJEQT_API types extract_interfaces(const type &for_type);
 
 }}

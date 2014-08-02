@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "interfaces-extractor.h"
+#include "extract-interfaces.h"
 
 #include "type.h"
 
@@ -36,7 +36,7 @@ bool is_qobject(const QMetaObject * const meta_object)
 
 }
 
-types interfaces_extractor::extract_interfaces(const type &for_type) const
+types extract_interfaces(const type &for_type)
 {
 	auto result = std::vector<type>{};
 	auto meta_object = for_type.meta_object();

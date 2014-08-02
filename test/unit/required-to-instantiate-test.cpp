@@ -20,9 +20,9 @@
 
 #include "dependency.cpp"
 #include "extract-dependencies.cpp"
+#include "extract-interfaces.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"
-#include "interfaces-extractor.cpp"
 #include "required-to-instantiate.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"

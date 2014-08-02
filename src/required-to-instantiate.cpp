@@ -22,8 +22,8 @@
 
 #include "dependency.h"
 #include "extract-dependencies.h"
+#include "extract-interfaces.h"
 #include "implemented-by.h"
-#include "interfaces-extractor.h"
 
 #include <set>
 
@@ -53,7 +53,7 @@ types required_to_instantiate(
 		auto current_implementation_type = available_it->implementation_type();
 		if (future_available.find(current_implementation_type) != std::end(future_available))
 			continue;
-		auto implements = interfaces_extractor{}.extract_interfaces(current_implementation_type);
+		auto implements = extract_interfaces(current_implementation_type);
 		for (auto &&interface : implements)
 		{
 			if (available_implementations.contains_key(interface))

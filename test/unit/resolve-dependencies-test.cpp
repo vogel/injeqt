@@ -19,8 +19,8 @@
  */
 
 #include "dependency.cpp"
+#include "extract-interfaces.cpp"
 #include "implementation.cpp"
-#include "interfaces-extractor.cpp"
 #include "resolved-dependency.cpp"
 #include "resolve-dependencies.cpp"
 #include "setter-method.cpp"

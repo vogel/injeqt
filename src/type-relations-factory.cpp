@@ -20,7 +20,7 @@
 
 #include "type-relations-factory.h"
 
-#include "interfaces-extractor.h"
+#include "extract-interfaces.h"
 #include "type-relations.h"
 
 #include <map>
@@ -34,7 +34,7 @@ type_relations type_relations_factory::create_type_relations(const std::vector<t
 
 	for (auto &&main_type : main_types)
 	{
-		auto interface_types = interfaces_extractor{}.extract_interfaces(main_type);
+		auto interface_types = extract_interfaces(main_type);
 		for (auto &&interface_type : interface_types)
 		{
 			type_count[interface_type]++;
