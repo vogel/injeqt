@@ -38,9 +38,9 @@ instantiation_state scope::state() const
 	return _state;
 }
 
-QObject * scope::get(const type &t)
+QObject * scope::get(const type &interface_type)
 {
-	auto implementation_type_it = _state.available_types().get(t);
+	auto implementation_type_it = _state.available_types().get(interface_type);
 	if (implementation_type_it == end(_state.available_types()))
 		throw type_not_in_scope_exception{};
 
@@ -51,7 +51,6 @@ QObject * scope::get(const type &t)
 
 	auto types_to_instantiate = required_to_instantiate(implementation_type, _state);
 
-	auto new_objects = std::vector<implementation>{};
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
@@ -60,14 +59,11 @@ QObject * scope::get(const type &t)
 
 		_owned_objects.push_back(std::move(unique_ptr_instance));
 
-		auto interfaces = extract_interfaces(type_to_instantiate);
 		objects_to_resolve.emplace_back(type_to_instantiate, instance);
-		for (auto &&interface : interfaces)
-			new_objects.emplace_back(interface, instance);
 	}
 
 	auto objects = _state.objects();
-	objects.merge(implementations{new_objects});
+	objects.merge(implementations{objects_to_resolve});
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{

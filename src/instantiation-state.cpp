@@ -35,35 +35,8 @@ instantiation_state::instantiation_state(implemented_by_mapping available_types,
 			throw type_not_in_mapping_exception{};
 
 		auto implementation_type = available_interface_type_it->implementation_type();
-		auto available_implementation_type_it = _available_types.get(implementation_type);
-		if (available_implementation_type_it == end(_available_types))
+		if (implementation_type != object.interface_type())
 			throw type_implementation_inconsistent_exception{};
-
-		if (available_implementation_type_it->interface_type() != available_implementation_type_it->implementation_type())
-			throw type_implementation_inconsistent_exception{};
-
-		auto implementation_object_it = _objects.get(available_interface_type_it->implementation_type());
-		auto all_interface_types = extract_interfaces(implementation_type);
-		if (implementation_object_it != end(_objects))
-		{
-			for (auto &&interface_type : all_interface_types)
-			{
-				auto interface_object_it = _objects.get(interface_type);
-				if (interface_object_it == end(_objects))
-					throw type_implementation_inconsistent_exception{};
-				if (interface_object_it->object() != implementation_object_it->object())
-					throw type_implementation_inconsistent_exception{};
-			}
-		}
-		else
-		{
-			for (auto &&interface_type : all_interface_types)
-			{
-				auto interface_object_it = _objects.get(interface_type);
-				if (interface_object_it != end(_objects))
-					throw type_implementation_inconsistent_exception{};
-			}
-		}
 	}
 }
 

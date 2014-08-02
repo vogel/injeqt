@@ -44,10 +44,10 @@ types required_to_instantiate(const type &type_to_instantiate, const instantiati
 		if (available_it == end(state.available_types()))
 			throw type_not_mapped_exception{};
 
-		if (state.objects().contains_key(current_interface_type))
+		auto current_implementation_type = available_it->implementation_type();
+		if (state.objects().contains_key(current_implementation_type))
 			continue;
 
-		auto current_implementation_type = available_it->implementation_type();
 		if (future_available.find(current_implementation_type) != std::end(future_available))
 			continue;
 		future_available.insert(current_implementation_type);

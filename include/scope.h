@@ -40,7 +40,7 @@ public:
 
 	instantiation_state state() const;
 
-	QObject * get(const type &t);
+	QObject * get(const type &interface_type);
 
 private:
 	instantiation_state _state;
