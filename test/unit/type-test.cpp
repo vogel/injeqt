@@ -51,7 +51,7 @@ void type_test::should_throw_when_created_with_null_meta_object()
 {
 	auto t = make_type<valid_type>();
 
-	QCOMPARE(t.meta_object(), std::addressof(valid_type::staticMetaObject));
+	QCOMPARE(t.meta_object(), &valid_type::staticMetaObject);
 }
 
 QTEST_APPLESS_MAIN(type_test)

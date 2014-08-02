@@ -53,7 +53,7 @@ INJEQT_API bool operator >= (const type &x, const type &y);
 template<typename T>
 inline type make_type()
 {
-	return type{std::addressof(T::staticMetaObject)};
+	return type{&T::staticMetaObject};
 }
 
 }}

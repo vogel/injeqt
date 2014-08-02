@@ -193,8 +193,8 @@ void resolve_dependencies_test::should_resolve_available_dependencies_using_exac
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QCOMPARE(*result.unresolved.begin(), to_resolve.at(1));
-	QVERIFY(std::addressof(object1) != std::addressof(object1b));
-	QVERIFY(std::addressof(object3) != std::addressof(object3b));
+	QVERIFY(&object1 != &object1b);
+	QVERIFY(&object3 != &object3b);
 }
 
 void resolve_dependencies_test::should_resolve_available_dependencies_using_exact_matching_not_using_subclass()
@@ -223,8 +223,8 @@ void resolve_dependencies_test::should_resolve_available_dependencies_using_exac
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
-	QVERIFY(std::addressof(object1) != std::addressof(subobject1));
-	QVERIFY(std::addressof(object3) != std::addressof(object3b));
+	QVERIFY(&object1 != &subobject1);
+	QVERIFY(&object3 != &object3b);
 }
 
 void resolve_dependencies_test::should_resolve_available_dependencies_not_using_superclass()

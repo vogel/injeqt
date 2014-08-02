@@ -57,9 +57,6 @@ bool resolved_dependency::apply_on(QObject *on)
 
 bool operator == (const resolved_dependency &first, const resolved_dependency &second)
 {
-	if (std::addressof(first) == std::addressof(second))
-		return true;
-
 	if (first.resolved_with() != second.resolved_with())
 		return false;
 

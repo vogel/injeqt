@@ -45,9 +45,6 @@ type implemented_by::implementation_type() const
 
 bool operator == (const implemented_by &x, const implemented_by &y)
 {
-	if (std::addressof(x) == std::addressof(y))
-		return true;
-
 	if (x.interface_type() != y.interface_type())
 		return false;
 

@@ -39,9 +39,6 @@ setter_method dependency::setter() const
 
 bool operator == (const dependency &first, const dependency &second)
 {
-	if (std::addressof(first) == std::addressof(second))
-		return true;
-
 	if (first.setter() != second.setter())
 		return false;
 

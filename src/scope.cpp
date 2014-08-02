@@ -92,9 +92,6 @@ QObject * scope::get(const type &t)
 
 bool operator == (const scope &x, const scope &y)
 {
-	if (std::addressof(x) == std::addressof(y))
-		return true;
-
 	if (x.available_types() != y.available_types())
 		return false;
 

@@ -44,9 +44,6 @@ const types & type_relations::ambiguous() const
 
 bool operator == (const type_relations &first, const type_relations &second)
 {
-	if (std::addressof(first) == std::addressof(second))
-		return true;
-
 	if (first.unique() != second.unique())
 		return false;
 

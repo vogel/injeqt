@@ -84,9 +84,6 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 
 bool operator == (const setter_method &x, const setter_method &y)
 {
-	if (std::addressof(x) == std::addressof(y))
-		return true;
-
 	if (x.object_type() != y.object_type())
 		return false;
 

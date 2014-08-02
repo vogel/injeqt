@@ -53,9 +53,6 @@ QObject * implementation::object() const
 
 bool operator == (const implementation &x, const implementation &y)
 {
-	if (std::addressof(x) == std::addressof(y))
-		return true;
-
 	if (x.interface_type() != y.interface_type())
 		return false;
 
