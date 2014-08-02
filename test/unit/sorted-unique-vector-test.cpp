@@ -28,12 +28,18 @@ class sorted_unique_vector_test : public QObject
 {
 	Q_OBJECT
 
-	static int extract_key(const int &v)
+	static int extract_key(const int &x)
 	{
-		return v;
+		return x;
+	}
+
+	static int extract_key_pair(const std::pair<int, std::string> &x)
+	{
+		return x.first;
 	}
 
 	using suv_int = sorted_unique_vector<int, int, extract_key>;
+	using suv_pair = sorted_unique_vector<int, std::pair<int, std::string>, extract_key_pair>;
 
 private slots:
 	void should_be_empty_after_default_construction();
@@ -60,6 +66,13 @@ private slots:
 	void should_match_return_only_unresolved_for_non_matching_vectors();
 	void should_match_return_only_resolved_for_matching_vectors();
 	void should_match_return_valid_data_for_partially_matching_vectors();
+	void should_return_false_for_contains_when_empty();
+	void should_return_false_for_contains_when_does_not_contain();
+	void should_return_true_for_contains_when_contains();
+	void should_return_false_for_contains_when_contains_key_with_different_value();
+	void should_return_false_for_contains_key_when_empty();
+	void should_return_false_for_contains_when_does_not_contain_key();
+	void should_return_true_for_contains_when_contains_key();
 
 };
 
@@ -294,6 +307,49 @@ void sorted_unique_vector_test::should_match_return_valid_data_for_partially_mat
 	QCOMPARE(result.unmatched_1.content(), (std::vector<int>{1}));
 	QCOMPARE(result.unmatched_2.content(), (std::vector<int>{4, 5}));
 }
+
+void sorted_unique_vector_test::should_return_false_for_contains_when_empty()
+{
+	auto data = suv_pair{};
+	QVERIFY(!data.contains(std::make_pair(0, std::string{"0"})));
+}
+
+void sorted_unique_vector_test::should_return_false_for_contains_when_does_not_contain()
+{
+	auto data = suv_pair{std::make_pair(0, std::string{"0"})};
+	QVERIFY(!data.contains(std::make_pair(1, std::string{"1"})));
+}
+
+void sorted_unique_vector_test::should_return_true_for_contains_when_contains()
+{
+	auto data = suv_pair{std::make_pair(0, std::string{"0"})};
+	QVERIFY(data.contains(std::make_pair(0, std::string{"0"})));
+}
+
+void sorted_unique_vector_test::should_return_false_for_contains_when_contains_key_with_different_value()
+{
+	auto data = suv_pair{std::make_pair(0, std::string{"0"})};
+	QVERIFY(!data.contains(std::make_pair(0, std::string{"1"})));
+}
+
+void sorted_unique_vector_test::should_return_false_for_contains_key_when_empty()
+{
+	auto data = suv_pair{};
+	QVERIFY(!data.contains_key(0));
+}
+
+void sorted_unique_vector_test::should_return_false_for_contains_when_does_not_contain_key()
+{
+	auto data = suv_pair{std::make_pair(0, std::string{"0"})};
+	QVERIFY(!data.contains_key(1));
+}
+
+void sorted_unique_vector_test::should_return_true_for_contains_when_contains_key()
+{
+	auto data = suv_pair{std::make_pair(0, std::string{"0"})};
+	QVERIFY(data.contains_key(0));
+}
+
 
 QTEST_APPLESS_MAIN(sorted_unique_vector_test)
 #include "sorted-unique-vector-test.moc"

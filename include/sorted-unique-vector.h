@@ -191,7 +191,7 @@ public:
 		if (lower_bound == end())
 			return false;
 
-		return true;
+		return k == KeyExtractor(*lower_bound);
 	}
 
 	/**
