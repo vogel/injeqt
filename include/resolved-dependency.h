@@ -47,7 +47,7 @@ private:
 
 };
 
-INJEQT_API bool operator == (const resolved_dependency &first, const resolved_dependency &second);
-INJEQT_API bool operator != (const resolved_dependency &first, const resolved_dependency &second);
+INJEQT_API bool operator == (const resolved_dependency &x, const resolved_dependency &y);
+INJEQT_API bool operator != (const resolved_dependency &x, const resolved_dependency &y);
 
 }}

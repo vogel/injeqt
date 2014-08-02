@@ -40,7 +40,7 @@ private:
 
 };
 
-INJEQT_API bool operator == (const dependency &first, const dependency &second);
-INJEQT_API bool operator != (const dependency &first, const dependency &second);
+INJEQT_API bool operator == (const dependency &x, const dependency &y);
+INJEQT_API bool operator != (const dependency &x, const dependency &y);
 
 }}

@@ -37,17 +37,17 @@ setter_method dependency::setter() const
 	return _setter;
 }
 
-bool operator == (const dependency &first, const dependency &second)
+bool operator == (const dependency &x, const dependency &y)
 {
-	if (first.setter() != second.setter())
+	if (x.setter() != y.setter())
 		return false;
 
 	return true;
 }
 
-bool operator != (const dependency &first, const dependency &second)
+bool operator != (const dependency &x, const dependency &y)
 {
-	return !(first == second);
+	return !(x == y);
 }
 
 }}

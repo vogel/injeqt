@@ -55,20 +55,20 @@ bool resolved_dependency::apply_on(QObject *on)
 	}
 }
 
-bool operator == (const resolved_dependency &first, const resolved_dependency &second)
+bool operator == (const resolved_dependency &x, const resolved_dependency &y)
 {
-	if (first.resolved_with() != second.resolved_with())
+	if (x.resolved_with() != y.resolved_with())
 		return false;
 
-	if (first.setter() != second.setter())
+	if (x.setter() != y.setter())
 		return false;
 
 	return true;
 }
 
-bool operator != (const resolved_dependency &first, const resolved_dependency &second)
+bool operator != (const resolved_dependency &x, const resolved_dependency &y)
 {
-	return !(first == second);
+	return !(x == y);
 }
 
 }}
