@@ -40,9 +40,9 @@ set(INJEQT_SRCS
 	src/extract-dependencies.cpp
 	src/implementation.cpp
 	src/implemented-by.cpp
-	src/instantiate-helper.cpp
 	src/interfaces-extractor.cpp
 	src/module.cpp
+	src/required-to-instantiate.cpp
 	src/resolved-dependency.cpp
 	src/resolve-dependencies.cpp
 	src/setter-injector.cpp

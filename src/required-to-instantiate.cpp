@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "instantiate-helper.h"
+#include "required-to-instantiate.h"
 
 #include "dependency.h"
 #include "extract-dependencies.h"
@@ -29,7 +29,7 @@
 
 namespace injeqt { namespace v1 {
 
-types instantiate_helper::required_to_instantiate(
+types required_to_instantiate(
 	const type &type_to_instantiate,
 	const implemented_by_mapping &available_types,
 	const implementations &available_implementations)

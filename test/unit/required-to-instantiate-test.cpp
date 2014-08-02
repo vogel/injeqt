@@ -21,9 +21,9 @@
 #include "dependency.cpp"
 #include "extract-dependencies.cpp"
 #include "implementation.cpp"
-#include "interfaces-extractor.cpp"
 #include "implemented-by.cpp"
-#include "instantiate-helper.cpp"
+#include "interfaces-extractor.cpp"
+#include "required-to-instantiate.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 #include "type-relations.cpp"
@@ -113,12 +113,12 @@ class cyclic_type_3_subtype_1 : public cyclic_type_3
 	Q_OBJECT
 };
 
-class instantiate_helper_test : public QObject
+class required_to_instantiate_test : public QObject
 {
 	Q_OBJECT
 
 public:
-	instantiate_helper_test();
+	required_to_instantiate_test();
 
 private slots:
 	void should_throw_when_type_not_in_mapping();
@@ -157,7 +157,7 @@ private:
 
 };
 
-instantiate_helper_test::instantiate_helper_test() :
+required_to_instantiate_test::required_to_instantiate_test() :
 	type_1_type{make_type<type_1>()},
 	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
 	type_2_type{make_type<type_2>()},
@@ -197,26 +197,26 @@ instantiate_helper_test::instantiate_helper_test() :
 {
 }
 
-void instantiate_helper_test::should_throw_when_type_not_in_mapping()
+void required_to_instantiate_test::should_throw_when_type_not_in_mapping()
 {
 	expect<type_not_mapped_exception>([&]{
-		auto result = instantiate_helper{}.required_to_instantiate(type_1_type, {}, {});
+		auto result = required_to_instantiate(type_1_type, {}, {});
 	});
 }
 
-void instantiate_helper_test::should_return_type_when_simple_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_type_when_simple_mapping_and_empty_implementation()
 {
-	auto result = instantiate_helper{}.required_to_instantiate(type_1_type, simple_mapping, {});
+	auto result = required_to_instantiate(type_1_type, simple_mapping, {});
 	QCOMPARE(result, types{type_1_type});
 }
 
-void instantiate_helper_test::should_return_subtype_when_inheriting_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_subtype_when_inheriting_mapping_and_empty_implementation()
 {
-	auto result = instantiate_helper{}.required_to_instantiate(type_1_type, inheriting_mapping, {});
+	auto result = required_to_instantiate(type_1_type, inheriting_mapping, {});
 	QCOMPARE(result, types{type_1_subtype_1_type});
 }
 
-void instantiate_helper_test::should_return_nothing_when_simple_mapping_and_implementation()
+void required_to_instantiate_test::should_return_nothing_when_simple_mapping_and_implementation()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
@@ -224,11 +224,11 @@ void instantiate_helper_test::should_return_nothing_when_simple_mapping_and_impl
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_1_type, simple_mapping, available_implementations);
+	auto result = required_to_instantiate(type_1_type, simple_mapping, available_implementations);
 	QCOMPARE(result, types{});
 }
 
-void instantiate_helper_test::should_throw_when_inheriting_mapping_and_only_subtype_implementation()
+void required_to_instantiate_test::should_throw_when_inheriting_mapping_and_only_subtype_implementation()
 {
 	auto type_1_subtype_1_object = make_object<type_1_subtype_1>();
 	auto available_implementations = implementations
@@ -237,11 +237,11 @@ void instantiate_helper_test::should_throw_when_inheriting_mapping_and_only_subt
 	};
 
 	expect<subtype_implementation_available>([&]{
-		auto result = instantiate_helper{}.required_to_instantiate(type_1_type, inheriting_mapping, available_implementations);
+		auto result = required_to_instantiate(type_1_type, inheriting_mapping, available_implementations);
 	});
 }
 
-void instantiate_helper_test::should_throw_when_inheriting_mapping_and_only_supertype_implementation()
+void required_to_instantiate_test::should_throw_when_inheriting_mapping_and_only_supertype_implementation()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
@@ -250,11 +250,11 @@ void instantiate_helper_test::should_throw_when_inheriting_mapping_and_only_supe
 	};
 
 	expect<supertype_implementation_available>([&]{
-		auto result = instantiate_helper{}.required_to_instantiate(type_1_subtype_1_type, inheriting_mapping, available_implementations);
+		auto result = required_to_instantiate(type_1_subtype_1_type, inheriting_mapping, available_implementations);
 	});
 }
 
-void instantiate_helper_test::should_return_nothing_when_inheriting_mapping_and_subtype_implementation()
+void required_to_instantiate_test::should_return_nothing_when_inheriting_mapping_and_subtype_implementation()
 {
 	auto type_1_subtype_1_object = make_object<type_1_subtype_1>();
 	auto available_implementations = implementations
@@ -263,11 +263,11 @@ void instantiate_helper_test::should_return_nothing_when_inheriting_mapping_and_
 		implementation{type_1_subtype_1_type, type_1_subtype_1_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_1_type, inheriting_mapping, available_implementations);
+	auto result = required_to_instantiate(type_1_type, inheriting_mapping, available_implementations);
 	QCOMPARE(result, types{});
 }
 
-void instantiate_helper_test::should_throw_when_inheriting_mapping_and_supertype_implementation_available()
+void required_to_instantiate_test::should_throw_when_inheriting_mapping_and_supertype_implementation_available()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
@@ -276,17 +276,17 @@ void instantiate_helper_test::should_throw_when_inheriting_mapping_and_supertype
 	};
 
 	expect<supertype_implementation_available>([&]{
-		auto result = instantiate_helper{}.required_to_instantiate(type_1_subtype_1_type, inheriting_mapping, available_implementations);
+		auto result = required_to_instantiate(type_1_subtype_1_type, inheriting_mapping, available_implementations);
 	});
 }
 
-void instantiate_helper_test::should_return_type_with_dependencies_when_simple_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_type_with_dependencies_when_simple_mapping_and_empty_implementation()
 {
-	auto result = instantiate_helper{}.required_to_instantiate(type_2_type, simple_mapping, {});
+	auto result = required_to_instantiate(type_2_type, simple_mapping, {});
 	QCOMPARE(result, (types{type_1_type, type_2_type}));
 }
 
-void instantiate_helper_test::should_return_type_when_simple_mapping_and_dependencies_implementation()
+void required_to_instantiate_test::should_return_type_when_simple_mapping_and_dependencies_implementation()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
@@ -294,11 +294,11 @@ void instantiate_helper_test::should_return_type_when_simple_mapping_and_depende
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_2_type, simple_mapping, available_implementations);
+	auto result = required_to_instantiate(type_2_type, simple_mapping, available_implementations);
 	QCOMPARE(result, (types{type_2_type}));
 }
 
-void instantiate_helper_test::should_return_nothing_when_simple_mapping_and_self_implementation()
+void required_to_instantiate_test::should_return_nothing_when_simple_mapping_and_self_implementation()
 {
 	auto type_2_object = make_object<type_2>();
 	auto available_implementations = implementations
@@ -306,23 +306,23 @@ void instantiate_helper_test::should_return_nothing_when_simple_mapping_and_self
 		implementation{type_2_type, type_2_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_2_type, simple_mapping, available_implementations);
+	auto result = required_to_instantiate(type_2_type, simple_mapping, available_implementations);
 	QCOMPARE(result, (types{}));
 }
 
-void instantiate_helper_test::should_return_subtype_with_dependencies_when_inheriting_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_subtype_with_dependencies_when_inheriting_mapping_and_empty_implementation()
 {
-	auto result = instantiate_helper{}.required_to_instantiate(type_2_type, inheriting_mapping, {});
+	auto result = required_to_instantiate(type_2_type, inheriting_mapping, {});
 	QCOMPARE(result, (types{type_1_subtype_1_type, type_2_subtype_1_type}));
 }
 
-void instantiate_helper_test::should_return_type_with_all_dependencies_when_simple_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_type_with_all_dependencies_when_simple_mapping_and_empty_implementation()
 {
-	auto result = instantiate_helper{}.required_to_instantiate(type_3_type, simple_mapping, {});
+	auto result = required_to_instantiate(type_3_type, simple_mapping, {});
 	QCOMPARE(result, (types{type_1_type, type_2_type, type_3_type}));
 }
 
-void instantiate_helper_test::should_return_type_with_partial_dependencies_when_simple_mapping_and_partial_implementation()
+void required_to_instantiate_test::should_return_type_with_partial_dependencies_when_simple_mapping_and_partial_implementation()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
@@ -330,11 +330,11 @@ void instantiate_helper_test::should_return_type_with_partial_dependencies_when_
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_3_type, simple_mapping, available_implementations);
+	auto result = required_to_instantiate(type_3_type, simple_mapping, available_implementations);
 	QCOMPARE(result, (types{type_2_type, type_3_type}));
 }
 
-void instantiate_helper_test::should_return_type_when_simple_mapping_and_almost_full_implementation()
+void required_to_instantiate_test::should_return_type_when_simple_mapping_and_almost_full_implementation()
 {
 	auto type_1_object = make_object<type_1>();
 	auto type_2_object = make_object<type_2>();
@@ -344,34 +344,34 @@ void instantiate_helper_test::should_return_type_when_simple_mapping_and_almost_
 		implementation{type_2_type, type_2_object.get()}
 	};
 
-	auto result = instantiate_helper{}.required_to_instantiate(type_3_type, simple_mapping, available_implementations);
+	auto result = required_to_instantiate(type_3_type, simple_mapping, available_implementations);
 	QCOMPARE(result, (types{type_3_type}));
 }
 
-void instantiate_helper_test::should_return_all_types_with_cyclic_dependnecies_when_simple_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_all_types_with_cyclic_dependnecies_when_simple_mapping_and_empty_implementation()
 {
-	auto result1 = instantiate_helper{}.required_to_instantiate(cyclic_type_1_type, simple_mapping, {});
+	auto result1 = required_to_instantiate(cyclic_type_1_type, simple_mapping, {});
 	QCOMPARE(result1, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 
-	auto result2 = instantiate_helper{}.required_to_instantiate(cyclic_type_2_type, simple_mapping, {});
+	auto result2 = required_to_instantiate(cyclic_type_2_type, simple_mapping, {});
 	QCOMPARE(result2, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 
-	auto result3 = instantiate_helper{}.required_to_instantiate(cyclic_type_3_type, simple_mapping, {});
+	auto result3 = required_to_instantiate(cyclic_type_3_type, simple_mapping, {});
 	QCOMPARE(result3, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 }
 
-void instantiate_helper_test::should_return_all_subtypes_with_cyclic_dependnecies_when_inheriting_mapping_and_empty_implementation()
+void required_to_instantiate_test::should_return_all_subtypes_with_cyclic_dependnecies_when_inheriting_mapping_and_empty_implementation()
 {
-	auto result1 = instantiate_helper{}.required_to_instantiate(cyclic_type_1_type, inheriting_mapping, {});
+	auto result1 = required_to_instantiate(cyclic_type_1_type, inheriting_mapping, {});
 	QCOMPARE(result1, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 
-	auto result2 = instantiate_helper{}.required_to_instantiate(cyclic_type_2_type, inheriting_mapping, {});
+	auto result2 = required_to_instantiate(cyclic_type_2_type, inheriting_mapping, {});
 	QCOMPARE(result2, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 
-	auto result3 = instantiate_helper{}.required_to_instantiate(cyclic_type_3_type, inheriting_mapping, {});
+	auto result3 = required_to_instantiate(cyclic_type_3_type, inheriting_mapping, {});
 	QCOMPARE(result3, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 }
 
-QTEST_APPLESS_MAIN(instantiate_helper_test);
+QTEST_APPLESS_MAIN(required_to_instantiate_test);
 
-#include "instantiate-helper-test.moc"
+#include "required-to-instantiate-test.moc"

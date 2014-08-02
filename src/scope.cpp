@@ -21,8 +21,8 @@
 #include "scope.h"
 
 #include "extract-dependencies.h"
-#include "instantiate-helper.h"
 #include "interfaces-extractor.h"
+#include "required-to-instantiate.h"
 #include "resolved-dependency.h"
 #include "resolve-dependencies.h"
 
@@ -55,7 +55,7 @@ QObject * scope::get(const type &t)
 	if (object_it != end(_objects))
 		return object_it->object();
 
-	auto types_to_instantiate = instantiate_helper{}.required_to_instantiate(implementation_type, _available_types, _objects);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _available_types, _objects);
 
 	auto new_objects = std::vector<implementation>{};
 	auto objects_to_resolve = std::vector<implementation>{};
