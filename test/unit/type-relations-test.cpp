@@ -104,125 +104,93 @@ type_relations_test::type_relations_test() :
 void type_relations_test::should_create_empty_relations_for_no_types()
 {
 	auto result = make_type_relations({});
-	auto expected = type_relations
-	{
-		implemented_by_mapping{},
-		types{}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), implemented_by_mapping{});
+	QCOMPARE(result.ambiguous(), types{});
 }
 
 void type_relations_test::should_create_unique_relations_for_unrelated_types()
 {
 	auto result = make_type_relations({type_1_type, type_2_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping
-		{
-			implemented_by{type_1_type, type_1_type},
-			implemented_by{type_2_type, type_2_type}
-		},
-		types{}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), (implemented_by_mapping
+	{
+		implemented_by{type_1_type, type_1_type},
+		implemented_by{type_2_type, type_2_type}
+	}));
+	QCOMPARE(result.ambiguous(), types{});
 }
 
 void type_relations_test::should_create_unique_relations_for_unrelated_subtypes()
 {
 	auto result = make_type_relations({type_1_sub_1_sub_1_type, type_2_sub_1_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping
-		{
-			implemented_by{type_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_2_type, type_2_sub_1_type},
-			implemented_by{type_2_sub_1_type, type_2_sub_1_type}
-		},
-		types{}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), (implemented_by_mapping
+	{
+		implemented_by{type_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_2_type, type_2_sub_1_type},
+		implemented_by{type_2_sub_1_type, type_2_sub_1_type}
+	}));
+	QCOMPARE(result.ambiguous(), types{});
 }
 
 void type_relations_test::should_create_unique_relations_for_type_with_supertypes()
 {
 	auto result = make_type_relations({type_1_sub_1_sub_1_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping
-		{
-			implemented_by{type_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type}
-		},
-		types{}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), (implemented_by_mapping
+	{
+		implemented_by{type_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type}
+	}));
+	QCOMPARE(result.ambiguous(), types{});
 }
 
 void type_relations_test::should_create_ambiguous_relations_for_the_same_type()
 {
 	auto result = make_type_relations({type_1_type, type_1_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping{},
-		types{type_1_type}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), implemented_by_mapping{});
+	QCOMPARE(result.ambiguous(), types{type_1_type});
 }
 
 void type_relations_test::should_create_mixed_relations_for_subtypes()
 {
 	auto result = make_type_relations({type_1_sub_1_sub_1_type, type_1_sub_1_sub_2_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping
-		{
-			implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_sub_2_type, type_1_sub_1_sub_2_type}
-		},
-		types{type_1_type, type_1_sub_1_type}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), (implemented_by_mapping
+	{
+		implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_sub_2_type, type_1_sub_1_sub_2_type}
+	}));
+	QCOMPARE(result.ambiguous(), (types{type_1_type, type_1_sub_1_type}));
 }
 
 void type_relations_test::should_create_mixed_relations_for_type_and_subtype()
 {
 	auto result = make_type_relations({type_1_type, type_1_sub_1_sub_1_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping
-		{
-			implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type}
-		},
-		types{type_1_type}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), (implemented_by_mapping
+	{
+		implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type}
+	}));
+	QCOMPARE(result.ambiguous(), types{type_1_type});
 }
 
 void type_relations_test::should_create_mixed_relations_for_subtype_and_type()
 {
 	auto result = make_type_relations({type_1_sub_1_sub_1_type, type_1_type});
-	auto expected = type_relations
-	{
-		implemented_by_mapping
-		{
-			implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
-			implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type}
-		},
-		types{type_1_type}
-	};
 
-	QCOMPARE(result, expected);
+	QCOMPARE(result.unique(), (implemented_by_mapping
+	{
+		implemented_by{type_1_sub_1_type, type_1_sub_1_sub_1_type},
+		implemented_by{type_1_sub_1_sub_1_type, type_1_sub_1_sub_1_type}
+	}));
+	QCOMPARE(result.ambiguous(), types{type_1_type});
 }
 
 QTEST_APPLESS_MAIN(type_relations_test);

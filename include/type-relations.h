@@ -30,12 +30,13 @@ class INJEQT_API type_relations final
 {
 
 public:
-	explicit type_relations(implemented_by_mapping unique, types ambiguous);
-
 	const implemented_by_mapping & unique() const;
 	const types & ambiguous() const;
 
 private:
+	explicit type_relations(implemented_by_mapping unique, types ambiguous);
+	friend type_relations make_type_relations(const std::vector<type> &main_types);
+
 	implemented_by_mapping _unique;
 	types _ambiguous;
 
