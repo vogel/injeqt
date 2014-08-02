@@ -49,7 +49,7 @@ QObject * scope::get(const type &t)
 	if (object_it != end(_state.objects()))
 		return object_it->object();
 
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _state.available_types(), _state.objects());
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _state);
 
 	auto new_objects = std::vector<implementation>{};
 	auto objects_to_resolve = std::vector<implementation>{};

@@ -29,10 +29,7 @@
 
 namespace injeqt { namespace v1 {
 
-types required_to_instantiate(
-	const type &type_to_instantiate,
-	const implemented_by_mapping &available_types,
-	const implementations &available_implementations)
+types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state)
 {
 	auto result = std::vector<type>{};
 	auto future_available = std::set<type>{};
@@ -43,11 +40,11 @@ types required_to_instantiate(
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
 
-		auto available_it = available_types.get(current_interface_type);
-		if (available_it == end(available_types))
+		auto available_it = state.available_types().get(current_interface_type);
+		if (available_it == end(state.available_types()))
 			throw type_not_mapped_exception{};
 
-		if (available_implementations.contains_key(current_interface_type))
+		if (state.objects().contains_key(current_interface_type))
 			continue;
 
 		auto current_implementation_type = available_it->implementation_type();
@@ -56,7 +53,7 @@ types required_to_instantiate(
 		auto implements = extract_interfaces(current_implementation_type);
 		for (auto &&interface : implements)
 		{
-			if (available_implementations.contains_key(interface))
+			if (state.objects().contains_key(interface))
 				if (interface == current_implementation_type)
 					throw subtype_implementation_available{};
 				else
