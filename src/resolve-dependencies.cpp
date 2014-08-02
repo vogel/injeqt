@@ -18,30 +18,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "resolve-dependencies.h"
 
-#include "dependencies.h"
+#include "dependency.h"
 #include "implementations.h"
-#include "injeqt-global.h"
-
-#include <vector>
+#include "resolved-dependency.h"
 
 namespace injeqt { namespace v1 {
 
-class resolved_dependency;
-
-struct INJEQT_API resolve_dependencies_result
+resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with)
 {
-	dependencies unresolved;
-	std::vector<resolved_dependency> resolved;
-};
+	auto match_result = match(to_resolve, resolve_with);
+	auto resolved = std::vector<resolved_dependency>{};
 
-class dependency_resolver final
-{
+	for (auto &&match : match_result.matched)
+		resolved.emplace_back(match.second, match.first.setter());
 
-public:
-	resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with) const;
-
-};
+	return
+	{
+		dependencies{match_result.unmatched_1},
+		resolved
+	};
+}
 
 }}

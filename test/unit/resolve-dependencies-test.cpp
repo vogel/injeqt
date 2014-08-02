@@ -19,10 +19,10 @@
  */
 
 #include "dependency.cpp"
-#include "dependency-resolver.cpp"
 #include "implementation.cpp"
 #include "interfaces-extractor.cpp"
 #include "resolved-dependency.cpp"
+#include "resolve-dependencies.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 
@@ -63,12 +63,12 @@ public slots:
 	void set_sub_type1(sublcass_injectable_type1 *) {}
 };
 
-class dependency_resolver_test : public QObject
+class resolve_dependencies_test : public QObject
 {
 	Q_OBJECT
 
 public:
-	dependency_resolver_test();
+	resolve_dependencies_test();
 
 private slots:
 	void should_resolve_no_dependencies_when_no_objects_available();
@@ -90,7 +90,7 @@ private:
 
 };
 
-dependency_resolver_test::dependency_resolver_test() :
+resolve_dependencies_test::resolve_dependencies_test() :
 	injectable_type1_type{make_type<injectable_type1>()},
 	injectable_type2_type{make_type<injectable_type2>()},
 	injectable_type3_type{make_type<injectable_type3>()},
@@ -102,7 +102,7 @@ dependency_resolver_test::dependency_resolver_test() :
 {
 }
 
-void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_available()
+void resolve_dependencies_test::should_resolve_no_dependencies_when_no_objects_available()
 {
 	auto objects = std::vector<implementation>{};
 	auto to_resolve = std::vector<dependency>
@@ -112,12 +112,12 @@ void dependency_resolver_test::should_resolve_no_dependencies_when_no_objects_av
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
+	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QVERIFY(result.resolved.empty());
 	QCOMPARE(result.unresolved, dependencies{to_resolve});
 }
 
-void dependency_resolver_test::should_resolve_all_dependencies()
+void resolve_dependencies_test::should_resolve_all_dependencies()
 {
 	auto object1 = make_object<injectable_type1>();
 	auto object2 = make_object<injectable_type2>();
@@ -135,7 +135,7 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
+	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 3ul);
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type2_setter}));
@@ -143,7 +143,7 @@ void dependency_resolver_test::should_resolve_all_dependencies()
 	QVERIFY(result.unresolved.empty());
 }
 
-void dependency_resolver_test::should_resolve_available_dependencies()
+void resolve_dependencies_test::should_resolve_available_dependencies()
 {
 	auto object1 = make_object<injectable_type1>();
 	auto object3 = make_object<injectable_type3>();
@@ -159,7 +159,7 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
+	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 2ul);
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type3_setter}));
@@ -167,7 +167,7 @@ void dependency_resolver_test::should_resolve_available_dependencies()
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 }
 
-void dependency_resolver_test::should_resolve_available_dependencies_using_exact_matching()
+void resolve_dependencies_test::should_resolve_available_dependencies_using_exact_matching()
 {
 	auto object1 = make_object<injectable_type1>();
 	auto object1b = make_object<injectable_type1>();
@@ -187,7 +187,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
+	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 2ul);
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
@@ -197,7 +197,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	QVERIFY(std::addressof(object3) != std::addressof(object3b));
 }
 
-void dependency_resolver_test::should_resolve_available_dependencies_using_exact_matching_not_using_subclass()
+void resolve_dependencies_test::should_resolve_available_dependencies_using_exact_matching_not_using_subclass()
 {
 	auto object1 = make_object<injectable_type1>();
 	auto subobject1 = make_object<sublcass_injectable_type1>();
@@ -217,7 +217,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 		dependency{injectable_type3_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
+	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 2ul);
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
@@ -227,7 +227,7 @@ void dependency_resolver_test::should_resolve_available_dependencies_using_exact
 	QVERIFY(std::addressof(object3) != std::addressof(object3b));
 }
 
-void dependency_resolver_test::should_resolve_available_dependencies_not_using_superclass()
+void resolve_dependencies_test::should_resolve_available_dependencies_not_using_superclass()
 {
 	auto object1 = make_object<injectable_type1>();
 	auto object2 = make_object<injectable_type2>();
@@ -242,13 +242,13 @@ void dependency_resolver_test::should_resolve_available_dependencies_not_using_s
 		dependency{injectable_type2_setter}
 	};
 
-	auto result = dependency_resolver{}.resolve_dependencies(dependencies{to_resolve}, implementations{objects});
+	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
 	QCOMPARE(result.resolved.size(), 1ul);
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(1), injectable_type2_setter}));
 	QCOMPARE(result.unresolved.size(), 1ul);
 	QVERIFY(result.unresolved.contains(to_resolve.at(0)));
 }
 
-QTEST_APPLESS_MAIN(dependency_resolver_test);
+QTEST_APPLESS_MAIN(resolve_dependencies_test);
 
-#include "dependency-resolver-test.moc"
+#include "resolve-dependencies-test.moc"
