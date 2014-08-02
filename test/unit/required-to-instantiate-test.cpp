@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "dependencies.cpp"
 #include "dependency.cpp"
-#include "extract-dependencies.cpp"
 #include "extract-interfaces.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"

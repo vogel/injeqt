@@ -20,7 +20,7 @@
 
 #include "scope.h"
 
-#include "extract-dependencies.h"
+#include "dependencies.h"
 #include "extract-interfaces.h"
 #include "required-to-instantiate.h"
 #include "resolved-dependency.h"
@@ -67,7 +67,7 @@ QObject * scope::get(const type &interface_type)
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
-		auto to_resolve = extract_dependencies(object_to_resolve.interface_type());
+		auto to_resolve = make_dependencies(object_to_resolve.interface_type());
 		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
 		if (!resolved_dependencies.unresolved.empty())
 			throw unresolved_dependencies_exception{};

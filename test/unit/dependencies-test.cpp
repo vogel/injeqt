@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "dependencies.cpp"
 #include "dependency.cpp"
-#include "extract-dependencies.cpp"
 #include "extract-interfaces.cpp"
 #include "implemented-by.cpp"
 #include "setter-method.cpp"
@@ -176,12 +176,12 @@ public slots:
 
 };
 
-class extract_dependencies_test : public QObject
+class dependencies_test : public QObject
 {
 	Q_OBJECT
 
 public:
-	extract_dependencies_test();
+	dependencies_test();
 
 private slots:
 	void should_find_all_valid_dependencies();
@@ -230,7 +230,7 @@ private:
 
 };
 
-extract_dependencies_test::extract_dependencies_test() :
+dependencies_test::dependencies_test() :
 	injectable_type1_type{make_type<injectable_type1>()},
 	injectable_type2_type{make_type<injectable_type2>()},
 	injectable_type3_type{make_type<injectable_type3>()},
@@ -262,94 +262,94 @@ extract_dependencies_test::extract_dependencies_test() :
 {
 }
 
-void extract_dependencies_test::verify_dependency(dependencies list, const dependency &check)
+void dependencies_test::verify_dependency(dependencies list, const dependency &check)
 {
 	auto iterator = std::find(begin(list), end(list), check);
 	QVERIFY(iterator != end(list));
 }
 
-void extract_dependencies_test::should_find_all_valid_dependencies()
+void dependencies_test::should_find_all_valid_dependencies()
 {
-	auto dependencies = extract_dependencies(valid_injected_type_type);
+	auto dependencies = make_dependencies(valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_setter_1});
 	verify_dependency(dependencies, dependency{valid_injected_type_setter_2});
 }
 
-void extract_dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
+void dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = extract_dependencies(inheriting_valid_injected_type_type);
+	auto dependencies = make_dependencies(inheriting_valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 3UL);
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_1});
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_2});
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_3});
 }
 
-void extract_dependencies_test::should_find_dependencies_with_common_superclass()
+void dependencies_test::should_find_dependencies_with_common_superclass()
 {
-	auto dependencies = extract_dependencies(valid_injected_type_with_common_superclass_type);
+	auto dependencies = make_dependencies(valid_injected_type_with_common_superclass_type);
 
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_1});
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_2});
 }
 
-void extract_dependencies_test::should_fail_when_too_many_parameters()
+void dependencies_test::should_fail_when_too_many_parameters()
 {
 	expect<dependency_too_many_parameters_exception>([&]{
-		auto dependencies = extract_dependencies(too_many_parameters_invalid_injected_type_type);
+		auto dependencies = make_dependencies(too_many_parameters_invalid_injected_type_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_when_type_not_qobject()
+void dependencies_test::should_fail_when_type_not_qobject()
 {
 	expect<dependency_not_qobject_exception>([&]{
-		auto dependencies = extract_dependencies(non_qobject_invalid_injected_type_type);
+		auto dependencies = make_dependencies(non_qobject_invalid_injected_type_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_when_duplicate_dependency()
+void dependencies_test::should_fail_when_duplicate_dependency()
 {
 	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = extract_dependencies(duplicate_dependency_invalid_injected_type_type);
+		auto dependencies = make_dependencies(duplicate_dependency_invalid_injected_type_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_with_superclass_dependency()
+void dependencies_test::should_fail_with_superclass_dependency()
 {
 	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_type);
+		auto dependencies = make_dependencies(invalid_injected_type_with_superclass_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_with_superclass_inverted_dependency()
+void dependencies_test::should_fail_with_superclass_inverted_dependency()
 {
 	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_inverted_type);
+		auto dependencies = make_dependencies(invalid_injected_type_with_superclass_inverted_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_when_depends_on_self()
+void dependencies_test::should_fail_when_depends_on_self()
 {
 	expect<dependency_on_self_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_self_type);
+		auto dependencies = make_dependencies(invalid_injected_type_depends_on_self_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_when_depends_on_subtype()
+void dependencies_test::should_fail_when_depends_on_subtype()
 {
 	expect<dependency_on_subtype_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_subtype_type);
+		auto dependencies = make_dependencies(invalid_injected_type_depends_on_subtype_type);
 	});
 }
 
-void extract_dependencies_test::should_fail_when_depends_on_supertype()
+void dependencies_test::should_fail_when_depends_on_supertype()
 {
 	expect<dependency_on_supertype_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_supertype_type);
+		auto dependencies = make_dependencies(invalid_injected_type_depends_on_supertype_type);
 	});
 }
 
-QTEST_APPLESS_MAIN(extract_dependencies_test);
+QTEST_APPLESS_MAIN(dependencies_test);
 
-#include "extract-dependencies-test.moc"
+#include "dependencies-test.moc"

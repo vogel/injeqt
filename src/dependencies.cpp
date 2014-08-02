@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "extract-dependencies.h"
+#include "dependencies.h"
 
 #include "dependency.h"
 #include "extract-interfaces.h"
@@ -72,7 +72,7 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 
 }
 
-dependencies extract_dependencies(const type &for_type)
+dependencies make_dependencies(const type &for_type)
 try
 {
 	auto implements = extract_interfaces(for_type);

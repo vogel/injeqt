@@ -20,8 +20,7 @@
 
 #include "required-to-instantiate.h"
 
-#include "dependency.h"
-#include "extract-dependencies.h"
+#include "dependencies.h"
 #include "extract-interfaces.h"
 #include "implemented-by.h"
 
@@ -54,7 +53,7 @@ types required_to_instantiate(const type &type_to_instantiate, const instantiati
 
 		result.push_back(current_implementation_type);
 
-		auto dependencies = extract_dependencies(current_implementation_type);
+		auto dependencies = make_dependencies(current_implementation_type);
 		for (auto &&dependency : dependencies)
 			interfaces_to_check.push_back(dependency.required_type());
 	}

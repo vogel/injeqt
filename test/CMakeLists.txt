@@ -37,7 +37,7 @@ function (injeqt_add_test name_)
 	add_test ("${sourcePath}/${name_}" ${name_})
 endfunction ()
 
-injeqt_add_test(extract-dependencies-test unit/extract-dependencies-test.cpp)
+injeqt_add_test(dependencies-test unit/dependencies-test.cpp)
 injeqt_add_test(extract-interfaces-test unit/extract-interfaces-test.cpp)
 injeqt_add_test(implementation-test unit/implementation-test.cpp)
 injeqt_add_test(implemented-by-test unit/implemented-by-test.cpp)
