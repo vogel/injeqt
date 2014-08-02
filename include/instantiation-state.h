@@ -27,6 +27,10 @@
 
 namespace injeqt { namespace v1 {
 
+DEFINE_EXCEPTION(invalid_instantiation_state_exception, injeqt_exception);
+DEFINE_EXCEPTION(type_not_in_mapping_exception, invalid_instantiation_state_exception);
+DEFINE_EXCEPTION(type_implementation_inconsistent_exception, invalid_instantiation_state_exception);
+
 class INJEQT_API instantiation_state final
 {
 

@@ -236,7 +236,7 @@ void required_to_instantiate_test::should_throw_when_inheriting_mapping_and_only
 		implementation{type_1_subtype_1_type, type_1_subtype_1_object.get()}
 	};
 
-	expect<subtype_implementation_available>([&]{
+	expect<type_implementation_inconsistent_exception>([&]{
 		auto result = required_to_instantiate(type_1_type, instantiation_state{inheriting_mapping, available_implementations});
 	});
 }
@@ -249,7 +249,7 @@ void required_to_instantiate_test::should_throw_when_inheriting_mapping_and_only
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	expect<supertype_implementation_available>([&]{
+	expect<type_implementation_inconsistent_exception>([&]{
 		auto result = required_to_instantiate(type_1_subtype_1_type, instantiation_state{inheriting_mapping, available_implementations});
 	});
 }
@@ -275,7 +275,7 @@ void required_to_instantiate_test::should_throw_when_inheriting_mapping_and_supe
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	expect<supertype_implementation_available>([&]{
+	expect<type_implementation_inconsistent_exception>([&]{
 		auto result = required_to_instantiate(type_1_subtype_1_type, instantiation_state{inheriting_mapping, available_implementations});
 	});
 }

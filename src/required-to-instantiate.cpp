@@ -50,16 +50,8 @@ types required_to_instantiate(const type &type_to_instantiate, const instantiati
 		auto current_implementation_type = available_it->implementation_type();
 		if (future_available.find(current_implementation_type) != std::end(future_available))
 			continue;
-		auto implements = extract_interfaces(current_implementation_type);
-		for (auto &&interface : implements)
-		{
-			if (state.objects().contains_key(interface))
-				if (interface == current_implementation_type)
-					throw subtype_implementation_available{};
-				else
-					throw supertype_implementation_available{};
-			future_available.insert(interface);
-		}
+		auto interfaces = extract_interfaces(current_implementation_type);
+		std::copy(begin(interfaces), end(interfaces), std::inserter(future_available, std::begin(future_available)));
 
 		result.push_back(current_implementation_type);
 

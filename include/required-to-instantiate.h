@@ -27,8 +27,6 @@
 namespace injeqt { namespace v1 {
 
 DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
-DEFINE_EXCEPTION(subtype_implementation_available, injeqt_exception);
-DEFINE_EXCEPTION(supertype_implementation_available, injeqt_exception);
 
 INJEQT_API types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state);
 
