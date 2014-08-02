@@ -25,7 +25,6 @@
 #include "setter-method.h"
 #include "type.h"
 #include "type-relations.h"
-#include "type-relations-factory.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
@@ -91,7 +90,7 @@ try
 	}
 
 	auto parameter_types = extract_parameter_types(setters);
-	auto relations = type_relations_factory{}.create_type_relations(parameter_types);
+	auto relations = make_type_relations(parameter_types);
 
 	auto matches = match(types{parameter_types}, relations.ambiguous());
 	if (!matches.matched.empty())

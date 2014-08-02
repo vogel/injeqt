@@ -22,7 +22,6 @@
 #include "implemented-by.cpp"
 #include "type.cpp"
 #include "type-relations.cpp"
-#include "type-relations-factory.cpp"
 
 #include <QtTest/QtTest>
 
@@ -63,12 +62,12 @@ class type_2_sub_1 : public type_2
 	Q_OBJECT
 };
 
-class type_relations_factory_test : public QObject
+class type_relations_test : public QObject
 {
 	Q_OBJECT
 
 public:
-	type_relations_factory_test();
+	type_relations_test();
 
 private slots:
 	void should_create_empty_relations_for_no_types();
@@ -91,7 +90,7 @@ private:
 
 };
 
-type_relations_factory_test::type_relations_factory_test() :
+type_relations_test::type_relations_test() :
 	type_1_type{make_type<type_1>()},
 	type_1_sub_1_type{make_type<type_1_sub_1>()},
 	type_1_sub_1_sub_1_type{make_type<type_1_sub_1_sub_1>()},
@@ -102,9 +101,9 @@ type_relations_factory_test::type_relations_factory_test() :
 {
 }
 
-void type_relations_factory_test::should_create_empty_relations_for_no_types()
+void type_relations_test::should_create_empty_relations_for_no_types()
 {
-	auto result = type_relations_factory{}.create_type_relations({});
+	auto result = make_type_relations({});
 	auto expected = type_relations
 	{
 		implemented_by_mapping{},
@@ -114,9 +113,9 @@ void type_relations_factory_test::should_create_empty_relations_for_no_types()
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_unique_relations_for_unrelated_types()
+void type_relations_test::should_create_unique_relations_for_unrelated_types()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_type, type_2_type});
+	auto result = make_type_relations({type_1_type, type_2_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping
@@ -130,9 +129,9 @@ void type_relations_factory_test::should_create_unique_relations_for_unrelated_t
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_unique_relations_for_unrelated_subtypes()
+void type_relations_test::should_create_unique_relations_for_unrelated_subtypes()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_sub_1_sub_1_type, type_2_sub_1_type});
+	auto result = make_type_relations({type_1_sub_1_sub_1_type, type_2_sub_1_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping
@@ -149,9 +148,9 @@ void type_relations_factory_test::should_create_unique_relations_for_unrelated_s
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_unique_relations_for_type_with_supertypes()
+void type_relations_test::should_create_unique_relations_for_type_with_supertypes()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_sub_1_sub_1_type});
+	auto result = make_type_relations({type_1_sub_1_sub_1_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping
@@ -166,9 +165,9 @@ void type_relations_factory_test::should_create_unique_relations_for_type_with_s
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_ambiguous_relations_for_the_same_type()
+void type_relations_test::should_create_ambiguous_relations_for_the_same_type()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_type, type_1_type});
+	auto result = make_type_relations({type_1_type, type_1_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping{},
@@ -178,9 +177,9 @@ void type_relations_factory_test::should_create_ambiguous_relations_for_the_same
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_mixed_relations_for_subtypes()
+void type_relations_test::should_create_mixed_relations_for_subtypes()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_sub_1_sub_1_type, type_1_sub_1_sub_2_type});
+	auto result = make_type_relations({type_1_sub_1_sub_1_type, type_1_sub_1_sub_2_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping
@@ -194,9 +193,9 @@ void type_relations_factory_test::should_create_mixed_relations_for_subtypes()
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_mixed_relations_for_type_and_subtype()
+void type_relations_test::should_create_mixed_relations_for_type_and_subtype()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_type, type_1_sub_1_sub_1_type});
+	auto result = make_type_relations({type_1_type, type_1_sub_1_sub_1_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping
@@ -210,9 +209,9 @@ void type_relations_factory_test::should_create_mixed_relations_for_type_and_sub
 	QCOMPARE(result, expected);
 }
 
-void type_relations_factory_test::should_create_mixed_relations_for_subtype_and_type()
+void type_relations_test::should_create_mixed_relations_for_subtype_and_type()
 {
-	auto result = type_relations_factory{}.create_type_relations({type_1_sub_1_sub_1_type, type_1_type});
+	auto result = make_type_relations({type_1_sub_1_sub_1_type, type_1_type});
 	auto expected = type_relations
 	{
 		implemented_by_mapping
@@ -226,6 +225,6 @@ void type_relations_factory_test::should_create_mixed_relations_for_subtype_and_
 	QCOMPARE(result, expected);
 }
 
-QTEST_APPLESS_MAIN(type_relations_factory_test);
+QTEST_APPLESS_MAIN(type_relations_test);
 
-#include "type-relations-factory-test.moc"
+#include "type-relations-test.moc"

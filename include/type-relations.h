@@ -44,4 +44,6 @@ private:
 INJEQT_API bool operator == (const type_relations &first, const type_relations &second);
 INJEQT_API bool operator != (const type_relations &first, const type_relations &second);
 
+INJEQT_API type_relations make_type_relations(const std::vector<type> &main_types);
+
 }}

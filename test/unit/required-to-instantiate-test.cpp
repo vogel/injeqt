@@ -27,7 +27,6 @@
 #include "setter-method.cpp"
 #include "type.cpp"
 #include "type-relations.cpp"
-#include "type-relations-factory.cpp"
 
 #include "expect.h"
 #include "utils.h"
