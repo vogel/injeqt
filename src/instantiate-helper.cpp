@@ -66,7 +66,7 @@ types instantiate_helper::required_to_instantiate(
 
 		result.push_back(current_implementation_type);
 
-		auto dependencies = dependency_extractor{}.extract_dependencies(current_implementation_type);
+		auto dependencies = extract_dependencies(current_implementation_type);
 		for (auto &&dependency : dependencies)
 			interfaces_to_check.push_back(dependency.required_type());
 	}

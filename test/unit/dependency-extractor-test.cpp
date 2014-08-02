@@ -271,7 +271,7 @@ void dependency_extractor_test::verify_dependency(dependencies list, const depen
 
 void dependency_extractor_test::should_find_all_valid_dependencies()
 {
-	auto dependencies = dependency_extractor{}.extract_dependencies(valid_injected_type_type);
+	auto dependencies = extract_dependencies(valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_setter_1});
 	verify_dependency(dependencies, dependency{valid_injected_type_setter_2});
@@ -279,7 +279,7 @@ void dependency_extractor_test::should_find_all_valid_dependencies()
 
 void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = dependency_extractor{}.extract_dependencies(inheriting_valid_injected_type_type);
+	auto dependencies = extract_dependencies(inheriting_valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 3UL);
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_1});
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_2});
@@ -288,7 +288,7 @@ void dependency_extractor_test::should_find_all_valid_dependencies_in_hierarchy(
 
 void dependency_extractor_test::should_find_dependencies_with_common_superclass()
 {
-	auto dependencies = dependency_extractor{}.extract_dependencies(valid_injected_type_with_common_superclass_type);
+	auto dependencies = extract_dependencies(valid_injected_type_with_common_superclass_type);
 
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_1});
@@ -298,56 +298,56 @@ void dependency_extractor_test::should_find_dependencies_with_common_superclass(
 void dependency_extractor_test::should_fail_when_too_many_parameters()
 {
 	expect<dependency_too_many_parameters_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(too_many_parameters_invalid_injected_type_type);
+		auto dependencies = extract_dependencies(too_many_parameters_invalid_injected_type_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_type_not_qobject()
 {
 	expect<dependency_not_qobject_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(non_qobject_invalid_injected_type_type);
+		auto dependencies = extract_dependencies(non_qobject_invalid_injected_type_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_duplicate_dependency()
 {
 	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(duplicate_dependency_invalid_injected_type_type);
+		auto dependencies = extract_dependencies(duplicate_dependency_invalid_injected_type_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_with_superclass_dependency()
 {
 	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_with_superclass_type);
+		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_with_superclass_inverted_dependency()
 {
 	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_with_superclass_inverted_type);
+		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_inverted_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_depends_on_self()
 {
 	expect<dependency_on_self_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_depends_on_self_type);
+		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_self_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_depends_on_subtype()
 {
 	expect<dependency_on_subtype_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_depends_on_subtype_type);
+		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_subtype_type);
 	});
 }
 
 void dependency_extractor_test::should_fail_when_depends_on_supertype()
 {
 	expect<dependency_on_supertype_exception>([&]{
-		auto dependencies = dependency_extractor{}.extract_dependencies(invalid_injected_type_depends_on_supertype_type);
+		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_supertype_type);
 	});
 }
 

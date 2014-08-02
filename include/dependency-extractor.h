@@ -39,12 +39,6 @@ DEFINE_EXCEPTION(dependency_on_self_exception, dependency_exception);
 DEFINE_EXCEPTION(dependency_on_subtype_exception, dependency_exception);
 DEFINE_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
 
-class INJEQT_API dependency_extractor final
-{
-
-public:
-	dependencies extract_dependencies(const type &for_type) const;
-
-};
+INJEQT_API dependencies extract_dependencies(const type &for_type);
 
 }}

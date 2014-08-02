@@ -77,7 +77,7 @@ QObject * scope::get(const type &t)
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
-		auto to_resolve = dependency_extractor{}.extract_dependencies(object_to_resolve.interface_type());
+		auto to_resolve = extract_dependencies(object_to_resolve.interface_type());
 		auto resolved_dependencies = dependency_resolver{}.resolve_dependencies(to_resolve, merged_objects);
 		if (!resolved_dependencies.unresolved.empty())
 			throw unresolved_dependencies_exception{};

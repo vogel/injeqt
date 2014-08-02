@@ -73,7 +73,7 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 
 }
 
-dependencies dependency_extractor::extract_dependencies(const type &for_type) const
+dependencies extract_dependencies(const type &for_type)
 try
 {
 	auto implements = interfaces_extractor{}.extract_interfaces(for_type);
