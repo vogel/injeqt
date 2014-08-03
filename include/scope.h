@@ -52,4 +52,6 @@ private:
 INJEQT_API bool operator == (const scope &x, const scope &y);
 INJEQT_API bool operator != (const scope &x, const scope &y);
 
+INJEQT_API scope make_scope(const std::vector<type> &scope_types, const implementations &scope_objects);
+
 }}

@@ -24,14 +24,14 @@
 
 namespace injeqt { namespace v1 {
 
-instantiation_state::instantiation_state(implemented_by_mapping available_types, implementations objects) :
+instantiation_state::instantiation_state(type_relations available_types, implementations objects) :
 	_available_types{std::move(available_types)},
 	_objects{std::move(objects)}
 {
 	for (auto &&object : _objects)
 	{
-		auto available_interface_type_it = _available_types.get(object.interface_type());
-		if (available_interface_type_it == end(_available_types))
+		auto available_interface_type_it = _available_types.unique().get(object.interface_type());
+		if (available_interface_type_it == end(_available_types.unique()))
 			throw type_not_in_mapping_exception{};
 
 		auto implementation_type = available_interface_type_it->implementation_type();
@@ -40,7 +40,7 @@ instantiation_state::instantiation_state(implemented_by_mapping available_types,
 	}
 }
 
-const implemented_by_mapping & instantiation_state::available_types() const
+const type_relations & instantiation_state::available_types() const
 {
 	return _available_types;
 }

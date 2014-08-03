@@ -21,9 +21,9 @@
 #pragma once
 
 #include "implementations.h"
-#include "implemented-by-mapping.h"
 #include "injeqt-exception.h"
 #include "injeqt-global.h"
+#include "type-relations.h"
 
 namespace injeqt { namespace v1 {
 
@@ -35,13 +35,13 @@ class INJEQT_API instantiation_state final
 {
 
 public:
-	explicit instantiation_state(implemented_by_mapping available_types, implementations objects);
+	explicit instantiation_state(type_relations available_types, implementations objects);
 
-	const implemented_by_mapping & available_types() const;
+	const type_relations & available_types() const;
 	const implementations & objects() const;
 
 private:
-	implemented_by_mapping _available_types;
+	type_relations _available_types;
 	implementations _objects;
 
 };

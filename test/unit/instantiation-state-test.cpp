@@ -23,6 +23,7 @@
 #include "implemented-by.cpp"
 #include "instantiation-state.cpp"
 #include "type.cpp"
+#include "type-relations.cpp"
 
 #include "expect.h"
 #include "utils.h"
@@ -58,41 +59,34 @@ private slots:
 private:
 	type type_1_type;
 	type type_1_sub_1_type;
-	implemented_by_mapping simple_mapping;
-	implemented_by_mapping inheriting_mapping;
+	type_relations simple_relations;
+	type_relations inheriting_relations;
 
 };
 
 instantiation_state_test::instantiation_state_test() :
 	type_1_type{make_type<type_1>()},
 	type_1_sub_1_type{make_type<type_1_sub_1>()},
-	simple_mapping
-	{
-		implemented_by{type_1_type, type_1_type}
-	},
-	inheriting_mapping
-	{
-		implemented_by{type_1_type, type_1_sub_1_type},
-		implemented_by{type_1_sub_1_type, type_1_sub_1_type}
-	}
+	simple_relations{make_type_relations({type_1_type})},
+	inheriting_relations{make_type_relations({type_1_sub_1_type})}
 {
 }
 
 void instantiation_state_test::should_create_empty_state()
 {
-	auto state = instantiation_state{{}, {}};
-	QCOMPARE(state.available_types(), implemented_by_mapping{});
+	auto state = instantiation_state{make_type_relations({}), {}};
+	QCOMPARE(state.available_types(), make_type_relations({}));
 	QCOMPARE(state.objects(), implementations{});
 }
 
 void instantiation_state_test::should_create_state_without_objects()
 {
-	auto simple_state = instantiation_state{simple_mapping, {}};
-	QCOMPARE(simple_state.available_types(), simple_mapping);
+	auto simple_state = instantiation_state{simple_relations, {}};
+	QCOMPARE(simple_state.available_types(), simple_relations);
 	QCOMPARE(simple_state.objects(), implementations{});
 
-	auto inheriting_state = instantiation_state{inheriting_mapping, {}};
-	QCOMPARE(inheriting_state.available_types(), inheriting_mapping);
+	auto inheriting_state = instantiation_state{inheriting_relations, {}};
+	QCOMPARE(inheriting_state.available_types(), inheriting_relations);
 	QCOMPARE(inheriting_state.objects(), implementations{});
 }
 
@@ -100,14 +94,14 @@ void instantiation_state_test::should_create_state_with_objects()
 {
 	auto simple_type_1_object = make_object<type_1>();
 	auto simple_implementations = implementations{implementation{type_1_type, simple_type_1_object.get()}};
-	auto simple_state = instantiation_state{simple_mapping, simple_implementations};
-	QCOMPARE(simple_state.available_types(), simple_mapping);
+	auto simple_state = instantiation_state{simple_relations, simple_implementations};
+	QCOMPARE(simple_state.available_types(), simple_relations);
 	QCOMPARE(simple_state.objects(), simple_implementations);
 
 	auto inheriting_type_1_sub_1_object = make_object<type_1_sub_1>();
 	auto inheriting_implementations = implementations{implementation{type_1_sub_1_type, inheriting_type_1_sub_1_object.get()}};
-	auto inheriting_state = instantiation_state{inheriting_mapping, inheriting_implementations};
-	QCOMPARE(inheriting_state.available_types(), inheriting_mapping);
+	auto inheriting_state = instantiation_state{inheriting_relations, inheriting_implementations};
+	QCOMPARE(inheriting_state.available_types(), inheriting_relations);
 	QCOMPARE(inheriting_state.objects(), inheriting_implementations);
 }
 
@@ -116,13 +110,13 @@ void instantiation_state_test::should_throw_for_invalid_types()
 	expect<type_not_in_mapping_exception>([&]{
 		auto simple_type_1_object = make_object<type_1>();
 		auto simple_implementations = implementations{implementation{type_1_type, simple_type_1_object.get()}};
-		auto simple_state = instantiation_state{{}, simple_implementations};
+		auto simple_state = instantiation_state{make_type_relations({}), simple_implementations};
 	});
 
 	expect<type_not_in_mapping_exception>([&]{
 		auto inheriting_type_1_sub_1_object = make_object<type_1_sub_1>();
 		auto inheriting_implementations = implementations{implementation{type_1_sub_1_type, inheriting_type_1_sub_1_object.get()}};
-		auto simple_state = instantiation_state{simple_mapping, inheriting_implementations};
+		auto simple_state = instantiation_state{simple_relations, inheriting_implementations};
 	});
 }
 
@@ -131,13 +125,13 @@ void instantiation_state_test::should_throw_for_inconsistent_types()
 	expect<type_implementation_inconsistent_exception>([&]{
 		auto simple_type_1_object = make_object<type_1>();
 		auto simple_implementations = implementations{implementation{type_1_type, simple_type_1_object.get()}};
-		auto simple_state = instantiation_state{inheriting_mapping, simple_implementations};
+		auto simple_state = instantiation_state{inheriting_relations, simple_implementations};
 	});
 
 	expect<type_implementation_inconsistent_exception>([&]{
 		auto inheriting_type_1_sub_1_object = make_object<type_1_sub_1>();
 		auto simple_implementations = implementations{implementation{type_1_type, inheriting_type_1_sub_1_object.get()}};
-		auto simple_state = instantiation_state{inheriting_mapping, simple_implementations};
+		auto simple_state = instantiation_state{inheriting_relations, simple_implementations};
 	});
 }
 

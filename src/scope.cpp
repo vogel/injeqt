@@ -25,6 +25,7 @@
 #include "required-to-instantiate.h"
 #include "resolved-dependency.h"
 #include "resolve-dependencies.h"
+#include "type-relations.h"
 
 namespace injeqt { namespace v1 {
 
@@ -40,8 +41,8 @@ instantiation_state scope::state() const
 
 QObject * scope::get(const type &interface_type)
 {
-	auto implementation_type_it = _state.available_types().get(interface_type);
-	if (implementation_type_it == end(_state.available_types()))
+	auto implementation_type_it = _state.available_types().unique().get(interface_type);
+	if (implementation_type_it == end(_state.available_types().unique()))
 		throw type_not_in_scope_exception{};
 
 	auto implementation_type = implementation_type_it->implementation_type();
@@ -91,6 +92,13 @@ bool operator == (const scope &x, const scope &y)
 bool operator != (const scope &x, const scope &y)
 {
 	return !(x == y);
+}
+
+scope make_scope(const std::vector<type> &scope_types, const implementations &scope_objects)
+{
+	auto relations = make_type_relations(scope_types);
+	auto state = instantiation_state{relations, scope_objects};
+	return scope{state};
 }
 
 }}

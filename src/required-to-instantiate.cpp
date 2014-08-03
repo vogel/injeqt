@@ -39,8 +39,8 @@ types required_to_instantiate(const type &type_to_instantiate, const instantiati
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
 
-		auto available_it = state.available_types().get(current_interface_type);
-		if (available_it == end(state.available_types()))
+		auto available_it = state.available_types().unique().get(current_interface_type);
+		if (available_it == end(state.available_types().unique()))
 			throw type_not_mapped_exception{};
 
 		auto current_implementation_type = available_it->implementation_type();
