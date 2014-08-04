@@ -41,6 +41,7 @@ set(INJEQT_SRCS
 	src/extract-interfaces.cpp
 	src/implementation.cpp
 	src/implemented-by.cpp
+	src/injector.cpp
 	src/instantiation-state.cpp
 	src/module.cpp
 	src/required-to-instantiate.cpp

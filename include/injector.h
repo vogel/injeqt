@@ -21,9 +21,9 @@
 #pragma once
 
 #include "injeqt-global.h"
+#include "scope.h"
+#include "type.h"
 
-#include <QtCore/QMetaObject>
-#include <map>
 #include <vector>
 
 namespace injeqt { namespace v1 {
@@ -34,19 +34,19 @@ class INJEQT_API injector final
 {
 
 public:
-	explicit injector(std::vector<module *> modules);
+	explicit injector(std::vector<std::unique_ptr<module>> modules);
 
 	template<typename T>
-	QObject * instance()
+	T * get()
 	{
-		return instance(T::staticMetaObject());
+		return qobject_cast<T *>(get(make_type<T>()));
 	}
 
-	QObject * instance(const QMetaObject &itemType);
+	QObject * get(const type &interface_type);
 
 private:
-	std::vector<module *> _modules;
-	std::map<QMetaObject *, QObject *> _instances;
+	std::vector<std::unique_ptr<module>> _modules;
+	scope _singleton_scope;
 
 };
 

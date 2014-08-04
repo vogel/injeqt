@@ -25,6 +25,7 @@
 #include "injeqt-global.h"
 
 #include <memory>
+#include <QtCore/QObject>
 
 namespace injeqt { namespace v1 {
 

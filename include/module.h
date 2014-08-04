@@ -20,28 +20,28 @@
 
 #pragma once
 
+#include "implementation.h"
 #include "injeqt-global.h"
 #include "type.h"
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API module final
+class INJEQT_API module
 {
 
 public:
-	template<typename T>
-	void add_class()
-	{
-		add_class(T::staticMetaObject);
-	}
+	virtual ~module() {}
 
-	void add_class(const type &with_type);
+	void add_type(const type &t);
+	void add_implementation(const implementation &i);
 
 	const std::vector<type> & types() const;
+	const std::vector<implementation> & implementations() const;
 
 private:
 	std::vector<type> _types;
+	std::vector<implementation> _implementations;
 
 };
 
-}}
+}};

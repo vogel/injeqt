@@ -20,25 +20,38 @@
 
 #include "injector.h"
 
+#include "module.h"
+
 namespace injeqt { namespace v1 {
 
-injector::injector(std::vector<module *> modules) :
-	_modules{std::move(modules)}
+namespace {
+
+scope scope_from_modules(const std::vector<std::unique_ptr<module>> &modules)
 {
+	auto all_types = std::vector<type>{};
+	auto all_implementations = std::vector<implementation>();
+
+	for (auto &&module : modules)
+	{
+		std::copy(std::begin(module->types()), std::end(module->types()), std::back_inserter(all_types));
+		std::copy(std::begin(module->implementations()), std::end(module->implementations()), std::back_inserter(all_implementations));
+	}
+
+	// TODO: check for duplicates and stuff
+	return make_scope(all_types, implementations{all_implementations});
+}
 
 }
 
-QObject * injector::instance(const QMetaObject &itemType)
+injector::injector(std::vector<std::unique_ptr<module>> modules) :
+	_modules{std::move(modules)},
+	_singleton_scope{scope_from_modules(_modules)}
 {
-	auto created = _instances.find(&itemType);
-	if (created != std::end(_instances))
-		return created->second;
+}
 
-	for (auto module : _modules)
-	{
-		auto item = module->item(itemType);
-		if (item)
-	}
+QObject * injector::get(const type &interface_type)
+{
+	return _singleton_scope.get(interface_type);
 }
 
 }}

@@ -24,14 +24,24 @@
 
 namespace injeqt { namespace v1 {
 
-void module::add_class(const type &with_type)
+void module::add_type(const type &t)
 {
-	_types.push_back(with_type);
+	_types.push_back(t);
+}
+
+void module::add_implementation(const implementation &i)
+{
+	_implementations.push_back(i);
 }
 
 const std::vector<type> & module::types() const
 {
 	return _types;
+}
+
+const std::vector<implementation> & module::implementations() const
+{
+	return _implementations;
 }
 
 }}
