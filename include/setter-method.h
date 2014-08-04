@@ -28,8 +28,6 @@
 
 namespace injeqt { namespace v1 {
 
-class object_with_meta;
-
 DEFINE_EXCEPTION(setter_exception, injeqt_exception);
 DEFINE_EXCEPTION(setter_too_many_parameters_exception, setter_exception);
 DEFINE_EXCEPTION(invalid_setter_exception, setter_exception);
