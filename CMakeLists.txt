@@ -36,6 +36,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 
 set(INJEQT_SRCS
 	src/class-mapping.cpp
+	src/default-constructor-method.cpp
 	src/dependencies.cpp
 	src/dependency.cpp
 	src/extract-interfaces.cpp
