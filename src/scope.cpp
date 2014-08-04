@@ -20,6 +20,7 @@
 
 #include "scope.h"
 
+#include "default-constructor-method.h"
 #include "dependencies.h"
 #include "extract-interfaces.h"
 #include "required-to-instantiate.h"
@@ -55,7 +56,8 @@ QObject * scope::get(const type &interface_type)
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
-		auto unique_ptr_instance = std::unique_ptr<QObject>{type_to_instantiate.meta_object()->newInstance()};
+		auto constuctor = make_default_constructor_method(type_to_instantiate);
+		auto unique_ptr_instance = constuctor.invoke();
 		auto instance = unique_ptr_instance.get();
 
 		_owned_objects.push_back(std::move(unique_ptr_instance));
