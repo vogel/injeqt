@@ -36,6 +36,7 @@ class INJEQT_API type final
 public:
 	explicit type(const QMetaObject * meta_object);
 
+	std::string name() const;
 	const QMetaObject * meta_object() const;
 
 private:

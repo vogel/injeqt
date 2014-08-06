@@ -32,7 +32,7 @@ instantiation_state::instantiation_state(type_relations available_types, impleme
 	{
 		auto available_interface_type_it = _available_types.unique().get(object.interface_type());
 		if (available_interface_type_it == end(_available_types.unique()))
-			throw type_not_in_mapping_exception{};
+			throw type_not_in_mapping_exception{object.interface_type().name()};
 
 		auto implementation_type = available_interface_type_it->implementation_type();
 		if (implementation_type != object.interface_type())
