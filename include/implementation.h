@@ -38,7 +38,7 @@ class INJEQT_API implementation final
 public:
 	explicit implementation(type interface_type, QObject *object);
 
-	type interface_type() const;
+	const type & interface_type() const;
 	QObject * object() const;
 
 private:

@@ -38,7 +38,7 @@ catch (invalid_type_exception &e)
 	throw invalid_default_constructor_exception();
 }
 
-type default_constructor_method::object_type() const
+const type & default_constructor_method::object_type() const
 {
 	return _object_type;
 }
@@ -75,7 +75,7 @@ default_constructor_method make_default_constructor_method(const type &t)
 		return default_constructor_method{constructor};
 	}
 
-	throw no_default_constructor_exception{};
+	throw no_default_constructor_exception{t.name()};
 }
 
 }}

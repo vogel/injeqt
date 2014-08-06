@@ -41,7 +41,7 @@ implementation::implementation(type interface_type, QObject *object) :
 	}
 }
 
-type implementation::interface_type() const
+const type & implementation::interface_type() const
 {
 	return _interface_type;
 }

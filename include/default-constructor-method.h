@@ -41,7 +41,7 @@ class INJEQT_API default_constructor_method final
 public:
 	explicit default_constructor_method(QMetaMethod meta_method);
 
-	type object_type() const;
+	const type & object_type() const;
 
 	std::unique_ptr<QObject> invoke() const;
 
