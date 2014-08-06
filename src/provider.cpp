@@ -18,29 +18,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include "injeqt-global.h"
-#include "types.h"
-
-class QObject;
+#include "provider.h"
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API provider
-{
-
-public:
-	explicit provider() {}
-	virtual ~provider() {}
-
-	virtual const type & created_type() const = 0;
-	virtual QObject * create() = 0;
-	virtual const types & required_types() const { return _empty_types; };
-
-protected:
-	static types _empty_types;
-
-};
+types provider::_empty_types{};
 
 }}
