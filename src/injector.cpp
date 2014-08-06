@@ -20,6 +20,10 @@
 
 #include "injector.h"
 
+#include "provider-by-default-constructor.h"
+#include "provider-ready.h"
+#include "provider.h"
+#include "default-constructor-method.h"
 #include "module.h"
 
 namespace injeqt { namespace v1 {
@@ -28,17 +32,19 @@ namespace {
 
 scope scope_from_modules(const std::vector<std::unique_ptr<module>> &modules)
 {
-	auto all_types = std::vector<type>{};
-	auto all_implementations = std::vector<implementation>();
-
+	auto all_providers = std::vector<std::unique_ptr<provider>>{};
 	for (auto &&module : modules)
-	{
-		std::copy(std::begin(module->types()), std::end(module->types()), std::back_inserter(all_types));
-		std::copy(std::begin(module->implementations()), std::end(module->implementations()), std::back_inserter(all_implementations));
-	}
+		std::move(std::begin(module->providers()), std::end(module->providers()), std::back_inserter(all_providers));
+
+	auto all_types = std::vector<type>{};
+	std::transform(std::begin(all_providers), std::end(all_providers), std::back_inserter(all_types),
+		[](const std::unique_ptr<provider> &c){
+			return c->created_type();
+		}
+	);
 
 	// TODO: check for duplicates and stuff
-	return make_scope(all_types, implementations{all_implementations});
+	return make_scope(providers{std::move(all_providers)}, all_types);
 }
 
 }

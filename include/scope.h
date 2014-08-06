@@ -20,12 +20,12 @@
 
 #pragma once
 
+#include "providers.h"
 #include "instantiation-state.h"
 #include "injeqt-exception.h"
 #include "injeqt-global.h"
 
-#include <memory>
-#include <QtCore/QObject>
+class QObject;
 
 namespace injeqt { namespace v1 {
 
@@ -37,22 +37,22 @@ class INJEQT_API scope final
 {
 
 public:
-	explicit scope(instantiation_state state);
+	explicit scope(providers available_providers, type_relations available_types);
 
-	instantiation_state state() const;
+	const providers & available_providers() const;
+	const instantiation_state & state() const;
 
 	QObject * get(const type &interface_type);
 
 private:
+	providers _available_providers;
 	instantiation_state _state;
-
-	std::vector<std::unique_ptr<QObject>> _owned_objects;
 
 };
 
 INJEQT_API bool operator == (const scope &x, const scope &y);
 INJEQT_API bool operator != (const scope &x, const scope &y);
 
-INJEQT_API scope make_scope(const std::vector<type> &scope_types, const implementations &scope_objects);
+INJEQT_API scope make_scope(providers available_providers, const std::vector<type> &scope_types);
 
 }}

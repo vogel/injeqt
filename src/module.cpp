@@ -20,28 +20,31 @@
 
 #include "module.h"
 
+#include "provider-by-default-constructor.h"
+#include "provider-ready.h"
+
 #include <QtCore/QMetaObject>
 
 namespace injeqt { namespace v1 {
 
+void module::add_ready_object(const type &t, QObject *object)
+{
+	add_provider(std::unique_ptr<provider>{new provider_ready{implementation{t, object}}});
+}
+
 void module::add_type(const type &t)
 {
-	_types.push_back(t);
+	add_provider(std::unique_ptr<provider>{new provider_by_default_constructor{make_default_constructor_method(t)}});
 }
 
-void module::add_implementation(const implementation &i)
+void module::add_provider(std::unique_ptr<provider> c)
 {
-	_implementations.push_back(i);
+	_providers.push_back(std::move(c));
 }
 
-const std::vector<type> & module::types() const
+std::vector<std::unique_ptr<provider>> & module::providers()
 {
-	return _types;
-}
-
-const std::vector<implementation> & module::implementations() const
-{
-	return _implementations;
+	return _providers;
 }
 
 }}

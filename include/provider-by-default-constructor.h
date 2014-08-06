@@ -21,41 +21,25 @@
 #pragma once
 
 #include "provider.h"
+#include "default-constructor-method.h"
 #include "injeqt-global.h"
-#include "type.h"
-
-#include <memory>
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API module
+class INJEQT_API provider_by_default_constructor final : public provider
 {
 
 public:
-	virtual ~module() {}
+	explicit provider_by_default_constructor(default_constructor_method constructor);
+	virtual ~provider_by_default_constructor() {}
 
-	template<typename T>
-	void add_ready_object(QObject *object)
-	{
-		add_ready_object(make_type<T>(), object);
-	}
-
-
-	template<typename T>
-	void add_type()
-	{
-		add_type(make_type<T>());
-	}
-
-	std::vector<std::unique_ptr<provider>> & providers();
+	virtual const type & created_type() const override;
+	virtual QObject * create() override;
 
 private:
-	std::vector<std::unique_ptr<provider>> _providers;
-
-	void add_ready_object(const type &t, QObject *object);
-	void add_type(const type &t);
-	void add_provider(std::unique_ptr<provider> c);
+	default_constructor_method _constructor;
+	std::unique_ptr<QObject> _object;
 
 };
 
-}};
+}}

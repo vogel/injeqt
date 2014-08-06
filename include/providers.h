@@ -22,40 +22,18 @@
 
 #include "provider.h"
 #include "injeqt-global.h"
+#include "sorted-unique-vector.h"
 #include "type.h"
 
 #include <memory>
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API module
+inline type type_from_provider(const std::unique_ptr<provider> &c)
 {
+	return c->created_type();
+}
 
-public:
-	virtual ~module() {}
+using providers = sorted_unique_vector<type, std::unique_ptr<provider>, type_from_provider>;
 
-	template<typename T>
-	void add_ready_object(QObject *object)
-	{
-		add_ready_object(make_type<T>(), object);
-	}
-
-
-	template<typename T>
-	void add_type()
-	{
-		add_type(make_type<T>());
-	}
-
-	std::vector<std::unique_ptr<provider>> & providers();
-
-private:
-	std::vector<std::unique_ptr<provider>> _providers;
-
-	void add_ready_object(const type &t, QObject *object);
-	void add_type(const type &t);
-	void add_provider(std::unique_ptr<provider> c);
-
-};
-
-}};
+}}

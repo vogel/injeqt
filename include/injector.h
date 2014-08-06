@@ -25,6 +25,7 @@
 #include "type.h"
 
 #include <vector>
+#include <QtCore/QObject>
 
 namespace injeqt { namespace v1 {
 

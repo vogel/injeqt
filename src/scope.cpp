@@ -20,6 +20,8 @@
 
 #include "scope.h"
 
+#include "provider-by-default-constructor.h"
+#include "provider.h"
 #include "default-constructor-method.h"
 #include "dependencies.h"
 #include "extract-interfaces.h"
@@ -28,14 +30,23 @@
 #include "resolve-dependencies.h"
 #include "type-relations.h"
 
+#include <memory>
+#include <QtCore/QObject>
+
 namespace injeqt { namespace v1 {
 
-scope::scope(instantiation_state state) :
-	_state{std::move(state)}
+scope::scope(providers available_providers, type_relations available_types) :
+	_available_providers{std::move(available_providers)},
+	_state{std::move(available_types), {}}
 {
 }
 
-instantiation_state scope::state() const
+const providers & scope::available_providers() const
+{
+	return _available_providers;
+}
+
+const instantiation_state & scope::state() const
 {
 	return _state;
 }
@@ -44,7 +55,7 @@ QObject * scope::get(const type &interface_type)
 {
 	auto implementation_type_it = _state.available_types().unique().get(interface_type);
 	if (implementation_type_it == end(_state.available_types().unique()))
-		throw type_not_in_scope_exception{};
+		throw type_not_in_scope_exception{interface_type.name()};
 
 	auto implementation_type = implementation_type_it->implementation_type();
 	auto object_it = _state.objects().get(implementation_type);
@@ -56,11 +67,12 @@ QObject * scope::get(const type &interface_type)
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
-		auto constuctor = make_default_constructor_method(type_to_instantiate);
-		auto unique_ptr_instance = constuctor.invoke();
-		auto instance = unique_ptr_instance.get();
+		auto provider_it = _available_providers.get(type_to_instantiate);
+		if (provider_it == end(_available_providers))
+			return nullptr; // TODO: throw exception
 
-		_owned_objects.push_back(std::move(unique_ptr_instance));
+		// TODO: throw exception if null!
+		auto instance = provider_it->get()->create();
 
 		objects_to_resolve.emplace_back(type_to_instantiate, instance);
 	}
@@ -96,11 +108,9 @@ bool operator != (const scope &x, const scope &y)
 	return !(x == y);
 }
 
-scope make_scope(const std::vector<type> &scope_types, const implementations &scope_objects)
+scope make_scope(providers available_providers, const std::vector<type> &scope_types)
 {
-	auto relations = make_type_relations(scope_types);
-	auto state = instantiation_state{relations, scope_objects};
-	return scope{state};
+	return scope{std::move(available_providers), make_type_relations(scope_types)};
 }
 
 }}

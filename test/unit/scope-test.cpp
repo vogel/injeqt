@@ -18,6 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "provider-by-default-constructor.cpp"
 #include "default-constructor-method.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"
@@ -207,19 +208,19 @@ void scope_test::should_create_valid_scopes_with_no_objects()
 	auto empty_scope = make_scope({}, {});
 	//QCOMPARE(empty_scope.state(), (instantiation_state{implemented_by_mapping{}, implementations{}}));
 
-	auto simple_scope = make_scope(simple_types, {});
+	auto simple_scope = make_scope({}, simple_types);
 	//QCOMPARE(empty_scope.state(), (instantiation_state{implemented_by_mapping{}, implementations{}}));
 
-	auto inheriting_scope = make_scope(inheriting_types, {});
+	auto inheriting_scope = make_scope({}, inheriting_types);
 
-	auto simple_cyclic_scope = make_scope(simple_cyclic_types, {});
+	auto simple_cyclic_scope = make_scope({}, simple_cyclic_types);
 
-	auto inheriting_simple_cyclic_scope = make_scope(inheriting_simple_cyclic_types, {});
+	auto inheriting_simple_cyclic_scope = make_scope({}, inheriting_simple_cyclic_types);
 }
 
 void scope_test::should_throw_when_creating_scope_with_ambiguous_types()
 {
-	auto ambiguous_scope = make_scope(std::vector<type>{type_1_type, type_1_subtype_1_type}, {});
+	auto ambiguous_scope = make_scope({}, std::vector<type>{type_1_type, type_1_subtype_1_type});
 }
 
 QTEST_APPLESS_MAIN(scope_test);

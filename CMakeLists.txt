@@ -35,7 +35,6 @@ set(VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
 set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 
 set(INJEQT_SRCS
-	src/class-mapping.cpp
 	src/default-constructor-method.cpp
 	src/dependencies.cpp
 	src/dependency.cpp
@@ -45,6 +44,9 @@ set(INJEQT_SRCS
 	src/injector.cpp
 	src/instantiation-state.cpp
 	src/module.cpp
+	src/class-mapping.cpp
+	src/provider-by-default-constructor.cpp
+	src/provider-ready.cpp
 	src/required-to-instantiate.cpp
 	src/resolved-dependency.cpp
 	src/resolve-dependencies.cpp

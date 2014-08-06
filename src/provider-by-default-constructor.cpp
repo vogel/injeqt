@@ -18,44 +18,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include "provider.h"
-#include "injeqt-global.h"
-#include "type.h"
-
-#include <memory>
+#include "provider-by-default-constructor.h"
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API module
+provider_by_default_constructor::provider_by_default_constructor(default_constructor_method constructor) :
+	_constructor{std::move(constructor)}
 {
+}
 
-public:
-	virtual ~module() {}
+const type & provider_by_default_constructor::created_type() const
+{
+	return _constructor.object_type();
+}
 
-	template<typename T>
-	void add_ready_object(QObject *object)
-	{
-		add_ready_object(make_type<T>(), object);
-	}
+QObject * provider_by_default_constructor::create()
+{
+	// todo: thread safety
+	if (!_object)
+		_object = _constructor.invoke();
+	return _object.get();
+}
 
-
-	template<typename T>
-	void add_type()
-	{
-		add_type(make_type<T>());
-	}
-
-	std::vector<std::unique_ptr<provider>> & providers();
-
-private:
-	std::vector<std::unique_ptr<provider>> _providers;
-
-	void add_ready_object(const type &t, QObject *object);
-	void add_type(const type &t);
-	void add_provider(std::unique_ptr<provider> c);
-
-};
-
-}};
+}}
