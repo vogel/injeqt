@@ -62,22 +62,49 @@ QObject * scope::get(const type &interface_type)
 	if (object_it != end(_state.objects()))
 		return object_it->object();
 
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _state);
+	_state = state_with(_state, implementation_type);
+
+	// TODO: if we dont have the object, throw exception
+	auto object_it_2 = _state.objects().get(implementation_type);
+	if (object_it_2 != end(_state.objects()))
+		return object_it_2->object();
+	else
+		return nullptr;
+}
+
+instantiation_state scope::state_with(instantiation_state old_state, const type &implementation_type)
+{
+	auto types_to_instantiate = required_to_instantiate(implementation_type, old_state);
+	return state_with(old_state, types_to_instantiate);
+}
+
+instantiation_state scope::state_with(instantiation_state old_state, const types &types_to_instantiate)
+{
+	auto state = std::move(old_state);
 
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		if (provider_it == end(_available_providers))
-			return nullptr; // TODO: throw exception
+			return old_state; // TODO: throw exception
 
-		// TODO: throw exception if null!
-		auto instance = provider_it->get()->create();
-
-		objects_to_resolve.emplace_back(type_to_instantiate, instance);
+		for (auto &&required_type : provider_it->get()->required_types())
+			state = state_with(state, required_type);
 	}
 
-	auto objects = _state.objects();
+	for (auto &&type_to_instantiate : types_to_instantiate)
+		if (state.objects().get(type_to_instantiate) == end(state.objects()))
+		{
+			auto provider_it = _available_providers.get(type_to_instantiate);
+			auto instance = provider_it->get()->create(*this);
+
+			if (instance)
+				objects_to_resolve.emplace_back(type_to_instantiate, instance);
+			else {} // THROW
+		}
+
+	auto objects = state.objects();
 	objects.merge(implementations{objects_to_resolve});
 
 	for (auto &&object_to_resolve : objects_to_resolve)
@@ -91,8 +118,7 @@ QObject * scope::get(const type &interface_type)
 			resolved.apply_on(object_to_resolve.object());
 	}
 
-	_state = instantiation_state{_state.available_types(), objects};
-	return _state.objects().get(implementation_type)->object();
+	return instantiation_state{state.available_types(), objects};
 }
 
 bool operator == (const scope &x, const scope &y)

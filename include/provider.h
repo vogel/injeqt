@@ -27,6 +27,8 @@ class QObject;
 
 namespace injeqt { namespace v1 {
 
+class scope;
+
 class INJEQT_API provider
 {
 
@@ -35,7 +37,7 @@ public:
 	virtual ~provider() {}
 
 	virtual const type & created_type() const = 0;
-	virtual QObject * create() = 0;
+	virtual QObject * create(scope &s) = 0;
 	virtual types required_types() const = 0;
 
 };

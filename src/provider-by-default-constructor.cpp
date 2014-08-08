@@ -32,7 +32,7 @@ const type & provider_by_default_constructor::created_type() const
 	return _constructor.object_type();
 }
 
-QObject * provider_by_default_constructor::create()
+QObject * provider_by_default_constructor::create(scope &)
 {
 	// todo: thread safety
 	if (!_object)

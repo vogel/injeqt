@@ -34,7 +34,7 @@ public:
 	virtual ~provider_ready() {}
 
 	virtual const type & created_type() const override;
-	virtual QObject * create() override;
+	virtual QObject * create(scope &s) override;
 	virtual types required_types() const override { return types{}; }
 
 private:

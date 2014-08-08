@@ -48,6 +48,9 @@ private:
 	providers _available_providers;
 	instantiation_state _state;
 
+	instantiation_state state_with(instantiation_state old_state, const type &implementation_type);
+	instantiation_state state_with(instantiation_state old_state, const types &implementation_types);
+
 };
 
 INJEQT_API bool operator == (const scope &x, const scope &y);

@@ -34,7 +34,7 @@ public:
 	virtual ~provider_by_default_constructor() {}
 
 	virtual const type & created_type() const override;
-	virtual QObject * create() override;
+	virtual QObject * create(scope &s) override;
 	virtual types required_types() const { return types{}; }
 
 private:
