@@ -26,7 +26,6 @@
 #include "implemented-by.cpp"
 #include "instantiation-state.cpp"
 #include "provider-by-default-constructor.cpp"
-#include "provider.cpp"
 #include "required-to-instantiate.cpp"
 #include "resolve-dependencies.cpp"
 #include "resolved-dependency.cpp"
