@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <functional>
 #include <QtTest/QTest>
+#include <functional>
 
 template<typename E>
 void expect(std::function<void()> call)
@@ -35,8 +35,14 @@ void expect(std::function<void()> call)
 	{
 		// OK
 	}
+	catch (std::exception &e)
+	{
+		QFAIL(qPrintable(QString{"Unexpected exception thrown: %1 %2"}
+			.arg(typeid(e).name())
+			.arg(e.what())));
+	}
 	catch (...)
 	{
-		QFAIL("Unexpected exception thrown");
+		QFAIL("Unexpected exception thrown: %1");
 	}
 }
