@@ -40,7 +40,10 @@ class INJEQT_API injector final
 
 public:
 	explicit injector(std::vector<std::unique_ptr<module>> modules);
+	injector(injector &&x);
 	~injector();
+
+	injector & operator = (injector &&x);
 
 	template<typename T>
 	T * get()

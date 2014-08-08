@@ -34,8 +34,19 @@ injector::injector(std::vector<std::unique_ptr<module>> modules) :
 {
 }
 
+injector::injector(injector &&x) :
+	_pimpl{std::move(x._pimpl)}
+{
+}
+
 injector::~injector()
 {
+}
+
+injector & injector::operator = (injector &&x)
+{
+	_pimpl = std::move(x._pimpl);
+	return *this;
 }
 
 QObject * injector::get(const type &interface_type)
