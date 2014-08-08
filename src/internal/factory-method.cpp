@@ -79,6 +79,7 @@ factory_method make_factory_method(const type &f, const type &t)
 	auto meta_object = f.meta_object();
 	auto method_count = meta_object->methodCount();
 	auto factory_methods = std::vector<factory_method>{};
+
 	for (decltype(method_count) i = 0; i < method_count; i++)
 	{
 		auto method = meta_object->method(i);
@@ -88,8 +89,8 @@ factory_method make_factory_method(const type &f, const type &t)
 		if (!return_type_meta_object)
 			continue;
 		auto return_type = type{return_type_meta_object};
-		//auto interfaces = extract_interfaces(return_type);
-		//if (interfaces.contains(t))
+		auto interfaces = extract_interfaces(return_type);
+		if (interfaces.contains(t))
 			factory_methods.emplace_back(method);
 	}
 
