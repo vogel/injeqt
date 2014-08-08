@@ -45,14 +45,12 @@ set(INJEQT_SRCS
 	src/injector.cpp
 	src/instantiation-state.cpp
 	src/module.cpp
-	src/class-mapping.cpp
 	src/provider-by-default-constructor.cpp
 	src/provider-by-factory.cpp
 	src/provider-ready.cpp
 	src/required-to-instantiate.cpp
 	src/resolved-dependency.cpp
 	src/resolve-dependencies.cpp
-	src/setter-injector.cpp
 	src/setter-method.cpp
 	src/scope.cpp
 	src/type.cpp
