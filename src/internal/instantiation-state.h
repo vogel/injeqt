@@ -25,7 +25,9 @@
 #include "injeqt-global.h"
 #include "type-relations.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(invalid_instantiation_state_exception, injeqt_exception);
 DEFINE_EXCEPTION(type_not_in_mapping_exception, invalid_instantiation_state_exception);

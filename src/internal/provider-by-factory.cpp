@@ -22,7 +22,7 @@
 
 #include "scope.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 provider_by_factory::provider_by_factory(factory_method factory) :
 	_factory{std::move(factory)}

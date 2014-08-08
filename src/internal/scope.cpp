@@ -33,7 +33,7 @@
 #include <memory>
 #include <QtCore/QObject>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 scope::scope(providers available_providers, type_relations available_types) :
 	_available_providers{std::move(available_providers)},

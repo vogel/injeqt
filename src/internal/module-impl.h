@@ -18,39 +18,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module.h"
+#pragma once
 
-#include "module-impl.h"
-#include "provider-by-default-constructor.h"
-#include "provider-by-factory.h"
-#include "provider-ready.h"
+#include "provider.h"
+#include "injeqt-global.h"
+#include "type.h"
 
-#include <QtCore/QMetaObject>
+#include <memory>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
-module::module() :
-	_pimpl{new injeqt::internal::module_impl{}}
+class INJEQT_API module_impl final
 {
-}
 
-module::~module()
-{
-}
+public:
+	void add_ready_object(type t, QObject *object);
+	void add_type(type t);
+	void add_factory(type t, type f);
+	void add_provider(std::unique_ptr<provider> c);
 
-void module::add_ready_object(type t, QObject *object)
-{
-	_pimpl->add_ready_object(t, object);
-}
+	std::vector<std::unique_ptr<provider>> & providers();
 
-void module::add_type(type t)
-{
-	_pimpl->add_type(t);
-}
+private:
+	std::vector<std::unique_ptr<provider>> _providers;
 
-void module::add_factory(type f, const type t)
-{
-	_pimpl->add_factory(t, f);
-}
+};
 
-}}
+}};

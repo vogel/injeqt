@@ -27,7 +27,9 @@
 
 class QObject;
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(scope_exception, injeqt_exception);
 DEFINE_EXCEPTION(type_not_in_scope_exception, scope_exception);

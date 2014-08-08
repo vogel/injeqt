@@ -20,11 +20,15 @@
 
 #pragma once
 
-#include "provider.h"
 #include "injeqt-global.h"
 #include "type.h"
 
 #include <memory>
+
+namespace injeqt { namespace internal {
+	class injector_impl;
+	class module_impl;
+}}
 
 namespace injeqt { namespace v1 {
 
@@ -32,7 +36,8 @@ class INJEQT_API module
 {
 
 public:
-	virtual ~module() {}
+	module();
+	virtual ~module();
 
 	template<typename T>
 	void add_ready_object(QObject *object)
@@ -54,15 +59,14 @@ public:
 		add_factory(make_type<T>(), make_type<F>());
 	}
 
-	std::vector<std::unique_ptr<provider>> & providers();
 
 private:
-	std::vector<std::unique_ptr<provider>> _providers;
+	friend class ::injeqt::internal::injector_impl;
+	std::unique_ptr<injeqt::internal::module_impl> _pimpl;
 
 	void add_ready_object(type t, QObject *object);
 	void add_type(type t);
 	void add_factory(type t, type f);
-	void add_provider(std::unique_ptr<provider> c);
 
 };
 

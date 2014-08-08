@@ -24,7 +24,9 @@
 #include "setter-method.h"
 #include "type.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 class dependency final
 {

@@ -22,7 +22,7 @@
 
 #include "extract-interfaces.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 implemented_by::implemented_by(type interface_type, type implementation_type) :
 	_interface_type{std::move(interface_type)},

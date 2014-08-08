@@ -19,14 +19,15 @@
  */
 
 #include "extract-interfaces.cpp"
-#include "setter-method.cpp"
 #include "type.cpp"
+#include "setter-method.cpp"
 
 #include "expect.h"
 #include "utils.h"
 
 #include <QtTest/QtTest>
 
+using namespace injeqt::internal;
 using namespace injeqt::v1;
 
 class injectable_type1 : public QObject

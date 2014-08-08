@@ -22,7 +22,7 @@
 
 #include <QtTest/QtTest>
 
-using namespace injeqt::v1;
+using namespace injeqt::internal;
 
 class sorted_unique_vector_test : public QObject
 {

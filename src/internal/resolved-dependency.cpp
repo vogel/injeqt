@@ -20,7 +20,7 @@
 
 #include "resolved-dependency.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 resolved_dependency::resolved_dependency(implementation resolved_with, setter_method setter) :
 	_resolved_with{std::move(resolved_with)},

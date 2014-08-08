@@ -20,7 +20,7 @@
 
 #include "provider-by-default-constructor.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 provider_by_default_constructor::provider_by_default_constructor(default_constructor_method constructor) :
 	_constructor{std::move(constructor)}

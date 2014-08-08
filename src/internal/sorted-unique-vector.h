@@ -26,7 +26,7 @@
 #include <functional>
 #include <vector>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 /**
  * @addtogroup Misc

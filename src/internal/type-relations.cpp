@@ -24,7 +24,7 @@
 
 #include <map>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 type_relations::type_relations(implemented_by_mapping unique, types ambiguous) :
 	_unique{std::move(unique)},

@@ -24,7 +24,9 @@
 #include "injeqt-global.h"
 #include "sorted-unique-vector.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 inline type type_from_implemented_by(const implemented_by &i)
 {

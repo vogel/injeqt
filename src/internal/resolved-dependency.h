@@ -24,7 +24,9 @@
 #include "injeqt-global.h"
 #include "setter-method.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(invalid_resolved_dependency_exception, injeqt_exception);
 DEFINE_EXCEPTION(non_matching_setter_exception, invalid_resolved_dependency_exception);

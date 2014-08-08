@@ -24,7 +24,9 @@
 #include "default-constructor-method.h"
 #include "injeqt-global.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 class provider_by_default_constructor final : public provider
 {

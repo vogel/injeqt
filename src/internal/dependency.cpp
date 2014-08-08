@@ -20,7 +20,7 @@
 
 #include "dependency.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 dependency::dependency(setter_method setter) :
 	_setter{std::move(setter)}

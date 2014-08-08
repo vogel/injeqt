@@ -18,11 +18,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+find_package(Qt5Test 5.2 REQUIRED)
+
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
 )
-
-find_package(Qt5Test 5.2 REQUIRED)
 
 function (injeqt_add_test name_)
 	file (RELATIVE_PATH sourcePath "${CMAKE_SOURCE_DIR}/test" "${CMAKE_CURRENT_SOURCE_DIR}")

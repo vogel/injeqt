@@ -30,6 +30,7 @@
 
 #include <QtTest/QtTest>
 
+using namespace injeqt::internal;
 using namespace injeqt::v1;
 
 class injectable_type1 : public QObject

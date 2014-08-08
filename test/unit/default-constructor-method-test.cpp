@@ -27,6 +27,7 @@
 #include <QtTest/QtTest>
 #include <string>
 
+using namespace injeqt::internal;
 using namespace injeqt::v1;
 
 class no_default_constructor : public QObject

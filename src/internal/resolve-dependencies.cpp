@@ -24,7 +24,7 @@
 #include "implementations.h"
 #include "resolved-dependency.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with)
 {

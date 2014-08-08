@@ -22,7 +22,7 @@
 
 #include "extract-interfaces.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 factory_method::factory_method(QMetaMethod meta_method)
 try :

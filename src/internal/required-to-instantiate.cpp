@@ -26,7 +26,7 @@
 
 #include <set>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state)
 {

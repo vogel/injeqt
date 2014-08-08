@@ -29,7 +29,9 @@
 
 class QObject;
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(factory_method_exception, injeqt_exception);
 DEFINE_EXCEPTION(no_factory_method_exception, factory_method_exception);

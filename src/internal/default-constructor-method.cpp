@@ -20,7 +20,7 @@
 
 #include "default-constructor-method.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 default_constructor_method::default_constructor_method(QMetaMethod meta_method)
 try :

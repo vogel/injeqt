@@ -29,7 +29,9 @@
 
 class QObject;
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(default_constructor_exception, injeqt_exception);
 DEFINE_EXCEPTION(no_default_constructor_exception, default_constructor_exception);

@@ -22,7 +22,7 @@
 
 #include "extract-interfaces.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 namespace {
 

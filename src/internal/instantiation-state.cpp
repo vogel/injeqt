@@ -22,7 +22,7 @@
 
 #include "extract-interfaces.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 instantiation_state::instantiation_state(type_relations available_types, implementations objects) :
 	_available_types{std::move(available_types)},

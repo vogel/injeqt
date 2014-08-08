@@ -24,7 +24,9 @@
 #include "injeqt-global.h"
 #include "type.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(invalid_implemented_by_exception, injeqt_exception);
 

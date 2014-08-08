@@ -20,11 +20,12 @@
 
 #include "extract-interfaces.cpp"
 #include "implemented-by.cpp"
-#include "type.cpp"
 #include "type-relations.cpp"
+#include "type.cpp"
 
 #include <QtTest/QtTest>
 
+using namespace injeqt::internal;
 using namespace injeqt::v1;
 
 class type_1 : public QObject

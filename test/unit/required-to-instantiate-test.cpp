@@ -26,14 +26,15 @@
 #include "instantiation-state.cpp"
 #include "required-to-instantiate.cpp"
 #include "setter-method.cpp"
-#include "type.cpp"
 #include "type-relations.cpp"
+#include "type.cpp"
 
 #include "expect.h"
 #include "utils.h"
 
 #include <QtTest/QtTest>
 
+using namespace injeqt::internal;
 using namespace injeqt::v1;
 
 class type_1 : public QObject

@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 implementation::implementation(type interface_type, QObject *object) :
 	_interface_type{std::move(interface_type)},

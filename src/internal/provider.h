@@ -25,7 +25,9 @@
 
 class QObject;
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 class scope;
 

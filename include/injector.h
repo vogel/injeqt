@@ -21,11 +21,15 @@
 #pragma once
 
 #include "injeqt-global.h"
-#include "scope.h"
 #include "type.h"
 
+#include <memory>
 #include <vector>
 #include <QtCore/QObject>
+
+namespace injeqt { namespace internal {
+	class injector_impl;
+}}
 
 namespace injeqt { namespace v1 {
 
@@ -36,6 +40,7 @@ class INJEQT_API injector final
 
 public:
 	explicit injector(std::vector<std::unique_ptr<module>> modules);
+	~injector();
 
 	template<typename T>
 	T * get()
@@ -49,8 +54,7 @@ public:
 	QObject * get(const type &interface_type);
 
 private:
-	std::vector<std::unique_ptr<module>> _modules;
-	scope _singleton_scope;
+	std::unique_ptr<injeqt::internal::injector_impl> _pimpl;
 
 };
 

@@ -25,7 +25,9 @@
 #include "sorted-unique-vector.h"
 #include "type.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 inline type type_from_dependency(const dependency &d)
 {

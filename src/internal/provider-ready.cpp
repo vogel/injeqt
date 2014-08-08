@@ -20,7 +20,7 @@
 
 #include "provider-ready.h"
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
 provider_ready::provider_ready(implementation ready_implementation) :
 	_ready_implementation{std::move(ready_implementation)}
@@ -32,7 +32,7 @@ const type & provider_ready::created_type() const
 	return _ready_implementation.interface_type();
 }
 
-QObject * injeqt::v1::provider_ready::create(scope &)
+QObject * provider_ready::create(scope &)
 {
 	return _ready_implementation.object();
 }

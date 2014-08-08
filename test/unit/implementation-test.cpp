@@ -27,6 +27,7 @@
 
 #include <QtTest/QtTest>
 
+using namespace injeqt::internal;
 using namespace injeqt::v1;
 
 class type_1 : public QObject

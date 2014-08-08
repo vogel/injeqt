@@ -18,39 +18,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module.h"
-
 #include "module-impl.h"
+
 #include "provider-by-default-constructor.h"
 #include "provider-by-factory.h"
 #include "provider-ready.h"
 
 #include <QtCore/QMetaObject>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace internal {
 
-module::module() :
-	_pimpl{new injeqt::internal::module_impl{}}
+void module_impl::add_ready_object(type t, QObject *object)
 {
+	add_provider(std::unique_ptr<provider>{new provider_ready{implementation{std::move(t), object}}});
 }
 
-module::~module()
+void module_impl::add_type(type t)
 {
+	add_provider(std::unique_ptr<provider>{new provider_by_default_constructor{make_default_constructor_method(std::move(t))}});
 }
 
-void module::add_ready_object(type t, QObject *object)
+void module_impl::add_factory(type f, const type t)
 {
-	_pimpl->add_ready_object(t, object);
+	add_provider(std::unique_ptr<provider>{new provider_by_factory{make_factory_method(std::move(f), std::move(t))}});
 }
 
-void module::add_type(type t)
+void module_impl::add_provider(std::unique_ptr<provider> c)
 {
-	_pimpl->add_type(t);
+	_providers.push_back(std::move(c));
 }
 
-void module::add_factory(type f, const type t)
+std::vector<std::unique_ptr<provider>> & module_impl::providers()
 {
-	_pimpl->add_factory(t, f);
+	return _providers;
 }
 
 }}

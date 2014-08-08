@@ -26,7 +26,9 @@
 
 #include <QtCore/QMetaMethod>
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(setter_exception, injeqt_exception);
 DEFINE_EXCEPTION(setter_too_many_parameters_exception, setter_exception);

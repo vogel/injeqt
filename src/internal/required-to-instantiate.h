@@ -24,7 +24,9 @@
 #include "injeqt-global.h"
 #include "types.h"
 
-namespace injeqt { namespace v1 {
+using namespace injeqt::v1;
+
+namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
 
