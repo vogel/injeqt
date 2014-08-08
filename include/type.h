@@ -23,7 +23,7 @@
 #include "injeqt-exception.h"
 #include "injeqt-global.h"
 
-class QMetaObject;
+#include <QtCore/QMetaType>
 
 namespace injeqt { namespace v1 {
 
@@ -54,6 +54,7 @@ INJEQT_API bool operator >= (const type &x, const type &y);
 template<typename T>
 inline type make_type()
 {
+	qRegisterMetaType<T *>();
 	return type{&T::staticMetaObject};
 }
 
