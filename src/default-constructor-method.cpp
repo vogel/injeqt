@@ -19,7 +19,6 @@
  */
 
 #include "default-constructor-method.h"
-#include <qtextcodec.h>
 
 namespace injeqt { namespace v1 {
 
@@ -29,13 +28,13 @@ try :
 	_meta_method{std::move(meta_method)}
 {
 	if (meta_method.methodType() != QMetaMethod::Constructor)
-		throw invalid_default_constructor_exception();
+		throw invalid_default_constructor_exception{};
 	if (meta_method.parameterCount() != 0)
-		throw invalid_default_constructor_exception();
+		throw invalid_default_constructor_exception{};
 }
 catch (invalid_type_exception &e)
 {
-	throw invalid_default_constructor_exception();
+	throw invalid_default_constructor_exception{};
 }
 
 const type & default_constructor_method::object_type() const
