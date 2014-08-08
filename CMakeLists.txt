@@ -39,6 +39,7 @@ set(INJEQT_SRCS
 	src/dependencies.cpp
 	src/dependency.cpp
 	src/extract-interfaces.cpp
+	src/factory-method.cpp
 	src/implementation.cpp
 	src/implemented-by.cpp
 	src/injector.cpp
