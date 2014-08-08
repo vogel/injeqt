@@ -46,8 +46,8 @@ set(INJEQT_SRCS
 	src/module.cpp
 	src/class-mapping.cpp
 	src/provider-by-default-constructor.cpp
+	src/provider-by-factory.cpp
 	src/provider-ready.cpp
-	src/provider.cpp
 	src/required-to-instantiate.cpp
 	src/resolved-dependency.cpp
 	src/resolve-dependencies.cpp

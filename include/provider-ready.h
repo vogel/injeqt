@@ -35,6 +35,7 @@ public:
 
 	virtual const type & created_type() const override;
 	virtual QObject * create() override;
+	virtual types required_types() const override { return types{}; }
 
 private:
 	implementation _ready_implementation;

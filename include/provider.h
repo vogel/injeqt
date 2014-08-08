@@ -36,10 +36,7 @@ public:
 
 	virtual const type & created_type() const = 0;
 	virtual QObject * create() = 0;
-	virtual const types & required_types() const { return _empty_types; };
-
-protected:
-	static types _empty_types;
+	virtual types required_types() const = 0;
 
 };
 
