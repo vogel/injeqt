@@ -28,6 +28,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories(
 	${Qt5Core_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/src/internal
 )
 
 set(WARNINGS "-Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
@@ -35,26 +36,27 @@ set(VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
 set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 
 set(INJEQT_SRCS
-	src/default-constructor-method.cpp
-	src/dependencies.cpp
-	src/dependency.cpp
-	src/extract-interfaces.cpp
-	src/factory-method.cpp
-	src/implementation.cpp
-	src/implemented-by.cpp
 	src/injector.cpp
-	src/instantiation-state.cpp
 	src/module.cpp
-	src/provider-by-default-constructor.cpp
-	src/provider-by-factory.cpp
-	src/provider-ready.cpp
-	src/required-to-instantiate.cpp
-	src/resolved-dependency.cpp
-	src/resolve-dependencies.cpp
-	src/setter-method.cpp
-	src/scope.cpp
 	src/type.cpp
-	src/type-relations.cpp
+
+	src/internal/default-constructor-method.cpp
+	src/internal/dependencies.cpp
+	src/internal/dependency.cpp
+	src/internal/extract-interfaces.cpp
+	src/internal/factory-method.cpp
+	src/internal/implementation.cpp
+	src/internal/implemented-by.cpp
+	src/internal/instantiation-state.cpp
+	src/internal/provider-by-default-constructor.cpp
+	src/internal/provider-by-factory.cpp
+	src/internal/provider-ready.cpp
+	src/internal/required-to-instantiate.cpp
+	src/internal/resolved-dependency.cpp
+	src/internal/resolve-dependencies.cpp
+	src/internal/setter-method.cpp
+	src/internal/scope.cpp
+	src/internal/type-relations.cpp
 )
 
 enable_testing()
