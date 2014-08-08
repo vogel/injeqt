@@ -20,50 +20,27 @@
 
 #pragma once
 
+#include "factory-method.h"
 #include "provider.h"
 #include "injeqt-global.h"
-#include "type.h"
-
-#include <memory>
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API module
+class INJEQT_API provider_by_factory final : public provider
 {
 
 public:
-	virtual ~module() {}
+	explicit provider_by_factory(factory_method factory);
+	virtual ~provider_by_factory();
 
-	template<typename T>
-	void add_ready_object(QObject *object)
-	{
-		add_ready_object(make_type<T>(), object);
-	}
-
-
-	template<typename T>
-	void add_type()
-	{
-		add_type(make_type<T>());
-	}
-
-
-	template<typename T, typename F>
-	void add_factory()
-	{
-		add_factory(make_type<T>(), make_type<F>());
-	}
-
-	std::vector<std::unique_ptr<provider>> & providers();
+	virtual const type & created_type() const override;
+	virtual QObject * create(scope &s) override;
+	virtual types required_types() const;
 
 private:
-	std::vector<std::unique_ptr<provider>> _providers;
-
-	void add_ready_object(type t, QObject *object);
-	void add_type(type t);
-	void add_factory(type t, type f);
-	void add_provider(std::unique_ptr<provider> c);
+	factory_method _factory;
+	std::unique_ptr<QObject> _object;
 
 };
 
-}};
+}}

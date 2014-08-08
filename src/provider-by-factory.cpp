@@ -18,52 +18,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "provider-by-factory.h"
 
-#include "provider.h"
-#include "injeqt-global.h"
-#include "type.h"
-
-#include <memory>
+#include "scope.h"
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API module
+provider_by_factory::provider_by_factory(factory_method factory) :
+	_factory{std::move(factory)}
 {
+}
 
-public:
-	virtual ~module() {}
+provider_by_factory::~provider_by_factory()
+{
+}
 
-	template<typename T>
-	void add_ready_object(QObject *object)
+const type & provider_by_factory::created_type() const
+{
+	return _factory.result_type();
+}
+
+QObject * provider_by_factory::create(scope &s)
+{
+	if (!_object)
 	{
-		add_ready_object(make_type<T>(), object);
+		auto factory_object = s.get(_factory.object_type());
+		_object = _factory.invoke(factory_object);
 	}
 
+	return _object.get();
+}
 
-	template<typename T>
-	void add_type()
-	{
-		add_type(make_type<T>());
-	}
+types provider_by_factory::required_types() const
+{
+	return types{_factory.object_type()};
+}
 
-
-	template<typename T, typename F>
-	void add_factory()
-	{
-		add_factory(make_type<T>(), make_type<F>());
-	}
-
-	std::vector<std::unique_ptr<provider>> & providers();
-
-private:
-	std::vector<std::unique_ptr<provider>> _providers;
-
-	void add_ready_object(type t, QObject *object);
-	void add_type(type t);
-	void add_factory(type t, type f);
-	void add_provider(std::unique_ptr<provider> c);
-
-};
-
-}};
+}}
