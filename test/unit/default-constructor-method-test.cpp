@@ -100,7 +100,7 @@ void default_constructor_method_test::should_throw_when_created_with_no_default_
 
 void default_constructor_method_test::should_throw_when_created_with_not_invokable_constructor()
 {
-	expect<invalid_default_constructor_exception>([&]{
+	expect<constructor_not_found_exception>([&]{
 		default_constructor_method{make_constructor<default_not_invokable_constructor>("default_not_invokable_constructor()")};
 	});
 	expect<no_default_constructor_exception>([&]{
