@@ -31,7 +31,7 @@ DEFINE_EXCEPTION(invalid_instantiation_state_exception, injeqt_exception);
 DEFINE_EXCEPTION(type_not_in_mapping_exception, invalid_instantiation_state_exception);
 DEFINE_EXCEPTION(type_implementation_inconsistent_exception, invalid_instantiation_state_exception);
 
-class INJEQT_API instantiation_state final
+class instantiation_state final
 {
 
 public:
@@ -46,7 +46,7 @@ private:
 
 };
 
-INJEQT_API bool operator == (const instantiation_state &x, const instantiation_state &y);
-INJEQT_API bool operator != (const instantiation_state &x, const instantiation_state &y);
+bool operator == (const instantiation_state &x, const instantiation_state &y);
+bool operator != (const instantiation_state &x, const instantiation_state &y);
 
 }}

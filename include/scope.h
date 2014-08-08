@@ -33,7 +33,7 @@ DEFINE_EXCEPTION(scope_exception, injeqt_exception);
 DEFINE_EXCEPTION(type_not_in_scope_exception, scope_exception);
 DEFINE_EXCEPTION(unresolved_dependencies_exception, scope_exception);
 
-class INJEQT_API scope final
+class scope final
 {
 
 public:
@@ -53,9 +53,9 @@ private:
 
 };
 
-INJEQT_API bool operator == (const scope &x, const scope &y);
-INJEQT_API bool operator != (const scope &x, const scope &y);
+bool operator == (const scope &x, const scope &y);
+bool operator != (const scope &x, const scope &y);
 
-INJEQT_API scope make_scope(providers available_providers, const std::vector<type> &scope_types);
+scope make_scope(providers available_providers, const std::vector<type> &scope_types);
 
 }}

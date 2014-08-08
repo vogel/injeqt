@@ -30,7 +30,7 @@ DEFINE_EXCEPTION(invalid_resolved_dependency_exception, injeqt_exception);
 DEFINE_EXCEPTION(non_matching_setter_exception, invalid_resolved_dependency_exception);
 DEFINE_EXCEPTION(inavalid_apply_on_object_exception, invalid_resolved_dependency_exception);
 
-class INJEQT_API resolved_dependency final
+class resolved_dependency final
 {
 
 public:
@@ -47,7 +47,7 @@ private:
 
 };
 
-INJEQT_API bool operator == (const resolved_dependency &x, const resolved_dependency &y);
-INJEQT_API bool operator != (const resolved_dependency &x, const resolved_dependency &y);
+bool operator == (const resolved_dependency &x, const resolved_dependency &y);
+bool operator != (const resolved_dependency &x, const resolved_dependency &y);
 
 }}

@@ -36,7 +36,7 @@ DEFINE_EXCEPTION(no_factory_method_exception, factory_method_exception);
 DEFINE_EXCEPTION(invalid_factory_method_exception, factory_method_exception);
 DEFINE_EXCEPTION(non_unique_factory_exception, factory_method_exception);
 
-class INJEQT_API factory_method final
+class factory_method final
 {
 
 public:
@@ -54,10 +54,10 @@ private:
 
 };
 
-INJEQT_API bool operator == (const factory_method &x, const factory_method &y);
-INJEQT_API bool operator != (const factory_method &x, const factory_method &y);
+bool operator == (const factory_method &x, const factory_method &y);
+bool operator != (const factory_method &x, const factory_method &y);
 
-INJEQT_API factory_method make_factory_method(const type &f, const type &t);
+factory_method make_factory_method(const type &f, const type &t);
 
 template<typename F, typename T>
 inline factory_method make_factory_method()

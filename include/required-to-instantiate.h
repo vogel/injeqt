@@ -28,6 +28,6 @@ namespace injeqt { namespace v1 {
 
 DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
 
-INJEQT_API types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state);
+types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state);
 
 }}

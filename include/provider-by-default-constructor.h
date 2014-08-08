@@ -26,7 +26,7 @@
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API provider_by_default_constructor final : public provider
+class provider_by_default_constructor final : public provider
 {
 
 public:

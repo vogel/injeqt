@@ -25,6 +25,6 @@
 
 namespace injeqt { namespace v1 {
 
-INJEQT_API types extract_interfaces(const type &for_type);
+types extract_interfaces(const type &for_type);
 
 }}

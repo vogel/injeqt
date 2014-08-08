@@ -35,7 +35,7 @@ DEFINE_EXCEPTION(default_constructor_exception, injeqt_exception);
 DEFINE_EXCEPTION(no_default_constructor_exception, default_constructor_exception);
 DEFINE_EXCEPTION(invalid_default_constructor_exception, default_constructor_exception);
 
-class INJEQT_API default_constructor_method final
+class default_constructor_method final
 {
 
 public:
@@ -51,10 +51,10 @@ private:
 
 };
 
-INJEQT_API bool operator == (const default_constructor_method &x, const default_constructor_method &y);
-INJEQT_API bool operator != (const default_constructor_method &x, const default_constructor_method &y);
+bool operator == (const default_constructor_method &x, const default_constructor_method &y);
+bool operator != (const default_constructor_method &x, const default_constructor_method &y);
 
-INJEQT_API default_constructor_method make_default_constructor_method(const type &t);
+default_constructor_method make_default_constructor_method(const type &t);
 
 template<typename T>
 inline default_constructor_method make_default_constructor_method()

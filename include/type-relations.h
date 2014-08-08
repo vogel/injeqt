@@ -26,7 +26,7 @@
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API type_relations final
+class type_relations final
 {
 
 public:
@@ -42,9 +42,9 @@ private:
 
 };
 
-INJEQT_API bool operator == (const type_relations &x, const type_relations &y);
-INJEQT_API bool operator != (const type_relations &x, const type_relations &y);
+bool operator == (const type_relations &x, const type_relations &y);
+bool operator != (const type_relations &x, const type_relations &y);
 
-INJEQT_API type_relations make_type_relations(const std::vector<type> &main_types);
+type_relations make_type_relations(const std::vector<type> &main_types);
 
 }}

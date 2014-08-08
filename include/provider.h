@@ -29,7 +29,7 @@ namespace injeqt { namespace v1 {
 
 class scope;
 
-class INJEQT_API provider
+class provider
 {
 
 public:

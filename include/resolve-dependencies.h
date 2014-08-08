@@ -30,12 +30,12 @@ namespace injeqt { namespace v1 {
 
 class resolved_dependency;
 
-struct INJEQT_API resolve_dependencies_result
+struct resolve_dependencies_result
 {
 	dependencies unresolved;
 	std::vector<resolved_dependency> resolved;
 };
 
-INJEQT_API resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with);
+resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with);
 
 }}

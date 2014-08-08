@@ -28,7 +28,7 @@ namespace injeqt { namespace v1 {
 
 DEFINE_EXCEPTION(invalid_implemented_by_exception, injeqt_exception);
 
-class INJEQT_API implemented_by final
+class implemented_by final
 {
 
 public:
@@ -43,7 +43,7 @@ private:
 
 };
 
-INJEQT_API bool operator == (const implemented_by &x, const implemented_by &y);
-INJEQT_API bool operator != (const implemented_by &x, const implemented_by &y);
+bool operator == (const implemented_by &x, const implemented_by &y);
+bool operator != (const implemented_by &x, const implemented_by &y);
 
 }}

@@ -26,7 +26,7 @@
 
 namespace injeqt { namespace v1 {
 
-class INJEQT_API dependency final
+class dependency final
 {
 
 public:
@@ -40,7 +40,7 @@ private:
 
 };
 
-INJEQT_API bool operator == (const dependency &x, const dependency &y);
-INJEQT_API bool operator != (const dependency &x, const dependency &y);
+bool operator == (const dependency &x, const dependency &y);
+bool operator != (const dependency &x, const dependency &y);
 
 }}
