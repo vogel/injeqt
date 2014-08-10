@@ -34,11 +34,7 @@ resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve,
 	for (auto &&match : match_result.matched)
 		resolved.emplace_back(match.second, match.first.setter());
 
-	return
-	{
-		dependencies{match_result.unmatched_1},
-		resolved
-	};
+	return {dependencies{match_result.unmatched_1}, resolved};
 }
 
 }}

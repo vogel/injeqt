@@ -36,6 +36,7 @@ public:
 	const types & ambiguous() const;
 
 private:
+	type_relations();
 	explicit type_relations(implemented_by_mapping unique, types ambiguous);
 	friend type_relations make_type_relations(const std::vector<type> &main_types);
 

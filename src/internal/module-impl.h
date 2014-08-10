@@ -35,12 +35,13 @@ public:
 	void add_ready_object(type t, QObject *object);
 	void add_type(type t);
 	void add_factory(type t, type f);
-	void add_provider(std::unique_ptr<provider> c);
 
 	std::vector<std::unique_ptr<provider>> & providers();
 
 private:
 	std::vector<std::unique_ptr<provider>> _providers;
+
+	void add_provider(std::unique_ptr<provider> c);
 
 };
 

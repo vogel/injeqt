@@ -75,17 +75,17 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 dependencies make_dependencies(const type &for_type)
 try
 {
-	auto implements = extract_interfaces(for_type);
+	auto interfaces = extract_interfaces(for_type);
 	auto setters = extract_setters(for_type);
 	for (auto &&setter : setters)
 	{
 		auto parameter_type = setter.parameter_type();
 		if (parameter_type == for_type)
 			throw dependency_on_self_exception{};
-		if (std::find(std::begin(implements), std::end(implements), parameter_type) != std::end(implements))
+		if (std::find(std::begin(interfaces), std::end(interfaces), parameter_type) != std::end(interfaces))
 			throw dependency_on_supertype_exception{};
-		auto parameter_implements = extract_interfaces(parameter_type);
-		if (std::find(std::begin(parameter_implements), std::end(parameter_implements), for_type) != std::end(parameter_implements))
+		auto parameter_interfaces = extract_interfaces(parameter_type);
+		if (std::find(std::begin(parameter_interfaces), std::end(parameter_interfaces), for_type) != std::end(parameter_interfaces))
 			throw dependency_on_subtype_exception{};
 	}
 
@@ -94,7 +94,7 @@ try
 
 	auto matches = match(types{parameter_types}, relations.ambiguous());
 	if (!matches.matched.empty())
-		throw dependency_duplicated_exception(exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object()));
+		throw dependency_duplicated_exception{exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object())};
 
 	auto result = std::vector<dependency>{};
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),

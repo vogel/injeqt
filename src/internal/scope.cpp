@@ -72,22 +72,20 @@ QObject * scope::get(const type &interface_type)
 		return nullptr;
 }
 
-instantiation_state scope::state_with(instantiation_state old_state, const type &implementation_type)
+instantiation_state scope::state_with(instantiation_state state, const type &implementation_type)
 {
-	auto types_to_instantiate = required_to_instantiate(implementation_type, old_state);
-	return state_with(old_state, types_to_instantiate);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, state);
+	return state_with(state, types_to_instantiate);
 }
 
-instantiation_state scope::state_with(instantiation_state old_state, const types &types_to_instantiate)
+instantiation_state scope::state_with(instantiation_state state, const types &types_to_instantiate)
 {
-	auto state = std::move(old_state);
-
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		if (provider_it == end(_available_providers))
-			return old_state; // TODO: throw exception
+			return state; // TODO: throw exception
 
 		for (auto &&required_type : provider_it->get()->required_types())
 			state = state_with(state, required_type);

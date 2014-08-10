@@ -48,10 +48,7 @@ scope injector_impl::scope_from_modules(const std::vector<std::unique_ptr<module
 
 	auto all_types = std::vector<type>{};
 	std::transform(std::begin(all_providers), std::end(all_providers), std::back_inserter(all_types),
-		[](const std::unique_ptr<provider> &c){
-			return c->created_type();
-		}
-	);
+		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
 
 	// TODO: check for duplicates and stuff
 	return make_scope(providers{std::move(all_providers)}, all_types);

@@ -44,7 +44,7 @@ const type & default_constructor_method::object_type() const
 
 std::unique_ptr<QObject> default_constructor_method::invoke() const
 {
-	return std::unique_ptr<QObject>(_meta_method.enclosingMetaObject()->newInstance());
+	return std::unique_ptr<QObject>{_meta_method.enclosingMetaObject()->newInstance()};
 }
 
 bool operator == (const default_constructor_method &x, const default_constructor_method &y)

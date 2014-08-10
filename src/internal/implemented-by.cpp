@@ -28,9 +28,9 @@ implemented_by::implemented_by(type interface_type, type implementation_type) :
 	_interface_type{std::move(interface_type)},
 	_implementation_type{std::move(implementation_type)}
 {
-	auto implements = extract_interfaces(implementation_type);
-	if (std::find(std::begin(implements), std::end(implements), _interface_type) == std::end(implements))
-		throw  invalid_implemented_by_exception{};
+	auto interaces = extract_interfaces(implementation_type);
+	if (std::find(std::begin(interaces), std::end(interaces), _interface_type) == std::end(interaces))
+		throw invalid_implemented_by_exception{};
 }
 
 type implemented_by::interface_type() const
