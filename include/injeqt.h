@@ -31,3 +31,7 @@
 #ifndef Q_MOC_RUN
 #  define INJEQT_SETTER
 #endif
+
+namespace injeqt { namespace v1 { }
+using namespace v1;
+}
