@@ -63,8 +63,8 @@ class valid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(injectable_type1 *) {}
-	injeqt_setter void setter_2(injectable_type2 *) {}
+	INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	INJEQT_SETTER void setter_2(injectable_type2 *) {}
 	void invalid_setter_1(injectable_type1 *) {}
 	void invalid_setter_2(injectable_type2 *) {}
 	void invalid_setter_3(int) {}
@@ -76,7 +76,7 @@ class inheriting_valid_injected_type : public valid_injected_type
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_3(injectable_type3 *) {}
+	INJEQT_SETTER void setter_3(injectable_type3 *) {}
 
 };
 
@@ -85,8 +85,8 @@ class valid_injected_type_with_common_superclass : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(sub_injectable_type1a *) {}
-	injeqt_setter void setter_2(sub_injectable_type1b *) {}
+	INJEQT_SETTER void setter_1(sub_injectable_type1a *) {}
+	INJEQT_SETTER void setter_2(sub_injectable_type1b *) {}
 
 };
 
@@ -95,7 +95,7 @@ class too_many_parameters_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(injectable_type1 *, injectable_type2 *) {}
+	INJEQT_SETTER void setter_1(injectable_type1 *, injectable_type2 *) {}
 
 };
 
@@ -104,7 +104,7 @@ class non_qobject_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(int) {}
+	INJEQT_SETTER void setter_1(int) {}
 
 };
 
@@ -113,8 +113,8 @@ class duplicate_dependency_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(injectable_type1 *) {}
-	injeqt_setter void setter_2(injectable_type1 *) {}
+	INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	INJEQT_SETTER void setter_2(injectable_type1 *) {}
 
 };
 
@@ -123,8 +123,8 @@ class invalid_injected_type_with_superclass : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(injectable_type1 *) {}
-	injeqt_setter void setter_2(sub_injectable_type1a *) {}
+	INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
 
 };
 
@@ -133,8 +133,8 @@ class invalid_injected_type_with_superclass_inverted : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_2(sub_injectable_type1a *) {}
-	injeqt_setter void setter_1(injectable_type1 *) {}
+	INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
+	INJEQT_SETTER void setter_1(injectable_type1 *) {}
 
 };
 
@@ -143,7 +143,7 @@ class invalid_injected_type_depends_on_self : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(invalid_injected_type_depends_on_self *) {}
+	INJEQT_SETTER void setter_1(invalid_injected_type_depends_on_self *) {}
 
 };
 
@@ -154,7 +154,7 @@ class invalid_injected_type_depends_on_subtype : public QObject
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(invalid_injected_type_depends_on_subtype_subtype *) {}
+	INJEQT_SETTER void setter_1(invalid_injected_type_depends_on_subtype_subtype *) {}
 
 };
 
@@ -173,7 +173,7 @@ class invalid_injected_type_depends_on_supertype : public invalid_injected_type_
 	Q_OBJECT
 
 public slots:
-	injeqt_setter void setter_1(invalid_injected_type_depends_on_supertype_supertype *) {}
+	INJEQT_SETTER void setter_1(invalid_injected_type_depends_on_supertype_supertype *) {}
 
 };
 

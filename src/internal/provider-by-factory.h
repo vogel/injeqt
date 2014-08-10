@@ -22,7 +22,7 @@
 
 #include "factory-method.h"
 #include "provider.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 
 using namespace injeqt::v1;
 

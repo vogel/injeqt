@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "injeqt-global.h"
+#include "injeqt.h"
 #include "setter-method.h"
 #include "type.h"
 

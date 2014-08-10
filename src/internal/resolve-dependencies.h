@@ -22,7 +22,7 @@
 
 #include "dependencies.h"
 #include "implementations.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 
 #include <vector>
 

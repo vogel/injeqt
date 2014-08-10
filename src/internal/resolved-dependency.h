@@ -21,7 +21,7 @@
 #pragma once
 
 #include "implementation.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 #include "setter-method.h"
 
 using namespace injeqt::v1;

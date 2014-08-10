@@ -21,7 +21,7 @@
 #pragma once
 
 #include "implemented-by-mapping.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 #include "types.h"
 
 using namespace injeqt::v1;

@@ -50,7 +50,7 @@ std::vector<setter_method> extract_setters(const type &for_type)
 	{
 		auto probably_setter = meta_object->method(i);
 		auto tag = std::string{probably_setter.tag()};
-		if (tag != "injeqt_setter")
+		if (tag != "INJEQT_SETTER")
 			continue;
 
 		result.emplace_back(setter_method{probably_setter});

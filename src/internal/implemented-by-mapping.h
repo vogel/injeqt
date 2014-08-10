@@ -21,7 +21,7 @@
 #pragma once
 
 #include "implemented-by.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 #include "sorted-unique-vector.h"
 
 using namespace injeqt::v1;

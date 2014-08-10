@@ -21,7 +21,7 @@
 #pragma once
 
 #include "dependency.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 #include "sorted-unique-vector.h"
 #include "type.h"
 

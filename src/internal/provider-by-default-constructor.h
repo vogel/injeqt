@@ -22,7 +22,7 @@
 
 #include "provider.h"
 #include "default-constructor-method.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 
 using namespace injeqt::v1;
 

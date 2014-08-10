@@ -29,5 +29,5 @@
 #endif
 
 #ifndef Q_MOC_RUN
-#  define injeqt_setter
+#  define INJEQT_SETTER
 #endif

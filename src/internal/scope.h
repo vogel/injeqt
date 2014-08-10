@@ -23,7 +23,7 @@
 #include "providers.h"
 #include "instantiation-state.h"
 #include "injeqt-exception.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 
 class QObject;
 

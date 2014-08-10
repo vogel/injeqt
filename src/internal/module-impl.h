@@ -21,7 +21,7 @@
 #pragma once
 
 #include "provider.h"
-#include "injeqt-global.h"
+#include "injeqt.h"
 #include "type.h"
 
 #include <memory>

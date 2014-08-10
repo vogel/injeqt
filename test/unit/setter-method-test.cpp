@@ -48,9 +48,9 @@ public:
 	injectable_type1 *_1 = nullptr;
 
 public slots:
-	injeqt_setter void tagged_setter_1(injectable_type1 *a) { _1 = a; }
-	injeqt_setter void tagged_int_setter(int) {}
-	injeqt_setter void tagged_invalid_setter(injectable_type1 *, injectable_type2 *) {}
+	INJEQT_SETTER void tagged_setter_1(injectable_type1 *a) { _1 = a; }
+	INJEQT_SETTER void tagged_int_setter(int) {}
+	INJEQT_SETTER void tagged_invalid_setter(injectable_type1 *, injectable_type2 *) {}
 	void untagged_setter_1(injectable_type1 *) {}
 	void untagged_int_setter(int) {}
 	void untagged_invalid_setter(injectable_type1 *, injectable_type2 *) {}
