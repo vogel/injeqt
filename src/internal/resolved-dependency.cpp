@@ -30,12 +30,12 @@ resolved_dependency::resolved_dependency(implementation resolved_with, setter_me
 		throw non_matching_setter_exception{};
 }
 
-implementation resolved_dependency::resolved_with() const
+const implementation & resolved_dependency::resolved_with() const
 {
 	return _resolved_with;
 }
 
-setter_method resolved_dependency::setter() const
+const setter_method & resolved_dependency::setter() const
 {
 	return _setter;
 }

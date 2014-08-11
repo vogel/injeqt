@@ -49,12 +49,12 @@ catch (invalid_type_exception &e)
 	throw invalid_setter_exception(exception_message(meta_method));
 }
 
-type setter_method::object_type() const
+const type & setter_method::object_type() const
 {
 	return _object_type;
 }
 
-type setter_method::parameter_type() const
+const type & setter_method::parameter_type() const
 {
 	return _parameter_type;
 }

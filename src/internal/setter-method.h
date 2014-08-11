@@ -42,8 +42,8 @@ class setter_method final
 public:
 	explicit setter_method(QMetaMethod meta_method);
 
-	type object_type() const;
-	type parameter_type() const;
+	const type & object_type() const;
+	const type & parameter_type() const;
 	std::string signature() const;
 
 	bool invoke(QObject *on, QObject *parameter) const;

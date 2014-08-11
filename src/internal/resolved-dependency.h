@@ -38,8 +38,8 @@ class resolved_dependency final
 public:
 	explicit resolved_dependency(implementation resolved_with, setter_method setter);
 
-	implementation resolved_with() const;
-	setter_method setter() const;
+	const implementation & resolved_with() const;
+	const setter_method & setter() const;
 
 	bool apply_on(QObject *on);
 

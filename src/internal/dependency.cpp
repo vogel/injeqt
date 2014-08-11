@@ -27,12 +27,12 @@ dependency::dependency(setter_method setter) :
 {
 }
 
-type dependency::required_type() const
+const type & dependency::required_type() const
 {
 	return _setter.parameter_type();
 }
 
-setter_method dependency::setter() const
+const setter_method & dependency::setter() const
 {
 	return _setter;
 }

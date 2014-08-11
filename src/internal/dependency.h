@@ -34,8 +34,8 @@ class dependency final
 public:
 	explicit dependency(setter_method setter);
 
-	type required_type() const;
-	setter_method setter() const;
+	const type & required_type() const;
+	const setter_method & setter() const;
 
 private:
 	setter_method _setter;
