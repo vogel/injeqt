@@ -37,6 +37,7 @@ class INJEQT_API injector_impl final
 {
 
 public:
+	injector_impl();
 	explicit injector_impl(std::vector<std::unique_ptr<::injeqt::v1::module>> modules);
 
 	QObject * get(const type &interface_type);

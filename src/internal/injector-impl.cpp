@@ -29,6 +29,10 @@
 
 namespace injeqt { namespace internal {
 
+injector_impl::injector_impl()
+{
+}
+
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	_modules{std::move(modules)},
 	_singleton_scope{scope_from_modules(_modules)}

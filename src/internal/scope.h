@@ -40,6 +40,7 @@ class scope final
 {
 
 public:
+	scope();
 	explicit scope(providers available_providers, type_relations available_types);
 
 	const providers & available_providers() const;

@@ -39,6 +39,7 @@ class INJEQT_API injector final
 {
 
 public:
+	injector();
 	explicit injector(std::vector<std::unique_ptr<module>> modules);
 	injector(injector &&x);
 	~injector();

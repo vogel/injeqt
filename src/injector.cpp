@@ -29,6 +29,11 @@ using namespace injeqt::internal;
 
 namespace injeqt { namespace v1 {
 
+injector::injector() :
+	_pimpl{new ::injeqt::internal::injector_impl{}}
+{
+}
+
 injector::injector(std::vector<std::unique_ptr<module>> modules) :
 	_pimpl{new ::injeqt::internal::injector_impl{std::move(modules)}}
 {
