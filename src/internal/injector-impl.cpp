@@ -30,24 +30,36 @@
 #include "required-to-instantiate.h"
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"
+#include "type-relations.h"
 
 namespace injeqt { namespace internal {
 
 injector_impl::injector_impl()
 {
+	printf("dc\n");
 }
 
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
-	_modules{std::move(modules)},
-	_singleton_scope{scope_from_modules(_modules)}
+	_modules{std::move(modules)}
 {
+	auto all_providers = std::vector<std::unique_ptr<provider>>{};
+	for (auto &&module : _modules)
+		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(all_providers));
+
+	auto all_types = std::vector<type>{};
+	std::transform(std::begin(all_providers), std::end(all_providers), std::back_inserter(all_types),
+		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
+
+	// TODO: check for duplicates and stuff
+	_available_providers = providers{std::move(all_providers)};
+	_available_types = make_type_relations(all_types).unique();
 }
 
 QObject * injector_impl::get(const type &interface_type)
 {
-	auto implementation_type_it = _singleton_scope.available_types().unique().get(interface_type);
-	if (implementation_type_it == end(_singleton_scope.available_types().unique()))
-		throw type_not_in_scope_exception{interface_type.name()};
+	auto implementation_type_it = _available_types.get(interface_type);
+	if (implementation_type_it == end(_available_types))
+		throw type_not_configured_exception{interface_type.name()};
 
 	auto implementation_type = implementation_type_it->implementation_type();
 	auto object_it = _objects.get(implementation_type);
@@ -66,7 +78,7 @@ QObject * injector_impl::get(const type &interface_type)
 
 implementations injector_impl::objects_with(implementations objects, const type &implementation_type)
 {
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _singleton_scope.available_types().unique(), objects);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _available_types, objects);
 	return objects_with(objects, types_to_instantiate);
 }
 
@@ -75,8 +87,8 @@ implementations injector_impl::objects_with(implementations objects, const types
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
-		auto provider_it = _singleton_scope.available_providers().get(type_to_instantiate);
-		if (provider_it == end(_singleton_scope.available_providers()))
+		auto provider_it = _available_providers.get(type_to_instantiate);
+		if (provider_it == end(_available_providers))
 			return objects; // TODO: throw exception
 
 		for (auto &&required_type : provider_it->get()->required_types())
@@ -86,7 +98,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 	for (auto &&type_to_instantiate : types_to_instantiate)
 		if (objects.get(type_to_instantiate) == end(objects))
 		{
-			auto provider_it = _singleton_scope.available_providers().get(type_to_instantiate);
+			auto provider_it = _available_providers.get(type_to_instantiate);
 			auto instance = provider_it->get()->create(*this);
 
 			if (instance)
@@ -108,20 +120,6 @@ implementations injector_impl::objects_with(implementations objects, const types
 	}
 
 	return objects;
-}
-
-scope injector_impl::scope_from_modules(const std::vector<std::unique_ptr<module>> &modules) const
-{
-	auto all_providers = std::vector<std::unique_ptr<provider>>{};
-	for (auto &&module : modules)
-		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(all_providers));
-
-	auto all_types = std::vector<type>{};
-	std::transform(std::begin(all_providers), std::end(all_providers), std::back_inserter(all_types),
-		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
-
-	// TODO: check for duplicates and stuff
-	return make_scope(providers{std::move(all_providers)}, all_types);
 }
 
 }}

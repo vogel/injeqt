@@ -20,8 +20,10 @@
 
 #pragma once
 
+#include "implementations.h"
+#include "implemented-by-mapping.h"
 #include "injeqt.h"
-#include "scope.h"
+#include "providers.h"
 #include "type.h"
 
 #include <vector>
@@ -32,6 +34,10 @@ namespace injeqt { namespace v1 {
 }}
 
 namespace injeqt { namespace internal {
+
+DEFINE_EXCEPTION(injector_exception, injeqt_exception);
+DEFINE_EXCEPTION(type_not_configured_exception, injector_exception);
+DEFINE_EXCEPTION(unresolved_dependencies_exception, injector_exception);
 
 class INJEQT_API injector_impl final
 {
@@ -44,13 +50,13 @@ public:
 
 private:
 	std::vector<std::unique_ptr<module>> _modules;
-	scope _singleton_scope;
+
+	providers _available_providers;
+	implemented_by_mapping _available_types;
 	implementations _objects;
 
 	implementations objects_with(implementations objects, const type &implementation_type);
 	implementations objects_with(implementations objects, const types &implementation_types);
-
-	scope scope_from_modules(const std::vector<std::unique_ptr<module>> &modules) const;
 
 };
 
