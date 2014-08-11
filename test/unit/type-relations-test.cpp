@@ -71,6 +71,7 @@ public:
 	type_relations_test();
 
 private slots:
+	void should_create_empty_relations();
 	void should_create_empty_relations_for_no_types();
 	void should_create_unique_relations_for_unrelated_types();
 	void should_create_unique_relations_for_unrelated_subtypes();
@@ -100,6 +101,14 @@ type_relations_test::type_relations_test() :
 	type_2_type{make_type<type_2>()},
 	type_2_sub_1_type{make_type<type_2_sub_1>()}
 {
+}
+
+void type_relations_test::should_create_empty_relations()
+{
+	auto result = type_relations{};
+
+	QCOMPARE(result.unique(), implemented_by_mapping{});
+	QCOMPARE(result.ambiguous(), types{});
 }
 
 void type_relations_test::should_create_empty_relations_for_no_types()
