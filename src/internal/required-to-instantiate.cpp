@@ -28,7 +28,7 @@
 
 namespace injeqt { namespace internal {
 
-types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state)
+types required_to_instantiate(const type &type_to_instantiate, const implemented_by_mapping &available_types, const implementations &objects)
 {
 	auto result = std::vector<type>{};
 	auto future_available = std::set<type>{};
@@ -39,12 +39,12 @@ types required_to_instantiate(const type &type_to_instantiate, const instantiati
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
 
-		auto available_it = state.available_types().unique().get(current_interface_type);
-		if (available_it == end(state.available_types().unique()))
+		auto available_it = available_types.get(current_interface_type);
+		if (available_it == end(available_types))
 			throw type_not_mapped_exception{};
 
 		auto current_implementation_type = available_it->implementation_type();
-		if (state.objects().contains_key(current_implementation_type))
+		if (objects.contains_key(current_implementation_type))
 			continue;
 
 		if (future_available.find(current_implementation_type) != std::end(future_available))

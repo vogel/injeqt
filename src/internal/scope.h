@@ -20,10 +20,11 @@
 
 #pragma once
 
-#include "providers.h"
-#include "instantiation-state.h"
+#include "implementations.h"
 #include "injeqt-exception.h"
 #include "injeqt.h"
+#include "providers.h"
+#include "type-relations.h"
 
 class QObject;
 
@@ -42,16 +43,18 @@ public:
 	explicit scope(providers available_providers, type_relations available_types);
 
 	const providers & available_providers() const;
-	const instantiation_state & state() const;
+	const type_relations & available_types() const;
+	const implementations & objects() const;
 
 	QObject * get(const type &interface_type);
 
 private:
 	providers _available_providers;
-	instantiation_state _state;
+	type_relations _available_types;
+	implementations _objects;
 
-	instantiation_state state_with(instantiation_state state, const type &implementation_type);
-	instantiation_state state_with(instantiation_state state, const types &implementation_types);
+	implementations objects_with(implementations objects, const type &implementation_type);
+	implementations objects_with(implementations objects, const types &implementation_types);
 
 };
 

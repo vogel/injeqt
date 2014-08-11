@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "instantiation-state.h"
+#include "implementations.h"
+#include "implemented-by-mapping.h"
 #include "injeqt.h"
 #include "types.h"
 
@@ -30,6 +31,6 @@ namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
 
-types required_to_instantiate(const type &type_to_instantiate, const instantiation_state &state);
+types required_to_instantiate(const type &type_to_instantiate, const implemented_by_mapping &available_types, const implementations &objects);
 
 }}

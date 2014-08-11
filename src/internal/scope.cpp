@@ -37,7 +37,7 @@ namespace injeqt { namespace internal {
 
 scope::scope(providers available_providers, type_relations available_types) :
 	_available_providers{std::move(available_providers)},
-	_state{std::move(available_types), {}}
+	_available_types{std::move(available_types)}
 {
 }
 
@@ -46,53 +46,58 @@ const providers & scope::available_providers() const
 	return _available_providers;
 }
 
-const instantiation_state & scope::state() const
+const type_relations & scope::available_types() const
 {
-	return _state;
+	return _available_types;
+}
+
+const implementations & scope::objects() const
+{
+	return _objects;
 }
 
 QObject * scope::get(const type &interface_type)
 {
-	auto implementation_type_it = _state.available_types().unique().get(interface_type);
-	if (implementation_type_it == end(_state.available_types().unique()))
+	auto implementation_type_it = _available_types.unique().get(interface_type);
+	if (implementation_type_it == end(_available_types.unique()))
 		throw type_not_in_scope_exception{interface_type.name()};
 
 	auto implementation_type = implementation_type_it->implementation_type();
-	auto object_it = _state.objects().get(implementation_type);
-	if (object_it != end(_state.objects()))
+	auto object_it = _objects.get(implementation_type);
+	if (object_it != end(_objects))
 		return object_it->object();
 
-	_state = state_with(_state, implementation_type);
+	_objects = objects_with(_objects, implementation_type);
 
 	// TODO: if we dont have the object, throw exception
-	auto object_it_2 = _state.objects().get(implementation_type);
-	if (object_it_2 != end(_state.objects()))
+	auto object_it_2 = _objects.get(implementation_type);
+	if (object_it_2 != end(_objects))
 		return object_it_2->object();
 	else
 		return nullptr;
 }
 
-instantiation_state scope::state_with(instantiation_state state, const type &implementation_type)
+implementations scope::objects_with(implementations objects, const type &implementation_type)
 {
-	auto types_to_instantiate = required_to_instantiate(implementation_type, state);
-	return state_with(state, types_to_instantiate);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _available_types.unique(), objects);
+	return objects_with(objects, types_to_instantiate);
 }
 
-instantiation_state scope::state_with(instantiation_state state, const types &types_to_instantiate)
+implementations scope::objects_with(implementations objects, const types &types_to_instantiate)
 {
 	auto objects_to_resolve = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		if (provider_it == end(_available_providers))
-			return state; // TODO: throw exception
+			return objects; // TODO: throw exception
 
 		for (auto &&required_type : provider_it->get()->required_types())
-			state = state_with(state, required_type);
+			objects = objects_with(objects, required_type);
 	}
 
 	for (auto &&type_to_instantiate : types_to_instantiate)
-		if (state.objects().get(type_to_instantiate) == end(state.objects()))
+		if (objects.get(type_to_instantiate) == end(objects))
 		{
 			auto provider_it = _available_providers.get(type_to_instantiate);
 			auto instance = provider_it->get()->create(*this);
@@ -102,7 +107,6 @@ instantiation_state scope::state_with(instantiation_state state, const types &ty
 			else {} // THROW
 		}
 
-	auto objects = state.objects();
 	objects.merge(implementations{objects_to_resolve});
 
 	for (auto &&object_to_resolve : objects_to_resolve)
@@ -116,14 +120,17 @@ instantiation_state scope::state_with(instantiation_state state, const types &ty
 			resolved.apply_on(object_to_resolve.object());
 	}
 
-	return instantiation_state{state.available_types(), objects};
+	return objects;
 }
 
 bool operator == (const scope &x, const scope &y)
 {
-	if (x.state() != y.state())
+	if (x.available_providers() != y.available_providers())
 		return false;
-
+	if (x.available_types() != y.available_types())
+		return false;
+	if (x.objects() != y.objects())
+		return false;
 	return true;
 }
 

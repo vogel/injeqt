@@ -24,7 +24,6 @@
 #include "extract-interfaces.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"
-#include "instantiation-state.cpp"
 #include "provider-by-default-constructor.cpp"
 #include "required-to-instantiate.cpp"
 #include "resolve-dependencies.cpp"
