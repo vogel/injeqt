@@ -48,7 +48,6 @@ set(INJEQT_SRCS
 	src/internal/implementation.cpp
 	src/internal/implemented-by.cpp
 	src/internal/injector-impl.cpp
-	src/internal/instantiation-state.cpp
 	src/internal/module-impl.cpp
 	src/internal/provider-by-default-constructor.cpp
 	src/internal/provider-by-factory.cpp
