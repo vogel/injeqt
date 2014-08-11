@@ -45,17 +45,10 @@ public:
 
 	const providers & available_providers() const;
 	const type_relations & available_types() const;
-	const implementations & objects() const;
-
-	QObject * get(const type &interface_type);
 
 private:
 	providers _available_providers;
 	type_relations _available_types;
-	implementations _objects;
-
-	implementations objects_with(implementations objects, const type &implementation_type);
-	implementations objects_with(implementations objects, const types &implementation_types);
 
 };
 

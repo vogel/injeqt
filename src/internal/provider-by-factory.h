@@ -28,7 +28,7 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-class  provider_by_factory final : public provider
+class provider_by_factory final : public provider
 {
 
 public:
@@ -36,7 +36,7 @@ public:
 	virtual ~provider_by_factory();
 
 	virtual const type & created_type() const override;
-	virtual QObject * create(scope &s) override;
+	virtual QObject * create(injector_impl &i) override;
 	virtual types required_types() const;
 
 private:

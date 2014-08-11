@@ -29,7 +29,7 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-class scope;
+class injector_impl;
 
 class provider
 {
@@ -39,7 +39,7 @@ public:
 	virtual ~provider() {}
 
 	virtual const type & created_type() const = 0;
-	virtual QObject * create(scope &s) = 0;
+	virtual QObject * create(injector_impl &i) = 0;
 	virtual types required_types() const = 0;
 
 };

@@ -45,6 +45,10 @@ public:
 private:
 	std::vector<std::unique_ptr<module>> _modules;
 	scope _singleton_scope;
+	implementations _objects;
+
+	implementations objects_with(implementations objects, const type &implementation_type);
+	implementations objects_with(implementations objects, const types &implementation_types);
 
 	scope scope_from_modules(const std::vector<std::unique_ptr<module>> &modules) const;
 

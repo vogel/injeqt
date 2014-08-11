@@ -32,7 +32,7 @@ const type & provider_ready::created_type() const
 	return _ready_implementation.interface_type();
 }
 
-QObject * provider_ready::create(scope &)
+QObject * provider_ready::create(injector_impl &)
 {
 	return _ready_implementation.object();
 }

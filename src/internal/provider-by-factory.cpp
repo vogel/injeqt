@@ -20,7 +20,7 @@
 
 #include "provider-by-factory.h"
 
-#include "scope.h"
+#include "injector-impl.h"
 
 namespace injeqt { namespace internal {
 
@@ -38,11 +38,11 @@ const type & provider_by_factory::created_type() const
 	return _factory.result_type();
 }
 
-QObject * provider_by_factory::create(scope &s)
+QObject * provider_by_factory::create(injector_impl &i)
 {
 	if (!_object)
 	{
-		auto factory_object = s.get(_factory.object_type());
+		auto factory_object = i.get(_factory.object_type());
 		_object = _factory.invoke(factory_object);
 	}
 
