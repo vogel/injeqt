@@ -135,6 +135,7 @@ private slots:
 	void should_return_type_when_simple_types_and_almost_full_implementation();
 	void should_return_all_types_with_cyclic_dependnecies_when_simple_types_and_empty_implementation();
 	void should_return_all_subtypes_with_cyclic_dependnecies_when_inheriting_types_and_empty_implementation();
+	void should_return_type_when_supertype_is_already_available();
 
 private:
 	type type_1_type;
@@ -322,6 +323,18 @@ void required_to_instantiate_test::should_return_all_subtypes_with_cyclic_depend
 
 	auto result3 = required_to_instantiate(cyclic_type_3_type, inheriting_types, {});
 	QCOMPARE(result3, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
+}
+
+void required_to_instantiate_test::should_return_type_when_supertype_is_already_available()
+{
+	auto type_1_object = make_object<type_1>();
+	auto available_implementations = implementations
+	{
+		implementation{type_1_type, type_1_object.get()},
+	};
+
+	auto result = required_to_instantiate(type_1_subtype_1_type, inheriting_types, available_implementations);
+	QCOMPARE(result, (types{type_1_subtype_1_type}));
 }
 
 QTEST_APPLESS_MAIN(required_to_instantiate_test);
