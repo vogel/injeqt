@@ -33,10 +33,9 @@
 #include "type-relations.h"
 
 namespace injeqt { namespace internal {
-
+// TODO: tests!!
 injector_impl::injector_impl()
 {
-	printf("dc\n");
 }
 
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
