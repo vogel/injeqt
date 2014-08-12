@@ -26,6 +26,7 @@ resolved_dependency::resolved_dependency(implementation resolved_with, setter_me
 	_resolved_with{std::move(resolved_with)},
 	_setter{std::move(setter)}
 {
+	// TODO: belive our users maybe and do not check?
 	if (_resolved_with.interface_type() != setter.parameter_type())
 		throw non_matching_setter_exception{};
 }

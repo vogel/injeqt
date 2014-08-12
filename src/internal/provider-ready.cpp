@@ -21,10 +21,11 @@
 #include "provider-ready.h"
 
 namespace injeqt { namespace internal {
-
+// TODO: tests
 provider_ready::provider_ready(implementation ready_implementation) :
 	_ready_implementation{std::move(ready_implementation)}
 {
+	// TODO: maybe check implementation here, because it is not provided by us?
 }
 
 const type & provider_ready::created_type() const

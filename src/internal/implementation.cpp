@@ -33,7 +33,7 @@ implementation::implementation(type interface_type, QObject *object) :
 	if (!object)
 		throw invalid_implementation_availability_exception{};
 
-	if (object)
+	if (object) // TODO: what about beliving creators?
 	{
 		auto implements = extract_interfaces(type{object->metaObject()});
 		if (!implements.contains(interface_type))

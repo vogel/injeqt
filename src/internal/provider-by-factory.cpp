@@ -23,7 +23,7 @@
 #include "injector-impl.h"
 
 namespace injeqt { namespace internal {
-
+// TODO: tests
 provider_by_factory::provider_by_factory(factory_method factory) :
 	_factory{std::move(factory)}
 {

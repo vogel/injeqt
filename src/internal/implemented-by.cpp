@@ -28,7 +28,7 @@ implemented_by::implemented_by(type interface_type, type implementation_type) :
 	_interface_type{std::move(interface_type)},
 	_implementation_type{std::move(implementation_type)}
 {
-	auto interaces = extract_interfaces(implementation_type);
+	auto interaces = extract_interfaces(implementation_type); // what about beliving creators?
 	if (std::find(std::begin(interaces), std::end(interaces), _interface_type) == std::end(interaces))
 		throw invalid_implemented_by_exception{};
 }

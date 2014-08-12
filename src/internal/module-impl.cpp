@@ -27,7 +27,7 @@
 #include <QtCore/QMetaObject>
 
 namespace injeqt { namespace internal {
-
+// TODO: tests!!!
 void module_impl::add_ready_object(type t, QObject *object)
 {
 	add_provider(std::unique_ptr<provider>{new provider_ready{implementation{std::move(t), object}}});
