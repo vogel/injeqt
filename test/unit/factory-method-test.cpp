@@ -130,27 +130,27 @@ void factory_method_test::should_throw_when_created_with_not_invokable_factory_m
 		factory_method{make_method<factory_not_invokable>("create_result_object()")};
 	});
 	expect<no_factory_method_exception>([&]{
-		make_factory_method<factory_not_invokable, result_object>();
+		make_factory_method<result_object, factory_not_invokable>();
 	});
 	expect<no_factory_method_exception>([&]{
-		make_factory_method(make_type<factory_not_invokable>(), make_type<result_object>());
+		make_factory_method(make_type<result_object>(), make_type<factory_not_invokable>());
 	});
 }
 
 void factory_method_test::should_throw_when_created_with_non_unique_factory_method()
 {
 	expect<non_unique_factory_exception>([&]{
-		make_factory_method<non_unique_factory, result_object>();
+		make_factory_method<result_object, non_unique_factory>();
 	});
 	expect<non_unique_factory_exception>([&]{
-		make_factory_method(make_type<non_unique_factory>(), make_type<result_object>());
+		make_factory_method(make_type<result_object>(), make_type<non_unique_factory>());
 	});
 }
 
 void factory_method_test::should_throw_when_created_with_different_type_factory_method()
 {
 	expect<no_factory_method_exception>([&]{
-		make_factory_method<valid_factory, other_object>();
+		make_factory_method<other_object, valid_factory>();
 	});
 }
 
@@ -160,11 +160,11 @@ void factory_method_test::should_create_valid_with_invokable_factory_method()
 	QCOMPARE(c1.object_type(), make_type<valid_factory>());
 	QCOMPARE(c1.result_type(), make_type<result_object>());
 
-	auto c2 = make_factory_method<valid_factory, result_object>();
+	auto c2 = make_factory_method<result_object, valid_factory>();
 	QCOMPARE(c2.object_type(), make_type<valid_factory>());
 	QCOMPARE(c2.result_type(), make_type<result_object>());
 
-	auto c3 = make_factory_method(make_type<valid_factory>(), make_type<result_object>());
+	auto c3 = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
 	QCOMPARE(c3.object_type(), make_type<valid_factory>());
 	QCOMPARE(c3.result_type(), make_type<result_object>());
 
@@ -175,7 +175,7 @@ void factory_method_test::should_create_valid_with_invokable_factory_method()
 
 void factory_method_test::should_create_object_with_factory_method()
 {
-	auto factory = make_factory_method<valid_factory, result_object>();
+	auto factory = make_factory_method<result_object, valid_factory>();
 	auto factory_object = make_object<valid_factory>();
 	auto object = factory.invoke(factory_object.get());
 	auto cast = qobject_cast<result_object *>(object.get());

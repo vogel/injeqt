@@ -38,9 +38,9 @@ void module_impl::add_type(type t)
 	add_provider(std::unique_ptr<provider>{new provider_by_default_constructor{make_default_constructor_method(std::move(t))}});
 }
 
-void module_impl::add_factory(type f, const type t)
+void module_impl::add_factory(type t, const type f)
 {
-	add_provider(std::unique_ptr<provider>{new provider_by_factory{make_factory_method(std::move(f), std::move(t))}});
+	add_provider(std::unique_ptr<provider>{new provider_by_factory{make_factory_method(std::move(t), std::move(f))}});
 }
 
 void module_impl::add_provider(std::unique_ptr<provider> c)

@@ -59,7 +59,7 @@ private:
 bool operator == (const factory_method &x, const factory_method &y);
 bool operator != (const factory_method &x, const factory_method &y);
 
-factory_method make_factory_method(const type &f, const type &t);
+factory_method make_factory_method(const type &t, const type &f);
 
 template<typename F, typename T>
 inline factory_method make_factory_method()

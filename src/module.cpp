@@ -48,7 +48,7 @@ void module::add_type(type t)
 	_pimpl->add_type(t);
 }
 
-void module::add_factory(type f, const type t)
+void module::add_factory(type t, type f)
 {
 	_pimpl->add_factory(t, f);
 }

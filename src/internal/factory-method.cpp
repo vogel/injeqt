@@ -74,7 +74,7 @@ bool operator != (const factory_method &x, const factory_method &y)
 	return !(x == y);
 }
 
-factory_method make_factory_method(const type &f, const type &t)
+factory_method make_factory_method(const type &t, const type &f)
 {
 	auto meta_object = f.meta_object();
 	auto method_count = meta_object->methodCount();
