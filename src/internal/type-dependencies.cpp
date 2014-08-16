@@ -38,5 +38,20 @@ const dependencies & type_dependencies::dependency_list() const
 	return _dependency_list;
 }
 
+bool operator == (const type_dependencies &x, const type_dependencies &y)
+{
+	if (x.dependent_type() != y.dependent_type())
+		return false;
+
+	if (x.dependency_list() != y.dependency_list())
+		return false;
+
+	return true;
+}
+
+bool operator != (const type_dependencies &x, const type_dependencies &y)
+{
+	return !(x == y);
+}
 
 }}

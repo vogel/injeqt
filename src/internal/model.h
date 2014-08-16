@@ -48,4 +48,7 @@ private:
 
 };
 
+bool operator == (const model &x, const model &y);
+bool operator != (const model &x, const model &y);
+
 }}

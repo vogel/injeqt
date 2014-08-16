@@ -257,10 +257,7 @@ typename sorted_unique_vector<K, V, KeyExtractor>::const_iterator end(const sort
 template<typename K, typename V, K (*KeyExtractor)(const V &)>
 bool operator == (const sorted_unique_vector<K, V, KeyExtractor> &x, const sorted_unique_vector<K, V, KeyExtractor> &y)
 {
-	if (x.size() != y.size())
-		return false;
-
-	return std::equal(begin(x), end(x), begin(y));
+	return x.content() == y.content();
 }
 
 template<typename K, typename V, K (*KeyExtractor)(const V &)>

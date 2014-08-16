@@ -54,4 +54,20 @@ const types_dependencies & model::mapped_dependencies() const
 	return _mapped_dependencies;
 }
 
+bool operator == (const model &x, const model &y)
+{
+	if (x.available_types() != y.available_types())
+		return false;
+
+	if (x.mapped_dependencies() != y.mapped_dependencies())
+		return false;
+
+	return true;
+}
+
+bool operator != (const model &x, const model &y)
+{
+	return !(x == y);
+}
+
 }}

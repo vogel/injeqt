@@ -41,4 +41,7 @@ private:
 
 };
 
+bool operator == (const type_dependencies &x, const type_dependencies &y);
+bool operator != (const type_dependencies &x, const type_dependencies &y);
+
 }}
