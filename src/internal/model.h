@@ -32,6 +32,7 @@ namespace injeqt { namespace internal {
 DEFINE_EXCEPTION(model_exception, injeqt_exception);
 DEFINE_EXCEPTION(ambiguous_type_exception, model_exception);
 DEFINE_EXCEPTION(unresolable_dependency_exception, model_exception);
+DEFINE_EXCEPTION(type_not_in_model_exception, model_exception);
 
 class model
 {
@@ -42,6 +43,8 @@ public:
 
 	const implemented_by_mapping & available_types() const;
 	const types_dependencies & mapped_dependencies() const;
+
+	type_dependencies get_dependencies(const type &t) const;
 
 private:
 	implemented_by_mapping _available_types;

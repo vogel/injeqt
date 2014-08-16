@@ -59,6 +59,15 @@ const types_dependencies & model::mapped_dependencies() const
 	return _mapped_dependencies;
 }
 
+type_dependencies model::get_dependencies(const type &t) const
+{
+	auto available_it = _available_types.get(t);
+	if (available_it == end(_available_types))
+		throw type_not_in_model_exception{t.name()};
+
+	return *_mapped_dependencies.get(available_it->implementation_type());
+}
+
 bool operator == (const model &x, const model &y)
 {
 	if (x.available_types() != y.available_types())

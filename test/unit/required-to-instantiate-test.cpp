@@ -194,7 +194,7 @@ required_to_instantiate_test::required_to_instantiate_test() :
 
 void required_to_instantiate_test::should_throw_when_type_not_in_mapping()
 {
-	expect<type_not_mapped_exception>([&]{
+	expect<type_not_in_model_exception>([&]{
 		auto result = required_to_instantiate(type_1_type, empty_model, {});
 	});
 }

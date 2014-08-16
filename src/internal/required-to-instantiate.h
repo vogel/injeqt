@@ -29,8 +29,6 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
-
 types required_to_instantiate(const type &type_to_instantiate, const model &types_model, const implementations &objects);
 
 }}
