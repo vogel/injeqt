@@ -28,7 +28,11 @@
 
 namespace injeqt { namespace internal {
 
-types required_to_instantiate(const type &type_to_instantiate, const implemented_by_mapping &available_types, const implementations &objects)
+types required_to_instantiate(
+	const type &type_to_instantiate,
+	const implemented_by_mapping &available_types,
+	const types_dependencies &mapped_dependencies,
+	const implementations &objects)
 {
 	auto result = std::vector<type>{};
 	auto future_available = std::set<type>{};
@@ -53,7 +57,7 @@ types required_to_instantiate(const type &type_to_instantiate, const implemented
 
 		result.push_back(current_implementation_type);
 
-		auto dependencies = make_validated_dependencies(current_implementation_type);
+		auto dependencies = mapped_dependencies.get(current_implementation_type)->dependency_list();
 		for (auto &&dependency : dependencies)
 			interfaces_to_check.push_back(dependency.required_type());
 	}

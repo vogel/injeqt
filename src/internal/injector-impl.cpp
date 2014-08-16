@@ -80,7 +80,7 @@ QObject * injector_impl::get(const type &interface_type)
 
 implementations injector_impl::objects_with(implementations objects, const type &implementation_type)
 {
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _available_types, objects);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _available_types, _dependencies, objects);
 	return objects_with(objects, types_to_instantiate);
 }
 

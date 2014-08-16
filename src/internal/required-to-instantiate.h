@@ -24,6 +24,7 @@
 #include "implemented-by-mapping.h"
 #include "injeqt.h"
 #include "types.h"
+#include "types-dependencies.h"
 
 using namespace injeqt::v1;
 
@@ -31,6 +32,10 @@ namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
 
-types required_to_instantiate(const type &type_to_instantiate, const implemented_by_mapping &available_types, const implementations &objects);
+types required_to_instantiate(
+	const type &type_to_instantiate,
+	const implemented_by_mapping &available_types,
+	const types_dependencies &mapped_dependencies,
+	const implementations &objects);
 
 }}
