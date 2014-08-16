@@ -20,16 +20,28 @@
 
 #include "model.h"
 
+#include "type-relations.h"
+
 namespace injeqt { namespace internal {
 
 model::model()
 {
 }
 
-model::model(implemented_by_mapping available_types, types_dependencies mapped_dependencies) :
-	_available_types{std::move(available_types)},
-	_mapped_dependencies{std::move(mapped_dependencies)}
+model::model(const std::vector<type> &all_types)
 {
+	auto relations = make_type_relations(all_types);
+
+	for (auto &&t : all_types)
+		if (relations.ambiguous().contains(t))
+			throw ambiguous_type_exception{t.name()};
+
+	auto all_dependencies = std::vector<type_dependencies>{};
+	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
+		[](const implemented_by &ib){ return type_dependencies{ib.implementation_type()}; });
+
+	_available_types = relations.unique();
+	_mapped_dependencies = types_dependencies{all_dependencies};
 }
 
 const implemented_by_mapping & model::available_types() const

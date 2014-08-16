@@ -20,8 +20,6 @@
 
 #include "injector-impl.h"
 
-#include "default-constructor-method.h"
-#include "dependencies.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
@@ -30,7 +28,6 @@
 #include "required-to-instantiate.h"
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"
-#include "type-relations.h"
 
 namespace injeqt { namespace internal {
 // TODO: tests!!
@@ -49,17 +46,7 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	auto all_types = std::vector<type>{};
 	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(all_types),
 		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
-	auto relations = make_type_relations(all_types);
-
-	for (auto &&t : all_types)
-		if (relations.ambiguous().contains(t))
-			throw ambiguous_type_configured{t.name()};
-
-	auto all_dependencies = std::vector<type_dependencies>{};
-	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
-		[](const implemented_by &ib){ return type_dependencies{ib.implementation_type()}; });
-
-	_model = model{relations.unique(), types_dependencies{all_dependencies}};
+	_model = model{all_types};
 }
 
 QObject * injector_impl::get(const type &interface_type)
