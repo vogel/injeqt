@@ -38,7 +38,10 @@ void module_impl::add_ready_object(type t, QObject *object)
 
 void module_impl::add_type(type t)
 {
-	add_provider(std::unique_ptr<provider>{new provider_by_default_constructor{make_default_constructor_method(std::move(t))}});
+	auto p = std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(std::move(t))}};
+	validate(*p.get());
+
+	add_provider(std::move(p));
 }
 
 void module_impl::add_factory(type t, const type f)

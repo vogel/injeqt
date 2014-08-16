@@ -39,10 +39,14 @@ public:
 	virtual QObject * create(injector_impl &i) override;
 	virtual types required_types() const { return types{}; }
 
+	const default_constructor_method & constructor() const;
+
 private:
 	default_constructor_method _constructor;
 	std::unique_ptr<QObject> _object;
 
 };
+
+void validate(const provider_by_default_constructor &pbdc);
 
 }}

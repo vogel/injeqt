@@ -33,12 +33,22 @@ const type & provider_by_default_constructor::created_type() const
 	return _constructor.object_type();
 }
 
+const default_constructor_method & provider_by_default_constructor::constructor() const
+{
+	return _constructor;
+}
+
 QObject * provider_by_default_constructor::create(injector_impl &)
 {
 	// todo: thread safety
 	if (!_object)
 		_object = _constructor.invoke();
 	return _object.get();
+}
+
+void validate(const provider_by_default_constructor &pbdc)
+{
+	validate(pbdc.constructor());
 }
 
 }}

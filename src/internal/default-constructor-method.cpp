@@ -50,14 +50,7 @@ void validate(const default_constructor_method &d)
 	if (d.meta_method().parameterCount() != 0)
 		throw invalid_default_constructor_exception{};
 
-	try
-	{
-		validate(d.object_type());
-	}
-	catch (invalid_type_exception &e)
-	{
-		throw invalid_default_constructor_exception{};
-	}
+	validate(d.object_type());
 }
 
 bool operator == (const default_constructor_method &x, const default_constructor_method &y)
