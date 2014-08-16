@@ -44,19 +44,17 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	auto all_providers = std::vector<std::unique_ptr<provider>>{};
 	for (auto &&module : _modules)
 		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(all_providers));
-
-	auto all_types = std::vector<type>{};
-	std::transform(std::begin(all_providers), std::end(all_providers), std::back_inserter(all_types),
-		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
-
 	_available_providers = providers{std::move(all_providers)};
 
+	auto all_types = std::vector<type>{};
+	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(all_types),
+		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
 	auto relations = make_type_relations(all_types);
+	_available_types = relations.unique();
+
 	for (auto &&t : all_types)
 		if (relations.ambiguous().contains(t))
 			throw ambiguous_type_configured{t.name()};
-
-	_available_types = relations.unique();
 }
 
 QObject * injector_impl::get(const type &interface_type)
@@ -70,14 +68,9 @@ QObject * injector_impl::get(const type &interface_type)
 	if (object_it != end(_objects))
 		return object_it->object();
 
+	// throws if object of implementation_type was not created
 	_objects = objects_with(_objects, implementation_type);
-
-	// TODO: if we dont have the object, throw exception
-	auto object_it_2 = _objects.get(implementation_type);
-	if (object_it_2 != end(_objects))
-		return object_it_2->object();
-	else
-		return nullptr;
+	return _objects.get(implementation_type)->object();
 }
 
 implementations injector_impl::objects_with(implementations objects, const type &implementation_type)
@@ -107,7 +100,8 @@ implementations injector_impl::objects_with(implementations objects, const types
 
 			if (instance)
 				objects_to_resolve.emplace_back(type_to_instantiate, instance);
-			else {} // THROW
+			else
+				throw type_not_instantiated_exception{type_to_instantiate.name()};
 		}
 
 	objects.merge(implementations{objects_to_resolve});
