@@ -46,6 +46,7 @@ public:
 
 	const type & object_type() const;
 	const type & result_type() const;
+	const QMetaMethod & meta_method() const;
 
 	std::unique_ptr<QObject> invoke(QObject *on) const;
 
@@ -55,6 +56,8 @@ private:
 	QMetaMethod _meta_method;
 
 };
+
+void validate (const factory_method &fm);
 
 bool operator == (const factory_method &x, const factory_method &y);
 bool operator != (const factory_method &x, const factory_method &y);

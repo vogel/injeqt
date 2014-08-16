@@ -29,21 +29,6 @@ factory_method::factory_method(QMetaMethod meta_method) :
 	_result_type{QMetaType::metaObjectForType(meta_method.returnType())},
 	_meta_method{std::move(meta_method)}
 {
-	if (meta_method.methodType() != QMetaMethod::Method &&
-		meta_method.methodType() != QMetaMethod::Slot)
-		throw invalid_factory_method_exception{};
-	if (meta_method.parameterCount() != 0)
-		throw invalid_factory_method_exception{};
-
-	try
-	{
-		validate(_object_type);
-		validate(_result_type);
-	}
-	catch (invalid_type_exception &e)
-	{
-		throw invalid_factory_method_exception{};
-	}
 }
 
 const type & factory_method::object_type() const
@@ -56,11 +41,28 @@ const type & factory_method::result_type() const
 	return _result_type;
 }
 
+const QMetaMethod & factory_method::meta_method() const
+{
+	return _meta_method;
+}
+
 std::unique_ptr<QObject> factory_method::invoke(QObject *on) const
 {
 	QObject *result = nullptr;
 	_meta_method.invoke(on, QReturnArgument<QObject *>((_result_type.name() + "*").c_str(), result)); // TODO: check for false result
 	return std::unique_ptr<QObject>{result};
+}
+
+void validate(const factory_method &fm)
+{
+	if (fm.meta_method().methodType() != QMetaMethod::Method &&
+		fm.meta_method().methodType() != QMetaMethod::Slot)
+		throw invalid_factory_method_exception{};
+	if (fm.meta_method().parameterCount() != 0)
+		throw invalid_factory_method_exception{};
+
+	validate(fm.object_type());
+	validate(fm.result_type());
 }
 
 bool operator == (const factory_method &x, const factory_method &y)

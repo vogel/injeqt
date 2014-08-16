@@ -105,29 +105,29 @@ private slots:
 
 void factory_method_test::should_throw_when_created_with_empty_method()
 {
-	expect<invalid_factory_method_exception>([&]{
-		factory_method{QMetaMethod{}};
+	expect<invalid_type_exception>([&]{
+		make_validated<factory_method>(QMetaMethod{});
 	});
 }
 
 void factory_method_test::should_throw_when_created_with_regular_method()
 {
-	expect<invalid_factory_method_exception>([&]{
-		factory_method{make_method<no_factory>("regular_method()")};
+	expect<invalid_type_exception>([&]{
+		make_validated<factory_method>(make_method<no_factory>("regular_method()"));
 	});
 }
 
 void factory_method_test::should_throw_when_created_with_no_factory_method()
 {
-	expect<invalid_factory_method_exception>([&]{
-		factory_method{make_method<factory_invalid_result_type>("create_result_object()")};
+	expect<invalid_type_exception>([&]{
+		make_validated<factory_method>(make_method<factory_invalid_result_type>("create_result_object()"));
 	});
 }
 
 void factory_method_test::should_throw_when_created_with_not_invokable_factory_method()
 {
 	expect<method_not_found_exception>([&]{
-		factory_method{make_method<factory_not_invokable>("create_result_object()")};
+		make_validated<factory_method>(make_method<factory_not_invokable>("create_result_object()"));
 	});
 	expect<no_factory_method_exception>([&]{
 		make_factory_method<result_object, factory_not_invokable>();
