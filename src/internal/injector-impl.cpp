@@ -109,7 +109,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
-		auto to_resolve = make_dependencies(object_to_resolve.interface_type());
+		auto to_resolve = make_validated_dependencies(object_to_resolve.interface_type());
 		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
 		if (!resolved_dependencies.unresolved.empty())
 			throw unresolved_dependencies_exception{};

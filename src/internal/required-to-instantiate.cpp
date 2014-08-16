@@ -53,7 +53,7 @@ types required_to_instantiate(const type &type_to_instantiate, const implemented
 
 		result.push_back(current_implementation_type);
 
-		auto dependencies = make_dependencies(current_implementation_type);
+		auto dependencies = make_validated_dependencies(current_implementation_type);
 		for (auto &&dependency : dependencies)
 			interfaces_to_check.push_back(dependency.required_type());
 	}

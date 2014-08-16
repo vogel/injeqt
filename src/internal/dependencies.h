@@ -44,6 +44,6 @@ DEFINE_EXCEPTION(dependency_on_self_exception, dependency_exception);
 DEFINE_EXCEPTION(dependency_on_subtype_exception, dependency_exception);
 DEFINE_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
 
-dependencies make_dependencies(const type &for_type);
+dependencies make_validated_dependencies(const type &for_type);
 
 }}

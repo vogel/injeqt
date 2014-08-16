@@ -53,7 +53,7 @@ std::vector<setter_method> extract_setters(const type &for_type)
 		if (tag != "INJEQT_SETTER")
 			continue;
 
-		result.emplace_back(make_validated<setter_method>(probably_setter));
+		result.emplace_back(setter_method{probably_setter});
 	}
 
 	return result;
@@ -72,7 +72,7 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 
 }
 
-dependencies make_dependencies(const type &for_type)
+dependencies make_validated_dependencies(const type &for_type)
 try
 {
 	auto interfaces = extract_interfaces(for_type);
@@ -100,6 +100,9 @@ try
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),
 		[](const setter_method &setter){ return dependency{setter}; }
 	);
+
+	for (auto &&d : result)
+		validate(d);
 
 	return dependencies{result};
 }
