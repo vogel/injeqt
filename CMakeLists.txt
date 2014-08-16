@@ -56,6 +56,7 @@ set(INJEQT_SRCS
 	src/internal/resolved-dependency.cpp
 	src/internal/resolve-dependencies.cpp
 	src/internal/setter-method.cpp
+	src/internal/type-dependencies.cpp
 	src/internal/type-relations.cpp
 )
 
