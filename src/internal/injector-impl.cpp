@@ -49,9 +49,14 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	std::transform(std::begin(all_providers), std::end(all_providers), std::back_inserter(all_types),
 		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
 
-	// TODO: check for duplicates and stuff
 	_available_providers = providers{std::move(all_providers)};
-	_available_types = make_type_relations(all_types).unique();
+
+	auto relations = make_type_relations(all_types);
+	for (auto &&t : all_types)
+		if (relations.ambiguous().contains(t))
+			throw ambiguous_type_configured{t.name()};
+
+	_available_types = relations.unique();
 }
 
 QObject * injector_impl::get(const type &interface_type)

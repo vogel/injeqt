@@ -36,6 +36,7 @@ namespace injeqt { namespace v1 {
 namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(injector_exception, injeqt_exception);
+DEFINE_EXCEPTION(ambiguous_type_configured, injector_exception);
 DEFINE_EXCEPTION(type_not_configured_exception, injector_exception);
 DEFINE_EXCEPTION(unresolved_dependencies_exception, injector_exception);
 
