@@ -53,7 +53,7 @@ std::vector<setter_method> extract_setters(const type &for_type)
 		if (tag != "INJEQT_SETTER")
 			continue;
 
-		result.emplace_back(setter_method{probably_setter});
+		result.emplace_back(make_validated<setter_method>(probably_setter));
 	}
 
 	return result;

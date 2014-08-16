@@ -44,6 +44,8 @@ public:
 
 	const type & object_type() const;
 	const type & parameter_type() const;
+	const QMetaMethod & meta_method() const;
+
 	std::string signature() const;
 
 	bool invoke(QObject *on, QObject *parameter) const;
@@ -55,13 +57,15 @@ private:
 
 };
 
+void validate(const setter_method &s);
+
 bool operator == (const setter_method &x, const setter_method &y);
 bool operator != (const setter_method &x, const setter_method &y);
 
 template<typename T>
 inline setter_method make_setter_method(const std::string &signature)
 {
-	return setter_method{T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()))};
+	return make_validated<setter_method>(T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data())));
 }
 
 }}

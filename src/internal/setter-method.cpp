@@ -40,18 +40,6 @@ setter_method::setter_method(QMetaMethod meta_method) :
 	_parameter_type{QMetaType::metaObjectForType(meta_method.parameterType(0))},
 	_meta_method{std::move(meta_method)}
 {
-	try
-	{
-		validate(_object_type);
-		validate(_parameter_type);
-	}
-	catch (invalid_type_exception &e)
-	{
-		throw invalid_setter_exception(exception_message(meta_method));
-	}
-
-	if (meta_method.parameterCount() != 1)
-		throw setter_too_many_parameters_exception(exception_message(meta_method));
 }
 
 const type & setter_method::object_type() const
@@ -62,6 +50,11 @@ const type & setter_method::object_type() const
 const type & setter_method::parameter_type() const
 {
 	return _parameter_type;
+}
+
+const QMetaMethod & setter_method::meta_method() const
+{
+	return _meta_method;
 }
 
 std::string setter_method::signature() const
@@ -87,6 +80,22 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 	return _meta_method.invoke(on, Q_ARG(QObject *, parameter));
 }
 
+void validate(const setter_method &s)
+{
+	try
+	{
+		validate(s.object_type());
+		validate(s.parameter_type());
+	}
+	catch (invalid_type_exception &e)
+	{
+		throw invalid_setter_exception(exception_message(s.meta_method()));
+	}
+
+	if (s.meta_method().parameterCount() != 1)
+		throw setter_too_many_parameters_exception(exception_message(s.meta_method()));
+}
+
 bool operator == (const setter_method &x, const setter_method &y)
 {
 	if (x.object_type() != y.object_type())
@@ -95,7 +104,7 @@ bool operator == (const setter_method &x, const setter_method &y)
 	if (x.parameter_type() != y.parameter_type())
 		return false;
 
-	if (x.signature() != y.signature())
+	if (x.meta_method() != y.meta_method())
 		return false;
 
 	return true;

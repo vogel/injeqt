@@ -95,7 +95,7 @@ setter_method_test::setter_method_test() :
 void setter_method_test::should_throw_when_created_with_empty_method()
 {
 	expect<invalid_setter_exception>([]{
-		auto setter = setter_method{{}};
+		auto setter = make_validated<setter_method>(QMetaMethod{});
 	});
 }
 
