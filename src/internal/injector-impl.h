@@ -25,6 +25,7 @@
 #include "injeqt.h"
 #include "providers.h"
 #include "type.h"
+#include "types-dependencies.h"
 
 #include <vector>
 #include <QtCore/QObject>
@@ -56,6 +57,7 @@ private:
 	providers _available_providers;
 	implemented_by_mapping _available_types;
 	implementations _objects;
+	types_dependencies _dependencies;
 
 	implementations objects_with(implementations objects, const type &implementation_type);
 	implementations objects_with(implementations objects, const types &implementation_types);

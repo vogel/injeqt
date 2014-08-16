@@ -55,6 +55,11 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	for (auto &&t : all_types)
 		if (relations.ambiguous().contains(t))
 			throw ambiguous_type_configured{t.name()};
+
+	auto all_dependencies = std::vector<type_dependencies>{};
+	std::transform(std::begin(_available_types), std::end(_available_types), std::back_inserter(all_dependencies),
+		[](const implemented_by &ib){ return type_dependencies{ib.implementation_type()}; });
+	_dependencies = types_dependencies{all_dependencies};
 }
 
 QObject * injector_impl::get(const type &interface_type)
@@ -108,7 +113,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
-		auto to_resolve = make_validated_dependencies(object_to_resolve.interface_type());
+		auto to_resolve = _dependencies.get(object_to_resolve.interface_type())->dependency_list();
 		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
 		if (!resolved_dependencies.unresolved.empty())
 			throw unresolved_dependencies_exception{};
