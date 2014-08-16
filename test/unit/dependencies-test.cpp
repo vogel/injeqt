@@ -297,14 +297,14 @@ void dependencies_test::should_find_dependencies_with_common_superclass()
 
 void dependencies_test::should_fail_when_too_many_parameters()
 {
-	expect<dependency_too_many_parameters_exception>([&]{
+	expect<too_many_setter_parameters_exception>([&]{
 		auto dependencies = make_validated_dependencies(too_many_parameters_invalid_injected_type_type);
 	});
 }
 
 void dependencies_test::should_fail_when_type_not_qobject()
 {
-	expect<dependency_not_qobject_exception>([&]{
+	expect<invalid_setter_exception>([&]{
 		auto dependencies = make_validated_dependencies(non_qobject_invalid_injected_type_type);
 	});
 }

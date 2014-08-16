@@ -31,8 +31,8 @@ using namespace injeqt::v1;
 namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(setter_exception, injeqt_exception);
-DEFINE_EXCEPTION(setter_too_many_parameters_exception, setter_exception);
 DEFINE_EXCEPTION(invalid_setter_exception, setter_exception);
+DEFINE_EXCEPTION(too_many_setter_parameters_exception, invalid_setter_exception);
 DEFINE_EXCEPTION(invoked_on_wrong_object_exception, setter_exception);
 DEFINE_EXCEPTION(invoked_with_wrong_object_exception, setter_exception);
 

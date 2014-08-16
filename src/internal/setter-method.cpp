@@ -93,7 +93,7 @@ void validate(const setter_method &s)
 	}
 
 	if (s.meta_method().parameterCount() != 1)
-		throw setter_too_many_parameters_exception(exception_message(s.meta_method()));
+		throw too_many_setter_parameters_exception(exception_message(s.meta_method()));
 }
 
 bool operator == (const setter_method &x, const setter_method &y)

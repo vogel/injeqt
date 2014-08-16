@@ -73,7 +73,6 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 }
 
 dependencies make_validated_dependencies(const type &for_type)
-try
 {
 	auto interfaces = extract_interfaces(for_type);
 	auto setters = extract_setters(for_type);
@@ -105,14 +104,6 @@ try
 		validate(d);
 
 	return dependencies{result};
-}
-catch (setter_too_many_parameters_exception &e)
-{
-	throw dependency_too_many_parameters_exception();
-}
-catch (invalid_setter_exception &e)
-{
-	throw dependency_not_qobject_exception();
 }
 
 }}
