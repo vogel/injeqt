@@ -56,6 +56,9 @@ private:
 	implementations _objects;
 	model _model;
 
+	providers extract_providers(const std::vector<std::unique_ptr<module>> &modules) const;
+	model create_model(const providers &all_providers) const;
+
 	implementations objects_with(implementations objects, const type &implementation_type);
 	implementations objects_with(implementations objects, const types &implementation_types);
 

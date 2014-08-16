@@ -36,17 +36,26 @@ injector_impl::injector_impl()
 }
 
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
-	_modules{std::move(modules)}
+	_modules{std::move(modules)},
+	_available_providers(extract_providers(_modules)),
+	_model(create_model(_available_providers))
 {
-	auto all_providers = std::vector<std::unique_ptr<provider>>{};
-	for (auto &&module : _modules)
-		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(all_providers));
-	_available_providers = providers{std::move(all_providers)};
+}
 
-	auto all_types = std::vector<type>{};
-	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(all_types),
+providers injector_impl::extract_providers(const std::vector<std::unique_ptr<module>> &modules) const
+{
+	auto result = std::vector<std::unique_ptr<provider>>{};
+	for (auto &&module : _modules)
+		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(result));
+	return providers{std::move(result)};
+}
+
+model injector_impl::create_model(const providers &all_providers) const
+{
+	auto result = std::vector<type>{};
+	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
 		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
-	_model = model{all_types};
+	return model{result};
 }
 
 QObject * injector_impl::get(const type &interface_type)
