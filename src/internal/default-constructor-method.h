@@ -44,6 +44,7 @@ public:
 	explicit default_constructor_method(QMetaMethod meta_method);
 
 	const type & object_type() const;
+	const QMetaMethod & meta_method() const;
 
 	std::unique_ptr<QObject> invoke() const;
 
@@ -52,6 +53,8 @@ private:
 	QMetaMethod _meta_method;
 
 };
+
+void validate(const default_constructor_method &d);
 
 bool operator == (const default_constructor_method &x, const default_constructor_method &y);
 bool operator != (const default_constructor_method &x, const default_constructor_method &y);

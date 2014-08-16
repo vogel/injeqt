@@ -26,19 +26,6 @@ default_constructor_method::default_constructor_method(QMetaMethod meta_method) 
 	_object_type{meta_method.enclosingMetaObject()},
 	_meta_method{std::move(meta_method)}
 {
-	if (meta_method.methodType() != QMetaMethod::Constructor)
-		throw invalid_default_constructor_exception{};
-	if (meta_method.parameterCount() != 0)
-		throw invalid_default_constructor_exception{};
-
-	try
-	{
-		validate(_object_type);
-	}
-	catch (invalid_type_exception &e)
-	{
-		throw invalid_default_constructor_exception{};
-	}
 }
 
 const type & default_constructor_method::object_type() const
@@ -46,14 +33,39 @@ const type & default_constructor_method::object_type() const
 	return _object_type;
 }
 
+const QMetaMethod & default_constructor_method::meta_method() const
+{
+	return _meta_method;
+}
+
 std::unique_ptr<QObject> default_constructor_method::invoke() const
 {
 	return std::unique_ptr<QObject>{_meta_method.enclosingMetaObject()->newInstance()};
 }
 
+void validate(const default_constructor_method &d)
+{
+	if (d.meta_method().methodType() != QMetaMethod::Constructor)
+		throw invalid_default_constructor_exception{};
+	if (d.meta_method().parameterCount() != 0)
+		throw invalid_default_constructor_exception{};
+
+	try
+	{
+		validate(d.object_type());
+	}
+	catch (invalid_type_exception &e)
+	{
+		throw invalid_default_constructor_exception{};
+	}
+}
+
 bool operator == (const default_constructor_method &x, const default_constructor_method &y)
 {
 	if (x.object_type() != y.object_type())
+		return false;
+
+	if (x.meta_method() != y.meta_method())
 		return false;
 
 	return true;
@@ -66,6 +78,8 @@ bool operator != (const default_constructor_method &x, const default_constructor
 
 default_constructor_method make_default_constructor_method(const type &t)
 {
+	validate(t);
+
 	auto meta_object = t.meta_object();
 	auto constructor_count = meta_object->constructorCount();
 	for (decltype(constructor_count) i = 0; i < constructor_count; i++)
