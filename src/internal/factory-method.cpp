@@ -24,8 +24,7 @@
 
 namespace injeqt { namespace internal {
 
-factory_method::factory_method(QMetaMethod meta_method)
-try :
+factory_method::factory_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_result_type{QMetaType::metaObjectForType(meta_method.returnType())},
 	_meta_method{std::move(meta_method)}
@@ -35,10 +34,16 @@ try :
 		throw invalid_factory_method_exception{};
 	if (meta_method.parameterCount() != 0)
 		throw invalid_factory_method_exception{};
-}
-catch (invalid_type_exception &e)
-{
-	throw invalid_factory_method_exception{};
+
+	try
+	{
+		validate(_object_type);
+		validate(_result_type);
+	}
+	catch (invalid_type_exception &e)
+	{
+		throw invalid_factory_method_exception{};
+	}
 }
 
 const type & factory_method::object_type() const

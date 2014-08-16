@@ -35,18 +35,23 @@ std::string exception_message(const QMetaMethod &method)
 
 }
 
-setter_method::setter_method(QMetaMethod meta_method)
-try :
+setter_method::setter_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_parameter_type{QMetaType::metaObjectForType(meta_method.parameterType(0))},
 	_meta_method{std::move(meta_method)}
 {
+	try
+	{
+		validate(_object_type);
+		validate(_parameter_type);
+	}
+	catch (invalid_type_exception &e)
+	{
+		throw invalid_setter_exception(exception_message(meta_method));
+	}
+
 	if (meta_method.parameterCount() != 1)
 		throw setter_too_many_parameters_exception(exception_message(meta_method));
-}
-catch (invalid_type_exception &e)
-{
-	throw invalid_setter_exception(exception_message(meta_method));
 }
 
 const type & setter_method::object_type() const

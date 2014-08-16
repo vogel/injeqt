@@ -22,8 +22,7 @@
 
 namespace injeqt { namespace internal {
 
-default_constructor_method::default_constructor_method(QMetaMethod meta_method)
-try :
+default_constructor_method::default_constructor_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_meta_method{std::move(meta_method)}
 {
@@ -31,10 +30,15 @@ try :
 		throw invalid_default_constructor_exception{};
 	if (meta_method.parameterCount() != 0)
 		throw invalid_default_constructor_exception{};
-}
-catch (invalid_type_exception &e)
-{
-	throw invalid_default_constructor_exception{};
+
+	try
+	{
+		validate(_object_type);
+	}
+	catch (invalid_type_exception &e)
+	{
+		throw invalid_default_constructor_exception{};
+	}
 }
 
 const type & default_constructor_method::object_type() const

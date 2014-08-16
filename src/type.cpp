@@ -27,8 +27,6 @@ namespace injeqt { namespace v1 {
 type::type(const QMetaObject *meta_object) :
 	_meta_object{meta_object}
 {
-	if (!_meta_object)
-		throw invalid_type_exception{};
 }
 
 std::string type::name() const
@@ -39,6 +37,14 @@ std::string type::name() const
 const QMetaObject * type::meta_object() const
 {
 	return _meta_object;
+}
+
+void validate(const type &t)
+{
+	if (!t.meta_object())
+		throw invalid_type_exception{};
+	if (!t.meta_object()->superClass())
+		throw invalid_type_exception{};
 }
 
 bool operator == (const type &x, const type &y)

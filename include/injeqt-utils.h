@@ -20,45 +20,16 @@
 
 #pragma once
 
-#include "injeqt-exception.h"
-#include "injeqt-utils.h"
 #include "injeqt.h"
-
-#include <QtCore/QMetaType>
 
 namespace injeqt { namespace v1 {
 
-DEFINE_EXCEPTION(type_exception, injeqt_exception);
-DEFINE_EXCEPTION(invalid_type_exception, type_exception);
-
-class INJEQT_API type final
+template<typename T, typename ...Args>
+T make_validated(Args&& ...args)
 {
-
-public:
-	explicit type(const QMetaObject * meta_object);
-
-	std::string name() const;
-	const QMetaObject * meta_object() const;
-
-private:
-	const QMetaObject * _meta_object;
-
-};
-
-INJEQT_API void validate(const type &t);
-
-INJEQT_API bool operator == (const type &x, const type &y);
-INJEQT_API bool operator != (const type &x, const type &y);
-INJEQT_API bool operator < (const type &x, const type &y);
-INJEQT_API bool operator > (const type &x, const type &y);
-INJEQT_API bool operator <= (const type &x, const type &y);
-INJEQT_API bool operator >= (const type &x, const type &y);
-
-template<typename T>
-inline type make_type()
-{
-	qRegisterMetaType<T *>();
-	return make_validated<type>(&T::staticMetaObject);
+	T result{std::forward<Args>(args)...};
+	validate(result);
+	return result;
 }
 
 }}
