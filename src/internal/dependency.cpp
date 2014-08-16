@@ -37,6 +37,11 @@ const setter_method & dependency::setter() const
 	return _setter;
 }
 
+void validate(const dependency &d)
+{
+	validate(d.setter());
+}
+
 bool operator == (const dependency &x, const dependency &y)
 {
 	if (x.setter() != y.setter())

@@ -42,6 +42,8 @@ private:
 
 };
 
+void validate(const dependency &d);
+
 bool operator == (const dependency &x, const dependency &y);
 bool operator != (const dependency &x, const dependency &y);
 
