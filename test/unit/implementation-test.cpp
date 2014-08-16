@@ -84,14 +84,14 @@ implementation_test::implementation_test() :
 void implementation_test::should_throw_when_object_is_null()
 {
 	expect<invalid_implementation_availability_exception>([&]{
-		auto i = implementation{type_1_type, nullptr};
+		auto i = make_validated<implementation>(type_1_type, nullptr);
 	});
 }
 
 void implementation_test::should_accept_object_of_type()
 {
 	auto object = make_object<type_1>();
-	auto i = implementation{type_1_type, object.get()};
+	auto i = make_validated<implementation>(type_1_type, object.get());
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(object.get(), i.object());
@@ -100,7 +100,7 @@ void implementation_test::should_accept_object_of_type()
 void implementation_test::should_accept_object_of_sub_type()
 {
 	auto object = make_object<type_1_subtype_1>();
-	auto i = implementation{type_1_type, object.get()};
+	auto i = make_validated<implementation>(type_1_type, object.get());
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(object.get(), i.object());
@@ -109,7 +109,7 @@ void implementation_test::should_accept_object_of_sub_type()
 void implementation_test::should_accept_object_of_sub_sub_type()
 {
 	auto object = make_object<type_1_subtype_1_subtype_1>();
-	auto i = implementation{type_1_type, object.get()};
+	auto i = make_validated<implementation>(type_1_type, object.get());
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(object.get(), i.object());
@@ -119,7 +119,7 @@ void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
 	expect<invalid_interface_type_exception>([&]{
-		auto i = implementation{type_1_subtype_1_subtype_1_type, object.get()};
+		auto i = make_validated<implementation>(type_1_subtype_1_subtype_1_type, object.get());
 	});
 }
 
@@ -127,7 +127,7 @@ void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
 	expect<invalid_interface_type_exception>([&]{
-		auto i = implementation{type_2_type, object.get()};
+		auto i = make_validated<implementation>(type_2_type, object.get());
 	});
 }
 

@@ -49,6 +49,8 @@ private:
 
 };
 
+void validate(const implementation &i);
+
 bool operator == (const implementation &x, const implementation &y);
 bool operator != (const implementation &x, const implementation &y);
 

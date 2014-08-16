@@ -30,15 +30,6 @@ implementation::implementation(type interface_type, QObject *object) :
 	_interface_type{std::move(interface_type)},
 	_object{object}
 {
-	if (!object)
-		throw invalid_implementation_availability_exception{};
-
-	if (object) // TODO: what about beliving creators?
-	{
-		auto implements = extract_interfaces(type{object->metaObject()});
-		if (!implements.contains(interface_type))
-			throw invalid_interface_type_exception{};
-	}
 }
 
 const type & implementation::interface_type() const
@@ -49,6 +40,16 @@ const type & implementation::interface_type() const
 QObject * implementation::object() const
 {
 	return _object;
+}
+
+void validate(const implementation &i)
+{
+	if (!i.object())
+		throw invalid_implementation_availability_exception{};
+
+	auto implements = extract_interfaces(type{i.object()->metaObject()});
+	if (!implements.contains(i.interface_type()))
+		throw invalid_interface_type_exception{};
 }
 
 bool operator == (const implementation &x, const implementation &y)
