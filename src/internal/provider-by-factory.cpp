@@ -38,6 +38,11 @@ const type & provider_by_factory::created_type() const
 	return _factory.result_type();
 }
 
+const factory_method & provider_by_factory::factory() const
+{
+	return _factory;
+}
+
 QObject * provider_by_factory::create(injector_impl &i)
 {
 	if (!_object)
@@ -52,6 +57,11 @@ QObject * provider_by_factory::create(injector_impl &i)
 types provider_by_factory::required_types() const
 {
 	return types{_factory.object_type()};
+}
+
+void validate(const provider_by_factory &pbf)
+{
+	validate(pbf.factory());
 }
 
 }}

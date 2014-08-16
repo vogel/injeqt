@@ -43,7 +43,10 @@ void module_impl::add_type(type t)
 
 void module_impl::add_factory(type t, const type f)
 {
-	add_provider(std::unique_ptr<provider>{new provider_by_factory{make_factory_method(std::move(t), std::move(f))}});
+	auto p = std::unique_ptr<provider_by_factory>{new provider_by_factory{make_factory_method(std::move(t), std::move(f))}};
+	validate(*p.get());
+
+	add_provider(std::move(p));
 }
 
 void module_impl::add_provider(std::unique_ptr<provider> c)

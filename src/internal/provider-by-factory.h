@@ -39,10 +39,14 @@ public:
 	virtual QObject * create(injector_impl &i) override;
 	virtual types required_types() const;
 
+	const factory_method & factory() const;
+
 private:
 	factory_method _factory;
 	std::unique_ptr<QObject> _object;
 
 };
+
+void validate(const provider_by_factory &pbf);
 
 }}

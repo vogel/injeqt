@@ -57,7 +57,7 @@ private:
 
 };
 
-void validate (const factory_method &fm);
+void validate(const factory_method &fm);
 
 bool operator == (const factory_method &x, const factory_method &y);
 bool operator != (const factory_method &x, const factory_method &y);
