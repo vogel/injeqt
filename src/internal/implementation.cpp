@@ -44,6 +44,8 @@ QObject * implementation::object() const
 
 void validate(const implementation &i)
 {
+	validate(i.interface_type());
+
 	if (!i.object())
 		throw invalid_implementation_availability_exception{};
 

@@ -30,7 +30,10 @@ namespace injeqt { namespace internal {
 // TODO: tests!!!
 void module_impl::add_ready_object(type t, QObject *object)
 {
-	add_provider(std::unique_ptr<provider>{new provider_ready{implementation{std::move(t), object}}});
+	auto p = std::unique_ptr<provider_ready>{new provider_ready{implementation{std::move(t), object}}};
+	validate(*p.get());
+
+	add_provider(std::move(p));
 }
 
 void module_impl::add_type(type t)

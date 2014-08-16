@@ -25,7 +25,6 @@ namespace injeqt { namespace internal {
 provider_ready::provider_ready(implementation ready_implementation) :
 	_ready_implementation{std::move(ready_implementation)}
 {
-	// TODO: maybe check implementation here, because it is not provided by us?
 }
 
 const type & provider_ready::created_type() const
@@ -33,9 +32,19 @@ const type & provider_ready::created_type() const
 	return _ready_implementation.interface_type();
 }
 
+const implementation & provider_ready::ready_implementation() const
+{
+	return _ready_implementation;
+}
+
 QObject * provider_ready::create(injector_impl &)
 {
 	return _ready_implementation.object();
+}
+
+void validate(const provider_ready &pr)
+{
+	validate(pr.ready_implementation());
 }
 
 }}

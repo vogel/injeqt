@@ -39,9 +39,13 @@ public:
 	virtual QObject * create(injector_impl &i) override;
 	virtual types required_types() const override { return types{}; }
 
+	const implementation & ready_implementation() const;
+
 private:
 	implementation _ready_implementation;
 
 };
+
+void validate(const provider_ready &pr);
 
 }}
