@@ -45,6 +45,8 @@ private:
 
 };
 
+void validate(const implemented_by &ib);
+
 bool operator == (const implemented_by &x, const implemented_by &y);
 bool operator != (const implemented_by &x, const implemented_by &y);
 
