@@ -206,7 +206,7 @@ void model_test::should_create_with_dependencies()
 
 void model_test::should_throw_when_unresolvable_dependency()
 {
-	expect<unresolable_dependency_exception>([&]{
+	expect<unresolvable_dependency_exception>([&]{
 		model{{type_1_subtype_3_type}};
 	});
 }

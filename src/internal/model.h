@@ -31,7 +31,7 @@ namespace injeqt { namespace internal {
 
 DEFINE_EXCEPTION(model_exception, injeqt_exception);
 DEFINE_EXCEPTION(ambiguous_type_exception, model_exception);
-DEFINE_EXCEPTION(unresolable_dependency_exception, model_exception);
+DEFINE_EXCEPTION(unresolvable_dependency_exception, model_exception);
 DEFINE_EXCEPTION(type_not_in_model_exception, model_exception);
 
 class model

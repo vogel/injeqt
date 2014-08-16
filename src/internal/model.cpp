@@ -46,7 +46,7 @@ model::model(const std::vector<type> &all_types)
 	for (auto &&mapped_type_dependency : _mapped_dependencies)
 		for (auto &&dependency : mapped_type_dependency.dependency_list())
 			if (!_available_types.contains_key(dependency.required_type()))
-				throw unresolable_dependency_exception{dependency.required_type().name()};
+				throw unresolvable_dependency_exception{dependency.required_type().name()};
 }
 
 const implemented_by_mapping & model::available_types() const
