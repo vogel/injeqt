@@ -49,6 +49,8 @@ private:
 
 };
 
+void validate(const resolved_dependency &rd);
+
 bool operator == (const resolved_dependency &x, const resolved_dependency &y);
 bool operator != (const resolved_dependency &x, const resolved_dependency &y);
 

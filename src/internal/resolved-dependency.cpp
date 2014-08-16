@@ -26,9 +26,6 @@ resolved_dependency::resolved_dependency(implementation resolved_with, setter_me
 	_resolved_with{std::move(resolved_with)},
 	_setter{std::move(setter)}
 {
-	// TODO: belive our users maybe and do not check?
-	if (_resolved_with.interface_type() != setter.parameter_type())
-		throw non_matching_setter_exception{};
 }
 
 const implementation & resolved_dependency::resolved_with() const
@@ -54,6 +51,15 @@ bool resolved_dependency::apply_on(QObject *on)
 	{
 		throw inavalid_apply_on_object_exception{};
 	}
+}
+
+void validate(const resolved_dependency &rd)
+{
+	validate(rd.resolved_with());
+	validate(rd.setter());
+
+	if (rd.resolved_with().interface_type() != rd.setter().parameter_type())
+		throw non_matching_setter_exception{};
 }
 
 bool operator == (const resolved_dependency &x, const resolved_dependency &y)
