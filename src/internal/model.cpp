@@ -18,19 +18,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include "implementations.h"
-#include "injeqt.h"
 #include "model.h"
-#include "types.h"
-
-using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
+model::model()
+{
+}
 
-types required_to_instantiate(const type &type_to_instantiate, const model &types_model, const implementations &objects);
+model::model(implemented_by_mapping available_types, types_dependencies mapped_dependencies) :
+	_available_types{std::move(available_types)},
+	_mapped_dependencies{std::move(mapped_dependencies)}
+{
+}
+
+const implemented_by_mapping & model::available_types() const
+{
+	return _available_types;
+}
+
+const types_dependencies & model::mapped_dependencies() const
+{
+	return _mapped_dependencies;
+}
 
 }}

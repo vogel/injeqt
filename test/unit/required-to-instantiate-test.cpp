@@ -23,6 +23,7 @@
 #include "extract-interfaces.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"
+#include "model.cpp"
 #include "required-to-instantiate.cpp"
 #include "setter-method.cpp"
 #include "type-dependencies.cpp"
@@ -151,11 +152,9 @@ private:
 	type cyclic_type_2_subtype_1_type;
 	type cyclic_type_3_type;
 	type cyclic_type_3_subtype_1_type;
-	implemented_by_mapping empty_types;
-	implemented_by_mapping simple_types;
-	implemented_by_mapping inheriting_types;
-	types_dependencies simple_types_dependencies;
-	types_dependencies inheriting_types_dependencies;
+	model empty_model;
+	model simple_model;
+	model inheriting_model;
 
 };
 
@@ -172,7 +171,7 @@ required_to_instantiate_test::required_to_instantiate_test() :
 	cyclic_type_2_subtype_1_type{make_type<cyclic_type_2_subtype_1>()},
 	cyclic_type_3_type{make_type<cyclic_type_3>()},
 	cyclic_type_3_subtype_1_type{make_type<cyclic_type_3_subtype_1>()},
-	simple_types{make_type_relations(
+	simple_model{make_type_relations(
 	{
 		type_1_type,
 		type_2_type,
@@ -180,8 +179,17 @@ required_to_instantiate_test::required_to_instantiate_test() :
 		cyclic_type_1_type,
 		cyclic_type_2_type,
 		cyclic_type_3_type
-	}).unique()},
-	inheriting_types{make_type_relations(
+	}).unique(),
+		types_dependencies{{
+			type_dependencies{type_1_type},
+			type_dependencies{type_2_type},
+			type_dependencies{type_3_type},
+			type_dependencies{cyclic_type_1_type},
+			type_dependencies{cyclic_type_2_type},
+			type_dependencies{cyclic_type_3_type}
+		}}
+	},
+	inheriting_model{make_type_relations(
 	{
 		type_1_subtype_1_type,
 		type_2_subtype_1_type,
@@ -189,39 +197,35 @@ required_to_instantiate_test::required_to_instantiate_test() :
 		cyclic_type_1_subtype_1_type,
 		cyclic_type_2_subtype_1_type,
 		cyclic_type_3_subtype_1_type
-	}).unique()}
+	}).unique(),
+		types_dependencies{{
+			type_dependencies{type_1_subtype_1_type},
+			type_dependencies{type_2_subtype_1_type},
+			type_dependencies{type_3_subtype_1_type},
+			type_dependencies{cyclic_type_1_subtype_1_type},
+			type_dependencies{cyclic_type_2_subtype_1_type},
+			type_dependencies{cyclic_type_3_subtype_1_type}
+		}}
+	}
 {
-	simple_types_dependencies.add(type_dependencies{type_1_type});
-	simple_types_dependencies.add(type_dependencies{type_2_type});
-	simple_types_dependencies.add(type_dependencies{type_3_type});
-	simple_types_dependencies.add(type_dependencies{cyclic_type_1_type});
-	simple_types_dependencies.add(type_dependencies{cyclic_type_2_type});
-	simple_types_dependencies.add(type_dependencies{cyclic_type_3_type});
-
-	inheriting_types_dependencies.add(type_dependencies{type_1_subtype_1_type});
-	inheriting_types_dependencies.add(type_dependencies{type_2_subtype_1_type});
-	inheriting_types_dependencies.add(type_dependencies{type_3_subtype_1_type});
-	inheriting_types_dependencies.add(type_dependencies{cyclic_type_1_subtype_1_type});
-	inheriting_types_dependencies.add(type_dependencies{cyclic_type_2_subtype_1_type});
-	inheriting_types_dependencies.add(type_dependencies{cyclic_type_3_subtype_1_type});
 }
 
 void required_to_instantiate_test::should_throw_when_type_not_in_mapping()
 {
 	expect<type_not_mapped_exception>([&]{
-		auto result = required_to_instantiate(type_1_type, empty_types, {}, {});
+		auto result = required_to_instantiate(type_1_type, empty_model, {});
 	});
 }
 
 void required_to_instantiate_test::should_return_type_when_simple_types_and_empty_implementation()
 {
-	auto result = required_to_instantiate(type_1_type, simple_types, simple_types_dependencies, {});
+	auto result = required_to_instantiate(type_1_type, simple_model, {});
 	QCOMPARE(result, types{type_1_type});
 }
 
 void required_to_instantiate_test::should_return_subtype_when_inheriting_types_and_empty_implementation()
 {
-	auto result = required_to_instantiate(type_1_type, inheriting_types, inheriting_types_dependencies, {});
+	auto result = required_to_instantiate(type_1_type, inheriting_model, {});
 	QCOMPARE(result, types{type_1_subtype_1_type});
 }
 
@@ -233,7 +237,7 @@ void required_to_instantiate_test::should_return_nothing_when_simple_types_and_i
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = required_to_instantiate(type_1_type, simple_types, simple_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_1_type, simple_model, available_implementations);
 	QCOMPARE(result, types{});
 }
 
@@ -245,13 +249,13 @@ void required_to_instantiate_test::should_return_nothing_when_inheriting_types_a
 		implementation{type_1_subtype_1_type, type_1_subtype_1_object.get()}
 	};
 
-	auto result = required_to_instantiate(type_1_type, inheriting_types, inheriting_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_1_type, inheriting_model, available_implementations);
 	QCOMPARE(result, types{});
 }
 
 void required_to_instantiate_test::should_return_type_with_dependencies_when_simple_types_and_empty_implementation()
 {
-	auto result = required_to_instantiate(type_2_type, simple_types, simple_types_dependencies, {});
+	auto result = required_to_instantiate(type_2_type, simple_model, {});
 	QCOMPARE(result, (types{type_1_type, type_2_type}));
 }
 
@@ -263,7 +267,7 @@ void required_to_instantiate_test::should_return_type_when_simple_types_and_depe
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = required_to_instantiate(type_2_type, simple_types, simple_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_2_type, simple_model, available_implementations);
 	QCOMPARE(result, (types{type_2_type}));
 }
 
@@ -275,19 +279,19 @@ void required_to_instantiate_test::should_return_nothing_when_simple_types_and_s
 		implementation{type_2_type, type_2_object.get()}
 	};
 
-	auto result = required_to_instantiate(type_2_type, simple_types, inheriting_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_2_type, simple_model, available_implementations);
 	QCOMPARE(result, (types{}));
 }
 
 void required_to_instantiate_test::should_return_subtype_with_dependencies_when_inheriting_types_and_empty_implementation()
 {
-	auto result = required_to_instantiate(type_2_type, inheriting_types, inheriting_types_dependencies, {});
+	auto result = required_to_instantiate(type_2_type, inheriting_model, {});
 	QCOMPARE(result, (types{type_1_subtype_1_type, type_2_subtype_1_type}));
 }
 
 void required_to_instantiate_test::should_return_type_with_all_dependencies_when_simple_types_and_empty_implementation()
 {
-	auto result = required_to_instantiate(type_3_type, simple_types, simple_types_dependencies, {});
+	auto result = required_to_instantiate(type_3_type, simple_model, {});
 	QCOMPARE(result, (types{type_1_type, type_2_type, type_3_type}));
 }
 
@@ -299,7 +303,7 @@ void required_to_instantiate_test::should_return_type_with_partial_dependencies_
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = required_to_instantiate(type_3_type, simple_types, simple_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_3_type, simple_model, available_implementations);
 	QCOMPARE(result, (types{type_2_type, type_3_type}));
 }
 
@@ -313,31 +317,31 @@ void required_to_instantiate_test::should_return_type_when_simple_types_and_almo
 		implementation{type_2_type, type_2_object.get()}
 	};
 
-	auto result = required_to_instantiate(type_3_type, simple_types, simple_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_3_type, simple_model, available_implementations);
 	QCOMPARE(result, (types{type_3_type}));
 }
 
 void required_to_instantiate_test::should_return_all_types_with_cyclic_dependnecies_when_simple_types_and_empty_implementation()
 {
-	auto result1 = required_to_instantiate(cyclic_type_1_type, simple_types, simple_types_dependencies, {});
+	auto result1 = required_to_instantiate(cyclic_type_1_type, simple_model, {});
 	QCOMPARE(result1, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 
-	auto result2 = required_to_instantiate(cyclic_type_2_type, simple_types, simple_types_dependencies, {});
+	auto result2 = required_to_instantiate(cyclic_type_2_type, simple_model, {});
 	QCOMPARE(result2, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 
-	auto result3 = required_to_instantiate(cyclic_type_3_type, simple_types, simple_types_dependencies, {});
+	auto result3 = required_to_instantiate(cyclic_type_3_type, simple_model, {});
 	QCOMPARE(result3, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 }
 
 void required_to_instantiate_test::should_return_all_subtypes_with_cyclic_dependnecies_when_inheriting_types_and_empty_implementation()
 {
-	auto result1 = required_to_instantiate(cyclic_type_1_type, inheriting_types, inheriting_types_dependencies, {});
+	auto result1 = required_to_instantiate(cyclic_type_1_type, inheriting_model, {});
 	QCOMPARE(result1, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 
-	auto result2 = required_to_instantiate(cyclic_type_2_type, inheriting_types, inheriting_types_dependencies, {});
+	auto result2 = required_to_instantiate(cyclic_type_2_type, inheriting_model, {});
 	QCOMPARE(result2, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 
-	auto result3 = required_to_instantiate(cyclic_type_3_type, inheriting_types, inheriting_types_dependencies, {});
+	auto result3 = required_to_instantiate(cyclic_type_3_type, inheriting_model, {});
 	QCOMPARE(result3, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 }
 
@@ -349,7 +353,7 @@ void required_to_instantiate_test::should_return_type_when_supertype_is_already_
 		implementation{type_1_type, type_1_object.get()},
 	};
 
-	auto result = required_to_instantiate(type_1_subtype_1_type, inheriting_types, inheriting_types_dependencies, available_implementations);
+	auto result = required_to_instantiate(type_1_subtype_1_type, inheriting_model, available_implementations);
 	QCOMPARE(result, (types{type_1_subtype_1_type}));
 }
 

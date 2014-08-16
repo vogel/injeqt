@@ -20,17 +20,28 @@
 
 #pragma once
 
-#include "implementations.h"
+#include "implemented-by-mapping.h"
 #include "injeqt.h"
-#include "model.h"
-#include "types.h"
+#include "types-dependencies.h"
 
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(type_not_mapped_exception, injeqt_exception);
+class model
+{
 
-types required_to_instantiate(const type &type_to_instantiate, const model &types_model, const implementations &objects);
+public:
+	model();
+	explicit model(implemented_by_mapping available_types, types_dependencies mapped_dependencies);
+
+	const implemented_by_mapping & available_types() const;
+	const types_dependencies & mapped_dependencies() const;
+
+private:
+	implemented_by_mapping _available_types;
+	types_dependencies _mapped_dependencies;
+
+};
 
 }}

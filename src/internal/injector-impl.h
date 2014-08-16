@@ -21,11 +21,10 @@
 #pragma once
 
 #include "implementations.h"
-#include "implemented-by-mapping.h"
 #include "injeqt.h"
+#include "model.h"
 #include "providers.h"
 #include "type.h"
-#include "types-dependencies.h"
 
 #include <vector>
 #include <QtCore/QObject>
@@ -55,9 +54,8 @@ private:
 	std::vector<std::unique_ptr<module>> _modules;
 
 	providers _available_providers;
-	implemented_by_mapping _available_types;
 	implementations _objects;
-	types_dependencies _dependencies;
+	model _model;
 
 	implementations objects_with(implementations objects, const type &implementation_type);
 	implementations objects_with(implementations objects, const types &implementation_types);
