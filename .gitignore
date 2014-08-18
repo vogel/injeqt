@@ -23,6 +23,9 @@
 # Build directory
 build
 
+# Generated documentation
+docs
+
 # KDevelop4 files
 *.kdev4
 .kdev*
