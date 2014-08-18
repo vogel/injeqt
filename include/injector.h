@@ -49,10 +49,7 @@ public:
 	template<typename T>
 	T * get()
 	{
-		auto o = get(make_type<T>());
-		return o != nullptr
-			? qobject_cast<T *>(o)
-			: nullptr;
+		return qobject_cast<T *>(get(make_type<T>()));
 	}
 
 	QObject * get(const type &interface_type);
