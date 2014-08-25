@@ -20,6 +20,7 @@ AUTOLINK_SUPPORT       = YES
 SUBGROUPING            = YES
 LOOKUP_CACHE_SIZE      = 0
 SHOW_NAMESPACES        = YES
+HIDE_IN_BODY_DOCS      = NO
 
 #---------------------------------------------------------------------------
 # Build related configuration options
@@ -100,7 +101,7 @@ GENERATE_LATEX         = NO
 #---------------------------------------------------------------------------
 
 ENABLE_PREPROCESSING   = YES
-MACRO_EXPANSION        = NO
+MACRO_EXPANSION        = YES
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           =

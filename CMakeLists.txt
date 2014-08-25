@@ -61,6 +61,8 @@ set(INJEQT_SRCS
 	src/internal/type-relations.cpp
 )
 
+add_subdirectory(examples)
+
 enable_testing()
 add_subdirectory(test)
 

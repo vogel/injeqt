@@ -18,6 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/** @file */
+
 #include "type.h"
 
 #include <QtCore/QMetaObject>
@@ -31,7 +33,7 @@ type::type(const QMetaObject *meta_object) :
 
 std::string type::name() const
 {
-	return {_meta_object->className()};
+	return _meta_object->className();
 }
 
 const QMetaObject * type::meta_object() const
@@ -39,6 +41,15 @@ const QMetaObject * type::meta_object() const
 	return _meta_object;
 }
 
+/**
+ * @brief Throw an exception if type t is not valid.
+ * @param t type to validate
+ * @throws invalid_type_exception
+ *
+ * Call to validate type t. If t does not represent a QObject-derived type, an
+ * exception of type invalid_type_exception is thrown. If t is valid, this
+ * function returns.
+ */
 void validate(const type &t)
 {
 	if (!t.meta_object())
