@@ -37,7 +37,7 @@ SORT_BY_SCOPE_NAME     = YES
 
 RECURSIVE              = YES
 EXCLUDE                =
-EXCLUDE_PATTERNS       = */test/* */build/*
+EXCLUDE_PATTERNS       = */test/* */build/* */examples/*
 EXCLUDE_SYMBOLS        =
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =
