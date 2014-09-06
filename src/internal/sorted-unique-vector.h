@@ -94,7 +94,7 @@ public:
 
 	/**
 	 * @short Create sorted_unique_vector from given initialization list.
-	 * @param storage vector to get data from
+	 * @param values vector to get data from
 	 *
 	 * Copies content of storage, sorts it and removes duplicates.
 	 */

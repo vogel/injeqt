@@ -5,8 +5,8 @@ PROJECT_BRIEF          = "Dependency injection framework for Qt5"
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
-ALWAYS_DETAILED_SEC    = NO
-INLINE_INHERITED_MEMB  = NO
+ALWAYS_DETAILED_SEC    = YES
+INLINE_INHERITED_MEMB  = YES
 FULL_PATH_NAMES        = YES
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
@@ -19,8 +19,6 @@ MARKDOWN_SUPPORT       = YES
 AUTOLINK_SUPPORT       = YES
 SUBGROUPING            = YES
 LOOKUP_CACHE_SIZE      = 0
-SHOW_NAMESPACES        = YES
-HIDE_IN_BODY_DOCS      = NO
 
 #---------------------------------------------------------------------------
 # Build related configuration options
@@ -30,6 +28,13 @@ SORT_BRIEF_DOCS        = YES
 SORT_MEMBERS_CTORS_1ST = YES
 SORT_GROUP_NAMES       = YES
 SORT_BY_SCOPE_NAME     = YES
+SHOW_NAMESPACES        = YES
+SHOW_FILES             = YES
+HIDE_IN_BODY_DOCS      = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+HIDE_SCOPE_NAMES       = YES
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -44,6 +49,7 @@ EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             =
 USE_MDFILE_AS_MAINPAGE = README.md
+CLANG_ASSISTED_PARSING = YES
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -123,20 +129,20 @@ DOT_NUM_THREADS        = 0
 DOT_FONTNAME           = Helvetica
 DOT_FONTSIZE           = 10
 DOT_FONTPATH           =
-CLASS_GRAPH            = YES
-COLLABORATION_GRAPH    = YES
-GROUP_GRAPHS           = YES
+CLASS_GRAPH            = NO
+COLLABORATION_GRAPH    = NO
+GROUP_GRAPHS           = NO
 UML_LOOK               = YES
 UML_LIMIT_NUM_FIELDS   = 10
 TEMPLATE_RELATIONS     = NO
-INCLUDE_GRAPH          = YES
-INCLUDED_BY_GRAPH      = YES
-CALL_GRAPH             = YES
-CALLER_GRAPH           = YES
-GRAPHICAL_HIERARCHY    = YES
-DIRECTORY_GRAPH        = YES
+INCLUDE_GRAPH          = NO
+INCLUDED_BY_GRAPH      = NO
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+GRAPHICAL_HIERARCHY    = NO
+DIRECTORY_GRAPH        = NO
 DOT_IMAGE_FORMAT       = svg
-INTERACTIVE_SVG        = YES
+INTERACTIVE_SVG        = NO
 DOTFILE_DIRS           =
 MSCFILE_DIRS           =
 DIAFILE_DIRS           =

@@ -27,6 +27,11 @@
 #include <QtCore/QMetaType>
 
 /**
+ * @file
+ * @brief Contains classes and functions for abstractions of C++ types.
+ */
+
+/**
  * @brief
  */
 namespace injeqt
@@ -92,6 +97,15 @@ private:
 
 };
 
+/**
+ * @brief Throws an exception if type t is not valid.
+ * @param t type to validate
+ * @throws invalid_type_exception if type is not derived from QObject.
+ *
+ * Call to validate type t. If t does not represent a QObject-derived type, an
+ * exception of type invalid_type_exception is thrown. If t is valid, this
+ * function returns.
+ */
 INJEQT_API void validate(const type &t);
 
 INJEQT_API bool operator == (const type &x, const type &y);
@@ -102,13 +116,25 @@ INJEQT_API bool operator <= (const type &x, const type &y);
 INJEQT_API bool operator >= (const type &x, const type &y);
 
 /**
- * @brief Throw an exception if type t is not valid.
- * @param t type to validate
- * @throws invalid_type_exception
+ * @brief Create valid instance of type class.
+ * @param T type to be represented by new object
+ * @throws invalid_type_exception if type is not derived from QObject.
  *
- * Call to validate type t. If t does not represent a QObject-derived type, an
- * exception of type invalid_type_exception is thrown. If t is valid, this
- * function returns.
+ * Call to create type object abstracting T. T must be a class based on
+ * QObject with Q_OBJECT macro defined. In other cases invalid_type_exception is
+ * thrown.
+ *
+ * This function registers T in Qt meta type systems, because sometimes automatic
+ * registration does not occur as soon as it is required by injeqt.
+ *
+ * Example usage:
+ *
+ *     class injectable : public QObject
+ *     {
+ *         Q_OBJECT
+ *     };
+ *
+ *     auto injectable_type = make_type<injectable>();
  */
 template<typename T>
 inline type make_type()
