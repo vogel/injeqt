@@ -159,7 +159,6 @@ protected:
 		add_type(make_type<T>());
 	}
 
-
 	/**
 	 * @brief Add type that can be created by factory to module.
 	 * @param T type added to module (must be inherited from QObject).
@@ -224,7 +223,6 @@ protected:
 	{
 		add_factory(make_type<T>(), make_type<F>());
 	}
-
 
 private:
 	friend class ::injeqt::internal::injector_impl;
