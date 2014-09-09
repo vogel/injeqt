@@ -22,8 +22,28 @@
 
 #include "injeqt.h"
 
+/**
+ * @file
+ * @brief Various utils.
+ */
+
 namespace injeqt { namespace v1 {
 
+/**
+ * @brief Helper function for creating valid objects.
+ * @param T type of object to create
+ * @param args argumetns to T constructor
+ *
+ * In injeqt most of the object can be created both in valid and invalid state. It is assumed
+ * that each object that comes or is constructor from objects from outside of library can be
+ * invalid and must be checked by validate<T>(T) free function that throws exception when that
+ * case occurs. Objects created inside library from other valid objects must be valid (it is
+ * developer responsibility to ensure that this is true).
+ *
+ * For simplicity make_validated function was added. It created new object with provided arguments
+ * and calls validate<T>(T) free function on it. It can only return objects that are valid -
+ * otherwise an exception is thrown.
+ */
 template<typename T, typename ...Args>
 T make_validated(Args&& ...args)
 {
