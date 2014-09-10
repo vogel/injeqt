@@ -64,7 +64,7 @@ public:
 protected:
 	/**
 	 * @brief Add already constructed object to module.
-	 * @param T type of added object (must be inherited from QObject).
+	 * @tparam T type of added object (must be inherited from QObject).
 	 * @param object added object
 	 *
 	 * It has to be fully constructed and must not expect any injection to take place on it
@@ -117,7 +117,7 @@ protected:
 
 	/**
 	 * @brief Add type that can be default-constructed to module.
-	 * @param T type added to module (must be inherited from QObject).
+	 * @tparam T type added to module (must be inherited from QObject).
 	 *
 	 * When an object of that type (or one of inherited types) is requested from injector or
 	 * as a dependency to other objects then default constructor of T is invoked to create it.
@@ -161,8 +161,8 @@ protected:
 
 	/**
 	 * @brief Add type that can be created by factory to module.
-	 * @param T type added to module (must be inherited from QObject).
-	 * @param F factory type (must be inherited from QObject).
+	 * @tparam T type added to module (must be inherited from QObject).
+	 * @tparam F factory type (must be inherited from QObject).
 	 *
 	 * When an object of that type (or one of inherited types) is requested from injector or
 	 * as a dependency to other objects then object of type F is requted first and its method

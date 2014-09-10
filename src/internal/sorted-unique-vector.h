@@ -36,9 +36,9 @@ namespace injeqt { namespace internal {
 /**
  * @class sorted_unique_vector
  * @short Vector that stored only unique values thata are always sorted.
- * @param T type of data
- * @param LessThanComparator comparator used for sorting
- * @param EqualityComparator comparator used for uniqueness testing
+ * @tparam T type of data
+ * @tparam LessThanComparator comparator used for sorting
+ * @tparam EqualityComparator comparator used for uniqueness testing
  */
 template<typename K, typename V, K (*KeyExtractor)(const V &)>
 class sorted_unique_vector

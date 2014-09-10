@@ -31,7 +31,7 @@ namespace injeqt { namespace v1 {
 
 /**
  * @brief Helper function for creating valid objects.
- * @param T type of object to create
+ * @tparam T type of object to create
  * @param args argumetns to T constructor
  *
  * In injeqt most of the object can be created both in valid and invalid state. It is assumed

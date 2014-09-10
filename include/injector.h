@@ -89,7 +89,7 @@ public:
 
 	/**
 	 * @brief Returns pointer to object of given type T.
-	 * @param T type of object to return
+	 * @tparam T type of object to return
 	 *
 	 * When object of given type is requested by get<T>() method, injector first check if T is in set of
 	 * available types. If not, an exception is thrown. Next an unique configured type U that implements T

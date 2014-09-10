@@ -119,7 +119,7 @@ INJEQT_API bool operator >= (const type &x, const type &y);
 
 /**
  * @brief Create valid instance of type class.
- * @param T type to be represented by new object
+ * @tparam T type to be represented by new object
  * @throws invalid_type_exception if type is not derived from QObject.
  *
  * Call to create type object abstracting T. T must be a class based on
