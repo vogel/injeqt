@@ -105,6 +105,8 @@ private:
  * Call to validate type t. If t does not represent a QObject-derived type, an
  * exception of type invalid_type_exception is thrown. If t is valid, this
  * function returns.
+ *
+ * Note that QObject itself is also an invalid injeqt type.
  */
 INJEQT_API void validate(const type &t);
 
