@@ -26,7 +26,7 @@
 
 /**
  * @file
- * @brief Contains classes and functions for abstractions of injeqt dependencies.
+ * @brief Contains classes and functions for abstractions of Injeqt dependencies.
  */
 
 using namespace injeqt::v1;
@@ -34,9 +34,9 @@ using namespace injeqt::v1;
 namespace injeqt { namespace internal {
 
 /**
- * @brief Abstraction of injeqt dependency.
+ * @brief Abstraction of Injeqt dependency.
  *
- * Current version of injeqt supports only setter-based dependencies between classes.
+ * Current version of Injeqt supports only setter-based dependencies between classes.
  * Dependency is based on setter_method class - it contains one object of setter_method
  * type to represent method used to resolve dependency. It also has helper function
  * required_type() to get a type that of object can be accepted as a dependency.

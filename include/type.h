@@ -59,7 +59,7 @@ DEFINE_EXCEPTION(invalid_type_exception, injeqt_exception);
  * Direct instantiations of this class should not be needed in user code.
  *
  * Use convienance free function make_type&lt;T&gt; that also registers type T
- * in Qt meta-type that is required for injeqt to functino properly.
+ * in Qt meta-type that is required for Injeqt to function properly.
  *
  * To check type validity use validate(type) free function. Internal code assumes
  * that all passes type instances are valid. All public API functions always check
@@ -106,7 +106,7 @@ private:
  * exception of type invalid_type_exception is thrown. If t is valid, this
  * function returns.
  *
- * Note that QObject itself is also an invalid injeqt type.
+ * Note that QObject itself is also an invalid Injeqt type.
  */
 INJEQT_API void validate(const type &t);
 
@@ -127,7 +127,7 @@ INJEQT_API bool operator >= (const type &x, const type &y);
  * thrown.
  *
  * This function registers T in Qt meta type systems, because sometimes automatic
- * registration does not occur as soon as it is required by injeqt.
+ * registration does not occur as soon as it is required by Injeqt.
  *
  * Example usage:
  *

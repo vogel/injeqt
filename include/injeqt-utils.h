@@ -34,7 +34,7 @@ namespace injeqt { namespace v1 {
  * @tparam T type of object to create
  * @param args argumetns to T constructor
  *
- * In injeqt most of the object can be created both in valid and invalid state. It is assumed
+ * In Injeqt most of the object can be created both in valid and invalid state. It is assumed
  * that each object that comes or is constructor from objects from outside of library can be
  * invalid and must be checked by validate<T>(T) free function that throws exception when that
  * case occurs. Objects created inside library from other valid objects must be valid (it is
