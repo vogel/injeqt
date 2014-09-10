@@ -23,10 +23,24 @@
 #include "injeqt.h"
 #include "types.h"
 
+/**
+ * @file
+ * @brief Contains functions for extracting interfaces from a type.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Return list of interfaces that given type implements.
+ * @param for_type does not have to be a valid type object
+ *
+ * QObject meta type system supports only single inheritance. This method
+ * gets all QObject-based ancestors of for_type (including for_type itself,
+ * excluding QObject) and returns it as a types collection. If for_type
+ * object is not valid an empty collection is returned.
+ */
 types extract_interfaces(const type &for_type);
 
 }}
