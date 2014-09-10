@@ -24,17 +24,50 @@
 #include "setter-method.h"
 #include "type.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for abstractions of injeqt dependencies.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Abstraction of injeqt dependency.
+ *
+ * Current version of injeqt supports only setter-based dependencies between classes.
+ * Dependency is based on setter_method class - it contains one object of setter_method
+ * type to represent method used to resolve dependency. It also has helper function
+ * required_type() to get a type that of object can be accepted as a dependency.
+ *
+ * Objects of this type are valid only when backing setter_method is valid.
+ * To validate call validate(const dependency &).
+ */
 class dependency final
 {
 
 public:
+	/**
+	 * @brief Create dependency instance that uses setter method to be resolved.
+	 * @param setter setter method used to resolve dependency
+	 */
 	explicit dependency(setter_method setter);
 
+	/**
+	 * @return type that is required to resolve dependency
+	 *
+	 * Objects that resolve must be either of type returned by this method or
+	 * of type that derives from it. This type is the same as setter().parameter_type().
+	 */
 	const type & required_type() const;
+
+	/**
+	 * @return setter method that must be used to resolve dependency
+	 *
+	 * Returned method can be invoked on object that is of type that contains this
+	 * dependency to resolve it.
+	 */
 	const setter_method & setter() const;
 
 private:
@@ -42,6 +75,16 @@ private:
 
 };
 
+/**
+ * @brief Throws an exception if dependency d is not valid.
+ * @param d dependency to validate
+ * @throws invalid_type_exception if object type of backing setter_method is invalid
+ * @throws invalid_type_exception if parameter type of backing setter_method is invalid
+ * @throws too_many_setter_parameters_exception if backing setter_method has too many parameters
+ *
+ * Call to validate dependency d. If backing setter_method is invalid
+ * an exception is thrown. For details validate(const setter_method &)
+ */
 void validate(const dependency &d);
 
 bool operator == (const dependency &x, const dependency &y);
