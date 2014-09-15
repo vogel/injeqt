@@ -25,23 +25,75 @@
 #include "sorted-unique-vector.h"
 #include "type.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing set of Injeqt dependencies.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Extract type from dependency for storting purposes.
+ */
 inline type type_from_dependency(const dependency &d)
 {
 	return d.required_type();
 }
 
+/**
+ * @brief Abstraction of Injeqt set of dependencies.
+ *
+ * This set is used to represent all dependencies of one class. It is not possible
+ * to store two dependnecies with the same dependency::required_type() values in it.
+ * Set is sorted by dependency::required_type() and it can be matched with other
+ * type based sets (like implementations) using match() function.
+ *
+ * The best way to create instance of this type is to call make_validated_dependencies(const type &).
+ */
 using dependencies = sorted_unique_vector<type, dependency, type_from_dependency>;
 
+/**
+ * @brief Any exception that can occur during extracting dependencies from type.
+ */
 DEFINE_EXCEPTION(dependency_exception, injeqt_exception);
+
+/**
+ * @brief Any exception thrown when type has two INJEQT_SETTER tagged setters with the same type.
+ */
 DEFINE_EXCEPTION(dependency_duplicated_exception, dependency_exception);
+
+/**
+ * @brief Any exception thrown when type has INJEQT_SETTER tagged setter with self type.
+ */
 DEFINE_EXCEPTION(dependency_on_self_exception, dependency_exception);
+
+/**
+ * @brief Any exception thrown when type has INJEQT_SETTER tagged setter with subtype.
+ */
 DEFINE_EXCEPTION(dependency_on_subtype_exception, dependency_exception);
+
+/**
+ * @brief Any exception thrown when type has INJEQT_SETTER tagged setter with supertype.
+ */
 DEFINE_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
 
+/**
+ * @brief Extract set of dependencies from type.
+ * @param for_type type to extract dependencies from.
+ * @throw dependency_duplicated_exception when one type occurs twice as a dependency.
+ * @throw dependency_on_self_exception when type depends on self.
+ * @throw dependency_on_subtype_exception when type depends on own supertype.
+ * @throw dependency_on_subtype_exception when type depends on own subtype.
+ * @throw invalid_type_exception if any tagged setter has parameter that is not a QObject-based pointer
+ * @throw too_many_setter_parameters_exception if any tagged setter has more than one parameters
+ *
+ * This function computes and returns set of all dependencies of a given type. All slots methods tagged
+ * with INJEQT_SETTER are describing dependnecies. If all dependnecies are valid, there is no duplication,
+ * and type does not depends on self, subtype or supertype, a result is returned. Otherwise one of many
+ * exceptions can be thrown.
+ */
 dependencies make_validated_dependencies(const type &for_type);
 
 }}
