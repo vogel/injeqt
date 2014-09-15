@@ -80,7 +80,7 @@ private:
  * @param d dependency to validate
  * @throws invalid_type_exception if object type of backing setter_method is invalid
  * @throws invalid_type_exception if parameter type of backing setter_method is invalid
- * @throws too_many_setter_parameters_exception if backing setter_method has too many parameters
+ * @throws bad_number_of_parameters_setter_exception if backing setter_method has other number of parameters than one
  *
  * Call to validate dependency d. If backing setter_method is invalid
  * an exception is thrown. For details validate(const setter_method &)

@@ -131,14 +131,14 @@ void setter_method_test::should_throw_when_created_from_untagged_int_setter()
 
 void setter_method_test::should_throw_when_created_from_tagged_invalid_setter()
 {
-	expect<too_many_setter_parameters_exception>([&]{
+	expect<bad_number_of_parameters_setter_exception>([&]{
 		auto setter = make_setter_method<test_type>("tagged_invalid_setter(injectable_type1*,injectable_type2*)");
 	});
 }
 
 void setter_method_test::should_throw_when_created_from_untagged_invalid_setter()
 {
-	expect<too_many_setter_parameters_exception>([&]{
+	expect<bad_number_of_parameters_setter_exception>([&]{
 		auto setter = make_setter_method<test_type>("untagged_invalid_setter(injectable_type1*,injectable_type2*)");
 	});
 }

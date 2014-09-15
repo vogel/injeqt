@@ -90,6 +90,15 @@ public slots:
 
 };
 
+class zero_parameters_invalid_injected_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	INJEQT_SETTER void setter_1() {}
+
+};
+
 class too_many_parameters_invalid_injected_type : public QObject
 {
 	Q_OBJECT
@@ -188,6 +197,7 @@ private slots:
 	void should_find_all_valid_dependencies();
 	void should_find_all_valid_dependencies_in_hierarchy();
 	void should_find_dependencies_with_common_superclass();
+	void should_fail_when_zero_parameters();
 	void should_fail_when_too_many_parameters();
 	void should_fail_when_type_not_qobject();
 	void should_fail_when_duplicate_dependency();
@@ -204,6 +214,7 @@ private:
 	type valid_injected_type_type;
 	type inheriting_valid_injected_type_type;
 	type valid_injected_type_with_common_superclass_type;
+	type zero_parameters_type_type;
 	type too_many_parameters_invalid_injected_type_type;
 	type non_qobject_invalid_injected_type_type;
 	type duplicate_dependency_invalid_injected_type_type;
@@ -238,6 +249,7 @@ dependencies_test::dependencies_test() :
 	valid_injected_type_type{make_type<valid_injected_type>()},
 	inheriting_valid_injected_type_type{make_type<inheriting_valid_injected_type>()},
 	valid_injected_type_with_common_superclass_type{make_type<valid_injected_type_with_common_superclass>()},
+	zero_parameters_type_type{make_type<zero_parameters_invalid_injected_type>()},
 	too_many_parameters_invalid_injected_type_type{make_type<too_many_parameters_invalid_injected_type>()},
 	non_qobject_invalid_injected_type_type{make_type<non_qobject_invalid_injected_type>()},
 	duplicate_dependency_invalid_injected_type_type{make_type<duplicate_dependency_invalid_injected_type>()},
@@ -295,9 +307,16 @@ void dependencies_test::should_find_dependencies_with_common_superclass()
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_2});
 }
 
+void dependencies_test::should_fail_when_zero_parameters()
+{
+	expect<bad_number_of_parameters_setter_exception>([&]{
+		auto dependencies = make_validated_dependencies(zero_parameters_type_type);
+	});
+}
+
 void dependencies_test::should_fail_when_too_many_parameters()
 {
-	expect<too_many_setter_parameters_exception>([&]{
+	expect<bad_number_of_parameters_setter_exception>([&]{
 		auto dependencies = make_validated_dependencies(too_many_parameters_invalid_injected_type_type);
 	});
 }

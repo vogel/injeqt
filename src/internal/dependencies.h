@@ -87,7 +87,7 @@ DEFINE_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
  * @throw dependency_on_subtype_exception when type depends on own supertype.
  * @throw dependency_on_subtype_exception when type depends on own subtype.
  * @throw invalid_type_exception if any tagged setter has parameter that is not a QObject-based pointer
- * @throw too_many_setter_parameters_exception if any tagged setter has more than one parameters
+ * @throw bad_number_of_parameters_setter_exception if any tagged setter has other number of parameters than one
  *
  * This function computes and returns set of all dependencies of a given type. All slots methods tagged
  * with INJEQT_SETTER are describing dependnecies. If all dependnecies are valid, there is no duplication,

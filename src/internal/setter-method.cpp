@@ -82,6 +82,9 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 
 void validate(const setter_method &s)
 {
+	if (s.meta_method().parameterCount() != 1)
+		throw bad_number_of_parameters_setter_exception(exception_message(s.meta_method()));
+
 	try
 	{
 		validate(s.object_type());
@@ -91,9 +94,6 @@ void validate(const setter_method &s)
 	{
 		throw invalid_setter_exception(exception_message(s.meta_method()));
 	}
-
-	if (s.meta_method().parameterCount() != 1)
-		throw too_many_setter_parameters_exception(exception_message(s.meta_method()));
 }
 
 bool operator == (const setter_method &x, const setter_method &y)
