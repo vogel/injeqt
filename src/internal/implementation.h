@@ -35,8 +35,20 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Any exception that can occur when validating or creating implementation objects.
+ */
 INJEQT_EXCEPTION(invalid_implementation_exception, injeqt_exception);
+
+/**
+ * @brief Exception that can occur when validating implementation that has null implementation::object() value.
+ */
 INJEQT_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
+
+/**
+ * @brief Exception that can occur when validating implementation that has null implementation::object()
+ *        that does not implement implementation::interface_type().
+ */
 INJEQT_EXCEPTION(invalid_interface_type_exception, invalid_implementation_exception);
 
 /**
