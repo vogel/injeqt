@@ -42,8 +42,11 @@ type implemented_by::implementation_type() const
 
 void validate(const implemented_by &ib)
 {
-	auto interaces = extract_interfaces(ib.implementation_type());
-	if (std::find(std::begin(interaces), std::end(interaces), ib.interface_type()) == std::end(interaces))
+	validate(ib.interface_type());
+	validate(ib.implementation_type());
+
+	auto interfaces = extract_interfaces(ib.implementation_type());
+	if (std::find(std::begin(interfaces), std::end(interfaces), ib.interface_type()) == std::end(interfaces))
 		throw invalid_implemented_by_exception{};
 }
 
