@@ -25,10 +25,26 @@
 #include "model.h"
 #include "types.h"
 
+/**
+ * @file
+ * @brief Contains functions for computing list of types required to properly instantiate given type.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Return list of types required to properly instantiate given type.
+ * @param type_to_instantiate type to compute data for, must be valid
+ * @param model model of all types in system, must be valid
+ * @param objects list of available interfaces, must be valid
+ *
+ * This function computes list of all types that must be instantiated in order to properly instantiate
+ * type_to_instantiate and resolve its dependencies. It starts with getting list of all dependencies of
+ * type_to_instantiate. If any of these types is not available in @p objects set then it is added to result
+ * set and recursively processed - so full set of required types can be computed.
+ */
 types required_to_instantiate(const type &type_to_instantiate, const model &types_model, const implementations &objects);
 
 }}
