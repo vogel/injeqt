@@ -38,9 +38,21 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Any exception that can occur when validating or creating default_constructor_method objects.
+ */
 INJEQT_EXCEPTION(default_constructor_exception, injeqt_exception);
-INJEQT_EXCEPTION(no_default_constructor_exception, default_constructor_exception);
+
+/**
+ * @brief Exception that can occur when validating default_constructor_method objects.
+ *        Objects created with make_default_constructor_method<T> will never cause that exception to be thrown.
+ */
 INJEQT_EXCEPTION(invalid_default_constructor_exception, default_constructor_exception);
+
+/**
+ * @brief Exception thrown when default constructor was not found in given type.
+ */
+INJEQT_EXCEPTION(no_default_constructor_exception, default_constructor_exception);
 
 /**
  * @brief Abstraction of default constructor.
