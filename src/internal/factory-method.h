@@ -44,13 +44,13 @@ namespace injeqt { namespace internal {
 INJEQT_EXCEPTION(factory_method_exception, injeqt_exception);
 
 /**
- * @brief Exception that can occur when validating objects. Objects created with make_factory_method<T, F>
- *        Will never cause that exception to be thrown.
+ * @brief Exception that can occur when validating factory_method objects. Objects created with make_factory_method<T, F>
+ *        will never cause that exception to be thrown.
  */
 INJEQT_EXCEPTION(invalid_factory_method_exception, factory_method_exception);
 
 /**
- * @brief Exception thrown when factory method returning given type was not found in an factory type.
+ * @brief Exception thrown when factory method returning given type was not found in factory type.
  */
 INJEQT_EXCEPTION(no_factory_method_exception, factory_method_exception);
 
