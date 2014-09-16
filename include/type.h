@@ -46,7 +46,7 @@ namespace v1
 /**
  * @brief Exception thrown if type passed to validate(type) function is not valid.
  */
-DEFINE_EXCEPTION(invalid_type_exception, injeqt_exception);
+INJEQT_EXCEPTION(invalid_type_exception, injeqt_exception);
 
 /**
  * @brief Abstraction of C++ type.

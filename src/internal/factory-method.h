@@ -33,10 +33,10 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(factory_method_exception, injeqt_exception);
-DEFINE_EXCEPTION(no_factory_method_exception, factory_method_exception);
-DEFINE_EXCEPTION(invalid_factory_method_exception, factory_method_exception);
-DEFINE_EXCEPTION(non_unique_factory_exception, factory_method_exception);
+INJEQT_EXCEPTION(factory_method_exception, injeqt_exception);
+INJEQT_EXCEPTION(no_factory_method_exception, factory_method_exception);
+INJEQT_EXCEPTION(invalid_factory_method_exception, factory_method_exception);
+INJEQT_EXCEPTION(non_unique_factory_exception, factory_method_exception);
 
 class factory_method final
 {

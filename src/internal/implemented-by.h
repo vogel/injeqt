@@ -28,7 +28,7 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(invalid_implemented_by_exception, injeqt_exception);
+INJEQT_EXCEPTION(invalid_implemented_by_exception, injeqt_exception);
 
 class implemented_by final
 {

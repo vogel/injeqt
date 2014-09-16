@@ -57,27 +57,27 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
 /**
  * @brief Any exception that can occur during extracting dependencies from type.
  */
-DEFINE_EXCEPTION(dependency_exception, injeqt_exception);
+INJEQT_EXCEPTION(dependency_exception, injeqt_exception);
 
 /**
  * @brief Exception thrown when type has two INJEQT_SETTER tagged setters with the same type.
  */
-DEFINE_EXCEPTION(dependency_duplicated_exception, dependency_exception);
+INJEQT_EXCEPTION(dependency_duplicated_exception, dependency_exception);
 
 /**
  * @brief Exception thrown when type has INJEQT_SETTER tagged setter with self type.
  */
-DEFINE_EXCEPTION(dependency_on_self_exception, dependency_exception);
+INJEQT_EXCEPTION(dependency_on_self_exception, dependency_exception);
 
 /**
  * @brief Exception thrown when type has INJEQT_SETTER tagged setter with subtype.
  */
-DEFINE_EXCEPTION(dependency_on_subtype_exception, dependency_exception);
+INJEQT_EXCEPTION(dependency_on_subtype_exception, dependency_exception);
 
 /**
  * @brief Exception thrown when type has INJEQT_SETTER tagged setter with supertype.
  */
-DEFINE_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
+INJEQT_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
 
 /**
  * @brief Extract set of dependencies from type.

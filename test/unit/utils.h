@@ -28,8 +28,8 @@
 
 namespace injeqt { namespace v1 {
 
-DEFINE_EXCEPTION(method_not_found_exception, injeqt_exception);
-DEFINE_EXCEPTION(constructor_not_found_exception, injeqt_exception);
+INJEQT_EXCEPTION(method_not_found_exception, injeqt_exception);
+INJEQT_EXCEPTION(constructor_not_found_exception, injeqt_exception);
 
 template<typename T>
 std::unique_ptr<QObject> make_object()

@@ -41,7 +41,7 @@ private:
 
 };
 
-#define DEFINE_EXCEPTION(name, parent) \
+#define INJEQT_EXCEPTION(name, parent) \
 class INJEQT_API name : public parent \
 { \
  \

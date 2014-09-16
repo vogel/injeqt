@@ -38,9 +38,9 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(default_constructor_exception, injeqt_exception);
-DEFINE_EXCEPTION(no_default_constructor_exception, default_constructor_exception);
-DEFINE_EXCEPTION(invalid_default_constructor_exception, default_constructor_exception);
+INJEQT_EXCEPTION(default_constructor_exception, injeqt_exception);
+INJEQT_EXCEPTION(no_default_constructor_exception, default_constructor_exception);
+INJEQT_EXCEPTION(invalid_default_constructor_exception, default_constructor_exception);
 
 /**
  * @brief Abstraction of default constructor.

@@ -35,9 +35,9 @@ using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-DEFINE_EXCEPTION(invalid_implementation_exception, injeqt_exception);
-DEFINE_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
-DEFINE_EXCEPTION(invalid_interface_type_exception, invalid_implementation_exception);
+INJEQT_EXCEPTION(invalid_implementation_exception, injeqt_exception);
+INJEQT_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
+INJEQT_EXCEPTION(invalid_interface_type_exception, invalid_implementation_exception);
 
 /**
  * @brief Connects type with object that implements it.
