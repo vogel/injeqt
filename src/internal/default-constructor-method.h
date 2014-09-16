@@ -48,7 +48,7 @@ INJEQT_EXCEPTION(invalid_default_constructor_exception, default_constructor_exce
  * This class is used for creating objects of types configured with module::add_type<T>().
  * Default constructor is crated from Qt type QMetaMethod. As Qt only creates QMetaMethod
  * objects for slots, signals and all methods marked with Q_INVOKABLE tag - Injeqt
- * requires that default constructor is also maked with that tag. It is also not allowed
+ * requires that default constructor is also marked with that tag. It is also not allowed
  * to have any parameters - even with default values.
  *
  * Example of valid default constructor:
