@@ -30,7 +30,7 @@ class type_dependencies final
 {
 
 public:
-	explicit type_dependencies(type dependent_type);
+	explicit type_dependencies(type dependent_type, dependencies dependency_list);
 
 	const type & dependent_type() const;
 	const dependencies & dependency_list() const;
@@ -43,5 +43,10 @@ private:
 
 bool operator == (const type_dependencies &x, const type_dependencies &y);
 bool operator != (const type_dependencies &x, const type_dependencies &y);
+
+inline type_dependencies make_type_dependencies(type dependent_type)
+{
+	return type_dependencies{dependent_type, make_validated_dependencies(dependent_type)};
+}
 
 }}

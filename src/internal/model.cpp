@@ -38,7 +38,7 @@ model::model(const std::vector<type> &all_types)
 
 	auto all_dependencies = std::vector<type_dependencies>{};
 	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
-		[](const implemented_by &ib){ return type_dependencies{ib.implementation_type()}; });
+		[](const implemented_by &ib){ return make_type_dependencies(ib.implementation_type()); });
 
 	_available_types = relations.unique();
 	_mapped_dependencies = types_dependencies{all_dependencies};

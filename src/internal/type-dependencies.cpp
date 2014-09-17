@@ -22,9 +22,9 @@
 
 namespace injeqt { namespace internal {
 
-type_dependencies::type_dependencies(type dependent_type) :
+type_dependencies::type_dependencies(type dependent_type, dependencies dependency_list) :
 	_dependent_type{std::move(dependent_type)},
-	_dependency_list{make_validated_dependencies(_dependent_type)}
+	_dependency_list{std::move(dependency_list)}
 {
 }
 

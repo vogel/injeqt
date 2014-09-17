@@ -120,7 +120,7 @@ void model_test::should_create_one_type_model()
 	}));
 	QCOMPARE(m1.mapped_dependencies(), (types_dependencies
 	{
-		type_dependencies{type_1_type}
+		make_type_dependencies(type_1_type)
 	}));
 
 	auto m2 = model{{type_1_subtype_1_type}};
@@ -132,7 +132,7 @@ void model_test::should_create_one_type_model()
 	}));
 	QCOMPARE(m2.mapped_dependencies(), (types_dependencies
 	{
-		type_dependencies{type_1_subtype_1_type}
+		make_type_dependencies(type_1_subtype_1_type)
 	}));
 }
 
@@ -165,8 +165,8 @@ void model_test::should_create_with_common_supertype()
 	}));
 	QCOMPARE(m.mapped_dependencies(), (types_dependencies
 	{
-		type_dependencies{type_1_subtype_1_type},
-		type_dependencies{type_1_subtype_2_type}
+		make_type_dependencies(type_1_subtype_1_type),
+		make_type_dependencies(type_1_subtype_2_type)
 	}));
 }
 
@@ -182,9 +182,9 @@ void model_test::should_create_with_dependencies()
 	}));
 	QCOMPARE(m1.mapped_dependencies(), (types_dependencies
 	{
-		type_dependencies{type_1_subtype_1_type},
-		type_dependencies{type_1_subtype_2_type},
-		type_dependencies{type_1_subtype_3_type}
+		make_type_dependencies(type_1_subtype_1_type),
+		make_type_dependencies(type_1_subtype_2_type),
+		make_type_dependencies(type_1_subtype_3_type)
 	}));
 
 	auto m2 = model{{type_1_subtype_1_type, type_1_subtype_2_subtype_1_type, type_1_subtype_3_type}};
@@ -198,9 +198,9 @@ void model_test::should_create_with_dependencies()
 	}));
 	QCOMPARE(m2.mapped_dependencies(), (types_dependencies
 	{
-		type_dependencies{type_1_subtype_1_type},
-		type_dependencies{type_1_subtype_2_subtype_1_type},
-		type_dependencies{type_1_subtype_3_type}
+		make_type_dependencies(type_1_subtype_1_type),
+		make_type_dependencies(type_1_subtype_2_subtype_1_type),
+		make_type_dependencies(type_1_subtype_3_type)
 	}));
 }
 
