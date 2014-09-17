@@ -26,18 +26,47 @@
 
 #include <vector>
 
+/**
+ * @file
+ * @brief Contains classes and functions for resolving dependencies.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
 class resolved_dependency;
 
+/**
+ * @brief Structure for holding result of resolving dependencies. *
+ */
 struct resolve_dependencies_result
 {
+	/**
+	 * @brief All dependencies that were not resolved.
+	 */
 	dependencies unresolved;
+
+	/**
+	 * @brief All dependencies that were resolved.
+	 *
+	 * There is no need to keep the result in sorted_unique_vector based class - resolve_dependencies
+	 * function is guaranteed to return only unique result and that field is not matched against any
+	 * other collection. If that condition changes this can be easily turned into sorted_unique_vector.
+	 */
 	std::vector<resolved_dependency> resolved;
 };
 
+/**
+ * @brief Resolve set of dependencies with set of implementations objects.
+ *
+ * This function matches each dependency with implementation with the same same type. If any dependency does not
+ * have corresponding object - it is added to resolve_dependencies_result::unresolved field. All matching dependency -
+ * implementation pairs are added to resolve_dependencies_result::resolved field.
+ *
+ * This function requires that all items in both sets are valid. In other case its behavior is undefined.
+ * This function returns only valid objects.
+ */
 resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with);
 
 }}
