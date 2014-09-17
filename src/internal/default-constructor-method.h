@@ -88,14 +88,14 @@ public:
 	/**
 	 * @return Type of objects created by default constructor.
 	 *
-	 * May return invalid type if QMetaMethod passed in constructor was no valid.
+	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */
 	const type & object_type() const;
 
 	/**
 	 * @return Qt representation of default constructor.
 	 *
-	 * May return empty value if QMetaMethod passed in constructor was no valid.
+	 * May return empty value if QMetaMethod passed in constructor was invalid.
 	 */
 	const QMetaMethod & meta_method() const;
 

@@ -106,21 +106,21 @@ public:
 	/**
 	 * @return Type of objects that owns this factory method.
 	 *
-	 * May return invalid type if QMetaMethod passed in constructor was no valid.
+	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */
 	const type & object_type() const;
 
 	/**
 	 * @return Type of objects created by factory method.
 	 *
-	 * May return invalid type if QMetaMethod passed in constructor was no valid.
+	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */
 	const type & result_type() const;
 
 	/**
 	 * @return Qt representation of factory method.
 	 *
-	 * May return empty value if QMetaMethod passed in constructor was no valid.
+	 * May return empty value if QMetaMethod passed in constructor was invalid.
 	 */
 	const QMetaMethod & meta_method() const;
 
