@@ -24,15 +24,28 @@
 #include "sorted-unique-vector.h"
 #include "type-dependencies.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing set of Injeqt type_dependencies objects.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Extract type from type_dependencies for storting purposes.
+ */
 inline type type_from_type_dependencies(const type_dependencies &td)
 {
 	return td.dependent_type();
 }
 
+/**
+ * @brief Set of type_dependencies objects.
+ *
+ * Used in model and injector_impl to do fast lookup of type_dependencies for given type.
+ */
 using types_dependencies = sorted_unique_vector<type, type_dependencies, type_from_type_dependencies>;
 
 }}
