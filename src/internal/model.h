@@ -39,7 +39,7 @@ class model
 
 public:
 	model();
-	explicit model(const std::vector<type> &all_types);
+	explicit model(implemented_by_mapping available_types, types_dependencies mapped_dependencies);
 
 	const implemented_by_mapping & available_types() const;
 	const types_dependencies & mapped_dependencies() const;
@@ -54,5 +54,7 @@ private:
 
 bool operator == (const model &x, const model &y);
 bool operator != (const model &x, const model &y);
+
+model make_model(const std::vector<type> &all_types);
 
 }}

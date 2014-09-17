@@ -171,7 +171,7 @@ required_to_instantiate_test::required_to_instantiate_test() :
 	cyclic_type_2_subtype_1_type{make_type<cyclic_type_2_subtype_1>()},
 	cyclic_type_3_type{make_type<cyclic_type_3>()},
 	cyclic_type_3_subtype_1_type{make_type<cyclic_type_3_subtype_1>()},
-	simple_model{std::vector<type>
+	simple_model{make_model(std::vector<type>
 	{
 		type_1_type,
 		type_2_type,
@@ -179,8 +179,8 @@ required_to_instantiate_test::required_to_instantiate_test() :
 		cyclic_type_1_type,
 		cyclic_type_2_type,
 		cyclic_type_3_type
-	}},
-	inheriting_model{std::vector<type>
+	})},
+	inheriting_model{make_model(std::vector<type>
 	{
 		type_1_subtype_1_type,
 		type_2_subtype_1_type,
@@ -188,7 +188,7 @@ required_to_instantiate_test::required_to_instantiate_test() :
 		cyclic_type_1_subtype_1_type,
 		cyclic_type_2_subtype_1_type,
 		cyclic_type_3_subtype_1_type
-	}}
+	})}
 {
 }
 

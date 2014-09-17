@@ -55,7 +55,7 @@ model injector_impl::create_model(const providers &all_providers) const
 	auto result = std::vector<type>{};
 	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
 		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
-	return model{result};
+	return make_model(result);
 }
 
 QObject * injector_impl::get(const type &interface_type)

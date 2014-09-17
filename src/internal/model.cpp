@@ -28,25 +28,10 @@ model::model()
 {
 }
 
-model::model(const std::vector<type> &all_types)
+model::model(implemented_by_mapping available_types, types_dependencies mapped_dependencies) :
+	_available_types{std::move(available_types)},
+	_mapped_dependencies{std::move(mapped_dependencies)}
 {
-	auto relations = make_type_relations(all_types);
-
-	for (auto &&t : all_types)
-		if (relations.ambiguous().contains(t))
-			throw ambiguous_type_exception{t.name()};
-
-	auto all_dependencies = std::vector<type_dependencies>{};
-	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
-		[](const implemented_by &ib){ return make_type_dependencies(ib.implementation_type()); });
-
-	_available_types = relations.unique();
-	_mapped_dependencies = types_dependencies{all_dependencies};
-
-	for (auto &&mapped_type_dependency : _mapped_dependencies)
-		for (auto &&dependency : mapped_type_dependency.dependency_list())
-			if (!_available_types.contains_key(dependency.required_type()))
-				throw unresolvable_dependency_exception{dependency.required_type().name()};
 }
 
 const implemented_by_mapping & model::available_types() const
@@ -82,6 +67,29 @@ bool operator == (const model &x, const model &y)
 bool operator != (const model &x, const model &y)
 {
 	return !(x == y);
+}
+
+model make_model(const std::vector<type> &all_types)
+{
+	auto relations = make_type_relations(all_types);
+
+	for (auto &&t : all_types)
+		if (relations.ambiguous().contains(t))
+			throw ambiguous_type_exception{t.name()};
+
+	auto all_dependencies = std::vector<type_dependencies>{};
+	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
+		[](const implemented_by &ib){ return make_type_dependencies(ib.implementation_type()); });
+
+	auto available_types = relations.unique();
+	auto mapped_dependencies = types_dependencies{all_dependencies};
+
+	for (auto &&mapped_type_dependency : mapped_dependencies)
+		for (auto &&dependency : mapped_type_dependency.dependency_list())
+			if (!available_types.contains_key(dependency.required_type()))
+				throw unresolvable_dependency_exception{dependency.required_type().name()};
+
+	return model(available_types, mapped_dependencies);
 }
 
 }}
