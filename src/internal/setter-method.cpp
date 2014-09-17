@@ -82,6 +82,8 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 
 void validate(const setter_method &s)
 {
+	if (s.meta_method().methodType() != QMetaMethod::Slot)
+		throw invalid_setter_exception{};
 	if (s.meta_method().parameterCount() != 1)
 		throw bad_number_of_parameters_setter_exception(exception_message(s.meta_method()));
 
