@@ -24,15 +24,26 @@
 #include "injeqt.h"
 #include "sorted-unique-vector.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing set of Injeqt types.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Identity function.
+ */
 inline type type_from_type(const type &i)
 {
 	return i;
 }
 
+/**
+ * @brief Set of type objects.
+ */
 using types = sorted_unique_vector<type, type, type_from_type>;
 
 }}
