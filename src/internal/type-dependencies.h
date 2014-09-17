@@ -24,15 +24,40 @@
 #include "injeqt.h"
 #include "type.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing type and its dependencies.
+ */
+
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Type and its dependencies.
+ *
+ * This class is used to represent type with connection of all its dependencies. Instances created
+ * with make_type_dependencies(type) function are guaranteed to be valid.
+ *
+ * Used in model class to store all dependnecies and in injector_impl to resolve them.
+ */
 class type_dependencies final
 {
 
 public:
+	/**
+	 * @brief Create new instance of type_dependencies.
+	 * @param dependent_type type that contains dependencies described with dependency_list
+	 * @param dependency_list list of dependencies of dependent_type
+	 */
 	explicit type_dependencies(type dependent_type, dependencies dependency_list);
 
+	/**
+	 * @return type that contains dependencies described with dependency_list
+	 */
 	const type & dependent_type() const;
+
+	/**
+	 * @return list of dependencies of dependent_type()
+	 */
 	const dependencies & dependency_list() const;
 
 private:
@@ -44,6 +69,10 @@ private:
 bool operator == (const type_dependencies &x, const type_dependencies &y);
 bool operator != (const type_dependencies &x, const type_dependencies &y);
 
+/**
+ * @brief Create valid type_dependencies from given type.
+ * @param dependent_type type to get dependecies from. Must be valid.
+ */
 inline type_dependencies make_type_dependencies(type dependent_type)
 {
 	return type_dependencies{dependent_type, make_validated_dependencies(dependent_type)};
