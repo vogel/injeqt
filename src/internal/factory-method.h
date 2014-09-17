@@ -63,7 +63,7 @@ INJEQT_EXCEPTION(non_unique_factory_exception, factory_method_exception);
  * @brief Abstraction of factory method.
  *
  * This class is used for creating objects of types configured with module::add_factory<T, F>().
- * Factory method is crated from Qt type QMetaMethod. As Qt only creates QMetaMethod
+ * Factory method is created from Qt type QMetaMethod. As Qt only creates QMetaMethod
  * objects for slots, signals and all methods marked with Q_INVOKABLE tag - Injeqt
  * requires that factory method is marked with that tag or is a slot. This method is must return
  * pointer of type inherited from QObject and is not allowed to have any parameters - even
