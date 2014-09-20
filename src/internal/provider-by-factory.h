@@ -35,8 +35,8 @@ public:
 	explicit provider_by_factory(factory_method factory);
 	virtual ~provider_by_factory();
 
-	virtual const type & created_type() const override;
-	virtual QObject * create(injector_impl &i) override;
+	virtual const type & provided_type() const override;
+	virtual QObject * provide(injector_impl &i) override;
 	virtual types required_types() const;
 
 	const factory_method & factory() const;

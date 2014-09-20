@@ -35,8 +35,8 @@ public:
 	explicit provider_ready(implementation ready_implementation);
 	virtual ~provider_ready() {}
 
-	virtual const type & created_type() const override;
-	virtual QObject * create(injector_impl &i) override;
+	virtual const type & provided_type() const override;
+	virtual QObject * provide(injector_impl &i) override;
 	virtual types required_types() const override { return types{}; }
 
 	const implementation & ready_implementation() const;

@@ -33,7 +33,7 @@ namespace injeqt { namespace internal {
 
 inline type type_from_provider(const std::unique_ptr<provider> &c)
 {
-	return c->created_type();
+	return c->provided_type();
 }
 
 using providers = sorted_unique_vector<type, std::unique_ptr<provider>, type_from_provider>;

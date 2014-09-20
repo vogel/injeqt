@@ -33,7 +33,7 @@ provider_by_factory::~provider_by_factory()
 {
 }
 
-const type & provider_by_factory::created_type() const
+const type & provider_by_factory::provided_type() const
 {
 	return _factory.result_type();
 }
@@ -43,7 +43,7 @@ const factory_method & provider_by_factory::factory() const
 	return _factory;
 }
 
-QObject * provider_by_factory::create(injector_impl &i)
+QObject * provider_by_factory::provide(injector_impl &i)
 {
 	if (!_object)
 	{

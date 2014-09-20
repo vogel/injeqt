@@ -54,7 +54,7 @@ types_model injector_impl::create_types_model(const providers &all_providers) co
 {
 	auto result = std::vector<type>{};
 	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
-		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
+		[](const std::unique_ptr<provider> &c){ return c->provided_type(); });
 	return make_types_model(result);
 }
 
@@ -97,7 +97,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 		if (objects.get(type_to_instantiate) == end(objects))
 		{
 			auto provider_it = _available_providers.get(type_to_instantiate);
-			auto instance = provider_it->get()->create(*this);
+			auto instance = provider_it->get()->provide(*this);
 
 			if (instance)
 				objects_to_resolve.emplace_back(type_to_instantiate, instance);

@@ -27,7 +27,7 @@ provider_ready::provider_ready(implementation ready_implementation) :
 {
 }
 
-const type & provider_ready::created_type() const
+const type & provider_ready::provided_type() const
 {
 	return _ready_implementation.interface_type();
 }
@@ -37,7 +37,7 @@ const implementation & provider_ready::ready_implementation() const
 	return _ready_implementation;
 }
 
-QObject * provider_ready::create(injector_impl &)
+QObject * provider_ready::provide(injector_impl &)
 {
 	return _ready_implementation.object();
 }

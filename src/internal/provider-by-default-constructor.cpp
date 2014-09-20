@@ -28,7 +28,7 @@ provider_by_default_constructor::provider_by_default_constructor(default_constru
 	validate(_constructor);
 }
 
-const type & provider_by_default_constructor::created_type() const
+const type & provider_by_default_constructor::provided_type() const
 {
 	return _constructor.object_type();
 }
@@ -38,7 +38,7 @@ const default_constructor_method & provider_by_default_constructor::constructor(
 	return _constructor;
 }
 
-QObject * provider_by_default_constructor::create(injector_impl &)
+QObject * provider_by_default_constructor::provide(injector_impl &)
 {
 	// todo: thread safety
 	if (!_object)

@@ -35,8 +35,8 @@ public:
 	explicit provider_by_default_constructor(default_constructor_method constructor);
 	virtual ~provider_by_default_constructor() {}
 
-	virtual const type & created_type() const override;
-	virtual QObject * create(injector_impl &i) override;
+	virtual const type & provided_type() const override;
+	virtual QObject * provide(injector_impl &i) override;
 	virtual types required_types() const { return types{}; }
 
 	const default_constructor_method & constructor() const;

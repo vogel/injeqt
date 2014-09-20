@@ -38,8 +38,8 @@ public:
 	explicit provider() {}
 	virtual ~provider() {}
 
-	virtual const type & created_type() const = 0;
-	virtual QObject * create(injector_impl &i) = 0;
+	virtual const type & provided_type() const = 0;
+	virtual QObject * provide(injector_impl &i) = 0;
 	virtual types required_types() const = 0;
 
 };
