@@ -28,7 +28,7 @@
 
 namespace injeqt { namespace internal {
 
-types required_to_instantiate(const type &type_to_instantiate, const model &types_model, const implementations &objects)
+types required_to_instantiate(const type &type_to_instantiate, const types_model &model, const implementations &objects)
 {
 	auto result = std::vector<type>{};
 	auto ready = std::set<type>{};
@@ -41,7 +41,7 @@ types required_to_instantiate(const type &type_to_instantiate, const model &type
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
 
-		auto dependencies = types_model.get_dependencies(current_interface_type);
+		auto dependencies = model.get_dependencies(current_interface_type);
 		auto current_implementation_type = dependencies.dependent_type();
 
 		if (ready.find(current_implementation_type) != std::end(ready))

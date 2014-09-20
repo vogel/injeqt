@@ -48,7 +48,6 @@ set(INJEQT_SRCS
 	src/internal/implementation.cpp
 	src/internal/implemented-by.cpp
 	src/internal/injector-impl.cpp
-	src/internal/model.cpp
 	src/internal/module-impl.cpp
 	src/internal/provider-by-default-constructor.cpp
 	src/internal/provider-by-factory.cpp
@@ -59,6 +58,7 @@ set(INJEQT_SRCS
 	src/internal/setter-method.cpp
 	src/internal/type-dependencies.cpp
 	src/internal/type-relations.cpp
+	src/internal/types-model.cpp
 )
 
 add_subdirectory(examples)

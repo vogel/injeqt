@@ -18,42 +18,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "model.h"
+#include "types-model.h"
 
 #include "type-relations.h"
 
 namespace injeqt { namespace internal {
 
-model::model()
+types_model::types_model()
 {
 }
 
-model::model(implemented_by_mapping available_types, types_dependencies mapped_dependencies) :
+types_model::types_model(implemented_by_mapping available_types, types_dependencies mapped_dependencies) :
 	_available_types{std::move(available_types)},
 	_mapped_dependencies{std::move(mapped_dependencies)}
 {
 }
 
-const implemented_by_mapping & model::available_types() const
+const implemented_by_mapping & types_model::available_types() const
 {
 	return _available_types;
 }
 
-const types_dependencies & model::mapped_dependencies() const
+const types_dependencies & types_model::mapped_dependencies() const
 {
 	return _mapped_dependencies;
 }
 
-type_dependencies model::get_dependencies(const type &t) const
+type_dependencies types_model::get_dependencies(const type &t) const
 {
 	auto available_it = _available_types.get(t);
 	if (available_it == end(_available_types))
-		throw type_not_in_model_exception{t.name()};
+		throw type_not_in_types_model_exception{t.name()};
 
 	return *_mapped_dependencies.get(available_it->implementation_type());
 }
 
-bool operator == (const model &x, const model &y)
+bool operator == (const types_model &x, const types_model &y)
 {
 	if (x.available_types() != y.available_types())
 		return false;
@@ -64,12 +64,12 @@ bool operator == (const model &x, const model &y)
 	return true;
 }
 
-bool operator != (const model &x, const model &y)
+bool operator != (const types_model &x, const types_model &y)
 {
 	return !(x == y);
 }
 
-model make_model(const std::vector<type> &all_types)
+types_model make_types_model(const std::vector<type> &all_types)
 {
 	auto relations = make_type_relations(all_types);
 
@@ -89,7 +89,7 @@ model make_model(const std::vector<type> &all_types)
 			if (!available_types.contains_key(dependency.required_type()))
 				throw unresolvable_dependency_exception{dependency.required_type().name()};
 
-	return model(available_types, mapped_dependencies);
+	return types_model(available_types, mapped_dependencies);
 }
 
 }}

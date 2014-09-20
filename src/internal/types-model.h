@@ -20,31 +20,41 @@
 
 #pragma once
 
-#include "implementations.h"
+#include "implemented-by-mapping.h"
 #include "injeqt.h"
-#include "types-model.h"
-#include "types.h"
-
-/**
- * @file
- * @brief Contains functions for computing list of types required to properly instantiate given type.
- */
+#include "types-dependencies.h"
+#include "type.h"
 
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
-/**
- * @brief Return list of types required to properly instantiate given type.
- * @param type_to_instantiate type to compute data for, must be valid
- * @param model model of all types in system, must be valid
- * @param objects list of available interfaces, must be valid
- *
- * This function computes list of all types that must be instantiated in order to properly instantiate
- * type_to_instantiate and resolve its dependencies. It starts with getting list of all dependencies of
- * type_to_instantiate. If any of these types is not available in @p objects set then it is added to result
- * set and recursively processed - so full set of required types can be computed.
- */
-types required_to_instantiate(const type &type_to_instantiate, const types_model &model, const implementations &objects);
+INJEQT_EXCEPTION(model_exception, injeqt_exception);
+INJEQT_EXCEPTION(ambiguous_type_exception, model_exception);
+INJEQT_EXCEPTION(unresolvable_dependency_exception, model_exception);
+INJEQT_EXCEPTION(type_not_in_types_model_exception, model_exception);
+
+class types_model
+{
+
+public:
+	types_model();
+	explicit types_model(implemented_by_mapping available_types, types_dependencies mapped_dependencies);
+
+	const implemented_by_mapping & available_types() const;
+	const types_dependencies & mapped_dependencies() const;
+
+	type_dependencies get_dependencies(const type &t) const;
+
+private:
+	implemented_by_mapping _available_types;
+	types_dependencies _mapped_dependencies;
+
+};
+
+bool operator == (const types_model &x, const types_model &y);
+bool operator != (const types_model &x, const types_model &y);
+
+types_model make_types_model(const std::vector<type> &all_types);
 
 }}

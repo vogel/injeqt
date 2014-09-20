@@ -22,8 +22,8 @@
 
 #include "implementations.h"
 #include "injeqt.h"
-#include "model.h"
 #include "providers.h"
+#include "types-model.h"
 #include "type.h"
 
 #include <vector>
@@ -54,10 +54,10 @@ private:
 
 	providers _available_providers;
 	implementations _objects;
-	model _model;
+	types_model _types_model;
 
 	providers extract_providers(const std::vector<std::unique_ptr<module>> &modules) const;
-	model create_model(const providers &all_providers) const;
+	types_model create_types_model(const providers &all_providers) const;
 
 	implementations objects_with(implementations objects, const type &implementation_type);
 	implementations objects_with(implementations objects, const types &implementation_types);

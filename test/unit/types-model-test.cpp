@@ -22,9 +22,9 @@
 #include "dependency.cpp"
 #include "extract-interfaces.cpp"
 #include "implemented-by.cpp"
-#include "model.cpp"
 #include "setter-method.cpp"
 #include "type-dependencies.cpp"
+#include "types-model.cpp"
 #include "type-relations.cpp"
 #include "type.cpp"
 
@@ -66,16 +66,16 @@ public slots:
 
 };
 
-class model_test : public QObject
+class types_model_test : public QObject
 {
 	Q_OBJECT
 
 public:
-	model_test();
+	types_model_test();
 
 private slots:
-	void should_create_empty_model();
-	void should_create_one_type_model();
+	void should_create_empty_types_model();
+	void should_create_one_type_types_model();
 	void should_throw_when_one_type_duplicated();
 	void should_throw_when_type_and_subtype_passed();
 	void should_create_with_common_supertype();
@@ -91,7 +91,7 @@ private:
 
 };
 
-model_test::model_test() :
+types_model_test::types_model_test() :
 	type_1_type{make_type<type_1>()},
 	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
 	type_1_subtype_2_type{make_type<type_1_subtype_2>()},
@@ -100,19 +100,19 @@ model_test::model_test() :
 {
 }
 
-void model_test::should_create_empty_model()
+void types_model_test::should_create_empty_types_model()
 {
-	auto empty_1 = model{};
-	auto empty_2 = make_model(std::vector<type>{});
+	auto empty_1 = types_model{};
+	auto empty_2 = make_types_model(std::vector<type>{});
 
 	QCOMPARE(empty_1.available_types(), implemented_by_mapping{});
 	QCOMPARE(empty_1.mapped_dependencies(), types_dependencies{});
 	QVERIFY(empty_1 == empty_2);
 }
 
-void model_test::should_create_one_type_model()
+void types_model_test::should_create_one_type_types_model()
 {
-	auto m1 = make_model({type_1_type});
+	auto m1 = make_types_model({type_1_type});
 
 	QCOMPARE(m1.available_types(), (implemented_by_mapping
 	{
@@ -123,7 +123,7 @@ void model_test::should_create_one_type_model()
 		make_type_dependencies(type_1_type)
 	}));
 
-	auto m2 = make_model({type_1_subtype_1_type});
+	auto m2 = make_types_model({type_1_subtype_1_type});
 
 	QCOMPARE(m2.available_types(), (implemented_by_mapping
 	{
@@ -136,27 +136,27 @@ void model_test::should_create_one_type_model()
 	}));
 }
 
-void model_test::should_throw_when_one_type_duplicated()
+void types_model_test::should_throw_when_one_type_duplicated()
 {
 	expect<ambiguous_type_exception>([&]{
-		make_model({type_1_type, type_1_type});
+		make_types_model({type_1_type, type_1_type});
 	});
 }
 
-void model_test::should_throw_when_type_and_subtype_passed()
+void types_model_test::should_throw_when_type_and_subtype_passed()
 {
 	expect<ambiguous_type_exception>([&]{
-		make_model({type_1_type, type_1_subtype_1_type});
+		make_types_model({type_1_type, type_1_subtype_1_type});
 	});
 
 	expect<ambiguous_type_exception>([&]{
-		make_model({type_1_subtype_1_type, type_1_type});
+		make_types_model({type_1_subtype_1_type, type_1_type});
 	});
 }
 
-void model_test::should_create_with_common_supertype()
+void types_model_test::should_create_with_common_supertype()
 {
-	auto m = make_model({type_1_subtype_1_type, type_1_subtype_2_type});
+	auto m = make_types_model({type_1_subtype_1_type, type_1_subtype_2_type});
 
 	QCOMPARE(m.available_types(), (implemented_by_mapping
 	{
@@ -170,9 +170,9 @@ void model_test::should_create_with_common_supertype()
 	}));
 }
 
-void model_test::should_create_with_dependencies()
+void types_model_test::should_create_with_dependencies()
 {
-	auto m1 = make_model({type_1_subtype_1_type, type_1_subtype_2_type, type_1_subtype_3_type});
+	auto m1 = make_types_model({type_1_subtype_1_type, type_1_subtype_2_type, type_1_subtype_3_type});
 
 	QCOMPARE(m1.available_types(), (implemented_by_mapping
 	{
@@ -187,7 +187,7 @@ void model_test::should_create_with_dependencies()
 		make_type_dependencies(type_1_subtype_3_type)
 	}));
 
-	auto m2 = make_model({type_1_subtype_1_type, type_1_subtype_2_subtype_1_type, type_1_subtype_3_type});
+	auto m2 = make_types_model({type_1_subtype_1_type, type_1_subtype_2_subtype_1_type, type_1_subtype_3_type});
 
 	QCOMPARE(m2.available_types(), (implemented_by_mapping
 	{
@@ -204,12 +204,12 @@ void model_test::should_create_with_dependencies()
 	}));
 }
 
-void model_test::should_throw_when_unresolvable_dependency()
+void types_model_test::should_throw_when_unresolvable_dependency()
 {
 	expect<unresolvable_dependency_exception>([&]{
-		make_model({type_1_subtype_3_type});
+		make_types_model({type_1_subtype_3_type});
 	});
 }
 
-QTEST_APPLESS_MAIN(model_test)
-#include "model-test.moc"
+QTEST_APPLESS_MAIN(types_model_test)
+#include "types-model-test.moc"

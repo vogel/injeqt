@@ -38,7 +38,7 @@ injector_impl::injector_impl()
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	_modules{std::move(modules)},
 	_available_providers(extract_providers(_modules)),
-	_model(create_model(_available_providers))
+	_types_model(create_types_model(_available_providers))
 {
 }
 
@@ -50,18 +50,18 @@ providers injector_impl::extract_providers(const std::vector<std::unique_ptr<mod
 	return providers{std::move(result)};
 }
 
-model injector_impl::create_model(const providers &all_providers) const
+types_model injector_impl::create_types_model(const providers &all_providers) const
 {
 	auto result = std::vector<type>{};
 	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
 		[](const std::unique_ptr<provider> &c){ return c->created_type(); });
-	return make_model(result);
+	return make_types_model(result);
 }
 
 QObject * injector_impl::get(const type &interface_type)
 {
-	auto implementation_type_it = _model.available_types().get(interface_type);
-	if (implementation_type_it == end(_model.available_types()))
+	auto implementation_type_it = _types_model.available_types().get(interface_type);
+	if (implementation_type_it == end(_types_model.available_types()))
 		throw type_not_configured_exception{interface_type.name()};
 
 	auto implementation_type = implementation_type_it->implementation_type();
@@ -76,7 +76,7 @@ QObject * injector_impl::get(const type &interface_type)
 
 implementations injector_impl::objects_with(implementations objects, const type &implementation_type)
 {
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _model, objects);
+	auto types_to_instantiate = required_to_instantiate(implementation_type, _types_model, objects);
 	return objects_with(objects, types_to_instantiate);
 }
 
@@ -109,7 +109,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
-		auto to_resolve = _model.mapped_dependencies().get(object_to_resolve.interface_type())->dependency_list();
+		auto to_resolve = _types_model.mapped_dependencies().get(object_to_resolve.interface_type())->dependency_list();
 		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
 		if (!resolved_dependencies.unresolved.empty())
 			throw unresolved_dependencies_exception{};
