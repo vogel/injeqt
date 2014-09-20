@@ -44,11 +44,11 @@ const types_dependencies & types_model::mapped_dependencies() const
 	return _mapped_dependencies;
 }
 
-type_dependencies types_model::get_dependencies(const type &t) const
+type_dependencies types_model::get_dependencies(const type &interface_type) const
 {
-	auto available_it = _available_types.get(t);
+	auto available_it = _available_types.get(interface_type);
 	if (available_it == end(_available_types))
-		throw type_not_in_types_model_exception{t.name()};
+		throw type_not_in_types_model_exception{interface_type.name()};
 
 	return *_mapped_dependencies.get(available_it->implementation_type());
 }
