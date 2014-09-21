@@ -27,15 +27,32 @@
 
 #include <memory>
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing set of Injeqt providers sorted by provider::provided_type().
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Extract provided_type from provider to pointer for storting purposes.
+ */
 inline type type_from_provider(const std::unique_ptr<provider> &c)
 {
 	return c->provided_type();
 }
 
+/**
+ * @brief Abstraction of Injeqt set of providers.
+ *
+ * As provider is an abstract class it stores set of pointers to it.
+ *
+ * This set is used to represent all providers available to module and injector. It is
+ * not possible to store two providers with the same provider::provided_type() values in it.
+ * Set is sorted by provider::provided_type().
+ */
 using providers = sorted_unique_vector<type, std::unique_ptr<provider>, type_from_provider>;
 
 }}
