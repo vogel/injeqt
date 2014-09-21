@@ -23,6 +23,11 @@
 #include "injeqt.h"
 #include "types.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing providers of object.
+ */
+
 class QObject;
 
 using namespace injeqt::v1;
@@ -31,6 +36,17 @@ namespace injeqt { namespace internal {
 
 class injector_impl;
 
+/**
+ * @brief Abstract provider of objects.
+ *
+ * Providers are used in injector to create objects of configured types. Objects
+ * can be created in different ways so this is an abstract class with a few
+ * mplementations.
+ *
+ * Provider can require objects of other types to be already available in injector
+ * using required_types() and then provide an object with its provide() object.
+ * Provider does not take ownership of a provided object.
+ */
 class provider
 {
 
@@ -38,8 +54,24 @@ public:
 	explicit provider() {}
 	virtual ~provider() {}
 
+	/**
+	 * @return type of object that this provider provides.
+	 */
 	virtual const type & provided_type() const = 0;
+
+	/**
+	 * @return provided object
+	 * @param i injector_impl that requests object
+	 *
+	 * Provider can require some types with required_types() to be already available
+	 * in injector_impl. Provider does not have ownership over that object. Returned
+	 * object will of type provided_type().
+	 */
 	virtual QObject * provide(injector_impl &i) = 0;
+
+	/**
+	 * @return list of types that must be instantiated in injector_impl before calling provide(injector_impl) method
+	 */
 	virtual types required_types() const = 0;
 
 };
