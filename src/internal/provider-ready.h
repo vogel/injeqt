@@ -81,6 +81,7 @@ private:
  * @param pr provider_ready to check
  * @throw invalid_implementation_availability_exception when object of backing implementation is nullptr
  * @throw invalid_interface_type_exception when object of backing implementation does not implement interface_type
+ * @throw invalid_type_exception when type of backing implementation is not a valid type
  */
 void validate(const provider_ready &pr);
 
