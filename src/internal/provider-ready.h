@@ -37,7 +37,7 @@ namespace injeqt { namespace internal {
  * @brief Provider that always returns the same object.
  *
  * This provider implementation will always return the same object. Its provided_type()
- * returns type of object passed to it in constructor. Its ready_implementation() returns
+ * returns type of object passed to it in constructor. Its required_types() returns
  * empty set of types.
  */
 class provider_ready final : public provider
