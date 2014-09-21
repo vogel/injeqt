@@ -45,7 +45,8 @@ class injector_impl;
  *
  * Provider can require objects of other types to be already available in injector
  * using required_types() and then provide an object with its provide() object.
- * Provider does not take ownership of a provided object.
+ * Provider may or may no take ownership of a provided object - look for concrete
+ * types for more information.
  */
 class provider
 {
@@ -64,8 +65,8 @@ public:
 	 * @param i injector_impl that requests object
 	 *
 	 * Provider can require some types with required_types() to be already available
-	 * in injector_impl. Provider does not have ownership over that object. Returned
-	 * object will of type provided_type().
+	 * in injector_impl. Provider may or may no take ownership of a provided object -
+	 * look for concrete types for more information.
 	 */
 	virtual QObject * provide(injector_impl &i) = 0;
 
