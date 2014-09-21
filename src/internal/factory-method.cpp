@@ -83,6 +83,9 @@ bool operator != (const factory_method &x, const factory_method &y)
 
 factory_method make_factory_method(const type &t, const type &f)
 {
+	validate(t); // TODO: remove outside and make precondition
+	validate(f); // TODO: remove outside and make precondition
+
 	auto meta_object = f.meta_object();
 	auto method_count = meta_object->methodCount();
 	auto factory_methods = std::vector<factory_method>{};
