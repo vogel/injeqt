@@ -71,7 +71,7 @@ bool operator != (const default_constructor_method &x, const default_constructor
 
 default_constructor_method make_default_constructor_method(const type &t)
 {
-	validate(t);
+	validate(t); // TODO: move outside and make a precondition
 
 	auto meta_object = t.meta_object();
 	auto constructor_count = meta_object->constructorCount();
