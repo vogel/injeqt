@@ -29,6 +29,11 @@
 #include <vector>
 #include <QtCore/QObject>
 
+/**
+ * @file
+ * @brief Contains classes and functions for implementation of injector.
+ */
+
 namespace injeqt { namespace v1 {
 	class module;
 }}
@@ -40,13 +45,49 @@ INJEQT_EXCEPTION(type_not_configured_exception, injector_exception);
 INJEQT_EXCEPTION(unresolved_dependencies_exception, injector_exception);
 INJEQT_EXCEPTION(type_not_instantiated_exception, injector_exception);
 
+/**
+ * @brief Implementation of injector class.
+ * @see injector class
+ *
+ * This class is core of Injeqt library.
+ *
+ * Its main purpose is to gather configuration from set of modules and construct objects with
+ * resolved dependencies.
+ *
+ * Injector keeps list of all configured providers and of all already created objects.
+ * Two methods objects_with(implementations, const type &) and objects_with(implementations, const types &)
+ * are used to update list of already created objects with new ones.
+ */
 class INJEQT_API injector_impl final
 {
 
 public:
+	/**
+	 * @brief Create empty injector_impl with no configuration.
+	 *
+	 * Injector with empty configuration will not be able to return any objects. Each call
+	 * to get(const type &) will result in type_not_configured_exception
+	 */
 	injector_impl();
+
+	/**
+	 * @brief Create injector confiugred with set of modules.
+	 * @param modules set of modules containing configuration of injector
+	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
+	 * @throw ambiguous_type_exception if one or more types is ambiguous (@see make_type_relations)
+	 * @throw unresolvable_dependency_exception if a type has a dependency type not configured in any module
+	 *
+	 * This constructor extract all providers from all modules and creates types_model object
+	 * to get all required information from them. After calling that all providers will be moved-out from
+	 * modules.
+	 */
 	explicit injector_impl(std::vector<std::unique_ptr<::injeqt::v1::module>> modules);
 
+	/**
+	 * @brief Returns pointer to object of given type interface_type
+	 * @param interface_type type of object to return.
+	 * @see injector::get<T>()
+	 */
 	QObject * get(const type &interface_type);
 
 private:
@@ -56,10 +97,41 @@ private:
 	implementations _objects;
 	types_model _types_model;
 
+	/**
+	 * @brief Extract set of providers from all modules
+	 * @todo Should check if types do not have duplicated
+	 */
 	providers extract_providers(const std::vector<std::unique_ptr<module>> &modules) const;
+
+	/**
+	 * @brief Extract all provided types and makes a types_model from them.
+	 */
 	types_model create_types_model(const providers &all_providers) const;
 
+	/**
+	 * @brief Create new list of implementation objects with object of type implementation_type
+	 * @param objects list of already created objects
+	 * @param implementation_type type of object to create
+	 *
+	 * This method get list of all not-already created objects required to properly instantiate implementation_type
+	 * using required_to_instantiate(const type &, const types_model &, const implementations &) and then uses
+	 * objects_with(implementations, const types &) to create all these objects.
+	 */
 	implementations objects_with(implementations objects, const type &implementation_type);
+
+	/**
+	 * @brief Create new list of implementation objects with objects of types implementation_types
+	 * @param objects list of already created objects
+	 * @param implementation_types set of types of object to create
+	 * @throw type_not_configured_exception if type from implementation_types or any required type is not configured in injector
+	 * @throw type_not_instantiated_exception if any provider fails to instantiate object
+	 * @throw unresolved_dependencies_exception if any dependency could not be resolved
+	 *
+	 * For each type in the list this method check if that type requires other one using provider::required_types()
+	 * and if so, calls objects_with(implementations, const type &) to update list with that requires object.
+	 * After all these requiremens are met all types from implementation_types list that still were not instantiated
+	 * are instantiated. Last step is to resolve and apply dependencies on newly created objects.
+	 */
 	implementations objects_with(implementations objects, const types &implementation_types);
 
 };
