@@ -24,21 +24,51 @@
 #include "implementation.h"
 #include "injeqt.h"
 
+/**
+ * @file
+ * @brief Contains classes and functions for representing provider working on ready object.
+ */
+
 using namespace injeqt::v1;
 
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Provider that always returns the same object.
+ *
+ * This provider implementation will always return the same object. Its provided_type()
+ * returns type of object passed to it in constructor. Its ready_implementation() returns
+ * empty set of types.
+ */
 class provider_ready final : public provider
 {
 
 public:
+	/**
+	 * @brief Create provider instance with object to return.
+	 * @param ready_implementation object that this provider will always return
+	 */
 	explicit provider_ready(implementation ready_implementation);
 	virtual ~provider_ready() {}
 
+	/**
+	 * @return implementation::interface_type() of object passed to construtor
+	 */
 	virtual const type & provided_type() const override;
+
+	/**
+	 * @return object passed in constructor
+	 */
 	virtual QObject * provide(injector_impl &i) override;
+
+	/**
+	 * @return empty set of object - this provider already has instance of a type
+	 */
 	virtual types required_types() const override { return types{}; }
 
+	/**
+	 * @return implementation object passed in constructor
+	 */
 	const implementation & ready_implementation() const;
 
 private:
@@ -46,6 +76,12 @@ private:
 
 };
 
+/**
+ * @brief Check if provider_ready object object is valid.
+ * @param pl provider_ready to check
+ * @throw invalid_implementation_availability_exception when object of backing implementation is nullptr
+ * @throw invalid_interface_type_exception when object of backing implementation does not implement interface_type
+ */
 void validate(const provider_ready &pr);
 
 }}
