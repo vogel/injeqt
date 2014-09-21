@@ -26,14 +26,67 @@
 
 #include <memory>
 
+/**
+ * @file
+ * @brief Contains classes and functions for implementation of modules.
+ */
+
 namespace injeqt { namespace internal {
 
+/**
+ * @brief Implementation of module class.
+ * @see module class
+ *
+ * Main job of this class is to create providers and keep list of pointers to them. All providers
+ * are created using add_ready_object(type, QObject *), add_type(type) and add_factory(type, type) methods.
+ *
+ * List can be retreived using providers() method. Injector that takes the module gets all providers from
+ * that list and move it to itself.
+ */
 class INJEQT_API module_impl final
 {
 
 public:
+	/**
+	 * @brief Add ready object to module_impl
+	 * @see module::add_ready_object<T>(QObject *)
+	 * @param t type to add
+	 * @param object object of type t
+	 * @throw invalid_type_exception when t is not a valid type
+	 * @throw invalid_implementation_availability_exception when object of backing implementation is nullptr
+	 * @throw invalid_interface_type_exception when object of backing implementation does not implement interface_type
+	 *
+	 * This methods creates a provider of type provider_ready and adds it to list. If types does not match
+	 * object or object is nullptr exception will be thrown.
+	 */
 	void add_ready_object(type t, QObject *object);
+
+	/**
+	 * @brief Add default constructible type to module_impl
+	 * @see module::add_type<T>()
+	 * @param t type to add
+	 * @throw invalid_type_exception when t is not a valid type
+	 * @throws no_default_constructor_exception if type t does not have default constructor
+	 *
+	 * This methods creates a provider of type provider_by_default_contructor and adds it to list. If type t is not
+	 * valid or does not have a default constructor exception will be thrown.
+	 */
 	void add_type(type t);
+
+	/**
+	 * @brief Add factory constructible type to module_impl
+	 * @see module::add_type<T>()
+	 * @param t type to add
+	 * @param f type of factory object
+	 * @throw invalid_type_exception when t is not a valid type
+	 * @throw invalid_type_exception when f is not a valid type
+	 * @throw no_factory_method_exception if no factory method returning pointer to t is found in f.
+	 * @throw non_unique_factory_exception if more than one factory methods returning pointer to tare found in f.
+	 *
+	 * This methods creates a provider of type provider_by_factory and adds it to list. If type t or f is not
+	 * valid or type f does not have factory method that returns pointer to object of type t, exception will
+	 * be thrown.
+	 */
 	void add_factory(type t, type f);
 
 	std::vector<std::unique_ptr<provider>> & providers();
@@ -41,7 +94,11 @@ public:
 private:
 	std::vector<std::unique_ptr<provider>> _providers;
 
-	void add_provider(std::unique_ptr<provider> c);
+	/**
+	 * @brief Add provider to list
+	 * @param p provider to add
+	 */
+	void add_provider(std::unique_ptr<provider> p);
 
 };
 

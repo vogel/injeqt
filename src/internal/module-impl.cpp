@@ -52,9 +52,9 @@ void module_impl::add_factory(type t, const type f)
 	add_provider(std::move(p));
 }
 
-void module_impl::add_provider(std::unique_ptr<provider> c)
+void module_impl::add_provider(std::unique_ptr<provider> p)
 {
-	_providers.push_back(std::move(c));
+	_providers.push_back(std::move(p));
 }
 
 std::vector<std::unique_ptr<provider>> & module_impl::providers()
