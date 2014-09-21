@@ -78,7 +78,7 @@ private:
 
 /**
  * @brief Check if provider_ready object object is valid.
- * @param pl provider_ready to check
+ * @param pr provider_ready to check
  * @throw invalid_implementation_availability_exception when object of backing implementation is nullptr
  * @throw invalid_interface_type_exception when object of backing implementation does not implement interface_type
  */
