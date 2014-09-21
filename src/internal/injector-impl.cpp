@@ -88,7 +88,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 	{
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		if (provider_it == end(_available_providers))
-			return objects; // TODO: throw exception
+			throw type_not_configured_exception{type_to_instantiate.name()};
 
 		for (auto &&required_type : provider_it->get()->required_types())
 			objects = objects_with(objects, required_type);
