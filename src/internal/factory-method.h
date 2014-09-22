@@ -176,7 +176,7 @@ factory_method make_factory_method(const type &t, const type &f);
 template<typename T, typename F>
 inline factory_method make_factory_method()
 {
-	return make_factory_method(make_type<T>(), make_type<F>());
+	return make_factory_method(make_validated_type<T>(), make_validated_type<F>());
 }
 
 }}

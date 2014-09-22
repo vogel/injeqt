@@ -87,9 +87,9 @@ private:
 };
 
 setter_method_test::setter_method_test() :
-	injectable_type1_type{make_type<injectable_type1>()},
-	injectable_type2_type{make_type<injectable_type2>()},
-	test_type_type{make_type<test_type>()}
+	injectable_type1_type{make_validated_type<injectable_type1>()},
+	injectable_type2_type{make_validated_type<injectable_type2>()},
+	test_type_type{make_validated_type<test_type>()}
 {
 }
 

@@ -112,7 +112,7 @@ protected:
 	template<typename T>
 	void add_ready_object(QObject *object)
 	{
-		add_ready_object(make_type<T>(), object);
+		add_ready_object(make_validated_type<T>(), object);
 	}
 
 	/**
@@ -156,7 +156,7 @@ protected:
 	template<typename T>
 	void add_type()
 	{
-		add_type(make_type<T>());
+		add_type(make_validated_type<T>());
 	}
 
 	/**
@@ -221,7 +221,7 @@ protected:
 	template<typename T, typename F>
 	void add_factory()
 	{
-		add_factory(make_type<T>(), make_type<F>());
+		add_factory(make_validated_type<T>(), make_validated_type<F>());
 	}
 
 private:

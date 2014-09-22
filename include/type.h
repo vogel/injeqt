@@ -136,10 +136,10 @@ INJEQT_API bool operator >= (const type &x, const type &y);
  *         Q_OBJECT
  *     };
  *
- *     auto injectable_type = make_type<injectable>();
+ *     auto injectable_type = make_validated_type<injectable>();
  */
 template<typename T>
-inline type make_type()
+inline type make_validated_type()
 {
 	qRegisterMetaType<T *>();
 	return make_validated<type>(&T::staticMetaObject);

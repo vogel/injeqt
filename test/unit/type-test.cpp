@@ -53,7 +53,7 @@ void type_test::should_throw_when_created_with_null_meta_object()
 void type_test::should_throw_when_created_with_qobject_meta_object()
 {
 	expect<invalid_type_exception>([]{
-		auto t = make_type<QObject>();
+		auto t = make_validated_type<QObject>();
 	});
 
 	expect<invalid_type_exception>([]{
@@ -63,7 +63,7 @@ void type_test::should_throw_when_created_with_qobject_meta_object()
 
 void type_test::should_return_valid_meta_object()
 {
-	auto t = make_type<valid_type>();
+	auto t = make_validated_type<valid_type>();
 
 	QCOMPARE(t.meta_object(), &valid_type::staticMetaObject);
 }

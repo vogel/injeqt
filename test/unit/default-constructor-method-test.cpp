@@ -109,20 +109,20 @@ void default_constructor_method_test::should_throw_when_created_with_not_invokab
 		make_default_constructor_method<default_not_invokable_constructor>();
 	});
 	expect<no_default_constructor_exception>([&]{
-		make_default_constructor_method(make_type<default_not_invokable_constructor>());
+		make_default_constructor_method(make_validated_type<default_not_invokable_constructor>());
 	});
 }
 
 void default_constructor_method_test::should_create_valid_with_invokable_constructor()
 {
 	auto c1 = make_validated<default_constructor_method>(make_constructor<default_invokable_constructor>("default_invokable_constructor()"));
-	QCOMPARE(c1.object_type(), make_type<default_invokable_constructor>());
+	QCOMPARE(c1.object_type(), make_validated_type<default_invokable_constructor>());
 
 	auto c2 = make_default_constructor_method<default_invokable_constructor>();
-	QCOMPARE(c2.object_type(), make_type<default_invokable_constructor>());
+	QCOMPARE(c2.object_type(), make_validated_type<default_invokable_constructor>());
 
-	auto c3 = make_default_constructor_method(make_type<default_invokable_constructor>());
-	QCOMPARE(c3.object_type(), make_type<default_invokable_constructor>());
+	auto c3 = make_default_constructor_method(make_validated_type<default_invokable_constructor>());
+	QCOMPARE(c3.object_type(), make_validated_type<default_invokable_constructor>());
 
 	QCOMPARE(c1, c2);
 	QCOMPARE(c2, c3);
@@ -131,7 +131,7 @@ void default_constructor_method_test::should_create_valid_with_invokable_constru
 
 void default_constructor_method_test::should_create_object_with_default_constructor()
 {
-	auto constructor = make_default_constructor_method(make_type<default_invokable_constructor>());
+	auto constructor = make_default_constructor_method(make_validated_type<default_invokable_constructor>());
 	auto object = constructor.invoke();
 	auto cast = qobject_cast<default_invokable_constructor *>(object.get());
 

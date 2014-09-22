@@ -143,7 +143,7 @@ default_constructor_method make_default_constructor_method(const type &t);
 template<typename T>
 inline default_constructor_method make_default_constructor_method()
 {
-	return make_default_constructor_method(make_type<T>());
+	return make_default_constructor_method(make_validated_type<T>());
 }
 
 }}

@@ -94,13 +94,13 @@ private:
 };
 
 type_relations_test::type_relations_test() :
-	type_1_type{make_type<type_1>()},
-	type_1_sub_1_type{make_type<type_1_sub_1>()},
-	type_1_sub_1_sub_1_type{make_type<type_1_sub_1_sub_1>()},
-	type_1_sub_1_sub_2_type{make_type<type_1_sub_1_sub_2>()},
-	type_1_sub_2_type{make_type<type_1_sub_2>()},
-	type_2_type{make_type<type_2>()},
-	type_2_sub_1_type{make_type<type_2_sub_1>()}
+	type_1_type{make_validated_type<type_1>()},
+	type_1_sub_1_type{make_validated_type<type_1_sub_1>()},
+	type_1_sub_1_sub_1_type{make_validated_type<type_1_sub_1_sub_1>()},
+	type_1_sub_1_sub_2_type{make_validated_type<type_1_sub_1_sub_2>()},
+	type_1_sub_2_type{make_validated_type<type_1_sub_2>()},
+	type_2_type{make_validated_type<type_2>()},
+	type_2_sub_1_type{make_validated_type<type_2_sub_1>()}
 {
 }
 

@@ -103,7 +103,7 @@ public:
 	template<typename T>
 	T * get()
 	{
-		return qobject_cast<T *>(get(make_type<T>()));
+		return qobject_cast<T *>(get(make_validated_type<T>()));
 	}
 
 	/**

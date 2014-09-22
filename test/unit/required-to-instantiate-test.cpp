@@ -160,18 +160,18 @@ private:
 };
 
 required_to_instantiate_test::required_to_instantiate_test() :
-	type_1_type{make_type<type_1>()},
-	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
-	type_2_type{make_type<type_2>()},
-	type_2_subtype_1_type{make_type<type_2_subtype_1>()},
-	type_3_type{make_type<type_3>()},
-	type_3_subtype_1_type{make_type<type_3_subtype_1>()},
-	cyclic_type_1_type{make_type<cyclic_type_1>()},
-	cyclic_type_1_subtype_1_type{make_type<cyclic_type_1_subtype_1>()},
-	cyclic_type_2_type{make_type<cyclic_type_2>()},
-	cyclic_type_2_subtype_1_type{make_type<cyclic_type_2_subtype_1>()},
-	cyclic_type_3_type{make_type<cyclic_type_3>()},
-	cyclic_type_3_subtype_1_type{make_type<cyclic_type_3_subtype_1>()},
+	type_1_type{make_validated_type<type_1>()},
+	type_1_subtype_1_type{make_validated_type<type_1_subtype_1>()},
+	type_2_type{make_validated_type<type_2>()},
+	type_2_subtype_1_type{make_validated_type<type_2_subtype_1>()},
+	type_3_type{make_validated_type<type_3>()},
+	type_3_subtype_1_type{make_validated_type<type_3_subtype_1>()},
+	cyclic_type_1_type{make_validated_type<cyclic_type_1>()},
+	cyclic_type_1_subtype_1_type{make_validated_type<cyclic_type_1_subtype_1>()},
+	cyclic_type_2_type{make_validated_type<cyclic_type_2>()},
+	cyclic_type_2_subtype_1_type{make_validated_type<cyclic_type_2_subtype_1>()},
+	cyclic_type_3_type{make_validated_type<cyclic_type_3>()},
+	cyclic_type_3_subtype_1_type{make_validated_type<cyclic_type_3_subtype_1>()},
 	simple_types_model{make_types_model(std::vector<type>
 	{
 		type_1_type,

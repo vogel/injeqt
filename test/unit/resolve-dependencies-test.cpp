@@ -93,10 +93,10 @@ private:
 };
 
 resolve_dependencies_test::resolve_dependencies_test() :
-	injectable_type1_type{make_type<injectable_type1>()},
-	injectable_type2_type{make_type<injectable_type2>()},
-	injectable_type3_type{make_type<injectable_type3>()},
-	sublcass_injectable_type1_type{make_type<sublcass_injectable_type1>()},
+	injectable_type1_type{make_validated_type<injectable_type1>()},
+	injectable_type2_type{make_validated_type<injectable_type2>()},
+	injectable_type3_type{make_validated_type<injectable_type3>()},
+	sublcass_injectable_type1_type{make_validated_type<sublcass_injectable_type1>()},
 	injectable_type1_setter{make_setter_method<valid_type>("set_type1(injectable_type1*)")},
 	injectable_type2_setter{make_setter_method<valid_type>("set_type2(injectable_type2*)")},
 	injectable_type3_setter{make_setter_method<valid_type>("set_type3(injectable_type3*)")},

@@ -134,7 +134,7 @@ void factory_method_test::should_throw_when_created_with_not_invokable_factory_m
 		make_factory_method<result_object, factory_not_invokable>();
 	});
 	expect<no_factory_method_exception>([&]{
-		make_factory_method(make_type<result_object>(), make_type<factory_not_invokable>());
+		make_factory_method(make_validated_type<result_object>(), make_validated_type<factory_not_invokable>());
 	});
 }
 
@@ -144,7 +144,7 @@ void factory_method_test::should_throw_when_created_with_non_unique_factory_meth
 		make_factory_method<result_object, non_unique_factory>();
 	});
 	expect<non_unique_factory_exception>([&]{
-		make_factory_method(make_type<result_object>(), make_type<non_unique_factory>());
+		make_factory_method(make_validated_type<result_object>(), make_validated_type<non_unique_factory>());
 	});
 }
 
@@ -158,16 +158,16 @@ void factory_method_test::should_throw_when_created_with_different_type_factory_
 void factory_method_test::should_create_valid_with_invokable_factory_method()
 {
 	auto c1 = factory_method{make_method<valid_factory>("create_result_object()")};
-	QCOMPARE(c1.object_type(), make_type<valid_factory>());
-	QCOMPARE(c1.result_type(), make_type<result_object>());
+	QCOMPARE(c1.object_type(), make_validated_type<valid_factory>());
+	QCOMPARE(c1.result_type(), make_validated_type<result_object>());
 
 	auto c2 = make_factory_method<result_object, valid_factory>();
-	QCOMPARE(c2.object_type(), make_type<valid_factory>());
-	QCOMPARE(c2.result_type(), make_type<result_object>());
+	QCOMPARE(c2.object_type(), make_validated_type<valid_factory>());
+	QCOMPARE(c2.result_type(), make_validated_type<result_object>());
 
-	auto c3 = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
-	QCOMPARE(c3.object_type(), make_type<valid_factory>());
-	QCOMPARE(c3.result_type(), make_type<result_object>());
+	auto c3 = make_factory_method(make_validated_type<result_object>(), make_validated_type<valid_factory>());
+	QCOMPARE(c3.object_type(), make_validated_type<valid_factory>());
+	QCOMPARE(c3.result_type(), make_validated_type<result_object>());
 
 	QCOMPARE(c1, c2);
 	QCOMPARE(c2, c3);
