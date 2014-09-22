@@ -48,20 +48,6 @@ class INJEQT_API module_impl final
 
 public:
 	/**
-	 * @brief Add ready object to module_impl
-	 * @see module::add_ready_object<T>(QObject *)
-	 * @param t type to add
-	 * @param object object of type t
-	 * @throw invalid_type_exception when t is not a valid type
-	 * @throw invalid_implementation_availability_exception when object of backing implementation is nullptr
-	 * @throw invalid_interface_type_exception when object of backing implementation does not implement interface_type
-	 *
-	 * This methods creates a provider of type provider_ready and adds it to list. If types does not match
-	 * object or object is nullptr exception will be thrown.
-	 */
-	void add_ready_object(type t, QObject *object);
-
-	/**
 	 * @brief Add default constructible type to module_impl
 	 * @see module::add_type<T>()
 	 * @param t type to add
@@ -91,14 +77,15 @@ public:
 
 	std::vector<std::unique_ptr<provider>> & providers();
 
-private:
-	std::vector<std::unique_ptr<provider>> _providers;
-
 	/**
 	 * @brief Add provider to list
 	 * @param p provider to add
+	 * @pre p must be valid
 	 */
 	void add_provider(std::unique_ptr<provider> p);
+
+private:
+	std::vector<std::unique_ptr<provider>> _providers;
 
 };
 

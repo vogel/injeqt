@@ -25,6 +25,7 @@
 #include "exception/invalid-qobject-exception.h"
 #include "exception/qobject-type-exception.h"
 #include "extract-interfaces.h"
+#include "implementation.h"
 #include "module-impl.h"
 #include "provider-by-default-constructor.h"
 #include "provider-by-factory.h"
@@ -58,7 +59,9 @@ void module::add_ready_object(type t, QObject *object)
 	if (!implements.contains(t))
 		throw exception::interface_not_implemented_exception{};
 
-	_pimpl->add_ready_object(t, object);
+	auto i = internal::implementation{std::move(t), object};
+	auto p = std::unique_ptr<internal::provider_ready>{new internal::provider_ready{std::move(i)}};
+	_pimpl->add_provider(std::move(p));
 }
 
 void module::add_type(type t)
