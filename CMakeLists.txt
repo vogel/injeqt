@@ -40,6 +40,8 @@ set(INJEQT_SRCS
 	src/module.cpp
 	src/type.cpp
 
+	src/exception/exception.cpp
+
 	src/internal/default-constructor-method.cpp
 	src/internal/dependencies.cpp
 	src/internal/dependency.cpp

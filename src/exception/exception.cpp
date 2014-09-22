@@ -18,37 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include "injeqt.h"
-
-#include <exception>
-#include <string>
+#include "exception/exception.h"
 
 namespace injeqt { namespace v1 { namespace exception {
 
-class INJEQT_API exception : public std::exception
+exception::exception(std::string what) :
+	_what{std::move(what)}
 {
+}
 
-public:
-	explicit exception(std::string what = std::string{});
-	virtual ~exception();
+exception::~exception()
+{
+}
 
-	virtual const char * what() const noexcept override;
-
-private:
-	std::string _what;
-
-};
-
-#define INJEQT_EXCEPTION(name, parent) \
-class INJEQT_API name : public parent \
-{ \
-\
-public: \
-	explicit name(std::string what = std::string{}) : parent{std::move(what)} {} \
-	virtual ~name() {} \
-\
-};
+const char * exception::what() const noexcept
+{
+	return _what.c_str();
+}
 
 }}}
