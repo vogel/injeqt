@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "injeqt-exception.h"
+#include "exception/exception.h"
 #include "injeqt.h"
 #include "type.h"
 
@@ -29,14 +29,12 @@
  * @brief Contains classes and functions for representing "interface is implemented by type" relations.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**
  * @brief Any exception that can occur when validating or creating implemented_by objects.
  */
-INJEQT_EXCEPTION(invalid_implemented_by_exception, injeqt_exception);
+INJEQT_EXCEPTION(invalid_implemented_by_exception, ::injeqt::v1::exception::exception);
 
 /**
  * @brief Represents "interface is implemented by type" relations.

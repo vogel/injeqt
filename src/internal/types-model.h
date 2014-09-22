@@ -30,14 +30,12 @@
  * @brief Contains classes and functions for representing model of Injeqt types.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**
  * @brief Any exception that can be thrown when creating or using types_model.
  */
-INJEQT_EXCEPTION(model_exception, injeqt_exception);
+INJEQT_EXCEPTION(model_exception, ::injeqt::v1::exception::exception);
 
 /**
  * @brief Exception thrown in make_types_model(const std::vector<type> &) when one of configured types is ambiguous.

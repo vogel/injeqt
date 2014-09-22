@@ -29,8 +29,6 @@
  * @brief Contains classes and functions for representing set of Injeqt type_dependencies objects.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**

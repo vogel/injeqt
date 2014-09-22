@@ -30,8 +30,6 @@
 
 class QObject;
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 class injector_impl;

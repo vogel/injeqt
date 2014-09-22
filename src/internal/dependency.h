@@ -29,8 +29,6 @@
  * @brief Contains classes and functions for abstractions of Injeqt dependencies.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**

@@ -32,12 +32,10 @@
  * @brief Contains classes and functions for representing set of Injeqt providers sorted by provider::provided_type().
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**
- * @brief Extract provided_type from provider to pointer for storting purposes.
+ * @brief Extract provided_type from pointer to provider for storting purposes.
  */
 inline type type_from_provider(const std::unique_ptr<provider> &c)
 {

@@ -31,8 +31,6 @@
  * @brief Contains classes and functions for resolving dependencies.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 class resolved_dependency;

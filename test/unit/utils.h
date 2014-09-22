@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "injeqt-exception.h"
+#include "exception/exception.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QObject>
@@ -28,8 +28,8 @@
 
 namespace injeqt { namespace v1 {
 
-INJEQT_EXCEPTION(method_not_found_exception, injeqt_exception);
-INJEQT_EXCEPTION(constructor_not_found_exception, injeqt_exception);
+INJEQT_EXCEPTION(method_not_found_exception, ::injeqt::v1::exception::exception);
+INJEQT_EXCEPTION(constructor_not_found_exception, ::injeqt::v1::exception::exception);
 
 template<typename T>
 std::unique_ptr<QObject> make_object()

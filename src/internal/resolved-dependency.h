@@ -29,11 +29,9 @@
  * @brief Contains classes and functions for resolved dependencies.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
-INJEQT_EXCEPTION(invalid_resolved_dependency_exception, injeqt_exception);
+INJEQT_EXCEPTION(invalid_resolved_dependency_exception, ::injeqt::v1::exception::exception);
 INJEQT_EXCEPTION(non_matching_setter_exception, invalid_resolved_dependency_exception);
 INJEQT_EXCEPTION(inavalid_apply_on_object_exception, invalid_resolved_dependency_exception);
 

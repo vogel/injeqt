@@ -40,7 +40,7 @@ namespace injeqt { namespace v1 {
 
 namespace injeqt { namespace internal {
 
-INJEQT_EXCEPTION(injector_exception, injeqt_exception);
+INJEQT_EXCEPTION(injector_exception, ::injeqt::v1::exception::exception);
 INJEQT_EXCEPTION(type_not_configured_exception, injector_exception);
 INJEQT_EXCEPTION(unresolved_dependencies_exception, injector_exception);
 INJEQT_EXCEPTION(type_not_instantiated_exception, injector_exception);

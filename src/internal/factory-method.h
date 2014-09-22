@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "injeqt-exception.h"
+#include "exception/exception.h"
 #include "injeqt.h"
 #include "type.h"
 
@@ -34,14 +34,12 @@
 
 class QObject;
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**
  * @brief Any exception that can occur when validating or creating factory_method objects.
  */
-INJEQT_EXCEPTION(factory_method_exception, injeqt_exception);
+INJEQT_EXCEPTION(factory_method_exception, ::injeqt::v1::exception::exception);
 
 /**
  * @brief Exception that can occur when validating factory_method objects. Objects created with make_factory_method<T, F>

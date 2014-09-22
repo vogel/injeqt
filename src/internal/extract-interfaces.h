@@ -28,8 +28,6 @@
  * @brief Contains functions for extracting interfaces from a type.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**

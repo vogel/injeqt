@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "injeqt-exception.h"
+#include "exception/exception.h"
 #include "injeqt.h"
 #include "type.h"
 
@@ -31,14 +31,12 @@
  * @brief Contains classes and functions for representing setter methods.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**
  * @brief Any exception that can occur when validating or creating setter_method objects or invoking setter_method.
  */
-INJEQT_EXCEPTION(setter_exception, injeqt_exception);
+INJEQT_EXCEPTION(setter_exception, ::injeqt::v1::exception::exception);
 
 /**
  * @brief Any exception that can occur when validating or creating setter_method objects.

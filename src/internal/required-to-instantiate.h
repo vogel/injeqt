@@ -30,8 +30,6 @@
  * @brief Contains functions for computing list of types required to properly instantiate given type.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**

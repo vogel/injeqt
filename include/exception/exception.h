@@ -25,14 +25,14 @@
 #include <exception>
 #include <string>
 
-namespace injeqt { namespace v1 {
+namespace injeqt { namespace v1 { namespace exception {
 
-class INJEQT_API injeqt_exception : public std::exception
+class INJEQT_API exception : public std::exception
 {
 
 public:
-	explicit injeqt_exception(std::string what = std::string{}) : _what{std::move(what)} {}
-	virtual ~injeqt_exception() {}
+	explicit exception(std::string what = std::string{}) : _what{std::move(what)} {}
+	virtual ~exception() {}
 
 	virtual const char * what() const noexcept override { return _what.c_str(); }
 
@@ -44,12 +44,11 @@ private:
 #define INJEQT_EXCEPTION(name, parent) \
 class INJEQT_API name : public parent \
 { \
- \
+\
 public: \
 	explicit name(std::string what = std::string{}) : parent{std::move(what)} {} \
 	virtual ~name() {} \
- \
+\
 };
 
-
-}}
+}}}

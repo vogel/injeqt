@@ -29,8 +29,6 @@
  * @brief Contains classes and functions for representing provider working on ready object.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**

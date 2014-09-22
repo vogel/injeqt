@@ -30,8 +30,6 @@
  * @brief Contains classes and functions for representing set of Injeqt dependencies.
  */
 
-using namespace injeqt::v1;
-
 namespace injeqt { namespace internal {
 
 /**
@@ -57,7 +55,7 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
 /**
  * @brief Any exception that can occur during extracting dependencies from type.
  */
-INJEQT_EXCEPTION(dependency_exception, injeqt_exception);
+INJEQT_EXCEPTION(dependency_exception, ::injeqt::v1::exception::exception);
 
 /**
  * @brief Exception thrown when type has two INJEQT_SETTER tagged setters with the same type.
