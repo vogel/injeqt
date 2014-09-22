@@ -118,6 +118,32 @@ INJEQT_API bool operator <= (const type &x, const type &y);
 INJEQT_API bool operator >= (const type &x, const type &y);
 
 /**
+ * @brief Create instance of type class.
+ * @tparam T type to be represented by new object
+ *
+ * Call to create type object abstracting T. If T is not a class based on
+ * QObject with Q_OBJECT macro defined the result object is invalid.
+ *
+ * This function registers T in Qt meta type systems, because sometimes automatic
+ * registration does not occur as soon as it is required by Injeqt.
+ *
+ * Example usage:
+ *
+ *     class injectable : public QObject
+ *     {
+ *         Q_OBJECT
+ *     };
+ *
+ *     auto injectable_type = make_validated_type<injectable>();
+ */
+template<typename T>
+inline type make_type()
+{
+	qRegisterMetaType<T *>();
+	return type{&T::staticMetaObject};
+}
+
+/**
  * @brief Create valid instance of type class.
  * @tparam T type to be represented by new object
  * @throws invalid_type_exception if type is not derived from QObject.
