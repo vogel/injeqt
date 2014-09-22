@@ -40,7 +40,11 @@ set(INJEQT_SRCS
 	src/module.cpp
 	src/type.cpp
 
+	src/exception/empty-type-exception.cpp
 	src/exception/exception.cpp
+	src/exception/interface-not-implemented-exception.cpp
+	src/exception/invalid-qobject-exception.cpp
+	src/exception/qobject-type-exception.cpp
 
 	src/internal/default-constructor-method.cpp
 	src/internal/dependencies.cpp
