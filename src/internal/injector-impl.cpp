@@ -101,7 +101,11 @@ implementations injector_impl::objects_with(implementations objects, const types
 			auto instance = provider_it->get()->provide(*this);
 
 			if (instance)
-				objects_to_resolve.emplace_back(type_to_instantiate, instance);
+			{
+				auto i = implementation{type_to_instantiate, instance};
+				validate(i);
+				objects_to_resolve.emplace_back(i);
+			}
 			else
 				throw type_not_instantiated_exception{type_to_instantiate.name()};
 		}
