@@ -42,9 +42,4 @@ QObject * provider_ready::provide(injector_impl &)
 	return _ready_implementation.object();
 }
 
-void validate(const provider_ready &pr)
-{
-	validate(pr.ready_implementation());
-}
-
 }}
