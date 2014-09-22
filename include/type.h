@@ -52,26 +52,36 @@ INJEQT_EXCEPTION(invalid_type_exception, ::injeqt::v1::exception::exception);
  * @brief Abstraction of C++ type.
  *
  * Represents a C++ type. Currently only types inheriting from QObject class can
- * be represented. Object is created with QMetaObject instance. If provided QMetaObject
- * is nullptr or designates QObject class, then resulting type is invalid. Otherwise
- * resulting type is valid.
+ * be represented. Type can be empty if created with default constructor or if
+ * passed QMetaObject is nullptr - use is_empty() to check for that. Type can be
+ * also qobject if passed QMetaObject designates QObject - use is_qobject() to check
+ * for that. Most Injeqt code requires type that is !is_empty() && !is_qobject().
  *
  * Direct instantiations of this class should not be needed in user code.
  *
- * Use convienance free function make_type&lt;T&gt; that also registers type T
- * in Qt meta-type that is required for Injeqt to function properly.
+ * Use convienance free function make_type&lt;T&gt; and make_validated_type&lt;T&gt;
+ * that also registers type T in Qt meta-type that is required for Injeqt to function
+ * properly.
  *
- * To check type validity use validate(type) free function. Internal code assumes
- * that all passes type instances are valid. All public API functions always check
- * user-provided types validity and throw an invalid_type_exception if neccessary.
+ * To check if type is not empty and not qobject use validate(type) free function.
+ * Internal code assumes that all passes type instances are not empty and not qobject.
+ * All public API functions always check user-provided types validity and throw an
+ * invalid_type_exception if neccessary.
  *
  * Type name can be retrieived by name() member. Original QMetaObject can be read
  * using meta_object() member.
+ *
+ * Behavior for all methods is undefined if theirs preconditions are not met.
  */
 class INJEQT_API type final
 {
 
 public:
+	/**
+	 * @brief Create empty type
+	 */
+	type();
+
 	/**
 	 * @param meta_object QMetaObject representing QObject-based type.<br>
 	 *                    New object does not take ownership of meta_object. QMetaObject
@@ -83,7 +93,19 @@ public:
 	explicit type(const QMetaObject * meta_object);
 
 	/**
-	 * Return unique name of type. Requires type to be valid.
+	 * @return true, if type is empty
+	 */
+	bool is_empty() const;
+
+	/**
+	 * @pre !is_empty()
+	 * @return true, if type is qobject
+	 */
+	bool is_qobject() const;
+
+	/**
+	 * @pre !is_empty()
+	 * @return unique name of type
 	 */
 	std::string name() const;
 

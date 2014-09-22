@@ -26,9 +26,24 @@
 
 namespace injeqt { namespace v1 {
 
+type::type() :
+	_meta_object{nullptr}
+{
+}
+
 type::type(const QMetaObject *meta_object) :
 	_meta_object{meta_object}
 {
+}
+
+bool type::is_empty() const
+{
+	return _meta_object == nullptr;
+}
+
+bool type::is_qobject() const
+{
+	return _meta_object->superClass() == nullptr;
 }
 
 std::string type::name() const
@@ -43,9 +58,7 @@ const QMetaObject * type::meta_object() const
 
 void validate(const type &t)
 {
-	if (!t.meta_object())
-		throw invalid_type_exception{};
-	if (!t.meta_object()->superClass())
+	if (t.is_empty() || t.is_qobject())
 		throw invalid_type_exception{};
 }
 
