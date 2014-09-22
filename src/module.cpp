@@ -57,7 +57,7 @@ void module::add_ready_object(type t, QObject *object)
 	auto object_type = type{object->metaObject()};
 	auto implements = internal::extract_interfaces(object_type);
 	if (!implements.contains(t))
-		throw exception::interface_not_implemented_exception{};
+		throw exception::interface_not_implemented_exception{t.name()};
 
 	auto i = internal::implementation{std::move(t), object};
 	auto p = std::unique_ptr<internal::provider_ready>{new internal::provider_ready{std::move(i)}};
