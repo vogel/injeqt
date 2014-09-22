@@ -33,6 +33,7 @@ namespace injeqt { namespace internal {
 /**
  * @brief Return list of interfaces that given type implements.
  * @param for_type does not have to be a valid type object
+ * @pre !for_type.is_empty()
  *
  * QObject meta type system supports only single inheritance. This method
  * gets all QObject-based ancestors of for_type (including for_type itself,
