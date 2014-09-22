@@ -20,6 +20,11 @@
 
 #include "module.h"
 
+#include "exception/empty-type-exception.h"
+#include "exception/interface-not-implemented-exception.h"
+#include "exception/invalid-qobject-exception.h"
+#include "exception/qobject-type-exception.h"
+#include "extract-interfaces.h"
 #include "module-impl.h"
 #include "provider-by-default-constructor.h"
 #include "provider-by-factory.h"
@@ -40,6 +45,19 @@ module::~module()
 
 void module::add_ready_object(type t, QObject *object)
 {
+	if (t.is_empty())
+		throw exception::empty_type_exception{};
+	if (t.is_qobject())
+		throw exception::qobject_type_exception();
+
+	if (!object || !object->metaObject())
+		throw exception::invalid_qobject_exception{};
+
+	auto object_type = type{object->metaObject()};
+	auto implements = internal::extract_interfaces(object_type);
+	if (!implements.contains(t))
+		throw exception::interface_not_implemented_exception{};
+
 	_pimpl->add_ready_object(t, object);
 }
 

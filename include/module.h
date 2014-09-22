@@ -66,6 +66,10 @@ protected:
 	 * @brief Add already constructed object to module.
 	 * @tparam T type of added object (must be inherited from QObject).
 	 * @param object added object
+	 * @throw empty_type_exception when passed type @p T is an empty type
+	 * @throw qobject_type_exception when passed type @p T represents QObject
+	 * @throw invalid_qobject_exception when passed @p object is nullptr or does not have valid QMetaType
+	 * @throw interface_not_implemented_exception when passed @p object does not implements type @p T
 	 *
 	 * It has to be fully constructed and must not expect any injection to take place on it
 	 * (even if it has INJEQT_SETTER methods). However this object could be injected into other
