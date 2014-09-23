@@ -127,18 +127,19 @@ bool operator == (const default_constructor_method &x, const default_constructor
 bool operator != (const default_constructor_method &x, const default_constructor_method &y);
 
 /**
- * @see make_default_constructor_method<T>()
+ * @brief Extract default constructor method from given type T.
+ * @tparam T type to extract constructor from
+ * @throw no_default_constructor_exception if no default constructor is found.
+ * @pre !t.is_empty() && !t.is_qobject()
+ *
+ * This method looks for all constructors of type t tagged with Q_INVOKABLE and returns
+ * default_constructor_method based on one without any parameters (even with default
+ * values). If no such constructor is found - no_default_constructor_exception is thrown.
  */
 default_constructor_method make_default_constructor_method(const type &t);
 
 /**
- * @brief Extract default constructor method from given type T.
- * @tparam T type to extract constructor from
- * @throw no_default_constructor_exception if no default constructor is found.
- *
- * This method looks for all constructors of type T tagged with Q_INVOKABLE and returns
- * default_constructor_method based on one without any parameters (even with default
- * values). If no such constructor is found - no_default_constructor_exception is thrown.
+ * @see make_default_constructor_method(const type &)
  */
 template<typename T>
 inline default_constructor_method make_default_constructor_method()

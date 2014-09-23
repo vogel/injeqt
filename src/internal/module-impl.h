@@ -48,18 +48,6 @@ class INJEQT_API module_impl final
 
 public:
 	/**
-	 * @brief Add default constructible type to module_impl
-	 * @see module::add_type<T>()
-	 * @param t type to add
-	 * @throw invalid_type_exception when t is not a valid type
-	 * @throws no_default_constructor_exception if type t does not have default constructor
-	 *
-	 * This methods creates a provider of type provider_by_default_contructor and adds it to list. If type t is not
-	 * valid or does not have a default constructor exception will be thrown.
-	 */
-	void add_type(type t);
-
-	/**
 	 * @brief Add factory constructible type to module_impl
 	 * @see module::add_type<T>()
 	 * @param t type to add

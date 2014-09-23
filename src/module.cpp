@@ -24,6 +24,7 @@
 #include "exception/interface-not-implemented-exception.h"
 #include "exception/invalid-qobject-exception.h"
 #include "exception/qobject-type-exception.h"
+#include "default-constructor-method.h"
 #include "extract-interfaces.h"
 #include "implementation.h"
 #include "module-impl.h"
@@ -66,7 +67,14 @@ void module::add_ready_object(type t, QObject *object)
 
 void module::add_type(type t)
 {
-	_pimpl->add_type(t);
+	if (t.is_empty())
+		throw exception::empty_type_exception{};
+	if (t.is_qobject())
+		throw exception::qobject_type_exception();
+
+	auto c = internal::make_default_constructor_method(std::move(t));
+	auto p = std::unique_ptr<internal::provider_by_default_constructor>{new internal::provider_by_default_constructor{std::move(c)}};
+	_pimpl->add_provider(std::move(p));
 }
 
 void module::add_factory(type t, type f)
