@@ -116,7 +116,7 @@ protected:
 	template<typename T>
 	void add_ready_object(QObject *object)
 	{
-		add_ready_object(make_validated_type<T>(), object);
+		add_ready_object(make_type<T>(), object);
 	}
 
 	/**
