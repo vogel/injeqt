@@ -47,22 +47,6 @@ class INJEQT_API module_impl final
 {
 
 public:
-	/**
-	 * @brief Add factory constructible type to module_impl
-	 * @see module::add_type<T>()
-	 * @param t type to add
-	 * @param f type of factory object
-	 * @throw invalid_type_exception when t is not a valid type
-	 * @throw invalid_type_exception when f is not a valid type
-	 * @throw no_factory_method_exception if no factory method returning pointer to t is found in f.
-	 * @throw non_unique_factory_exception if more than one factory methods returning pointer to tare found in f.
-	 *
-	 * This methods creates a provider of type provider_by_factory and adds it to list. If type t or f is not
-	 * valid or type f does not have factory method that returns pointer to object of type t, exception will
-	 * be thrown.
-	 */
-	void add_factory(type t, type f);
-
 	std::vector<std::unique_ptr<provider>> & providers();
 
 	/**

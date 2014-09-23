@@ -59,9 +59,4 @@ types provider_by_factory::required_types() const
 	return types{_factory.object_type()};
 }
 
-void validate(const provider_by_factory &pbf)
-{
-	validate(pbf.factory());
-}
-
 }}

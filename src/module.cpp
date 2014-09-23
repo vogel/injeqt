@@ -25,6 +25,7 @@
 #include "exception/interface-not-implemented-exception.h"
 #include "exception/invalid-qobject-exception.h"
 #include "exception/qobject-type-exception.h"
+#include "exception/unique-factory-method-not-found-exception.h"
 #include "default-constructor-method.h"
 #include "extract-interfaces.h"
 #include "implementation.h"
@@ -83,7 +84,21 @@ void module::add_type(type t)
 
 void module::add_factory(type t, type f)
 {
-	_pimpl->add_factory(t, f);
+	if (t.is_empty())
+		throw exception::empty_type_exception{};
+	if (t.is_qobject())
+		throw exception::qobject_type_exception();
+	if (f.is_empty())
+		throw exception::empty_type_exception{};
+	if (f.is_qobject())
+		throw exception::qobject_type_exception();
+
+	auto fm = internal::make_factory_method(t, f);
+	if (fm.is_empty())
+		throw exception::unique_factory_method_not_found_exception{t.name() + " in " + f.name()};
+
+	auto p = std::unique_ptr<internal::provider_by_factory>{new internal::provider_by_factory{std::move(fm)}};
+	_pimpl->add_provider(std::move(p));
 }
 
 }}

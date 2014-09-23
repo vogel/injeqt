@@ -85,17 +85,4 @@ private:
 
 };
 
-/**
- * @brief Throws an exception if provider_by_factory pbf is not valid.
- * @param pbf provider_by_factory to validate
- * @throws invalid_factory_method_exception if backing QMetaMethod is not a method or slot
- * @throws invalid_factory_method_exception if backing QMetaMethod contains paramers
- * @throws invalid_factory_method_exception if backing QMetaMethod comes from invalid type
- * @throws invalid_factory_method_exception if backing QMetaMethod does not return valid type
- *
- * Call to validate provider_by_factory pbf. If backing QMetaMethod of backin factory_method
- * is not valid factory method an exception will be thrown.
- */
-void validate(const provider_by_factory &pbf);
-
 }}

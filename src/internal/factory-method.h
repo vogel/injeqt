@@ -64,8 +64,8 @@ INJEQT_EXCEPTION(non_unique_factory_exception, factory_method_exception);
  * Factory method is created from Qt type QMetaMethod. As Qt only creates QMetaMethod
  * objects for slots, signals and all methods marked with Q_INVOKABLE tag - Injeqt
  * requires that factory method is marked with that tag or is a slot. This method must return
- * pointer of type inherited from QObject and is not allowed to have any parameters - even
- * with default values.
+ * pointer of type inherited from QObject and is not allowed only to have parameters with
+ * default values.
  *
  * Example of valid factory method:
  *
@@ -96,35 +96,49 @@ class factory_method final
 
 public:
 	/**
+	 * @brief Create empty factory_method.
+	 */
+	factory_method();
+
+	/**
 	 * @brief Create object from QMetaMethod definition.
 	 * @param meta_method Qt meta method that should be a factory method
+	 * @pre meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot
+	 * @pre meta_method.parameterCount() == 0
+	 * @pre meta_method.enclosingMetaObject() != nullptr
 	 */
 	explicit factory_method(QMetaMethod meta_method);
 
 	/**
+	 * @return true if factory_method is empty and does not represent method
+	 */
+	bool is_empty() const;
+
+	/**
 	 * @return Type of objects that owns this factory method.
-	 *
-	 * May return invalid type if QMetaMethod passed in constructor was invalid.
+	 * @pre !is_empty()
 	 */
 	const type & object_type() const;
 
 	/**
 	 * @return Type of objects created by factory method.
-	 *
-	 * May return invalid type if QMetaMethod passed in constructor was invalid.
+	 * @pre !is_empty()
 	 */
 	const type & result_type() const;
 
 	/**
 	 * @return Qt representation of factory method.
 	 *
-	 * May return empty value if QMetaMethod passed in constructor was invalid.
+	 * May return empty value if is_empty()
 	 */
 	const QMetaMethod & meta_method() const;
 
 	/**
 	 * @param on object to call this method on
 	 * @return Result on factory method called on given object.
+	 * @pre !is_empty()
+	 * @pre on != nullptr
+	 * @pre meta_method().enclosingMetaObject() is equal to @p on type
 	 *
 	 * This method can be only called on valid objects with @p on parameter being
 	 * the same type as object_type() returns. Invalid invocation with result
@@ -139,44 +153,21 @@ private:
 
 };
 
-/**
- * @brief Throws an exception if factory_method fm is not valid.
- * @param fm factory_method to validate
- * @throws invalid_factory_method_exception if backing QMetaMethod is not a method or slot
- * @throws invalid_factory_method_exception if backing QMetaMethod contains paramers
- * @throws invalid_factory_method_exception if backing QMetaMethod comes from invalid type
- * @throws invalid_factory_method_exception if backing QMetaMethod does not return valid type
- *
- * Call to validate factory_method fm. If backing QMetaMethod is not valid factory method
- * an exception will be thrown.
- */
-void validate(const factory_method &fm);
-
 bool operator == (const factory_method &x, const factory_method &y);
 bool operator != (const factory_method &x, const factory_method &y);
 
 /**
- * @see make_default_constructor_method<T, F>()
- */
-factory_method make_factory_method(const type &t, const type &f);
-
-/**
  * @brief Extract factory method from given type F that returns pointers to T.
- * @tparam T factory method must return T *
- * @tparam F type to extract constructor from
- * @throw no_factory_method_exception if no factory method returning T* is found.
- * @throw non_unique_factory_exception if more than one factory methods returning T* are found.
+ * @tparam t factory method must return T *
+ * @tparam f type to extract constructor from
+ * @pre !t.is_empty() && !t.is_qobject()
+ * @pre !f.is_empty() && !f.is_qobject()
  *
  * This function looks for all methods of type F that are tagged with Q_INVOKABLE, does not
  * accepts argumetns and returns T* or pointer to type derived from T. If only one such method
- * is found it is wrapped in factory_method type and returned. In other cases exception is thrown.
- *
- * This function is guaranted to return valid object or throw.
+ * is found it is wrapped in factory_method type and returned. In other cases an empty
+ * factory_method is returned.
  */
-template<typename T, typename F>
-inline factory_method make_factory_method()
-{
-	return make_factory_method(make_validated_type<T>(), make_validated_type<F>());
-}
+factory_method make_factory_method(const type &t, const type &f);
 
 }}

@@ -119,7 +119,7 @@ bool operator != (const default_constructor_method &x, const default_constructor
 
 /**
  * @brief Extract default constructor method from given type T.
- * @tparam T type to extract constructor from
+ * @tparam t type to extract constructor from
  * @pre !t.is_empty() && !t.is_qobject()
  *
  * This method looks for all constructors of type t tagged with Q_INVOKABLE and returns

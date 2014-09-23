@@ -24,11 +24,20 @@
 
 namespace injeqt { namespace internal {
 
+	factory_method::factory_method()
+{
+}
+
 factory_method::factory_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_result_type{QMetaType::metaObjectForType(meta_method.returnType())},
 	_meta_method{std::move(meta_method)}
 {
+}
+
+bool factory_method::is_empty() const
+{
+	return !_meta_method.isValid();
 }
 
 const type & factory_method::object_type() const

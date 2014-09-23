@@ -18,25 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module-impl.h"
+#include "exception/unique-factory-method-not-found-exception.h"
 
-#include "provider-by-default-constructor.h"
-#include "provider-by-factory.h"
-#include "provider-ready.h"
+namespace injeqt { namespace v1 { namespace exception {
 
-#include <QtCore/QMetaObject>
-
-namespace injeqt { namespace internal {
-// TODO: tests!!!
-
-void module_impl::add_provider(std::unique_ptr<provider> p)
+unique_factory_method_not_found_exception::unique_factory_method_not_found_exception(std::string what) :
+	exception{std::move(what)}
 {
-	_providers.push_back(std::move(p));
 }
 
-std::vector<std::unique_ptr<provider>> & module_impl::providers()
+unique_factory_method_not_found_exception::~unique_factory_method_not_found_exception()
 {
-	return _providers;
 }
 
-}}
+}}}

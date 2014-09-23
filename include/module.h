@@ -170,6 +170,11 @@ protected:
 	 * @brief Add type that can be created by factory to module.
 	 * @tparam T type added to module (must be inherited from QObject).
 	 * @tparam F factory type (must be inherited from QObject).
+	 * @throw empty_type_exception when passed type @p T is an empty type
+	 * @throw qobject_type_exception when passed type @p T represents QObject
+	 * @throw empty_type_exception when passed type @p F is an empty type
+	 * @throw qobject_type_exception when passed type @p F represents QObject
+	 * @throw unique_factory_method_not_found_exception when type F does not have unique factory method for T
 	 *
 	 * When an object of that type (or one of inherited types) is requested from injector or
 	 * as a dependency to other objects then object of type F is requted first and its method

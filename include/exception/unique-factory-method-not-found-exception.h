@@ -18,25 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module-impl.h"
+#pragma once
 
-#include "provider-by-default-constructor.h"
-#include "provider-by-factory.h"
-#include "provider-ready.h"
+#include "exception/exception.h"
 
-#include <QtCore/QMetaObject>
+namespace injeqt { namespace v1 { namespace exception {
 
-namespace injeqt { namespace internal {
-// TODO: tests!!!
-
-void module_impl::add_provider(std::unique_ptr<provider> p)
+/**
+ * @brief Exception thrown when type F does not have unique factory method for T in module::add_factory<T, F>() call.
+ */
+class INJEQT_API unique_factory_method_not_found_exception : public exception
 {
-	_providers.push_back(std::move(p));
-}
 
-std::vector<std::unique_ptr<provider>> & module_impl::providers()
-{
-	return _providers;
-}
+public:
+	explicit unique_factory_method_not_found_exception(std::string what = std::string{});
+	virtual ~unique_factory_method_not_found_exception();
 
-}}
+};
+
+}}}
