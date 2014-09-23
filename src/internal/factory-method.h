@@ -37,27 +37,6 @@ class QObject;
 namespace injeqt { namespace internal {
 
 /**
- * @brief Any exception that can occur when validating or creating factory_method objects.
- */
-INJEQT_EXCEPTION(factory_method_exception, ::injeqt::v1::exception::exception);
-
-/**
- * @brief Exception that can occur when validating factory_method objects. Objects created with make_factory_method<T, F>
- *        will never cause that exception to be thrown.
- */
-INJEQT_EXCEPTION(invalid_factory_method_exception, factory_method_exception);
-
-/**
- * @brief Exception thrown when factory method returning given type was not found in factory type.
- */
-INJEQT_EXCEPTION(no_factory_method_exception, factory_method_exception);
-
-/**
- * @brief Exception thrown when more than one factory method returning given type was found in an factory type.
- */
-INJEQT_EXCEPTION(non_unique_factory_exception, factory_method_exception);
-
-/**
  * @brief Abstraction of factory method.
  *
  * This class is used for creating objects of types configured with module::add_factory<T, F>().

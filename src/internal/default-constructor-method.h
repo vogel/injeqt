@@ -37,16 +37,6 @@ class QObject;
 namespace injeqt { namespace internal {
 
 /**
- * @brief Any exception that can occur when validating or creating default_constructor_method objects.
- */
-INJEQT_EXCEPTION(default_constructor_exception, ::injeqt::v1::exception::exception);
-
-/**
- * @brief Exception thrown when default constructor was not found in given type.
- */
-INJEQT_EXCEPTION(no_default_constructor_exception, default_constructor_exception);
-
-/**
  * @brief Abstraction of default constructor.
  *
  * This class is used for creating objects of types configured with module::add_type<T>().

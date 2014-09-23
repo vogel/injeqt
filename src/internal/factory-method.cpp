@@ -62,18 +62,6 @@ std::unique_ptr<QObject> factory_method::invoke(QObject *on) const
 	return std::unique_ptr<QObject>{result};
 }
 
-void validate(const factory_method &fm)
-{
-	if (fm.meta_method().methodType() != QMetaMethod::Method &&
-		fm.meta_method().methodType() != QMetaMethod::Slot)
-		throw invalid_factory_method_exception{};
-	if (fm.meta_method().parameterCount() != 0)
-		throw invalid_factory_method_exception{};
-
-	validate(fm.object_type());
-	validate(fm.result_type());
-}
-
 bool operator == (const factory_method &x, const factory_method &y)
 {
 	if (x.object_type() != y.object_type())
@@ -92,9 +80,6 @@ bool operator != (const factory_method &x, const factory_method &y)
 
 factory_method make_factory_method(const type &t, const type &f)
 {
-	validate(t); // TODO: remove outside and make precondition
-	validate(f); // TODO: remove outside and make precondition
-
 	auto meta_object = f.meta_object();
 	auto method_count = meta_object->methodCount();
 	auto factory_methods = std::vector<factory_method>{};
@@ -114,9 +99,9 @@ factory_method make_factory_method(const type &t, const type &f)
 	}
 
 	if (factory_methods.empty())
-		throw no_factory_method_exception{t.name()};
+		return factory_method{};
 	else if (factory_methods.size() > 1)
-		throw non_unique_factory_exception{t.name()};
+		return factory_method{};
 	else
 		return factory_methods.front();
 }

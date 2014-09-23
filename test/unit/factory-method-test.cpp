@@ -42,24 +42,6 @@ class other_object : public QObject
 	Q_OBJECT
 };
 
-class no_factory : public QObject
-{
-	Q_OBJECT
-
-public slots:
-	void regular_method() {}
-
-};
-
-class factory_invalid_result_type : public QObject
-{
-	Q_OBJECT
-
-public:
-	Q_INVOKABLE int create_result_object() {}
-
-};
-
 class factory_not_invokable : public QObject
 {
 	Q_OBJECT
@@ -102,61 +84,28 @@ class factory_method_test : public QObject
 	Q_OBJECT
 
 private slots:
-	void should_throw_when_created_with_empty_method();
-	void should_throw_when_created_with_regular_method();
-	void should_throw_when_created_with_no_factory_method();
-	void should_throw_when_created_with_not_invokable_factory_method();
-	void should_throw_when_created_with_non_unique_factory_method();
-	void should_throw_when_created_with_different_type_factory_method();
+	void should_return_empty_when_created_with_not_invokable_factory_method();
+	void should_return_empty_when_created_with_non_unique_factory_method();
+	void should_return_empty_when_created_with_different_type_factory_method();
 	void should_create_valid_with_invokable_factory_method();
 	void should_create_valid_with_invokable_factory_with_default_parameter_method();
 	void should_create_object_with_factory_method();
 
 };
 
-void factory_method_test::should_throw_when_created_with_empty_method()
+void factory_method_test::should_return_empty_when_created_with_not_invokable_factory_method()
 {
-	expect<invalid_type_exception>([&]{
-		make_validated<factory_method>(QMetaMethod{});
-	});
+	QVERIFY(make_factory_method(make_type<result_object>(), make_type<factory_not_invokable>()).is_empty());
 }
 
-void factory_method_test::should_throw_when_created_with_regular_method()
+void factory_method_test::should_return_empty_when_created_with_non_unique_factory_method()
 {
-	expect<invalid_type_exception>([&]{
-		make_validated<factory_method>(make_method<no_factory>("regular_method()"));
-	});
+	QVERIFY(make_factory_method(make_type<result_object>(), make_type<non_unique_factory>()).is_empty());
 }
 
-void factory_method_test::should_throw_when_created_with_no_factory_method()
+void factory_method_test::should_return_empty_when_created_with_different_type_factory_method()
 {
-	expect<invalid_type_exception>([&]{
-		make_validated<factory_method>(make_method<factory_invalid_result_type>("create_result_object()"));
-	});
-}
-
-void factory_method_test::should_throw_when_created_with_not_invokable_factory_method()
-{
-	expect<method_not_found_exception>([&]{
-		make_validated<factory_method>(make_method<factory_not_invokable>("create_result_object()"));
-	});
-	expect<no_factory_method_exception>([&]{
-		make_factory_method(make_validated_type<result_object>(), make_validated_type<factory_not_invokable>());
-	});
-}
-
-void factory_method_test::should_throw_when_created_with_non_unique_factory_method()
-{
-	expect<non_unique_factory_exception>([&]{
-		make_factory_method(make_validated_type<result_object>(), make_validated_type<non_unique_factory>());
-	});
-}
-
-void factory_method_test::should_throw_when_created_with_different_type_factory_method()
-{
-	expect<no_factory_method_exception>([&]{
-		make_factory_method(make_validated_type<other_object>(), make_validated_type<valid_factory>());
-	});
+	QVERIFY(make_factory_method(make_type<other_object>(), make_type<valid_factory>()).is_empty());
 }
 
 void factory_method_test::should_create_valid_with_invokable_factory_method()
