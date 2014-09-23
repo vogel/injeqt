@@ -20,6 +20,7 @@
 
 #include "module.h"
 
+#include "exception/default-constructor-not-found-exception.h"
 #include "exception/empty-type-exception.h"
 #include "exception/interface-not-implemented-exception.h"
 #include "exception/invalid-qobject-exception.h"
@@ -72,7 +73,10 @@ void module::add_type(type t)
 	if (t.is_qobject())
 		throw exception::qobject_type_exception();
 
-	auto c = internal::make_default_constructor_method(std::move(t));
+	auto c = internal::make_default_constructor_method(t);
+	if (c.is_empty())
+		throw exception::default_constructor_not_found_exception{t.name()};
+
 	auto p = std::unique_ptr<internal::provider_by_default_constructor>{new internal::provider_by_default_constructor{std::move(c)}};
 	_pimpl->add_provider(std::move(p));
 }

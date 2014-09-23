@@ -124,10 +124,11 @@ protected:
 	 * @tparam T type added to module (must be inherited from QObject).
 	 * @throw empty_type_exception when passed type @p T is an empty type
 	 * @throw qobject_type_exception when passed type @p T represents QObject
+	 * @throw default_constructor_not_found_exception is @p T does not have default constructor tagged with Q_INVOKABLE
 	 *
 	 * When an object of that type (or one of inherited types) is requested from injector or
 	 * as a dependency to other objects then default constructor of T is invoked to create it.
-	 * This constructor must be marked with QT_INVOKABLE macro and must not have any parameters
+	 * This constructor must be marked with Q_INVOKABLE macro and must not have any parameters
 	 * (even with default values). In other cases this method will throw an exception.
 	 *
 	 * After object of type T is created it will be injected will all required dependencies

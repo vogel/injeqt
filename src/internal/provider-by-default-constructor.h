@@ -48,6 +48,7 @@ public:
 	/**
 	 * @brief Create provider instance with default constructor to call.
 	 * @param constructor constructor method used to create object
+	 * @pre !constructor.is_empty()
 	 */
 	explicit provider_by_default_constructor(default_constructor_method constructor);
 	virtual ~provider_by_default_constructor() {}
@@ -80,18 +81,5 @@ private:
 	std::unique_ptr<QObject> _object;
 
 };
-
-/**
- * @brief Throws an exception if provider_by_default_constructor pbdc is not valid.
- * @param pbdc provider_by_default_constructor to validate
- * @throws invalid_default_constructor_exception if backing QMetaMethod is not a constructor
- * @throws invalid_default_constructor_exception if backing QMetaMethod contains paramers
- * @throws invalid_type_exception if backing QMetaMethod comes from invalid type
- *
- * Call to validate provider_by_default_constructor pbdc. If backing QMetaMethod of backing
- * provider_by_default_constructor is invalid, is not a constructor or requires paramters -
- * an exception is thrown.
- */
-void validate(const provider_by_default_constructor &pbdc);
 
 }}

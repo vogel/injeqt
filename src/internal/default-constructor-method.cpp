@@ -22,10 +22,19 @@
 
 namespace injeqt { namespace internal {
 
+default_constructor_method::default_constructor_method()
+{
+}
+
 default_constructor_method::default_constructor_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_meta_method{std::move(meta_method)}
 {
+}
+
+bool default_constructor_method::is_empty() const
+{
+	return !_meta_method.isValid();
 }
 
 const type & default_constructor_method::object_type() const
@@ -41,16 +50,6 @@ const QMetaMethod & default_constructor_method::meta_method() const
 std::unique_ptr<QObject> default_constructor_method::invoke() const
 {
 	return std::unique_ptr<QObject>{_meta_method.enclosingMetaObject()->newInstance()};
-}
-
-void validate(const default_constructor_method &d)
-{
-	if (d.meta_method().methodType() != QMetaMethod::Constructor)
-		throw invalid_default_constructor_exception{};
-	if (d.meta_method().parameterCount() != 0)
-		throw invalid_default_constructor_exception{};
-
-	validate(d.object_type());
 }
 
 bool operator == (const default_constructor_method &x, const default_constructor_method &y)
@@ -83,7 +82,7 @@ default_constructor_method make_default_constructor_method(const type &t)
 		return default_constructor_method{constructor};
 	}
 
-	throw no_default_constructor_exception{t.name()};
+	return default_constructor_method{};
 }
 
 }}

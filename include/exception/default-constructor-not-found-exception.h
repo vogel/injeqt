@@ -18,31 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "provider-by-default-constructor.h"
+#pragma once
 
-namespace injeqt { namespace internal {
-// TODO: tests
-provider_by_default_constructor::provider_by_default_constructor(default_constructor_method constructor) :
-	_constructor{std::move(constructor)}
+#include "exception/exception.h"
+
+namespace injeqt { namespace v1 { namespace exception {
+
+/**
+ * @brief Exception throw when type without default constructor tagged with Q_INVOKABLE was passed to module::add_type<T>()
+ */
+class INJEQT_API default_constructor_not_found_exception : public exception
 {
-}
 
-const type & provider_by_default_constructor::provided_type() const
-{
-	return _constructor.object_type();
-}
+public:
+	explicit default_constructor_not_found_exception(std::string what = std::string{});
+	virtual ~default_constructor_not_found_exception();
 
-const default_constructor_method & provider_by_default_constructor::constructor() const
-{
-	return _constructor;
-}
+};
 
-QObject * provider_by_default_constructor::provide(injector_impl &)
-{
-	// todo: thread safety
-	if (!_object)
-		_object = _constructor.invoke();
-	return _object.get();
-}
-
-}}
+}}}

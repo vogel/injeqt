@@ -37,10 +37,7 @@ class no_default_constructor : public QObject
 
 public:
 	Q_INVOKABLE no_default_constructor(int a) { (void)a; }
-	Q_INVOKABLE no_default_constructor(std::string a = std::string{}) { (void)a; }
-
-public slots:
-	void regular_method() {}
+	Q_INVOKABLE no_default_constructor(std::string a) { (void)a; }
 
 };
 
@@ -58,7 +55,7 @@ class default_invokable_constructor : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE default_invokable_constructor() {}
+	Q_INVOKABLE default_invokable_constructor(QObject *parent = nullptr) : QObject{parent} {}
 
 };
 
@@ -67,66 +64,33 @@ class default_constructor_method_test : public QObject
 	Q_OBJECT
 
 private slots:
-	void should_throw_when_created_with_empty_method();
-	void should_throw_when_created_with_regular_method();
-	void should_throw_when_created_with_no_default_constructor();
-	void should_throw_when_created_with_not_invokable_constructor();
+	void should_return_empty_when_default_constructed();
+	void should_return_empty_when_created_with_not_default_constructor();
+	void should_return_empty_when_created_with_not_invokable_constructor();
 	void should_create_valid_with_invokable_constructor();
 	void should_create_object_with_default_constructor();
 
 };
 
-void default_constructor_method_test::should_throw_when_created_with_empty_method()
+void default_constructor_method_test::should_return_empty_when_default_constructed()
 {
-	expect<invalid_default_constructor_exception>([&]{
-		make_validated<default_constructor_method>(QMetaMethod{});
-	});
+	QVERIFY(default_constructor_method{}.is_empty());
 }
 
-void default_constructor_method_test::should_throw_when_created_with_regular_method()
+void default_constructor_method_test::should_return_empty_when_created_with_not_default_constructor()
 {
-	expect<invalid_default_constructor_exception>([&]{
-		make_validated<default_constructor_method>(make_method<no_default_constructor>("regular_method()"));
-	});
+	QVERIFY(make_default_constructor_method(make_type<no_default_constructor>()).is_empty());
 }
 
-void default_constructor_method_test::should_throw_when_created_with_no_default_constructor()
+void default_constructor_method_test::should_return_empty_when_created_with_not_invokable_constructor()
 {
-	expect<invalid_default_constructor_exception>([&]{
-		make_validated<default_constructor_method>(make_constructor<no_default_constructor>("no_default_constructor(int)"));
-	});
-	expect<invalid_default_constructor_exception>([&]{
-		make_validated<default_constructor_method>(make_constructor<no_default_constructor>("no_default_constructor(std::string)"));
-	});
-}
-
-void default_constructor_method_test::should_throw_when_created_with_not_invokable_constructor()
-{
-	expect<constructor_not_found_exception>([&]{
-		make_validated<default_constructor_method>(make_constructor<default_not_invokable_constructor>("default_not_invokable_constructor()"));
-	});
-	expect<no_default_constructor_exception>([&]{
-		make_default_constructor_method<default_not_invokable_constructor>();
-	});
-	expect<no_default_constructor_exception>([&]{
-		make_default_constructor_method(make_validated_type<default_not_invokable_constructor>());
-	});
+	QVERIFY(make_default_constructor_method(make_type<default_not_invokable_constructor>()).is_empty());
 }
 
 void default_constructor_method_test::should_create_valid_with_invokable_constructor()
 {
-	auto c1 = make_validated<default_constructor_method>(make_constructor<default_invokable_constructor>("default_invokable_constructor()"));
-	QCOMPARE(c1.object_type(), make_validated_type<default_invokable_constructor>());
-
-	auto c2 = make_default_constructor_method<default_invokable_constructor>();
-	QCOMPARE(c2.object_type(), make_validated_type<default_invokable_constructor>());
-
-	auto c3 = make_default_constructor_method(make_validated_type<default_invokable_constructor>());
-	QCOMPARE(c3.object_type(), make_validated_type<default_invokable_constructor>());
-
-	QCOMPARE(c1, c2);
-	QCOMPARE(c2, c3);
-	QCOMPARE(c1, c3);
+	auto c = make_default_constructor_method(make_validated_type<default_invokable_constructor>());
+	QCOMPARE(c.object_type(), make_type<default_invokable_constructor>());
 }
 
 void default_constructor_method_test::should_create_object_with_default_constructor()

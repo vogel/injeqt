@@ -18,31 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "provider-by-default-constructor.h"
+#include "exception/default-constructor-not-found-exception.h"
 
-namespace injeqt { namespace internal {
-// TODO: tests
-provider_by_default_constructor::provider_by_default_constructor(default_constructor_method constructor) :
-	_constructor{std::move(constructor)}
+namespace injeqt { namespace v1 { namespace exception {
+
+default_constructor_not_found_exception::default_constructor_not_found_exception(std::string what) :
+	exception{std::move(what)}
 {
 }
 
-const type & provider_by_default_constructor::provided_type() const
+default_constructor_not_found_exception::~default_constructor_not_found_exception()
 {
-	return _constructor.object_type();
 }
 
-const default_constructor_method & provider_by_default_constructor::constructor() const
-{
-	return _constructor;
-}
-
-QObject * provider_by_default_constructor::provide(injector_impl &)
-{
-	// todo: thread safety
-	if (!_object)
-		_object = _constructor.invoke();
-	return _object.get();
-}
-
-}}
+}}}
