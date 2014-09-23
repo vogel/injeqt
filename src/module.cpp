@@ -55,8 +55,8 @@ void module::add_ready_object(type t, QObject *object)
 		throw exception::invalid_qobject_exception{};
 
 	auto object_type = type{object->metaObject()};
-	auto implements = internal::extract_interfaces(object_type);
-	if (!implements.contains(t))
+	auto interfaces = internal::extract_interfaces(object_type);
+	if (!interfaces.contains(t))
 		throw exception::interface_not_implemented_exception{t.name()};
 
 	auto i = internal::implementation{std::move(t), object};
