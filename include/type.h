@@ -59,7 +59,7 @@ INJEQT_EXCEPTION(invalid_type_exception, ::injeqt::v1::exception::exception);
  *
  * Direct instantiations of this class should not be needed in user code.
  *
- * Use convienance free function make_type&lt;T&gt; and make_validated_type&lt;T&gt;
+ * Use convienance free function make_type&lt;T&gt; and make_type&lt;T&gt;
  * that also registers type T in Qt meta-type that is required for Injeqt to function
  * properly.
  *
@@ -156,41 +156,13 @@ INJEQT_API bool operator >= (const type &x, const type &y);
  *         Q_OBJECT
  *     };
  *
- *     auto injectable_type = make_validated_type<injectable>();
+ *     auto injectable_type = make_type<injectable>();
  */
 template<typename T>
 inline type make_type()
 {
 	qRegisterMetaType<T *>();
 	return type{&T::staticMetaObject};
-}
-
-/**
- * @brief Create valid instance of type class.
- * @tparam T type to be represented by new object
- * @throws invalid_type_exception if type is not derived from QObject.
- *
- * Call to create type object abstracting T. T must be a class based on
- * QObject with Q_OBJECT macro defined. In other cases invalid_type_exception is
- * thrown.
- *
- * This function registers T in Qt meta type systems, because sometimes automatic
- * registration does not occur as soon as it is required by Injeqt.
- *
- * Example usage:
- *
- *     class injectable : public QObject
- *     {
- *         Q_OBJECT
- *     };
- *
- *     auto injectable_type = make_validated_type<injectable>();
- */
-template<typename T>
-inline type make_validated_type()
-{
-	qRegisterMetaType<T *>();
-	return make_validated<type>(&T::staticMetaObject);
 }
 
 }

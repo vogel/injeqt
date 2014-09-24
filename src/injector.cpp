@@ -56,6 +56,11 @@ injector & injector::operator = (injector &&x)
 
 QObject * injector::get(const type &interface_type)
 {
+	if (interface_type.is_empty())
+		throw invalid_type_exception{};
+	if (interface_type.is_qobject())
+		throw invalid_type_exception{};
+
 	return _pimpl->get(interface_type);
 }
 

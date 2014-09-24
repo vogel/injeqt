@@ -90,6 +90,7 @@ public:
 	/**
 	 * @brief Returns pointer to object of given type T.
 	 * @tparam T type of object to return
+	 * @throw invalid_type_exception if T is not valid QObject derived type
 	 *
 	 * When object of given type is requested by get<T>() method, injector first check if T is in set of
 	 * available types. If not, an exception is thrown. Next an unique configured type U that implements T
@@ -103,12 +104,13 @@ public:
 	template<typename T>
 	T * get()
 	{
-		return qobject_cast<T *>(get(make_validated_type<T>()));
+		return qobject_cast<T *>(get(make_type<T>()));
 	}
 
 	/**
 	 * @brief Returns pointer to object of given type interface_type.
 	 * @param interface_type type of object to return
+	 * @throw invalid_type_exception if interface_type is not valid type
 	 *
 	 * @see T * get<T>()
 	 */

@@ -32,8 +32,8 @@ class type_test : public QObject
 	Q_OBJECT
 
 private slots:
-	void should_throw_when_created_with_null_meta_object();
-	void should_throw_when_created_with_qobject_meta_object();
+	void should_return_empty_when_created_with_null_meta_object();
+	void should_return_qobject_when_created_with_qobject_meta_object();
 	void should_return_valid_meta_object();
 
 };
@@ -43,22 +43,17 @@ class valid_type : public QObject
 	Q_OBJECT
 };
 
-void type_test::should_throw_when_created_with_null_meta_object()
+void type_test::should_return_empty_when_created_with_null_meta_object()
 {
-	expect<invalid_type_exception>([]{
-		auto t = make_validated<type>(nullptr);
-	});
+	auto t = type{nullptr};
+	QVERIFY(t.is_empty());
 }
 
-void type_test::should_throw_when_created_with_qobject_meta_object()
+void type_test::should_return_qobject_when_created_with_qobject_meta_object()
 {
-	expect<invalid_type_exception>([]{
-		auto t = make_validated_type<QObject>();
-	});
-
-	expect<invalid_type_exception>([]{
-		auto t = make_validated<type>(&QObject::staticMetaObject);
-	});
+	auto t = make_type<QObject>();
+	QVERIFY(!t.is_empty());
+	QVERIFY(t.is_qobject());
 }
 
 void type_test::should_return_valid_meta_object()
