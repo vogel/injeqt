@@ -23,6 +23,7 @@
 #include "type.h"
 
 #include <QtCore/QMetaObject>
+#include <cassert>
 
 namespace injeqt { namespace internal {
 
@@ -38,6 +39,8 @@ bool is_qobject(const QMetaObject * const meta_object)
 
 types extract_interfaces(const type &for_type)
 {
+	assert(!for_type.is_empty());
+
 	auto result = std::vector<type>{};
 	auto meta_object = for_type.meta_object();
 	while (meta_object && !is_qobject(meta_object))

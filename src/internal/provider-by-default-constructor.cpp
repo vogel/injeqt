@@ -20,11 +20,14 @@
 
 #include "provider-by-default-constructor.h"
 
+#include <cassert>
+
 namespace injeqt { namespace internal {
 // TODO: tests
 provider_by_default_constructor::provider_by_default_constructor(default_constructor_method constructor) :
 	_constructor{std::move(constructor)}
 {
+	assert(!_constructor.is_empty());
 }
 
 const type & provider_by_default_constructor::provided_type() const

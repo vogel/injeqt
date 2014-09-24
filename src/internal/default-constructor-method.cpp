@@ -20,6 +20,8 @@
 
 #include "default-constructor-method.h"
 
+#include <cassert>
+
 namespace injeqt { namespace internal {
 
 default_constructor_method::default_constructor_method()
@@ -30,6 +32,9 @@ default_constructor_method::default_constructor_method(QMetaMethod meta_method) 
 	_object_type{meta_method.enclosingMetaObject()},
 	_meta_method{std::move(meta_method)}
 {
+	assert(meta_method.methodType() == QMetaMethod::Constructor);
+	assert(meta_method.parameterCount() == 0);
+	assert(meta_method.enclosingMetaObject() != nullptr);
 }
 
 bool default_constructor_method::is_empty() const
@@ -39,6 +44,8 @@ bool default_constructor_method::is_empty() const
 
 const type & default_constructor_method::object_type() const
 {
+	assert(!is_empty());
+
 	return _object_type;
 }
 
@@ -49,6 +56,8 @@ const QMetaMethod & default_constructor_method::meta_method() const
 
 std::unique_ptr<QObject> default_constructor_method::invoke() const
 {
+	assert(!is_empty());
+
 	return std::unique_ptr<QObject>{_meta_method.enclosingMetaObject()->newInstance()};
 }
 
@@ -70,6 +79,9 @@ bool operator != (const default_constructor_method &x, const default_constructor
 
 default_constructor_method make_default_constructor_method(const type &t)
 {
+	assert(!t.is_empty());
+	assert(!t.is_qobject());
+
 	auto meta_object = t.meta_object();
 	auto constructor_count = meta_object->constructorCount();
 	for (decltype(constructor_count) i = 0; i < constructor_count; i++)

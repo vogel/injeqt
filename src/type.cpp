@@ -23,6 +23,7 @@
 #include "type.h"
 
 #include <QtCore/QMetaObject>
+#include <cassert>
 
 namespace injeqt { namespace v1 {
 
@@ -43,11 +44,15 @@ bool type::is_empty() const
 
 bool type::is_qobject() const
 {
+	assert(!is_empty());
+
 	return _meta_object->superClass() == nullptr;
 }
 
 std::string type::name() const
 {
+	assert(!is_empty());
+
 	return _meta_object->className();
 }
 

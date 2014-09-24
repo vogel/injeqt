@@ -22,9 +22,11 @@
 
 #include "extract-interfaces.h"
 
+#include <cassert>
+
 namespace injeqt { namespace internal {
 
-	factory_method::factory_method()
+factory_method::factory_method()
 {
 }
 
@@ -33,6 +35,10 @@ factory_method::factory_method(QMetaMethod meta_method) :
 	_result_type{QMetaType::metaObjectForType(meta_method.returnType())},
 	_meta_method{std::move(meta_method)}
 {
+	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
+	assert(meta_method.parameterCount() == 0);
+	assert(meta_method.enclosingMetaObject() != nullptr);
+
 }
 
 bool factory_method::is_empty() const
@@ -42,11 +48,15 @@ bool factory_method::is_empty() const
 
 const type & factory_method::object_type() const
 {
+	assert(!is_empty());
+
 	return _object_type;
 }
 
 const type & factory_method::result_type() const
 {
+	assert(!is_empty());
+
 	return _result_type;
 }
 
@@ -57,6 +67,10 @@ const QMetaMethod & factory_method::meta_method() const
 
 std::unique_ptr<QObject> factory_method::invoke(QObject *on) const
 {
+	assert(!is_empty());
+	assert(on != nullptr);
+	assert(meta_method().enclosingMetaObject() == on->metaObject());
+
 	QObject *result = nullptr;
 	_meta_method.invoke(on, QReturnArgument<QObject *>((_result_type.name() + "*").c_str(), result)); // TODO: check for false result
 	return std::unique_ptr<QObject>{result};
@@ -80,6 +94,11 @@ bool operator != (const factory_method &x, const factory_method &y)
 
 factory_method make_factory_method(const type &t, const type &f)
 {
+	assert(!t.is_empty());
+	assert(!t.is_qobject());
+	assert(!f.is_empty());
+	assert(!f.is_qobject());
+
 	auto meta_object = f.meta_object();
 	auto method_count = meta_object->methodCount();
 	auto factory_methods = std::vector<factory_method>{};
