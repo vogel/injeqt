@@ -79,6 +79,8 @@ dependencies make_validated_dependencies(const type &for_type)
 	for (auto &&setter : setters)
 	{
 		auto parameter_type = setter.parameter_type();
+		if (parameter_type.is_empty())
+			throw bad_number_of_parameters_setter_exception{}; // zero parameters
 		if (parameter_type == for_type)
 			throw dependency_on_self_exception{};
 		if (std::find(std::begin(interfaces), std::end(interfaces), parameter_type) != std::end(interfaces))
