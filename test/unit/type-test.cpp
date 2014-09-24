@@ -63,7 +63,7 @@ void type_test::should_throw_when_created_with_qobject_meta_object()
 
 void type_test::should_return_valid_meta_object()
 {
-	auto t = make_validated_type<valid_type>();
+	auto t = make_type<valid_type>();
 
 	QCOMPARE(t.meta_object(), &valid_type::staticMetaObject);
 }

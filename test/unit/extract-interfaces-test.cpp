@@ -65,9 +65,9 @@ private:
 
 extract_interfaces_test::extract_interfaces_test() :
 	qobject_type{type(&QObject::staticMetaObject)},
-	direct_successor_type{make_validated_type<direct_successor>()},
-	indirect_successor_1_type{make_validated_type<indirect_successor_1>()},
-	indirect_successor_2_type{make_validated_type<indirect_successor_2>()}
+	direct_successor_type{make_type<direct_successor>()},
+	indirect_successor_1_type{make_type<indirect_successor_1>()},
+	indirect_successor_2_type{make_type<indirect_successor_2>()}
 {
 }
 

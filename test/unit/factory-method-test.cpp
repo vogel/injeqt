@@ -111,26 +111,26 @@ void factory_method_test::should_return_empty_when_created_with_different_type_f
 void factory_method_test::should_create_valid_with_invokable_factory_method()
 {
 	auto c1 = factory_method{make_method<valid_factory>("create_result_object()")};
-	QCOMPARE(c1.object_type(), make_validated_type<valid_factory>());
-	QCOMPARE(c1.result_type(), make_validated_type<result_object>());
+	QCOMPARE(c1.object_type(), make_type<valid_factory>());
+	QCOMPARE(c1.result_type(), make_type<result_object>());
 
-	auto c2 = make_factory_method(make_validated_type<result_object>(), make_validated_type<valid_factory>());
-	QCOMPARE(c2.object_type(), make_validated_type<valid_factory>());
-	QCOMPARE(c2.result_type(), make_validated_type<result_object>());
+	auto c2 = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
+	QCOMPARE(c2.object_type(), make_type<valid_factory>());
+	QCOMPARE(c2.result_type(), make_type<result_object>());
 
 	QCOMPARE(c1, c2);
 }
 
 void factory_method_test::should_create_valid_with_invokable_factory_with_default_parameter_method()
 {
-	auto c = make_factory_method(make_validated_type<result_object>(), make_validated_type<valid_factory_with_default_parameter>());
-	QCOMPARE(c.object_type(), make_validated_type<valid_factory_with_default_parameter>());
-	QCOMPARE(c.result_type(), make_validated_type<result_object>());
+	auto c = make_factory_method(make_type<result_object>(), make_type<valid_factory_with_default_parameter>());
+	QCOMPARE(c.object_type(), make_type<valid_factory_with_default_parameter>());
+	QCOMPARE(c.result_type(), make_type<result_object>());
 }
 
 void factory_method_test::should_create_object_with_factory_method()
 {
-	auto factory = make_factory_method(make_validated_type<result_object>(), make_validated_type<valid_factory>());
+	auto factory = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
 	auto factory_object = make_object<valid_factory>();
 	auto object = factory.invoke(factory_object.get());
 	auto cast = qobject_cast<result_object *>(object.get());

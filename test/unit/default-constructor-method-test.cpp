@@ -89,13 +89,13 @@ void default_constructor_method_test::should_return_empty_when_created_with_not_
 
 void default_constructor_method_test::should_create_valid_with_invokable_constructor()
 {
-	auto c = make_default_constructor_method(make_validated_type<default_invokable_constructor>());
+	auto c = make_default_constructor_method(make_type<default_invokable_constructor>());
 	QCOMPARE(c.object_type(), make_type<default_invokable_constructor>());
 }
 
 void default_constructor_method_test::should_create_object_with_default_constructor()
 {
-	auto constructor = make_default_constructor_method(make_validated_type<default_invokable_constructor>());
+	auto constructor = make_default_constructor_method(make_type<default_invokable_constructor>());
 	auto object = constructor.invoke();
 	auto cast = qobject_cast<default_invokable_constructor *>(object.get());
 

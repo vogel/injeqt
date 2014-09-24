@@ -93,11 +93,11 @@ private:
 };
 
 types_model_test::types_model_test() :
-	type_1_type{make_validated_type<type_1>()},
-	type_1_subtype_1_type{make_validated_type<type_1_subtype_1>()},
-	type_1_subtype_2_type{make_validated_type<type_1_subtype_2>()},
-	type_1_subtype_2_subtype_1_type{make_validated_type<type_1_subtype_2_subtype_1>()},
-	type_1_subtype_3_type{make_validated_type<type_1_subtype_3>()}
+	type_1_type{make_type<type_1>()},
+	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
+	type_1_subtype_2_type{make_type<type_1_subtype_2>()},
+	type_1_subtype_2_subtype_1_type{make_type<type_1_subtype_2_subtype_1>()},
+	type_1_subtype_3_type{make_type<type_1_subtype_3>()}
 {
 }
 

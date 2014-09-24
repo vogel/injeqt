@@ -75,10 +75,10 @@ private:
 };
 
 implementation_test::implementation_test() :
-	type_1_type{make_validated_type<type_1>()},
-	type_2_type{make_validated_type<type_2>()},
-	type_1_subtype_1_type{make_validated_type<type_1_subtype_1>()},
-	type_1_subtype_1_subtype_1_type{make_validated_type<type_1_subtype_1_subtype_1>()}
+	type_1_type{make_type<type_1>()},
+	type_2_type{make_type<type_2>()},
+	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
+	type_1_subtype_1_subtype_1_type{make_type<type_1_subtype_1_subtype_1>()}
 {
 }
 
