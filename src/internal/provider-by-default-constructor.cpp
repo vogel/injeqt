@@ -23,11 +23,22 @@
 #include <cassert>
 
 namespace injeqt { namespace internal {
-// TODO: tests
+
 provider_by_default_constructor::provider_by_default_constructor(default_constructor_method constructor) :
 	_constructor{std::move(constructor)}
 {
 	assert(!_constructor.is_empty());
+}
+
+provider_by_default_constructor::provider_by_default_constructor(provider_by_default_constructor &&x)
+{
+	std::swap(*this, x);
+}
+
+provider_by_default_constructor & provider_by_default_constructor::operator = (provider_by_default_constructor &&x)
+{
+	std::swap(*this, x);
+	return *this;
 }
 
 const type & provider_by_default_constructor::provided_type() const
