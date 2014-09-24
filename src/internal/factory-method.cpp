@@ -117,12 +117,10 @@ factory_method make_factory_method(const type &t, const type &f)
 			factory_methods.emplace_back(method);
 	}
 
-	if (factory_methods.empty())
-		return factory_method{};
-	else if (factory_methods.size() > 1)
-		return factory_method{};
-	else
+	if (factory_methods.size() == 1)
 		return factory_methods.front();
+	else
+		return factory_method{};
 }
 
 }}
