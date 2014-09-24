@@ -163,7 +163,7 @@ protected:
 	template<typename T>
 	void add_type()
 	{
-		add_type(make_validated_type<T>());
+		add_type(make_type<T>());
 	}
 
 	/**
@@ -233,7 +233,7 @@ protected:
 	template<typename T, typename F>
 	void add_factory()
 	{
-		add_factory(make_validated_type<T>(), make_validated_type<F>());
+		add_factory(make_type<T>(), make_type<F>());
 	}
 
 private:
