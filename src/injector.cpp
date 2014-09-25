@@ -20,6 +20,8 @@
 
 #include "injector.h"
 
+#include "exception/empty-type-exception.h"
+#include "exception/qobject-type-exception.h"
 #include "injector-impl.h"
 #include "module-impl.h"
 #include "module.h"
@@ -57,9 +59,9 @@ injector & injector::operator = (injector &&x)
 QObject * injector::get(const type &interface_type)
 {
 	if (interface_type.is_empty())
-		throw invalid_type_exception{};
+		throw exception::empty_type_exception{};
 	if (interface_type.is_qobject())
-		throw invalid_type_exception{};
+		throw exception::qobject_type_exception{};
 
 	return _pimpl->get(interface_type);
 }
