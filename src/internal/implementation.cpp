@@ -20,9 +20,14 @@
 
 #include "implementation.h"
 
+#include "exception/empty-type-exception.h"
+#include "exception/interface-not-implemented-exception.h"
+#include "exception/invalid-qobject-exception.h"
+#include "exception/qobject-type-exception.h"
 #include "extract-interfaces.h"
 
 #include <QtCore/QObject>
+#include <cassert>
 
 namespace injeqt { namespace internal {
 
@@ -30,6 +35,11 @@ implementation::implementation(type interface_type, QObject *object) :
 	_interface_type{std::move(interface_type)},
 	_object{object}
 {
+	assert(!_interface_type.is_empty());
+	assert(!_interface_type.is_qobject());
+	assert(_object != nullptr);
+	assert(_object->metaObject() != nullptr);
+	assert(extract_interfaces(type{_object->metaObject()}).contains(_interface_type));
 }
 
 const type & implementation::interface_type() const
@@ -40,18 +50,6 @@ const type & implementation::interface_type() const
 QObject * implementation::object() const
 {
 	return _object;
-}
-
-void validate(const implementation &i)
-{
-	validate(i.interface_type());
-
-	if (!i.object())
-		throw invalid_implementation_availability_exception{};
-
-	auto implements = extract_interfaces(type{i.object()->metaObject()});
-	if (!implements.contains(i.interface_type()))
-		throw invalid_interface_type_exception{};
 }
 
 bool operator == (const implementation &x, const implementation &y)
@@ -68,6 +66,24 @@ bool operator == (const implementation &x, const implementation &y)
 bool operator != (const implementation &x, const implementation &y)
 {
 	return !(x == y);
+}
+
+implementation make_implementation(type interface_type, QObject *object)
+{
+	if (interface_type.is_empty())
+		throw exception::empty_type_exception{};
+	if (interface_type.is_qobject())
+		throw exception::qobject_type_exception();
+
+	if (!object || !object->metaObject())
+		throw exception::invalid_qobject_exception{};
+
+	auto object_type = type{object->metaObject()};
+	auto interfaces = internal::extract_interfaces(object_type);
+	if (!interfaces.contains(interface_type))
+		throw exception::interface_not_implemented_exception{interface_type.name()};
+
+	return implementation{interface_type, object};
 }
 
 }}

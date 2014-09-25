@@ -55,7 +55,6 @@ bool resolved_dependency::apply_on(QObject *on)
 
 void validate(const resolved_dependency &rd)
 {
-	validate(rd.resolved_with());
 	validate(rd.setter());
 
 	if (rd.resolved_with().interface_type() != rd.setter().parameter_type())

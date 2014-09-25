@@ -18,7 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "exception/empty-type-exception.cpp"
 #include "exception/exception.cpp"
+#include "exception/interface-not-implemented-exception.cpp"
+#include "exception/invalid-qobject-exception.cpp"
+#include "exception/qobject-type-exception.cpp"
 #include "extract-interfaces.cpp"
 #include "implementation.cpp"
 #include "type.cpp"
@@ -59,6 +63,8 @@ public:
 	implementation_test();
 
 private slots:
+	void should_throw_when_type_is_empty();
+	void should_throw_when_type_is_qobject();
 	void should_throw_when_object_is_null();
 	void should_accept_object_of_type();
 	void should_accept_object_of_sub_type();
@@ -82,17 +88,33 @@ implementation_test::implementation_test() :
 {
 }
 
+void implementation_test::should_throw_when_type_is_empty()
+{
+	auto object = make_object<type_1>();
+	expect<exception::empty_type_exception>([&]{
+		auto i = make_implementation(type{}, object.get());
+	});
+}
+
+void implementation_test::should_throw_when_type_is_qobject()
+{
+	auto object = make_object<type_1>();
+	expect<exception::qobject_type_exception>([&]{
+		auto i = make_implementation(make_type<QObject>(), object.get());
+	});
+}
+
 void implementation_test::should_throw_when_object_is_null()
 {
-	expect<invalid_implementation_availability_exception>([&]{
-		auto i = make_validated<implementation>(type_1_type, nullptr);
+	expect<exception::invalid_qobject_exception>([&]{
+		auto i = make_implementation(type_1_type, nullptr);
 	});
 }
 
 void implementation_test::should_accept_object_of_type()
 {
 	auto object = make_object<type_1>();
-	auto i = make_validated<implementation>(type_1_type, object.get());
+	auto i = make_implementation(type_1_type, object.get());
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(object.get(), i.object());
@@ -101,7 +123,7 @@ void implementation_test::should_accept_object_of_type()
 void implementation_test::should_accept_object_of_sub_type()
 {
 	auto object = make_object<type_1_subtype_1>();
-	auto i = make_validated<implementation>(type_1_type, object.get());
+	auto i = make_implementation(type_1_type, object.get());
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(object.get(), i.object());
@@ -110,7 +132,7 @@ void implementation_test::should_accept_object_of_sub_type()
 void implementation_test::should_accept_object_of_sub_sub_type()
 {
 	auto object = make_object<type_1_subtype_1_subtype_1>();
-	auto i = make_validated<implementation>(type_1_type, object.get());
+	auto i = make_implementation(type_1_type, object.get());
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(object.get(), i.object());
@@ -119,16 +141,16 @@ void implementation_test::should_accept_object_of_sub_sub_type()
 void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
-	expect<invalid_interface_type_exception>([&]{
-		auto i = make_validated<implementation>(type_1_subtype_1_subtype_1_type, object.get());
+	expect<exception::interface_not_implemented_exception>([&]{
+		auto i = make_implementation(type_1_subtype_1_subtype_1_type, object.get());
 	});
 }
 
 void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
-	expect<invalid_interface_type_exception>([&]{
-		auto i = make_validated<implementation>(type_2_type, object.get());
+	expect<exception::interface_not_implemented_exception>([&]{
+		auto i = make_implementation(type_2_type, object.get());
 	});
 }
 

@@ -49,20 +49,7 @@ module::~module()
 
 void module::add_ready_object(type t, QObject *object)
 {
-	if (t.is_empty())
-		throw exception::empty_type_exception{};
-	if (t.is_qobject())
-		throw exception::qobject_type_exception();
-
-	if (!object || !object->metaObject())
-		throw exception::invalid_qobject_exception{};
-
-	auto object_type = type{object->metaObject()};
-	auto interfaces = internal::extract_interfaces(object_type);
-	if (!interfaces.contains(t))
-		throw exception::interface_not_implemented_exception{t.name()};
-
-	auto i = internal::implementation{std::move(t), object};
+	auto i = internal::make_implementation(std::move(t), object);
 	auto p = std::unique_ptr<internal::provider_ready>{new internal::provider_ready{std::move(i)}};
 	_pimpl->add_provider(std::move(p));
 }

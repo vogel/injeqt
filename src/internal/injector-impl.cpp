@@ -102,8 +102,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 
 			if (instance)
 			{
-				auto i = implementation{type_to_instantiate, instance};
-				validate(i);
+				auto i = make_implementation(type_to_instantiate, instance);
 				objects_to_resolve.emplace_back(i);
 			}
 			else

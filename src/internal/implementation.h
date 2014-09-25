@@ -34,22 +34,6 @@ class QObject;
 namespace injeqt { namespace internal {
 
 /**
- * @brief Any exception that can occur when validating or creating implementation objects.
- */
-INJEQT_EXCEPTION(invalid_implementation_exception, ::injeqt::v1::exception::exception);
-
-/**
- * @brief Exception that can occur when validating implementation that has null implementation::object() value.
- */
-INJEQT_EXCEPTION(invalid_implementation_availability_exception, invalid_implementation_exception);
-
-/**
- * @brief Exception that can occur when validating implementation that has null implementation::object()
- *        that does not implement implementation::interface_type().
- */
-INJEQT_EXCEPTION(invalid_interface_type_exception, invalid_implementation_exception);
-
-/**
  * @brief Connects type with object that implements it.
  *
  * This class is used to connect type with object that implements that type.
@@ -70,6 +54,11 @@ public:
 	 * @brief Create new instance.
 	 * @param interface_type type that object implements
 	 * @param object object that should implement interface_type
+	 * @pre !interface_type.is_empty()
+	 * @pre !interface_type.is_qobject()
+	 * @pre object != nullptr
+	 * @pre object->metaObject() != nullptr
+	 * @pre extract_interfaces(type{object->metaObject()}).contains(interface_type)
 	 *
 	 * Always succedes. To check if preconditions of class are meet
 	 * call validate(const implementation&)
@@ -85,15 +74,18 @@ private:
 
 };
 
-/**
- * @brief Check if implementation object is valid.
- * @param i object to check
- * @throw invalid_implementation_availability_exception when object is nullptr
- * @throw invalid_interface_type_exception when object does not implement interface_type
- */
-void validate(const implementation &i);
-
 bool operator == (const implementation &x, const implementation &y);
 bool operator != (const implementation &x, const implementation &y);
+
+/**
+ * @brief Check if @p interface_type and @p object met implementation preconditions and return new instance if true
+ * @param interface_type type that object implements
+ * @param object object that should implement interface_type
+ * @throw empty_type_exception when passed type @p interface_type is an empty type
+ * @throw qobject_type_exception when passed type @p interface_type represents QObject
+ * @throw invalid_qobject_exception when passed @p object is nullptr or does not have valid QMetaType
+ * @throw interface_not_implemented_exception when passed @p object does not implements type @p interface_type
+ */
+implementation make_implementation(type interface_type, QObject *object);
 
 }}
