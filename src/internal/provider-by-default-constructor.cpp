@@ -35,6 +35,10 @@ provider_by_default_constructor::provider_by_default_constructor(provider_by_def
 	std::swap(*this, x);
 }
 
+provider_by_default_constructor::~provider_by_default_constructor()
+{
+}
+
 provider_by_default_constructor & provider_by_default_constructor::operator = (provider_by_default_constructor &&x)
 {
 	std::swap(*this, x);

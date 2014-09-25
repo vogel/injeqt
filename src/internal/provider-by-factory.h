@@ -51,7 +51,10 @@ public:
 	 * @param factory factory method used to create object
 	 */
 	explicit provider_by_factory(factory_method factory);
+	provider_by_factory(provider_by_factory &&x);
 	virtual ~provider_by_factory();
+
+	provider_by_factory & operator = (provider_by_factory &&x);
 
 	/**
 	 * @return factory_method::retrun_type() of object passed to construtor

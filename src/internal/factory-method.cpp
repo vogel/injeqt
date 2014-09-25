@@ -38,7 +38,6 @@ factory_method::factory_method(QMetaMethod meta_method) :
 	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
 	assert(meta_method.parameterCount() == 0);
 	assert(meta_method.enclosingMetaObject() != nullptr);
-
 }
 
 bool factory_method::is_empty() const
