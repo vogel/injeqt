@@ -72,7 +72,7 @@ void provider_by_default_constructor_test::should_return_always_the_same_object(
 
 	QCOMPARE(p.provided_type(), make_type<default_constructor_type>());
 	QCOMPARE(p.required_types(), types{});
-	QCOMPARE(p.constructor(), make_default_constructor_method(make_type<default_constructor_type>()));
+	QCOMPARE(p.constructor(), c);
 
 	auto o = p.provide(empty_injector1);
 	QCOMPARE(p.provide(empty_injector1), o);
