@@ -28,8 +28,6 @@
 
 namespace injeqt { namespace v1 {
 
-INJEQT_EXCEPTION(method_not_found_exception, ::injeqt::v1::exception::exception);
-
 template<typename T>
 std::unique_ptr<QObject> make_object()
 {
@@ -39,10 +37,7 @@ std::unique_ptr<QObject> make_object()
 template<typename T>
 inline QMetaMethod make_method(const std::string &signature)
 {
-	auto result = T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()));
-	if (!result.isValid())
-		throw method_not_found_exception{signature};
-	return result;
+	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()));
 }
 
 }}
