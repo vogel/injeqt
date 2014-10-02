@@ -29,6 +29,8 @@
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"
 
+#include <cassert>
+
 namespace injeqt { namespace internal {
 // TODO: tests!!
 injector_impl::injector_impl()
@@ -119,7 +121,10 @@ implementations injector_impl::objects_with(implementations objects, const types
 			throw unresolved_dependencies_exception{};
 
 		for (auto &&resolved : resolved_dependencies.resolved)
+		{
+			assert(object_to_resolve.interface_type() == resolved.setter().object_type());
 			resolved.apply_on(object_to_resolve.object());
+		}
 	}
 
 	return objects;

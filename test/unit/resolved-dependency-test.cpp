@@ -75,7 +75,6 @@ public:
 	resolved_dependency_test();
 
 private slots:
-	void should_throw_when_applying_on_wrong_object();
 	void should_properly_apply_on_valid_object();
 
 private:
@@ -98,16 +97,6 @@ resolved_dependency_test::resolved_dependency_test() :
 	setter_1_subtype_1_method{make_setter_method<injected_type>("setter_1_subtype_1(type_1_subtype_1*)")},
 	setter_2_method{make_setter_method<injected_type>("setter_2(type_2*)")}
 {
-}
-
-void resolved_dependency_test::should_throw_when_applying_on_wrong_object()
-{
-	auto object_1 = make_object<type_1>();
-	auto object_2 = make_object<type_2>();
-	auto resolved = resolved_dependency{implementation{type_1_type, object_1.get()}, setter_1_method};
-	expect<inavalid_apply_on_object_exception>([&]{
-		resolved.apply_on(object_2.get());
-	});
 }
 
 void resolved_dependency_test::should_properly_apply_on_valid_object()

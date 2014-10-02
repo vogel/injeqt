@@ -31,9 +31,6 @@
 
 namespace injeqt { namespace internal {
 
-INJEQT_EXCEPTION(invalid_resolved_dependency_exception, ::injeqt::v1::exception::exception);
-INJEQT_EXCEPTION(inavalid_apply_on_object_exception, invalid_resolved_dependency_exception);
-
 /**
  * @brief Abstraction of Injeqt resolved dependency.
  *
@@ -70,7 +67,7 @@ public:
 	 * @brief Apply resolved dependency on an object instance.
 	 * @param on object to apply dependency on
 	 * @pre on != nullptr
-	 * @throw inavalid_apply_on_object_exception when @p on parameter is of invalid type
+	 * @pre type{on->metaObject()} == setter().object_type()
 	 *
 	 * This method can only be called on valid resolved_dependency object. If @p on parameter is
 	 * null or is of different type than setter_method::object_type() of setter() object an

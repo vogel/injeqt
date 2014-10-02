@@ -45,8 +45,7 @@ const setter_method & resolved_dependency::setter() const
 bool resolved_dependency::apply_on(QObject *on)
 {
 	assert(on != nullptr);
-	if (type{on->metaObject()} != _setter.object_type())
-		throw inavalid_apply_on_object_exception{};
+	assert(type{on->metaObject()} == _setter.object_type());
 
 	_setter.invoke(on, _resolved_with.object());
 }
