@@ -39,11 +39,6 @@ namespace injeqt { namespace internal {
 INJEQT_EXCEPTION(setter_exception, ::injeqt::v1::exception::exception);
 
 /**
- * @brief Exception thrown when setter was invoked on object of different type than setter_method::object_type().
- */
-INJEQT_EXCEPTION(invoked_on_wrong_object_exception, setter_exception);
-
-/**
  * @brief Exception thrown when setter was invoked with parameter of different type than setter_method::parameter_type().
  */
 INJEQT_EXCEPTION(invoked_with_wrong_object_exception, setter_exception);
@@ -134,7 +129,7 @@ public:
 	 * @return true if invoke was successfull
 	 * @pre !is_empty()
 	 * @pre on != nullptr
-	 * @throw invoked_on_wrong_object_exception if @p on type is different than object_type()
+	 * @pre type{on->metaObject()} == object_type()
 	 * @throw invoked_with_wrong_object_exception if @p parameter is null
 	 * @throw invoked_with_wrong_object_exception if @p parameter type does not implement parameter_type()
 	 *

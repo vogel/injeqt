@@ -65,7 +65,6 @@ private slots:
 	void should_create_empty();
 	void should_create_valid_from_tagged_setter();
 	void should_create_valid_from_untagged_setter();
-	void should_throw_when_called_on_wrong_object();
 	void should_throw_when_called_with_null_object();
 	void should_throw_when_called_with_wrong_object();
 	void should_invoke_have_results();
@@ -107,21 +106,11 @@ void setter_method_test::should_create_valid_from_untagged_setter()
 	QCOMPARE(setter.parameter_type(), injectable_type1_type);
 }
 
-void setter_method_test::should_throw_when_called_on_wrong_object()
-{
-	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
-	auto on = make_object<injectable_type1>();
-	auto with = make_object<injectable_type1>();
-	expect<invoked_on_wrong_object_exception>([&]{
-		setter.invoke(on.get(), with.get());
-	});
-}
-
 void setter_method_test::should_throw_when_called_with_null_object()
 {
 	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
-	auto on = make_object<injectable_type1>();
-	expect<invoked_on_wrong_object_exception>([&]{
+	auto on = make_object<test_type>();
+	expect<invoked_with_wrong_object_exception>([&]{
 		setter.invoke(on.get(), nullptr);
 	});
 }
@@ -129,9 +118,9 @@ void setter_method_test::should_throw_when_called_with_null_object()
 void setter_method_test::should_throw_when_called_with_wrong_object()
 {
 	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
-	auto on = make_object<injectable_type1>();
+	auto on = make_object<test_type>();
 	auto with = make_object<test_type>();
-	expect<invoked_on_wrong_object_exception>([&]{
+	expect<invoked_with_wrong_object_exception>([&]{
 		setter.invoke(on.get(), with.get());
 	});
 }

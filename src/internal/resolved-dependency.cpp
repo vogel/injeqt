@@ -45,15 +45,10 @@ const setter_method & resolved_dependency::setter() const
 bool resolved_dependency::apply_on(QObject *on)
 {
 	assert(on != nullptr);
-
-	try
-	{
-		_setter.invoke(on, _resolved_with.object());
-	}
-	catch (invoked_on_wrong_object_exception &)
-	{
+	if (type{on->metaObject()} != _setter.object_type())
 		throw inavalid_apply_on_object_exception{};
-	}
+
+	_setter.invoke(on, _resolved_with.object());
 }
 
 bool operator == (const resolved_dependency &x, const resolved_dependency &y)

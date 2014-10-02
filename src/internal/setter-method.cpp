@@ -86,9 +86,7 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 {
 	assert(!is_empty());
 	assert(on != nullptr);
-
-	if (type{on->metaObject()} != _object_type)
-		throw invoked_on_wrong_object_exception{};
+	assert(type{on->metaObject()} == _object_type);
 
 	if (!parameter || !parameter->metaObject())
 		throw invoked_with_wrong_object_exception{};
