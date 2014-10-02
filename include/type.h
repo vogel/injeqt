@@ -58,7 +58,6 @@ namespace v1
  * that also registers type T in Qt meta-type that is required for Injeqt to function
  * properly.
  *
- * To check if type is not empty and not qobject use validate(type) free function.
  * Internal code assumes that all passes type instances are not empty and not qobject.
  * All public API functions always check user-provided types validity and throw an
  * invalid_type_exception if neccessary.
