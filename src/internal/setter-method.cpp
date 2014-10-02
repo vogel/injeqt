@@ -85,9 +85,7 @@ std::string setter_method::signature() const
 bool setter_method::invoke(QObject *on, QObject *parameter) const
 {
 	assert(!is_empty());
-
-	if (!on)
-		throw invoked_on_wrong_object_exception{};
+	assert(on != nullptr);
 
 	if (type{on->metaObject()} != _object_type)
 		throw invoked_on_wrong_object_exception{};

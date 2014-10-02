@@ -133,7 +133,7 @@ public:
 	 * @param parameter parmeter to be passed in invocation
 	 * @return true if invoke was successfull
 	 * @pre !is_empty()
-	 * @throw invoked_on_wrong_object_exception if @p on is null
+	 * @pre on != nullptr
 	 * @throw invoked_on_wrong_object_exception if @p on type is different than object_type()
 	 * @throw invoked_with_wrong_object_exception if @p parameter is null
 	 * @throw invoked_with_wrong_object_exception if @p parameter type does not implement parameter_type()
