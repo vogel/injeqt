@@ -87,13 +87,9 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 	assert(!is_empty());
 	assert(on != nullptr);
 	assert(type{on->metaObject()} == _object_type);
-
-	if (!parameter || !parameter->metaObject())
-		throw invoked_with_wrong_object_exception{};
-
-	auto implements = extract_interfaces(type{parameter->metaObject()});
-	if (!implements.contains(_parameter_type))
-		throw invoked_with_wrong_object_exception{};
+	assert(parameter != nullptr);
+	assert(!type{parameter->metaObject()}.is_empty());
+	assert(implements(type{parameter->metaObject()}, _parameter_type));
 
 	return _meta_method.invoke(on, Q_ARG(QObject *, parameter));
 }

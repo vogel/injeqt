@@ -34,16 +34,6 @@
 namespace injeqt { namespace internal {
 
 /**
- * @brief Any exception that can occur when validating or creating setter_method objects or invoking setter_method.
- */
-INJEQT_EXCEPTION(setter_exception, ::injeqt::v1::exception::exception);
-
-/**
- * @brief Exception thrown when setter was invoked with parameter of different type than setter_method::parameter_type().
- */
-INJEQT_EXCEPTION(invoked_with_wrong_object_exception, setter_exception);
-
-/**
  * @brief Abstraction of setter method.
  *
  * This class is used for defining setter based dependencies and for invoking these setter methods
@@ -130,8 +120,9 @@ public:
 	 * @pre !is_empty()
 	 * @pre on != nullptr
 	 * @pre type{on->metaObject()} == object_type()
-	 * @throw invoked_with_wrong_object_exception if @p parameter is null
-	 * @throw invoked_with_wrong_object_exception if @p parameter type does not implement parameter_type()
+	 * @pre parameter != nullptr
+	 * @pre !type{parameter->metaObject()}.is_empty()
+	 * @pre implements(type{parameter->metaObject()}, _parameter_type)
 	 *
 	 * This method can be only called on valid objects with @p on parameter being
 	 * the same type as object_type() returns and @p parameter of type that implements parameter_type().
