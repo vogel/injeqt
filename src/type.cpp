@@ -61,12 +61,6 @@ const QMetaObject * type::meta_object() const
 	return _meta_object;
 }
 
-void validate(const type &t)
-{
-	if (t.is_empty() || t.is_qobject())
-		throw invalid_type_exception{};
-}
-
 bool operator == (const type &x, const type &y)
 {
 	return x.meta_object() == y.meta_object();

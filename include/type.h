@@ -44,11 +44,6 @@ namespace v1
 {
 
 /**
- * @brief Exception thrown if type passed to validate(type) function is not valid.
- */
-INJEQT_EXCEPTION(invalid_type_exception, ::injeqt::v1::exception::exception);
-
-/**
  * @brief Abstraction of C++ type.
  *
  * Represents a C++ type. Currently only types inheriting from QObject class can
@@ -118,19 +113,6 @@ private:
 	const QMetaObject * _meta_object;
 
 };
-
-/**
- * @brief Throws an exception if type t is not valid.
- * @param t type to validate
- * @throws invalid_type_exception if type is not derived from QObject.
- *
- * Call to validate type t. If t does not represent a QObject-derived type, an
- * exception of type invalid_type_exception is thrown. If t is valid, this
- * function returns.
- *
- * Note that QObject itself is also an invalid Injeqt type.
- */
-INJEQT_API void validate(const type &t);
 
 INJEQT_API bool operator == (const type &x, const type &y);
 INJEQT_API bool operator != (const type &x, const type &y);
