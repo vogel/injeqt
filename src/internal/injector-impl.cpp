@@ -97,19 +97,19 @@ implementations injector_impl::objects_with(implementations objects, const types
 	}
 
 	for (auto &&type_to_instantiate : types_to_instantiate)
-		if (objects.get(type_to_instantiate) == end(objects))
-		{
-			auto provider_it = _available_providers.get(type_to_instantiate);
-			auto instance = provider_it->get()->provide(*this);
+	{
+		if (objects.get(type_to_instantiate) != end(objects))
+			continue;
 
-			if (instance)
-			{
-				auto i = make_implementation(type_to_instantiate, instance);
-				objects_to_resolve.emplace_back(i);
-			}
-			else
-				throw type_not_instantiated_exception{type_to_instantiate.name()};
-		}
+		auto provider_it = _available_providers.get(type_to_instantiate);
+		auto instance = provider_it->get()->provide(*this);
+
+		if (!instance)
+			throw type_not_instantiated_exception{type_to_instantiate.name()};
+
+		auto i = make_implementation(type_to_instantiate, instance);
+		objects_to_resolve.emplace_back(i);
+	}
 
 	objects.merge(implementations{objects_to_resolve});
 
