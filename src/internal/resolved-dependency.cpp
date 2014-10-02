@@ -44,8 +44,7 @@ const setter_method & resolved_dependency::setter() const
 
 bool resolved_dependency::apply_on(QObject *on)
 {
-	if (!on)
-		throw inavalid_apply_on_object_exception{};
+	assert(on != nullptr);
 
 	try
 	{

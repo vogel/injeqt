@@ -69,7 +69,7 @@ public:
 	/**
 	 * @brief Apply resolved dependency on an object instance.
 	 * @param on object to apply dependency on
-	 * @throw inavalid_apply_on_object_exception when @p on parameter is null
+	 * @pre on != nullptr
 	 * @throw inavalid_apply_on_object_exception when @p on parameter is of invalid type
 	 *
 	 * This method can only be called on valid resolved_dependency object. If @p on parameter is
