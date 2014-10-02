@@ -32,7 +32,6 @@
 namespace injeqt { namespace internal {
 
 INJEQT_EXCEPTION(invalid_resolved_dependency_exception, ::injeqt::v1::exception::exception);
-INJEQT_EXCEPTION(non_matching_setter_exception, invalid_resolved_dependency_exception);
 INJEQT_EXCEPTION(inavalid_apply_on_object_exception, invalid_resolved_dependency_exception);
 
 /**
@@ -53,6 +52,7 @@ public:
 	 * @param resolved_with object that resolve dependency
 	 * @param setter setter_method that can be used to resolve dependency on an object instance
 	 * @pre !setter.is_empty()
+	 * @pre resolved_with.interface_type() == setter.parameter_type()
 	 */
 	explicit resolved_dependency(implementation resolved_with, setter_method setter);
 
@@ -83,21 +83,6 @@ private:
 	setter_method _setter;
 
 };
-
-/**
- * @brief Throws an exception if resolved_dependency rd is not valid.
- * @param rd resolved_dependency to validate
- * @throw invalid_implementation_availability_exception when backing implementation object is invalid
- * @throw invalid_interface_type_exceptionwhen when backing implementation object is invalid
- * @throw bad_number_of_parameters_setter_exception when backing setter_method object is invalid
- * @throw invalid_setter_exception when backing setter_method object is invalid
- * @throw invalid_type_exception when backing setter_method object is invalid
- * @throw invalid_type_exception when backing setter_method object is invalid
- * @throw non_matching_setter_exception when type of setter_method parameter is not the same as type of implementation object
- *
- * Call to validate resolved_dependency rd.
- */
-void validate(const resolved_dependency &rd);
 
 bool operator == (const resolved_dependency &x, const resolved_dependency &y);
 bool operator != (const resolved_dependency &x, const resolved_dependency &y);

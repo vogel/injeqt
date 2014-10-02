@@ -75,9 +75,6 @@ public:
 	resolved_dependency_test();
 
 private slots:
-	void should_throw_when_non_matching_setter_provided();
-	void should_throw_when_subclass_implementation_provided();
-	void should_throw_when_superclass_implementation_provided();
 	void should_throw_when_applying_on_wrong_object();
 	void should_properly_apply_on_valid_object();
 
@@ -103,35 +100,11 @@ resolved_dependency_test::resolved_dependency_test() :
 {
 }
 
-void resolved_dependency_test::should_throw_when_non_matching_setter_provided()
-{
-	auto object = make_object<type_1>();
-	expect<non_matching_setter_exception>([&]{
-		auto resolved = make_validated<resolved_dependency>(implementation{type_1_type, object.get()}, setter_2_method);
-	});
-}
-
-void resolved_dependency_test::should_throw_when_subclass_implementation_provided()
-{
-	auto object = make_object<type_1_subtype_1>();
-	expect<non_matching_setter_exception>([&]{
-		auto resolved = make_validated<resolved_dependency>(implementation{type_1_subtype_1_type, object.get()}, setter_1_method);
-	});
-}
-
-void resolved_dependency_test::should_throw_when_superclass_implementation_provided()
-{
-	auto object = make_object<type_1>();
-	expect<non_matching_setter_exception>([&]{
-		auto resolved = make_validated<resolved_dependency>(implementation{type_1_type, object.get()}, setter_1_subtype_1_method);
-	});
-}
-
 void resolved_dependency_test::should_throw_when_applying_on_wrong_object()
 {
 	auto object_1 = make_object<type_1>();
 	auto object_2 = make_object<type_2>();
-	auto resolved = make_validated<resolved_dependency>(implementation{type_1_type, object_1.get()}, setter_1_method);
+	auto resolved = resolved_dependency{implementation{type_1_type, object_1.get()}, setter_1_method};
 	expect<inavalid_apply_on_object_exception>([&]{
 		resolved.apply_on(object_2.get());
 	});
@@ -142,8 +115,8 @@ void resolved_dependency_test::should_properly_apply_on_valid_object()
 	auto object_1 = make_object<type_1>();
 	auto object_2 = make_object<type_2>();
 	auto apply_on_object = make_object<injected_type>();
-	auto resolved_1 = make_validated<resolved_dependency>(implementation{type_1_type, object_1.get()}, setter_1_method);
-	auto resolved_2 = make_validated<resolved_dependency>(implementation{type_2_type, object_2.get()}, setter_2_method);
+	auto resolved_1 = resolved_dependency{implementation{type_1_type, object_1.get()}, setter_1_method};
+	auto resolved_2 = resolved_dependency{implementation{type_2_type, object_2.get()}, setter_2_method};
 
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<injected_type *>(apply_on_object.get())->_1);
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<injected_type *>(apply_on_object.get())->_2);
