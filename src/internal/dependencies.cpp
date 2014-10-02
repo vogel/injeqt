@@ -20,6 +20,7 @@
 
 #include "dependencies.h"
 
+#include "exception/invalid-setter-exception.h"
 #include "dependency.h"
 #include "extract-interfaces.h"
 #include "setter-method.h"
@@ -29,6 +30,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
 #include <algorithm>
+#include <cassert>
 #include <set>
 
 namespace injeqt { namespace internal {
@@ -42,6 +44,8 @@ std::string exception_message(const QMetaObject *meta_object, const QMetaObject 
 
 std::vector<setter_method> extract_setters(const type &for_type)
 {
+	assert(!for_type.is_empty());
+
 	auto result = std::vector<setter_method>{};
 
 	auto meta_object = for_type.meta_object();
@@ -52,6 +56,14 @@ std::vector<setter_method> extract_setters(const type &for_type)
 		auto tag = std::string{probably_setter.tag()};
 		if (tag != "INJEQT_SETTER")
 			continue;
+
+		if (probably_setter.methodType() != QMetaMethod::Slot)
+			continue;
+		if (probably_setter.parameterCount() != 1)
+			throw exception::invalid_setter_exception{};
+		auto parameter_type = type{QMetaType::metaObjectForType(probably_setter.parameterType(0))};
+		if (parameter_type.is_empty())
+			throw exception::invalid_setter_exception{};
 
 		result.emplace_back(setter_method{probably_setter});
 	}
@@ -74,13 +86,13 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 
 dependencies make_validated_dependencies(const type &for_type)
 {
+	assert(!for_type.is_empty());
+
 	auto interfaces = extract_interfaces(for_type);
 	auto setters = extract_setters(for_type);
 	for (auto &&setter : setters)
 	{
 		auto parameter_type = setter.parameter_type();
-		if (parameter_type.is_empty())
-			throw bad_number_of_parameters_setter_exception{}; // zero parameters
 		if (parameter_type == for_type)
 			throw dependency_on_self_exception{};
 		if (std::find(std::begin(interfaces), std::end(interfaces), parameter_type) != std::end(interfaces))
@@ -101,9 +113,6 @@ dependencies make_validated_dependencies(const type &for_type)
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),
 		[](const setter_method &setter){ return dependency{setter}; }
 	);
-
-	for (auto &&d : result)
-		validate(d);
 
 	return dependencies{result};
 }

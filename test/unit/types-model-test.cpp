@@ -19,6 +19,7 @@
  */
 
 #include "exception/exception.cpp"
+#include "exception/invalid-setter-exception.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"
 #include "extract-interfaces.cpp"

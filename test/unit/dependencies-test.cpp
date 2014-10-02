@@ -19,6 +19,7 @@
  */
 
 #include "exception/exception.cpp"
+#include "exception/invalid-setter-exception.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"
 #include "extract-interfaces.cpp"
@@ -88,33 +89,6 @@ class valid_injected_type_with_common_superclass : public QObject
 public slots:
 	INJEQT_SETTER void setter_1(sub_injectable_type1a *) {}
 	INJEQT_SETTER void setter_2(sub_injectable_type1b *) {}
-
-};
-
-class zero_parameters_invalid_injected_type : public QObject
-{
-	Q_OBJECT
-
-public slots:
-	INJEQT_SETTER void setter_1() {}
-
-};
-
-class too_many_parameters_invalid_injected_type : public QObject
-{
-	Q_OBJECT
-
-public slots:
-	INJEQT_SETTER void setter_1(injectable_type1 *, injectable_type2 *) {}
-
-};
-
-class non_qobject_invalid_injected_type : public QObject
-{
-	Q_OBJECT
-
-public slots:
-	INJEQT_SETTER void setter_1(int) {}
 
 };
 
@@ -198,9 +172,6 @@ private slots:
 	void should_find_all_valid_dependencies();
 	void should_find_all_valid_dependencies_in_hierarchy();
 	void should_find_dependencies_with_common_superclass();
-	void should_fail_when_zero_parameters();
-	void should_fail_when_too_many_parameters();
-	void should_fail_when_type_not_qobject();
 	void should_fail_when_duplicate_dependency();
 	void should_fail_with_superclass_dependency();
 	void should_fail_with_superclass_inverted_dependency();
@@ -215,9 +186,6 @@ private:
 	type valid_injected_type_type;
 	type inheriting_valid_injected_type_type;
 	type valid_injected_type_with_common_superclass_type;
-	type zero_parameters_type_type;
-	type too_many_parameters_invalid_injected_type_type;
-	type non_qobject_invalid_injected_type_type;
 	type duplicate_dependency_invalid_injected_type_type;
 	type invalid_injected_type_with_superclass_type;
 	type invalid_injected_type_with_superclass_inverted_type;
@@ -250,9 +218,6 @@ dependencies_test::dependencies_test() :
 	valid_injected_type_type{make_type<valid_injected_type>()},
 	inheriting_valid_injected_type_type{make_type<inheriting_valid_injected_type>()},
 	valid_injected_type_with_common_superclass_type{make_type<valid_injected_type_with_common_superclass>()},
-	zero_parameters_type_type{make_type<zero_parameters_invalid_injected_type>()},
-	too_many_parameters_invalid_injected_type_type{make_type<too_many_parameters_invalid_injected_type>()},
-	non_qobject_invalid_injected_type_type{make_type<non_qobject_invalid_injected_type>()},
 	duplicate_dependency_invalid_injected_type_type{make_type<duplicate_dependency_invalid_injected_type>()},
 	invalid_injected_type_with_superclass_type{make_type<invalid_injected_type_with_superclass>()},
 	invalid_injected_type_with_superclass_inverted_type{make_type<invalid_injected_type_with_superclass_inverted>()},
@@ -306,27 +271,6 @@ void dependencies_test::should_find_dependencies_with_common_superclass()
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_1});
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_2});
-}
-
-void dependencies_test::should_fail_when_zero_parameters()
-{
-	expect<bad_number_of_parameters_setter_exception>([&]{
-		auto dependencies = make_validated_dependencies(zero_parameters_type_type);
-	});
-}
-
-void dependencies_test::should_fail_when_too_many_parameters()
-{
-	expect<bad_number_of_parameters_setter_exception>([&]{
-		auto dependencies = make_validated_dependencies(too_many_parameters_invalid_injected_type_type);
-	});
-}
-
-void dependencies_test::should_fail_when_type_not_qobject()
-{
-	expect<invalid_setter_exception>([&]{
-		auto dependencies = make_validated_dependencies(non_qobject_invalid_injected_type_type);
-	});
 }
 
 void dependencies_test::should_fail_when_duplicate_dependency()

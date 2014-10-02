@@ -52,6 +52,7 @@ public:
 	 * @brief Create new resolved_dependency object.
 	 * @param resolved_with object that resolve dependency
 	 * @param setter setter_method that can be used to resolve dependency on an object instance
+	 * @pre !setter.is_empty()
 	 */
 	explicit resolved_dependency(implementation resolved_with, setter_method setter);
 

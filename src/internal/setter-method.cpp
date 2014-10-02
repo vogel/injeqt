@@ -21,6 +21,9 @@
 #include "setter-method.h"
 
 #include "extract-interfaces.h"
+#include "type.h"
+
+#include <cassert>
 
 namespace injeqt { namespace internal {
 
@@ -35,20 +38,37 @@ std::string exception_message(const QMetaMethod &method)
 
 }
 
+setter_method::setter_method()
+{
+}
+
 setter_method::setter_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_parameter_type{QMetaType::metaObjectForType(meta_method.parameterType(0))},
 	_meta_method{std::move(meta_method)}
 {
+	assert(meta_method.methodType() == QMetaMethod::Slot);
+	assert(meta_method.parameterCount() == 1);
+	assert(meta_method.enclosingMetaObject() != nullptr);
+	assert(!_parameter_type.is_empty());
+}
+
+bool setter_method::is_empty() const
+{
+	return !_meta_method.isValid();
 }
 
 const type & setter_method::object_type() const
 {
+	assert(!is_empty());
+
 	return _object_type;
 }
 
 const type & setter_method::parameter_type() const
 {
+	assert(!is_empty());
+
 	return _parameter_type;
 }
 
@@ -64,6 +84,8 @@ std::string setter_method::signature() const
 
 bool setter_method::invoke(QObject *on, QObject *parameter) const
 {
+	assert(!is_empty());
+
 	if (!on)
 		throw invoked_on_wrong_object_exception{};
 
@@ -78,24 +100,6 @@ bool setter_method::invoke(QObject *on, QObject *parameter) const
 		throw invoked_with_wrong_object_exception{};
 
 	return _meta_method.invoke(on, Q_ARG(QObject *, parameter));
-}
-
-void validate(const setter_method &s)
-{
-	if (s.meta_method().methodType() != QMetaMethod::Slot)
-		throw invalid_setter_exception{};
-	if (s.meta_method().parameterCount() != 1)
-		throw bad_number_of_parameters_setter_exception(exception_message(s.meta_method()));
-
-	try
-	{
-		validate(s.object_type());
-		validate(s.parameter_type());
-	}
-	catch (invalid_type_exception &e)
-	{
-		throw invalid_setter_exception(exception_message(s.meta_method()));
-	}
 }
 
 bool operator == (const setter_method &x, const setter_method &y)

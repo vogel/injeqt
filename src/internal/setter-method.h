@@ -39,16 +39,6 @@ namespace injeqt { namespace internal {
 INJEQT_EXCEPTION(setter_exception, ::injeqt::v1::exception::exception);
 
 /**
- * @brief Any exception that can occur when validating or creating setter_method objects.
- */
-INJEQT_EXCEPTION(invalid_setter_exception, setter_exception);
-
-/**
- * @brief Exception thrown when setter has other number of arguments than one.
- */
-INJEQT_EXCEPTION(bad_number_of_parameters_setter_exception, invalid_setter_exception);
-
-/**
  * @brief Exception thrown when setter was invoked on object of different type than setter_method::object_type().
  */
 INJEQT_EXCEPTION(invoked_on_wrong_object_exception, setter_exception);
@@ -82,8 +72,6 @@ INJEQT_EXCEPTION(invoked_with_wrong_object_exception, setter_exception);
  *         INJEQT_SETTER void setter(set_object *obj) { ... }
  *     };
  *
- * To check if object is valid call validate(const setter_method &).
- *
  * Object with setter method must not take ownership of passed object.
  */
 class setter_method final
@@ -91,13 +79,28 @@ class setter_method final
 
 public:
 	/**
+	 * @brief Create empty setter_method.
+	 */
+	setter_method();
+
+	/**
 	 * @brief Create object from QMetaMethod definition.
 	 * @param meta_method Qt meta method that should be a setter method
+	 * @pre meta_method.methodType() == QMetaMethod::Slot
+	 * @pre meta_method.parameterCount() == 1
+	 * @pre meta_method.enclosingMetaObject() != nullptr
+	 * @pre !type{QMetaType::metaObjectForType(meta_method.parameterType(0))}.is_empty()
 	 */
 	explicit setter_method(QMetaMethod meta_method);
 
 	/**
+	 * @return true if setter_method is empty and does not represent valie setter method
+	 */
+	bool is_empty() const;
+
+	/**
 	 * @return Type of objects that owns this setter method.
+	 * @pre !is_empty()
 	 *
 	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */
@@ -105,6 +108,7 @@ public:
 
 	/**
 	 * @return Type of objects parameter accepted by setter method.
+	 * @pre !is_empty()
 	 *
 	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */
@@ -128,6 +132,7 @@ public:
 	 * @param on object to call this method on
 	 * @param parameter parmeter to be passed in invocation
 	 * @return true if invoke was successfull
+	 * @pre !is_empty()
 	 * @throw invoked_on_wrong_object_exception if @p on is null
 	 * @throw invoked_on_wrong_object_exception if @p on type is different than object_type()
 	 * @throw invoked_with_wrong_object_exception if @p parameter is null
@@ -147,25 +152,13 @@ private:
 
 };
 
-/**
- * @brief Throws an exception if setter_method s is not valid.
- * @param s setter_method to validate
- * @throws invalid_setter_exception  if backing QMetaMethod is not a method or slot
- * @throws bad_number_of_parameters_setter_exception if backing QMetaMethod has zero or more than one parameters
- * @throws invalid_setter_exception if backing QMetaMethod parameter is not a valid type
- *
- * Call to validate setter_method s. If backing QMetaMethod is not valid setter method
- * an exception will be thrown.
- */
-void validate(const setter_method &s);
-
 bool operator == (const setter_method &x, const setter_method &y);
 bool operator != (const setter_method &x, const setter_method &y);
 
 template<typename T>
 inline setter_method make_setter_method(const std::string &signature)
 {
-	return make_validated<setter_method>(T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data())));
+	return setter_method{T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()))};
 }
 
 }}

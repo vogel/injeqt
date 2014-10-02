@@ -45,6 +45,7 @@ set(INJEQT_SRCS
 	src/exception/exception.cpp
 	src/exception/interface-not-implemented-exception.cpp
 	src/exception/invalid-qobject-exception.cpp
+	src/exception/invalid-setter-exception.cpp
 	src/exception/qobject-type-exception.cpp
 	src/exception/unique-factory-method-not-found-exception.cpp
 

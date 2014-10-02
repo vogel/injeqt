@@ -18,39 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "dependency.h"
+#include "exception/invalid-setter-exception.h"
 
-#include <cassert>
+namespace injeqt { namespace v1 { namespace exception {
 
-namespace injeqt { namespace internal {
-
-dependency::dependency(setter_method setter) :
-	_setter{std::move(setter)}
+invalid_setter_exception::invalid_setter_exception(std::string what) :
+	exception{std::move(what)}
 {
-	assert(!_setter.is_empty());
 }
 
-const type & dependency::required_type() const
+invalid_setter_exception::~invalid_setter_exception()
 {
-	return _setter.parameter_type();
 }
 
-const setter_method & dependency::setter() const
-{
-	return _setter;
-}
-
-bool operator == (const dependency &x, const dependency &y)
-{
-	if (x.setter() != y.setter())
-		return false;
-
-	return true;
-}
-
-bool operator != (const dependency &x, const dependency &y)
-{
-	return !(x == y);
-}
-
-}}
+}}}

@@ -24,6 +24,8 @@
 #include "injeqt.h"
 #include "type.h"
 
+#include <cassert>
+
 /**
  * @file
  * @brief Contains classes and functions for representing type and its dependencies.
@@ -71,10 +73,13 @@ bool operator != (const type_dependencies &x, const type_dependencies &y);
 
 /**
  * @brief Create valid type_dependencies from given type.
- * @param dependent_type type to get dependecies from. Must be valid.
+ * @param dependent_type type to get dependecies from.
+ * @pre !dependent_type.is_empty()
  */
 inline type_dependencies make_type_dependencies(type dependent_type)
 {
+	assert(!dependent_type.is_empty());
+
 	return type_dependencies{dependent_type, make_validated_dependencies(dependent_type)};
 }
 

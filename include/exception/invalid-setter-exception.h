@@ -18,39 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "dependency.h"
+#pragma once
 
-#include <cassert>
+#include "exception/exception.h"
 
-namespace injeqt { namespace internal {
+namespace injeqt { namespace v1 { namespace exception {
 
-dependency::dependency(setter_method setter) :
-	_setter{std::move(setter)}
+/**
+ * @brief Exception throw when setter with bad number of arguments or with bad argument was found with INJEQT_SETTER tag.
+ */
+class INJEQT_API invalid_setter_exception : public exception
 {
-	assert(!_setter.is_empty());
-}
 
-const type & dependency::required_type() const
-{
-	return _setter.parameter_type();
-}
+public:
+	explicit invalid_setter_exception(std::string what = std::string{});
+	virtual ~invalid_setter_exception();
 
-const setter_method & dependency::setter() const
-{
-	return _setter;
-}
+};
 
-bool operator == (const dependency &x, const dependency &y)
-{
-	if (x.setter() != y.setter())
-		return false;
-
-	return true;
-}
-
-bool operator != (const dependency &x, const dependency &y)
-{
-	return !(x == y);
-}
-
-}}
+}}}

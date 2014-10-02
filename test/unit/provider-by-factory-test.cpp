@@ -23,6 +23,7 @@
 #include "exception/exception.cpp"
 #include "exception/interface-not-implemented-exception.cpp"
 #include "exception/invalid-qobject-exception.cpp"
+#include "exception/invalid-setter-exception.cpp"
 #include "exception/qobject-type-exception.cpp"
 #include "exception/unique-factory-method-not-found-exception.cpp"
 #include "dependencies.cpp"

@@ -49,6 +49,7 @@ public:
 	/**
 	 * @brief Create dependency instance that uses setter method to be resolved.
 	 * @param setter setter method used to resolve dependency
+	 * @pre !setter.is_empty()
 	 */
 	explicit dependency(setter_method setter);
 
@@ -72,18 +73,6 @@ private:
 	setter_method _setter;
 
 };
-
-/**
- * @brief Throws an exception if dependency d is not valid.
- * @param d dependency to validate
- * @throws invalid_type_exception if object type of backing setter_method is invalid
- * @throws invalid_type_exception if parameter type of backing setter_method is invalid
- * @throws bad_number_of_parameters_setter_exception if backing setter_method has other number of parameters than one
- *
- * Call to validate dependency d. If backing setter_method is invalid
- * an exception is thrown. For details validate(const setter_method &)
- */
-void validate(const dependency &d);
 
 bool operator == (const dependency &x, const dependency &y);
 bool operator != (const dependency &x, const dependency &y);

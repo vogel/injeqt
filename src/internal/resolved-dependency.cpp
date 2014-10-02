@@ -20,12 +20,15 @@
 
 #include "resolved-dependency.h"
 
+#include <cassert>
+
 namespace injeqt { namespace internal {
 
 resolved_dependency::resolved_dependency(implementation resolved_with, setter_method setter) :
 	_resolved_with{std::move(resolved_with)},
 	_setter{std::move(setter)}
 {
+	assert(!_setter.is_empty());
 }
 
 const implementation & resolved_dependency::resolved_with() const
@@ -55,8 +58,6 @@ bool resolved_dependency::apply_on(QObject *on)
 
 void validate(const resolved_dependency &rd)
 {
-	validate(rd.setter());
-
 	if (rd.resolved_with().interface_type() != rd.setter().parameter_type())
 		throw non_matching_setter_exception{};
 }
