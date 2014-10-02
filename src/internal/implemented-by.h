@@ -39,8 +39,6 @@ namespace injeqt { namespace internal {
  * T or any of T supertypes - excluding only supertypes common with other configured objects.
  * This class represens such relation. It is mostly used in implemnted_by_mapping set to
  * represents all types that injector knows and can handle.
- *
- * Call validate(const implemented_by &) to check if object is valid.
  */
 class implemented_by final
 {
@@ -53,9 +51,6 @@ public:
 	 * @pre !interface_type.is_empty()
 	 * @pre !implementation_type.is_empty()
 	 * @pre implements(implementation_type, interface_type)
-	 *
-	 * To check if @p implementation_type really implements @p interface_type call
-	 * validate(const implemented_by &).
 	 */
 	explicit implemented_by(type interface_type, type implementation_type);
 

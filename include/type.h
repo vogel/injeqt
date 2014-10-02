@@ -21,7 +21,6 @@
 #pragma once
 
 #include "exception/exception.h"
-#include "injeqt-utils.h"
 #include "injeqt.h"
 
 #include <QtCore/QMetaType>

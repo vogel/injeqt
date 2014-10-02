@@ -37,9 +37,6 @@ namespace injeqt { namespace internal {
  * @brief Connects type with object that implements it.
  *
  * This class is used to connect type with object that implements that type.
- * To ensure that type and object matched call free function validate(const implementation&).
- * To create valid object call free function make_validated<implementation>(type, QObject *). Both
- * of these will throw if object is null or if type and object does not match.
  *
  * This class is mostly used in internal code to store objects in cache and to pass
  * them as resolved dependencies. The only place where this class is created from outside
@@ -59,9 +56,6 @@ public:
 	 * @pre object != nullptr
 	 * @pre object->metaObject() != nullptr
 	 * @pre extract_interfaces(type{object->metaObject()}).contains(interface_type)
-	 *
-	 * Always succedes. To check if preconditions of class are meet
-	 * call validate(const implementation&)
 	 */
 	explicit implementation(type interface_type, QObject *object);
 

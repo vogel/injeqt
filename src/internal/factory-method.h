@@ -60,7 +60,6 @@ namespace injeqt { namespace internal {
  *         Q_INVOKABLE created_object * create() { ... }
  *     };
  *
- * To check if object is valid call validate(const factory_method &).
  * To extract constructor from a type call make_factory_method<T, F>().
  * For above example a call to make_factory_method<with_factory_method, created_object>()
  * would return valid object.

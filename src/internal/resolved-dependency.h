@@ -35,8 +35,7 @@ namespace injeqt { namespace internal {
  * @brief Abstraction of Injeqt resolved dependency.
  *
  * Resolved dependency consists of implementation and a setter_method. To resolve dependency
- * on an object call apply_on(QObject *) method. To check if resolved dependency is valid
- * call validate(const resolved_dependency &). To get instances of resolved_dependency call
+ * on an object call apply_on(QObject *) method. To get instances of resolved_dependency call
  * resolve_dependencies(const dependencies &, const implementations &). This class is currently
  * only used in injector_impl.
  */

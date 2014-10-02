@@ -40,7 +40,6 @@ namespace injeqt { namespace internal {
  * required_type() to get a type that of object can be accepted as a dependency.
  *
  * Objects of this type are valid only when backing setter_method is valid.
- * To validate call validate(const dependency &).
  */
 class dependency final
 {
