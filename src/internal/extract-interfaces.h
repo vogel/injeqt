@@ -32,7 +32,6 @@ namespace injeqt { namespace internal {
 
 /**
  * @brief Return list of interfaces that given type implements.
- * @param for_type does not have to be a valid type object
  * @pre !for_type.is_empty()
  *
  * QObject meta type system supports only single inheritance. This method
@@ -41,5 +40,12 @@ namespace injeqt { namespace internal {
  * object is not valid an empty collection is returned.
  */
 types extract_interfaces(const type &for_type);
+
+/**
+ * @brief Return true if @p implementation implements @p interface
+ * @pre !implementation.is_empty()
+ * @pre !interface.is_empty()
+ */
+bool implements(const type &implementation, const type &interface);
 
 }}

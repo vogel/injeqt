@@ -52,4 +52,13 @@ types extract_interfaces(const type &for_type)
 	return types{result};
 }
 
+bool implements(const type &implementation, const type &interface)
+{
+	assert(!implementation.is_empty());
+	assert(!interface.is_empty());
+
+	auto interfaces = extract_interfaces(implementation);
+	return std::find(std::begin(interfaces), std::end(interfaces), interface) != std::end(interfaces);
+}
+
 }}

@@ -61,8 +61,6 @@ public:
 private slots:
 	void should_accept_implemented_by_self();
 	void should_accept_implemented_by_subtype();
-	void should_not_accept_implemented_by_supertype();
-	void should_not_accept_implemented_by_unrelated_type();
 
 private:
 	type type_1_type;
@@ -82,7 +80,7 @@ implemented_by_test::implemented_by_test() :
 
 void implemented_by_test::should_accept_implemented_by_self()
 {
-	auto i = make_validated<implemented_by>(type_1_type, type_1_type);
+	auto i = implemented_by{type_1_type, type_1_type};
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(type_1_type, i.implementation_type());
@@ -90,24 +88,10 @@ void implemented_by_test::should_accept_implemented_by_self()
 
 void implemented_by_test::should_accept_implemented_by_subtype()
 {
-	auto i = make_validated<implemented_by>(type_1_type, type_1_subtype_1_subtype_1_type);
+	auto i = implemented_by{type_1_type, type_1_subtype_1_subtype_1_type};
 
 	QCOMPARE(type_1_type, i.interface_type());
 	QCOMPARE(type_1_subtype_1_subtype_1_type, i.implementation_type());
-}
-
-void implemented_by_test::should_not_accept_implemented_by_supertype()
-{
-	expect<invalid_implemented_by_exception>([&]{
-		auto i = make_validated<implemented_by>(type_1_subtype_1_subtype_1_type, type_1_type);
-	});
-}
-
-void implemented_by_test::should_not_accept_implemented_by_unrelated_type()
-{
-	expect<invalid_implemented_by_exception>([&]{
-		auto i = make_validated<implemented_by>(type_1_type, type_2_type);
-	});
 }
 
 QTEST_APPLESS_MAIN(implemented_by_test)

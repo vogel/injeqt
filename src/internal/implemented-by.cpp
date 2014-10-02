@@ -21,6 +21,9 @@
 #include "implemented-by.h"
 
 #include "extract-interfaces.h"
+#include "type.h"
+
+#include <cassert>
 
 namespace injeqt { namespace internal {
 
@@ -28,6 +31,9 @@ implemented_by::implemented_by(type interface_type, type implementation_type) :
 	_interface_type{std::move(interface_type)},
 	_implementation_type{std::move(implementation_type)}
 {
+	assert(!_interface_type.is_empty());
+	assert(!_implementation_type.is_empty());
+	assert(implements(_implementation_type, _interface_type));
 }
 
 type implemented_by::interface_type() const
@@ -38,16 +44,6 @@ type implemented_by::interface_type() const
 type implemented_by::implementation_type() const
 {
 	return _implementation_type;
-}
-
-void validate(const implemented_by &ib)
-{
-	validate(ib.interface_type());
-	validate(ib.implementation_type());
-
-	auto interfaces = extract_interfaces(ib.implementation_type());
-	if (std::find(std::begin(interfaces), std::end(interfaces), ib.interface_type()) == std::end(interfaces))
-		throw invalid_implemented_by_exception{};
 }
 
 bool operator == (const implemented_by &x, const implemented_by &y)

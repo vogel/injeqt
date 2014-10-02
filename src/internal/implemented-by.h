@@ -32,11 +32,6 @@
 namespace injeqt { namespace internal {
 
 /**
- * @brief Any exception that can occur when validating or creating implemented_by objects.
- */
-INJEQT_EXCEPTION(invalid_implemented_by_exception, ::injeqt::v1::exception::exception);
-
-/**
  * @brief Represents "interface is implemented by type" relations.
  *
  * In Injeqt dependencies between objects are described by types. When an object of some type
@@ -55,6 +50,9 @@ public:
 	 * @brief Create new instance of implemented_by.
 	 * @param interface_type type of available interface
 	 * @param implementation_type type of object implementing interface
+	 * @pre !interface_type.is_empty()
+	 * @pre !implementation_type.is_empty()
+	 * @pre implements(implementation_type, interface_type)
 	 *
 	 * To check if @p implementation_type really implements @p interface_type call
 	 * validate(const implemented_by &).
@@ -76,15 +74,6 @@ private:
 	type _implementation_type;
 
 };
-
-/**
- * @brief Check if implemented_by object is valid.
- * @param ib object to check
- * @throw invalid_type_exception when interface_type is invalid
- * @throw invalid_type_exception when implementation_type is invalid
- * @throw invalid_implemented_by_exception if implementation_type does not implement interface_type
- */
-void validate(const implemented_by &ib);
 
 bool operator == (const implemented_by &x, const implemented_by &y);
 bool operator != (const implemented_by &x, const implemented_by &y);
