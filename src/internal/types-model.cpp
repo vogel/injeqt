@@ -57,6 +57,16 @@ type_dependencies types_model::get_dependencies(const type &interface_type) cons
 	return *_mapped_dependencies.get(_available_types.get(interface_type)->implementation_type());
 }
 
+std::vector<dependency> types_model::get_unresolvable_dependencies() const
+{
+	auto result = std::vector<dependency>{};
+	for (auto &&mapped_type_dependency : _mapped_dependencies)
+		for (auto &&dependency : mapped_type_dependency.dependency_list())
+			if (!_available_types.contains_key(dependency.required_type()))
+				result.push_back(dependency);
+	return result;
+}
+
 bool operator == (const types_model &x, const types_model &y)
 {
 	if (x.available_types() != y.available_types())
@@ -87,13 +97,13 @@ types_model make_types_model(const std::vector<type> &all_types)
 
 	auto available_types = relations.unique();
 	auto mapped_dependencies = types_dependencies{all_dependencies};
+	auto result = types_model(available_types, mapped_dependencies);
+	auto unresolvable_dependencies = result.get_unresolvable_dependencies();
 
-	for (auto &&mapped_type_dependency : mapped_dependencies)
-		for (auto &&dependency : mapped_type_dependency.dependency_list())
-			if (!available_types.contains_key(dependency.required_type()))
-				throw unresolvable_dependency_exception{dependency.required_type().name()};
+	if (!unresolvable_dependencies.empty())
+		throw unresolvable_dependency_exception{unresolvable_dependencies[0].required_type().name()};
 
-	return types_model(available_types, mapped_dependencies);
+	return result;
 }
 
 }}

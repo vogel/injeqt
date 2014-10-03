@@ -107,6 +107,11 @@ public:
 	 */
 	type_dependencies get_dependencies(const type &interface_type) const;
 
+	/**
+	 * @brief Return all unresolvable dependencies
+	 */
+	std::vector<dependency> get_unresolvable_dependencies() const;
+
 private:
 	implemented_by_mapping _available_types;
 	types_dependencies _mapped_dependencies;
