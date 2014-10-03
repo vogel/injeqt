@@ -42,7 +42,6 @@ namespace injeqt { namespace internal {
 
 INJEQT_EXCEPTION(injector_exception, ::injeqt::v1::exception::exception);
 INJEQT_EXCEPTION(type_not_configured_exception, injector_exception);
-INJEQT_EXCEPTION(unresolved_dependencies_exception, injector_exception);
 INJEQT_EXCEPTION(type_not_instantiated_exception, injector_exception);
 
 /**
@@ -126,7 +125,6 @@ private:
 	 * @param implementation_types set of types of object to create
 	 * @throw type_not_configured_exception if type from implementation_types or any required type is not configured in injector
 	 * @throw type_not_instantiated_exception if any provider fails to instantiate object
-	 * @throw unresolved_dependencies_exception if any dependency could not be resolved
 	 *
 	 * For each type in the list this method check if that type requires other one using provider::required_types()
 	 * and if so, calls objects_with(implementations, const type &) to update list with that requires object.
