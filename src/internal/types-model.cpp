@@ -62,7 +62,7 @@ std::vector<dependency> types_model::get_unresolvable_dependencies() const
 	auto result = std::vector<dependency>{};
 	for (auto &&mapped_type_dependency : _mapped_dependencies)
 		for (auto &&dependency : mapped_type_dependency.dependency_list())
-			if (!_available_types.contains_key(dependency.required_type()))
+			if (!contains(dependency.required_type()))
 				result.push_back(dependency);
 	return result;
 }
