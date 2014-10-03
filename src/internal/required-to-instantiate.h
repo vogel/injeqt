@@ -37,6 +37,8 @@ namespace injeqt { namespace internal {
  * @param type_to_instantiate type to compute data for, must be valid
  * @param model model of all types in system, must be valid
  * @param objects list of available interfaces, must be valid
+ * @pre model.contains(type_to_instantiate)
+ * @pre model.get_unresolvable_dependencies().empty()
  *
  * This function computes list of all types that must be instantiated in order to properly instantiate
  * type_to_instantiate and resolve its dependencies. It starts with getting list of all dependencies of

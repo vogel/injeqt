@@ -129,7 +129,6 @@ public:
 	required_to_instantiate_test();
 
 private slots:
-	void should_throw_when_type_not_in_mapping();
 	void should_return_type_when_simple_types_and_empty_implementation();
 	void should_return_subtype_when_inheriting_types_and_empty_implementation();
 	void should_return_nothing_when_simple_types_and_implementation();
@@ -196,13 +195,6 @@ required_to_instantiate_test::required_to_instantiate_test() :
 		cyclic_type_3_subtype_1_type
 	})}
 {
-}
-
-void required_to_instantiate_test::should_throw_when_type_not_in_mapping()
-{
-	expect<type_not_in_types_model_exception>([&]{
-		auto result = required_to_instantiate(type_1_type, empty_types_model, {});
-	});
 }
 
 void required_to_instantiate_test::should_return_type_when_simple_types_and_empty_implementation()

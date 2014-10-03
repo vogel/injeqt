@@ -24,12 +24,16 @@
 #include "extract-interfaces.h"
 #include "implemented-by.h"
 
+#include <cassert>
 #include <set>
 
 namespace injeqt { namespace internal {
 
 types required_to_instantiate(const type &type_to_instantiate, const types_model &model, const implementations &objects)
 {
+	assert(model.contains(type_to_instantiate));
+	assert(model.get_unresolvable_dependencies().empty());
+
 	auto result = std::vector<type>{};
 	auto ready = std::set<type>{};
 	std::transform(std::begin(objects), std::end(objects), std::inserter(ready, std::end(ready)),
@@ -40,9 +44,6 @@ types required_to_instantiate(const type &type_to_instantiate, const types_model
 	{
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
-
-		if (!model.contains(current_interface_type))
-			throw type_not_in_types_model_exception{current_interface_type.name()};
 
 		auto dependencies = model.get_dependencies(current_interface_type);
 		auto current_implementation_type = dependencies.dependent_type();
