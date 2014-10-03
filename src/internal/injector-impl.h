@@ -75,7 +75,7 @@ public:
 	 * @param modules set of modules containing configuration of injector
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
 	 * @throw ambiguous_type_exception if one or more types is ambiguous (@see make_type_relations)
-	 * @throw unresolvable_dependency_exception if a type has a dependency type not configured in any module
+	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
 	 *
 	 * This constructor extract all providers from all modules and creates types_model object
 	 * to get all required information from them. After calling that all providers will be moved-out from
@@ -105,6 +105,7 @@ private:
 
 	/**
 	 * @brief Extract all provided types and makes a types_model from them.
+	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p all_providers
 	 */
 	types_model create_types_model(const providers &all_providers) const;
 

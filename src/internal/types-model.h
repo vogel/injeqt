@@ -43,11 +43,6 @@ INJEQT_EXCEPTION(model_exception, ::injeqt::v1::exception::exception);
 INJEQT_EXCEPTION(ambiguous_type_exception, model_exception);
 
 /**
- * @brief Exception thrown in make_types_model(const std::vector<type> &) when one of configured types has unresolvable dependency.
- */
-INJEQT_EXCEPTION(unresolvable_dependency_exception, model_exception);
-
-/**
  * @brief Model of all types, their dependencies and relations.
  *
  * This class is used to represent model of all types, their dependencies and relations.
@@ -121,7 +116,7 @@ bool operator != (const types_model &x, const types_model &y);
  * @param all_types set of types to make model from, all types must be valid.
  * @post result.get_unresolvable_dependencies().empty()
  * @throw ambiguous_type_exception if one or more types is ambiguous (@see make_type_relations)
- * @throw unresolvable_dependency_exception if a type has a dependency type not in @p all_types set
+ * @throw unresolvable_dependencies_exception if a type has a dependency type not in @p all_types set
  */
 types_model make_types_model(const std::vector<type> &all_types);
 

@@ -74,6 +74,7 @@ public:
 	/**
 	 * @brief Create new injector from provided modules.
 	 * @param modules list of modules
+	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
 	 *
 	 * Creates injector with all types from modules configured. If combined configuration
 	 * of all modules is invalid an exception is thrown. Configuration is invalid when:

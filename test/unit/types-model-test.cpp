@@ -20,6 +20,7 @@
 
 #include "exception/exception.cpp"
 #include "exception/invalid-setter-exception.cpp"
+#include "exception/unresolvable-dependencies-exception.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"
 #include "extract-interfaces.cpp"
@@ -208,7 +209,7 @@ void types_model_test::should_create_with_dependencies()
 
 void types_model_test::should_throw_when_unresolvable_dependency()
 {
-	expect<unresolvable_dependency_exception>([&]{
+	expect<exception::unresolvable_dependencies_exception>([&]{
 		make_types_model({type_1_subtype_3_type});
 	});
 }

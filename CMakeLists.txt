@@ -48,6 +48,7 @@ set(INJEQT_SRCS
 	src/exception/invalid-setter-exception.cpp
 	src/exception/qobject-type-exception.cpp
 	src/exception/unique-factory-method-not-found-exception.cpp
+	src/exception/unresolvable-dependencies-exception.cpp
 
 	src/internal/default-constructor-method.cpp
 	src/internal/dependencies.cpp

@@ -26,6 +26,7 @@
 #include "exception/invalid-setter-exception.cpp"
 #include "exception/qobject-type-exception.cpp"
 #include "exception/unique-factory-method-not-found-exception.cpp"
+#include "exception/unresolvable-dependencies-exception.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"
 #include "default-constructor-method.cpp"

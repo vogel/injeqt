@@ -20,6 +20,7 @@
 
 #include "types-model.h"
 
+#include "exception/unresolvable-dependencies-exception.h"
 #include "type-relations.h"
 
 #include <cassert>
@@ -101,7 +102,17 @@ types_model make_types_model(const std::vector<type> &all_types)
 	auto unresolvable_dependencies = result.get_unresolvable_dependencies();
 
 	if (!unresolvable_dependencies.empty())
-		throw unresolvable_dependency_exception{unresolvable_dependencies[0].required_type().name()};
+	{
+		auto message = std::string{};
+		for (auto &&unresolvable_dependency : unresolvable_dependencies)
+		{
+			message.append(unresolvable_dependency.required_type().name());
+			message.append(": ");
+			message.append(unresolvable_dependency.setter().signature());
+			message.append("\n");
+		}
+		throw exception::unresolvable_dependencies_exception{message};
+	}
 
 	return result;
 }
