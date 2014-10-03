@@ -22,6 +22,8 @@
 
 #include "type-relations.h"
 
+#include <cassert>
+
 namespace injeqt { namespace internal {
 
 types_model::types_model()
@@ -44,13 +46,15 @@ const types_dependencies & types_model::mapped_dependencies() const
 	return _mapped_dependencies;
 }
 
+bool types_model::contains(const type &interface_type) const
+{
+	return _available_types.get(interface_type) != end(_available_types);
+}
+
 type_dependencies types_model::get_dependencies(const type &interface_type) const
 {
-	auto available_it = _available_types.get(interface_type);
-	if (available_it == end(_available_types))
-		throw type_not_in_types_model_exception{interface_type.name()};
-
-	return *_mapped_dependencies.get(available_it->implementation_type());
+	assert(contains(interface_type));
+	return *_mapped_dependencies.get(_available_types.get(interface_type)->implementation_type());
 }
 
 bool operator == (const types_model &x, const types_model &y)

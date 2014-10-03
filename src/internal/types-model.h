@@ -92,9 +92,14 @@ public:
 	const types_dependencies & mapped_dependencies() const;
 
 	/**
+	 * @return true if model contains @p interface_type
+	 */
+	bool contains(const type &interface_type) const;
+
+	/**
 	 * @brief Get list of dependencies for given type.
 	 * @param interface_type type to get dependencies from
-	 * @throw type_not_in_types_model_exception if @p interface_type is not in model
+	 * @pre contains(interface_type)
 	 *
 	 * Return list of dependencies for given @p interface_type. First it looks for implementation
 	 * type of given interface type, then returns its list of dependencies. If @p interface_type

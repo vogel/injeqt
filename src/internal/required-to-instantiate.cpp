@@ -41,6 +41,9 @@ types required_to_instantiate(const type &type_to_instantiate, const types_model
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
 
+		if (!model.contains(current_interface_type))
+			throw type_not_in_types_model_exception{current_interface_type.name()};
+
 		auto dependencies = model.get_dependencies(current_interface_type);
 		auto current_implementation_type = dependencies.dependent_type();
 
