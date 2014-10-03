@@ -40,6 +40,7 @@ set(INJEQT_SRCS
 	src/module.cpp
 	src/type.cpp
 
+	src/exception/ambiguous-types-exception.cpp
 	src/exception/default-constructor-not-found-exception.cpp
 	src/exception/empty-type-exception.cpp
 	src/exception/exception.cpp

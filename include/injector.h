@@ -74,6 +74,7 @@ public:
 	/**
 	 * @brief Create new injector from provided modules.
 	 * @param modules list of modules
+	 * @throw ambiguous_types_exception if one or more types in @p modules is ambiguous
 	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
 	 *
 	 * Creates injector with all types from modules configured. If combined configuration

@@ -18,6 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "exception/ambiguous-types-exception.cpp"
 #include "exception/exception.cpp"
 #include "exception/invalid-setter-exception.cpp"
 #include "exception/unresolvable-dependencies-exception.cpp"
@@ -141,18 +142,18 @@ void types_model_test::should_create_one_type_types_model()
 
 void types_model_test::should_throw_when_one_type_duplicated()
 {
-	expect<ambiguous_type_exception>([&]{
+	expect<exception::ambiguous_types_exception>([&]{
 		make_types_model({type_1_type, type_1_type});
 	});
 }
 
 void types_model_test::should_throw_when_type_and_subtype_passed()
 {
-	expect<ambiguous_type_exception>([&]{
+	expect<exception::ambiguous_types_exception>([&]{
 		make_types_model({type_1_type, type_1_subtype_1_type});
 	});
 
-	expect<ambiguous_type_exception>([&]{
+	expect<exception::ambiguous_types_exception>([&]{
 		make_types_model({type_1_subtype_1_type, type_1_type});
 	});
 }

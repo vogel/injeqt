@@ -20,6 +20,7 @@
 
 #include "types-model.h"
 
+#include "exception/ambiguous-types-exception.h"
 #include "exception/unresolvable-dependencies-exception.h"
 #include "type-relations.h"
 
@@ -89,8 +90,17 @@ types_model make_types_model(const std::vector<type> &all_types)
 	auto relations = make_type_relations(all_types);
 
 	for (auto &&t : all_types)
+	{
+		auto message = std::string{};
 		if (relations.ambiguous().contains(t))
-			throw ambiguous_type_exception{t.name()};
+		{
+			message.append(t.name());
+			message.append("\n");
+		}
+
+		if (!message.empty())
+			throw exception::ambiguous_types_exception{message};
+	}
 
 	auto all_dependencies = std::vector<type_dependencies>{};
 	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
