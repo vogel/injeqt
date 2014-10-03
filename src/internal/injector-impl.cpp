@@ -117,7 +117,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 	{
 		auto to_resolve = _types_model.mapped_dependencies().get(object_to_resolve.interface_type())->dependency_list();
 		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
-		assert(!resolved_dependencies.unresolved.empty());
+		assert(resolved_dependencies.unresolved.empty());
 
 		for (auto &&resolved : resolved_dependencies.resolved)
 		{
