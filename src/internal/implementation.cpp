@@ -74,13 +74,9 @@ implementation make_implementation(type interface_type, QObject *object)
 		throw exception::empty_type_exception{};
 	if (interface_type.is_qobject())
 		throw exception::qobject_type_exception();
-
 	if (!object || !object->metaObject())
 		throw exception::invalid_qobject_exception{};
-
-	auto object_type = type{object->metaObject()};
-	auto interfaces = internal::extract_interfaces(object_type);
-	if (!interfaces.contains(interface_type))
+	if (!implements(type{object->metaObject()}, interface_type))
 		throw exception::interface_not_implemented_exception{interface_type.name()};
 
 	return implementation{interface_type, object};
