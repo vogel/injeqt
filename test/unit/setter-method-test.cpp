@@ -59,50 +59,34 @@ class setter_method_test : public QObject
 {
 	Q_OBJECT
 
-public:
-	setter_method_test();
-
 private slots:
 	void should_create_empty();
 	void should_create_valid_from_tagged_setter();
 	void should_create_valid_from_untagged_setter();
 	void should_invoke_have_results();
 
-private:
-	type injectable_type1_type;
-	type injectable_type2_type;
-	type test_type_type;
-
 };
-
-setter_method_test::setter_method_test() :
-	injectable_type1_type{make_type<injectable_type1>()},
-	injectable_type2_type{make_type<injectable_type2>()},
-	test_type_type{make_type<test_type>()}
-{
-}
 
 void setter_method_test::should_create_empty()
 {
 	auto setter = setter_method{};
-
 	QVERIFY(setter.is_empty());
 }
 
 void setter_method_test::should_create_valid_from_tagged_setter()
 {
 	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
-
-	QCOMPARE(setter.object_type(), test_type_type);
-	QCOMPARE(setter.parameter_type(), injectable_type1_type);
+	QVERIFY(!setter.is_empty());
+	QCOMPARE(setter.object_type(), make_type<test_type>());
+	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
 }
 
 void setter_method_test::should_create_valid_from_untagged_setter()
 {
 	auto setter = make_setter_method<test_type>("untagged_setter_1(injectable_type1*)");
-
-	QCOMPARE(setter.object_type(), test_type_type);
-	QCOMPARE(setter.parameter_type(), injectable_type1_type);
+	QVERIFY(!setter.is_empty());
+	QCOMPARE(setter.object_type(), make_type<test_type>());
+	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
 }
 
 void setter_method_test::should_invoke_have_results()
@@ -110,11 +94,9 @@ void setter_method_test::should_invoke_have_results()
 	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
 	auto on = make_object<test_type>();
 	auto with = make_object<injectable_type1>();
-
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<test_type *>(on.get())->_1);
 
 	setter.invoke(on.get(), with.get());
-
 	QCOMPARE(with.get(), static_cast<test_type *>(on.get())->_1);
 }
 
