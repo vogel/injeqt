@@ -18,7 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "exception/dependency-duplicated-exception.cpp"
+#include "exception/dependency-on-self-exception.cpp"
+#include "exception/dependency-on-subtype-exception.cpp"
+#include "exception/dependency-on-supertype-exception.cpp"
 #include "exception/exception.cpp"
+#include "exception/invalid-dependency-exception.cpp"
 #include "exception/invalid-setter-exception.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"
@@ -249,7 +254,7 @@ void dependencies_test::verify_dependency(dependencies list, const dependency &c
 
 void dependencies_test::should_find_all_valid_dependencies()
 {
-	auto dependencies = make_validated_dependencies(valid_injected_type_type);
+	auto dependencies = extract_dependencies(valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_setter_1});
 	verify_dependency(dependencies, dependency{valid_injected_type_setter_2});
@@ -257,7 +262,7 @@ void dependencies_test::should_find_all_valid_dependencies()
 
 void dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = make_validated_dependencies(inheriting_valid_injected_type_type);
+	auto dependencies = extract_dependencies(inheriting_valid_injected_type_type);
 	QCOMPARE(dependencies.size(), 3UL);
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_1});
 	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_2});
@@ -266,7 +271,7 @@ void dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
 
 void dependencies_test::should_find_dependencies_with_common_superclass()
 {
-	auto dependencies = make_validated_dependencies(valid_injected_type_with_common_superclass_type);
+	auto dependencies = extract_dependencies(valid_injected_type_with_common_superclass_type);
 
 	QCOMPARE(dependencies.size(), 2UL);
 	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_1});
@@ -275,43 +280,43 @@ void dependencies_test::should_find_dependencies_with_common_superclass()
 
 void dependencies_test::should_fail_when_duplicate_dependency()
 {
-	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = make_validated_dependencies(duplicate_dependency_invalid_injected_type_type);
+	expect<exception::dependency_duplicated_exception>([&]{
+		auto dependencies = extract_dependencies(duplicate_dependency_invalid_injected_type_type);
 	});
 }
 
 void dependencies_test::should_fail_with_superclass_dependency()
 {
-	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = make_validated_dependencies(invalid_injected_type_with_superclass_type);
+	expect<exception::dependency_duplicated_exception>([&]{
+		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_type);
 	});
 }
 
 void dependencies_test::should_fail_with_superclass_inverted_dependency()
 {
-	expect<dependency_duplicated_exception>([&]{
-		auto dependencies = make_validated_dependencies(invalid_injected_type_with_superclass_inverted_type);
+	expect<exception::dependency_duplicated_exception>([&]{
+		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_inverted_type);
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_self()
 {
-	expect<dependency_on_self_exception>([&]{
-		auto dependencies = make_validated_dependencies(invalid_injected_type_depends_on_self_type);
+	expect<exception::dependency_on_self_exception>([&]{
+		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_self_type);
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_subtype()
 {
-	expect<dependency_on_subtype_exception>([&]{
-		auto dependencies = make_validated_dependencies(invalid_injected_type_depends_on_subtype_type);
+	expect<exception::dependency_on_subtype_exception>([&]{
+		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_subtype_type);
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_supertype()
 {
-	expect<dependency_on_supertype_exception>([&]{
-		auto dependencies = make_validated_dependencies(invalid_injected_type_depends_on_supertype_type);
+	expect<exception::dependency_on_supertype_exception>([&]{
+		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_supertype_type);
 	});
 }
 

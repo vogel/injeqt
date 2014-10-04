@@ -53,45 +53,20 @@ inline type type_from_dependency(const dependency &d)
 using dependencies = sorted_unique_vector<type, dependency, type_from_dependency>;
 
 /**
- * @brief Any exception that can occur during extracting dependencies from type.
- */
-INJEQT_EXCEPTION(dependency_exception, ::injeqt::v1::exception::exception);
-
-/**
- * @brief Exception thrown when type has two INJEQT_SETTER tagged setters with the same type.
- */
-INJEQT_EXCEPTION(dependency_duplicated_exception, dependency_exception);
-
-/**
- * @brief Exception thrown when type has INJEQT_SETTER tagged setter with self type.
- */
-INJEQT_EXCEPTION(dependency_on_self_exception, dependency_exception);
-
-/**
- * @brief Exception thrown when type has INJEQT_SETTER tagged setter with subtype.
- */
-INJEQT_EXCEPTION(dependency_on_subtype_exception, dependency_exception);
-
-/**
- * @brief Exception thrown when type has INJEQT_SETTER tagged setter with supertype.
- */
-INJEQT_EXCEPTION(dependency_on_supertype_exception, dependency_exception);
-
-/**
  * @brief Extract set of dependencies from type.
  * @param for_type type to extract dependencies from.
  * @throw dependency_duplicated_exception when one type occurs twice as a dependency.
  * @throw dependency_on_self_exception when type depends on self.
  * @throw dependency_on_subtype_exception when type depends on own supertype.
  * @throw dependency_on_subtype_exception when type depends on own subtype.
- * @throw invalid_type_exception if any tagged setter has parameter that is not a QObject-based pointer
- * @throw bad_number_of_parameters_setter_exception if any tagged setter has other number of parameters than one
+ * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+ * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
  *
  * This function computes and returns set of all dependencies of a given type. All slots methods tagged
  * with INJEQT_SETTER are describing dependnecies. If all dependnecies are valid, there is no duplication,
  * and type does not depends on self, subtype or supertype, a result is returned. Otherwise one of many
  * exceptions can be thrown.
  */
-dependencies make_validated_dependencies(const type &for_type);
+dependencies extract_dependencies(const type &for_type);
 
 }}

@@ -42,9 +42,14 @@ set(INJEQT_SRCS
 
 	src/exception/ambiguous-types-exception.cpp
 	src/exception/default-constructor-not-found-exception.cpp
+	src/exception/dependency-duplicated-exception.cpp
+	src/exception/dependency-on-self-exception.cpp
+	src/exception/dependency-on-subtype-exception.cpp
+	src/exception/dependency-on-supertype-exception.cpp
 	src/exception/empty-type-exception.cpp
 	src/exception/exception.cpp
 	src/exception/interface-not-implemented-exception.cpp
+	src/exception/invalid-dependency-exception.cpp
 	src/exception/invalid-qobject-exception.cpp
 	src/exception/invalid-setter-exception.cpp
 	src/exception/qobject-type-exception.cpp

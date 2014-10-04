@@ -20,6 +20,12 @@
 
 #include "dependencies.h"
 
+#include "exception/dependency-duplicated-exception.h"
+#include "exception/dependency-on-self-exception.h"
+#include "exception/dependency-on-subtype-exception.h"
+#include "exception/dependency-on-supertype-exception.h"
+#include "exception/exception.h"
+#include "exception/invalid-dependency-exception.h"
 #include "exception/invalid-setter-exception.h"
 #include "dependency.h"
 #include "extract-interfaces.h"
@@ -84,7 +90,7 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 
 }
 
-dependencies make_validated_dependencies(const type &for_type)
+dependencies extract_dependencies(const type &for_type)
 {
 	assert(!for_type.is_empty());
 
@@ -94,12 +100,12 @@ dependencies make_validated_dependencies(const type &for_type)
 	{
 		auto parameter_type = setter.parameter_type();
 		if (parameter_type == for_type)
-			throw dependency_on_self_exception{};
+			throw exception::dependency_on_self_exception{};
 		if (std::find(std::begin(interfaces), std::end(interfaces), parameter_type) != std::end(interfaces))
-			throw dependency_on_supertype_exception{};
+			throw exception::dependency_on_supertype_exception{};
 		auto parameter_interfaces = extract_interfaces(parameter_type);
 		if (std::find(std::begin(parameter_interfaces), std::end(parameter_interfaces), for_type) != std::end(parameter_interfaces))
-			throw dependency_on_subtype_exception{};
+			throw exception::dependency_on_subtype_exception{};
 	}
 
 	auto parameter_types = extract_parameter_types(setters);
@@ -107,7 +113,7 @@ dependencies make_validated_dependencies(const type &for_type)
 
 	auto matches = match(types{parameter_types}, relations.ambiguous());
 	if (!matches.matched.empty())
-		throw dependency_duplicated_exception{exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object())};
+		throw exception::dependency_duplicated_exception{exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object())};
 
 	auto result = std::vector<dependency>{};
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),

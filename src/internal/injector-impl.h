@@ -75,6 +75,12 @@ public:
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
 	 * @throw ambiguous_types_exception if one or more types in @p modules is ambiguous
 	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
+	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency of another type
+	 * @throw dependency_on_self_exception when type depends on self
+	 * @throw dependency_on_subtype_exception when type depends on own supertype
+	 * @throw dependency_on_subtype_exception when type depends on own subtype
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
 	 *
 	 * This constructor extract all providers from all modules and creates types_model object
 	 * to get all required information from them. After calling that all providers will be moved-out from
@@ -104,8 +110,14 @@ private:
 
 	/**
 	 * @brief Extract all provided types and makes a types_model from them.
-	 * * @throw ambiguous_types_exception if one or more types in @p all_providers is ambiguous
+	 * @throw ambiguous_types_exception if one or more types in @p all_providers is ambiguous
 	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p all_providers
+	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency of another type
+	 * @throw dependency_on_self_exception when type depends on self
+	 * @throw dependency_on_subtype_exception when type depends on own supertype
+	 * @throw dependency_on_subtype_exception when type depends on own subtype
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
 	 */
 	types_model create_types_model(const providers &all_providers) const;
 

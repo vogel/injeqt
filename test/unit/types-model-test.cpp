@@ -19,7 +19,12 @@
  */
 
 #include "exception/ambiguous-types-exception.cpp"
+#include "exception/dependency-duplicated-exception.cpp"
+#include "exception/dependency-on-self-exception.cpp"
+#include "exception/dependency-on-subtype-exception.cpp"
+#include "exception/dependency-on-supertype-exception.cpp"
 #include "exception/exception.cpp"
+#include "exception/invalid-dependency-exception.cpp"
 #include "exception/invalid-setter-exception.cpp"
 #include "exception/unresolvable-dependencies-exception.cpp"
 #include "dependencies.cpp"

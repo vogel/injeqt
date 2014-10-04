@@ -76,6 +76,12 @@ public:
 	 * @param modules list of modules
 	 * @throw ambiguous_types_exception if one or more types in @p modules is ambiguous
 	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
+	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency of another type
+	 * @throw dependency_on_self_exception when type depends on self
+	 * @throw dependency_on_subtype_exception when type depends on own supertype
+	 * @throw dependency_on_subtype_exception when type depends on own subtype
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
 	 *
 	 * Creates injector with all types from modules configured. If combined configuration
 	 * of all modules is invalid an exception is thrown. Configuration is invalid when:

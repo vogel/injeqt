@@ -107,6 +107,12 @@ bool operator != (const types_model &x, const types_model &y);
  * @post result.get_unresolvable_dependencies().empty()
  * @throw ambiguous_types_exception if one or more types is ambiguous (@see make_type_relations)
  * @throw unresolvable_dependencies_exception if a type has a dependency type not in @p all_types set
+ * @throw dependency_duplicated_exception when one type occurs twice as a dependency of another type
+ * @throw dependency_on_self_exception when type depends on self
+ * @throw dependency_on_subtype_exception when type depends on own supertype
+ * @throw dependency_on_subtype_exception when type depends on own subtype
+ * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+ * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
  */
 types_model make_types_model(const std::vector<type> &all_types);
 
