@@ -31,6 +31,7 @@
 #include "setter-method.cpp"
 #include "type.cpp"
 
+#include "make-setter-method.h"
 #include "utils.h"
 
 #include <QtTest/QtTest>

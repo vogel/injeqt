@@ -76,7 +76,7 @@ public:
 	 * @throw dependency_on_subtype_exception when type depends on own supertype
 	 * @throw dependency_on_subtype_exception when type depends on own subtype
 	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject pointer
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
 	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
 	 *
 	 * This constructor extract all providers from all modules and creates types_model object
@@ -116,7 +116,7 @@ private:
 	 * @throw dependency_on_subtype_exception when type depends on own supertype
 	 * @throw dependency_on_subtype_exception when type depends on own subtype
 	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject pointer
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
 	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
 	 */
 	types_model create_types_model(const providers &all_providers) const;

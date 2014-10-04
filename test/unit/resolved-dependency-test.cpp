@@ -30,6 +30,7 @@
 #include "type.cpp"
 
 #include "expect.h"
+#include "make-setter-method.h"
 #include "utils.h"
 
 #include <QtTest/QtTest>

@@ -141,10 +141,4 @@ private:
 bool operator == (const setter_method &x, const setter_method &y);
 bool operator != (const setter_method &x, const setter_method &y);
 
-template<typename T>
-inline setter_method make_setter_method(const std::string &signature)
-{
-	return setter_method{T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()))};
-}
-
 }}

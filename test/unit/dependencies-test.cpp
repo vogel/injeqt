@@ -34,6 +34,7 @@
 #include "type.cpp"
 
 #include "expect.h"
+#include "make-setter-method.h"
 
 #include <QtTest/QtTest>
 
@@ -72,9 +73,9 @@ class valid_injected_type : public QObject
 public slots:
 	INJEQT_SETTER void setter_1(injectable_type1 *) {}
 	INJEQT_SETTER void setter_2(injectable_type2 *) {}
-	void invalid_setter_1(injectable_type1 *) {}
-	void invalid_setter_2(injectable_type2 *) {}
-	void invalid_setter_3(int) {}
+	void no_injeqt_setter_1(injectable_type1 *) {}
+	void no_injeqt_setter_2(injectable_type2 *) {}
+	void no_injeqt_setter_3(int) {}
 
 };
 
@@ -166,14 +167,48 @@ public slots:
 
 };
 
+class invalid_setter_empty_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	INJEQT_SETTER void setter(int) {};
+
+};
+
+class invalid_setter_qobject_type : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	INJEQT_SETTER void setter(QObject *) {};
+
+};
+
+class invalid_setter_no_paremters : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	INJEQT_SETTER void setter() {};
+
+};
+
+class invalid_setter_two_paremters : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	INJEQT_SETTER void setter() {};
+
+};
+
 class dependencies_test : public QObject
 {
 	Q_OBJECT
 
-public:
-	dependencies_test();
-
 private slots:
+	void should_find_no_dependnecies_in_qobject();
 	void should_find_all_valid_dependencies();
 	void should_find_all_valid_dependencies_in_hierarchy();
 	void should_find_dependencies_with_common_superclass();
@@ -183,68 +218,15 @@ private slots:
 	void should_fail_when_depends_on_self();
 	void should_fail_when_depends_on_subtype();
 	void should_fail_when_depends_on_supertype();
+	void should_throw_when_setter_with_empty_type();
+	void should_throw_when_setter_with_qobject_type();
+	void should_throw_when_setter_with_no_parameters();
+	void should_throw_when_setter_with_two_parameters();
 
 private:
-	type injectable_type1_type;
-	type injectable_type2_type;
-	type injectable_type3_type;
-	type valid_injected_type_type;
-	type inheriting_valid_injected_type_type;
-	type valid_injected_type_with_common_superclass_type;
-	type duplicate_dependency_invalid_injected_type_type;
-	type invalid_injected_type_with_superclass_type;
-	type invalid_injected_type_with_superclass_inverted_type;
-	type invalid_injected_type_depends_on_self_type;
-	type invalid_injected_type_depends_on_subtype_type;
-	type invalid_injected_type_depends_on_supertype_type;
-	setter_method valid_injected_type_setter_1;
-	setter_method valid_injected_type_setter_2;
-	setter_method valid_injected_type_with_common_superclass_setter_1;
-	setter_method valid_injected_type_with_common_superclass_setter_2;
-	setter_method inheriting_valid_injected_type_setter_1;
-	setter_method inheriting_valid_injected_type_setter_2;
-	setter_method inheriting_valid_injected_type_setter_3;
-	setter_method invalid_injected_type_with_superclass_setter_1;
-	setter_method invalid_injected_type_with_superclass_setter_2;
-	setter_method invalid_injected_type_with_superclass_inverted_setter_1;
-	setter_method invalid_injected_type_with_superclass_inverted_setter_2;
-	setter_method invalid_injected_type_depends_on_self_type_setter_1;
-	setter_method invalid_injected_type_depends_on_subtype_setter_1;
-	setter_method invalid_injected_type_depends_on_supertype_setter_1;
-
 	void verify_dependency(dependencies list, const dependency &check);
 
 };
-
-dependencies_test::dependencies_test() :
-	injectable_type1_type{make_type<injectable_type1>()},
-	injectable_type2_type{make_type<injectable_type2>()},
-	injectable_type3_type{make_type<injectable_type3>()},
-	valid_injected_type_type{make_type<valid_injected_type>()},
-	inheriting_valid_injected_type_type{make_type<inheriting_valid_injected_type>()},
-	valid_injected_type_with_common_superclass_type{make_type<valid_injected_type_with_common_superclass>()},
-	duplicate_dependency_invalid_injected_type_type{make_type<duplicate_dependency_invalid_injected_type>()},
-	invalid_injected_type_with_superclass_type{make_type<invalid_injected_type_with_superclass>()},
-	invalid_injected_type_with_superclass_inverted_type{make_type<invalid_injected_type_with_superclass_inverted>()},
-	invalid_injected_type_depends_on_self_type{make_type<invalid_injected_type_depends_on_self>()},
-	invalid_injected_type_depends_on_subtype_type{make_type<invalid_injected_type_depends_on_subtype>()},
-	invalid_injected_type_depends_on_supertype_type{make_type<invalid_injected_type_depends_on_supertype>()},
-	valid_injected_type_setter_1{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")},
-	valid_injected_type_setter_2{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")},
-	valid_injected_type_with_common_superclass_setter_1{make_setter_method<valid_injected_type_with_common_superclass>("setter_1(sub_injectable_type1a*)")},
-	valid_injected_type_with_common_superclass_setter_2{make_setter_method<valid_injected_type_with_common_superclass>("setter_2(sub_injectable_type1b*)")},
-	inheriting_valid_injected_type_setter_1{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")},
-	inheriting_valid_injected_type_setter_2{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")},
-	inheriting_valid_injected_type_setter_3{make_setter_method<inheriting_valid_injected_type>("setter_3(injectable_type3*)")},
-	invalid_injected_type_with_superclass_setter_1{make_setter_method<invalid_injected_type_with_superclass>("setter_1(injectable_type1*)")},
-	invalid_injected_type_with_superclass_setter_2{make_setter_method<invalid_injected_type_with_superclass>("setter_2(sub_injectable_type1a*)")},
-	invalid_injected_type_with_superclass_inverted_setter_1{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_1(injectable_type1*)")},
-	invalid_injected_type_with_superclass_inverted_setter_2{make_setter_method<invalid_injected_type_with_superclass_inverted>("setter_2(sub_injectable_type1a*)")},
-	invalid_injected_type_depends_on_self_type_setter_1{make_setter_method<invalid_injected_type_depends_on_self>("setter_1(invalid_injected_type_depends_on_self*)")},
-	invalid_injected_type_depends_on_subtype_setter_1{make_setter_method<invalid_injected_type_depends_on_subtype>("setter_1(invalid_injected_type_depends_on_subtype_subtype*)")},
-	invalid_injected_type_depends_on_supertype_setter_1{make_setter_method<invalid_injected_type_depends_on_supertype>("setter_1(invalid_injected_type_depends_on_supertype_supertype*)")}
-{
-}
 
 void dependencies_test::verify_dependency(dependencies list, const dependency &check)
 {
@@ -252,71 +234,105 @@ void dependencies_test::verify_dependency(dependencies list, const dependency &c
 	QVERIFY(iterator != end(list));
 }
 
+void dependencies_test::should_find_no_dependnecies_in_qobject()
+{
+	auto dependencies = extract_dependencies(make_type<QObject>());
+	QCOMPARE(dependencies.size(), 0UL);
+}
+
 void dependencies_test::should_find_all_valid_dependencies()
 {
-	auto dependencies = extract_dependencies(valid_injected_type_type);
+	auto dependencies = extract_dependencies(make_type<valid_injected_type>());
 	QCOMPARE(dependencies.size(), 2UL);
-	verify_dependency(dependencies, dependency{valid_injected_type_setter_1});
-	verify_dependency(dependencies, dependency{valid_injected_type_setter_2});
+	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")});
+	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")});
 }
 
 void dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
 {
-	auto dependencies = extract_dependencies(inheriting_valid_injected_type_type);
+	auto dependencies = extract_dependencies(make_type<inheriting_valid_injected_type>());
 	QCOMPARE(dependencies.size(), 3UL);
-	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_1});
-	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_2});
-	verify_dependency(dependencies, dependency{inheriting_valid_injected_type_setter_3});
+	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type>("setter_1(injectable_type1*)")});
+	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type>("setter_2(injectable_type2*)")});
+	verify_dependency(dependencies, dependency{make_setter_method<inheriting_valid_injected_type>("setter_3(injectable_type3*)")});
 }
 
 void dependencies_test::should_find_dependencies_with_common_superclass()
 {
-	auto dependencies = extract_dependencies(valid_injected_type_with_common_superclass_type);
+	auto dependencies = extract_dependencies(make_type<valid_injected_type_with_common_superclass>());
 
 	QCOMPARE(dependencies.size(), 2UL);
-	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_1});
-	verify_dependency(dependencies, dependency{valid_injected_type_with_common_superclass_setter_2});
+	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type_with_common_superclass>("setter_1(sub_injectable_type1a*)")});
+	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type_with_common_superclass>("setter_2(sub_injectable_type1b*)")});
 }
 
 void dependencies_test::should_fail_when_duplicate_dependency()
 {
 	expect<exception::dependency_duplicated_exception>([&]{
-		auto dependencies = extract_dependencies(duplicate_dependency_invalid_injected_type_type);
+		auto dependencies = extract_dependencies(make_type<duplicate_dependency_invalid_injected_type>());
 	});
 }
 
 void dependencies_test::should_fail_with_superclass_dependency()
 {
 	expect<exception::dependency_duplicated_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_type);
+		auto dependencies = extract_dependencies(make_type<invalid_injected_type_with_superclass>());
 	});
 }
 
 void dependencies_test::should_fail_with_superclass_inverted_dependency()
 {
 	expect<exception::dependency_duplicated_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_with_superclass_inverted_type);
+		auto dependencies = extract_dependencies(make_type<invalid_injected_type_with_superclass_inverted>());
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_self()
 {
 	expect<exception::dependency_on_self_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_self_type);
+		auto dependencies = extract_dependencies(make_type<invalid_injected_type_depends_on_self>());
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_subtype()
 {
 	expect<exception::dependency_on_subtype_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_subtype_type);
+		auto dependencies = extract_dependencies(make_type<invalid_injected_type_depends_on_subtype>());
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_supertype()
 {
 	expect<exception::dependency_on_supertype_exception>([&]{
-		auto dependencies = extract_dependencies(invalid_injected_type_depends_on_supertype_type);
+		auto dependencies = extract_dependencies(make_type<invalid_injected_type_depends_on_supertype>());
+	});
+}
+
+void dependencies_test::should_throw_when_setter_with_empty_type()
+{
+	expect<exception::invalid_setter_exception>([&]{
+		auto dependencies = extract_dependencies(make_type<invalid_setter_empty_type>());
+	});
+}
+
+void dependencies_test::should_throw_when_setter_with_qobject_type()
+{
+	expect<exception::invalid_setter_exception>([&]{
+		auto dependencies = extract_dependencies(make_type<invalid_setter_qobject_type>());
+	});
+}
+
+void dependencies_test::should_throw_when_setter_with_no_parameters()
+{
+	expect<exception::invalid_setter_exception>([&]{
+		auto dependencies = extract_dependencies(make_type<invalid_setter_no_paremters>());
+	});
+}
+
+void dependencies_test::should_throw_when_setter_with_two_parameters()
+{
+	expect<exception::invalid_setter_exception>([&]{
+		auto dependencies = extract_dependencies(make_type<invalid_setter_two_paremters>());
 	});
 }
 

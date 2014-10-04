@@ -61,7 +61,7 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
  * @throw dependency_on_subtype_exception when type depends on own supertype.
  * @throw dependency_on_subtype_exception when type depends on own subtype.
  * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
- * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject pointer
+ * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
  * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
  *
  * This function computes and returns set of all dependencies of a given type. All slots methods tagged

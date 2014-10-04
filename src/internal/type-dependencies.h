@@ -80,7 +80,7 @@ bool operator != (const type_dependencies &x, const type_dependencies &y);
  * @throw dependency_on_subtype_exception when type depends on own supertype
  * @throw dependency_on_subtype_exception when type depends on own subtype
  * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
- * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject pointer
+ * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
  * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
  */
 inline type_dependencies make_type_dependencies(type dependent_type)
