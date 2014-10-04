@@ -73,26 +73,37 @@ interfaces_utils_test::interfaces_utils_test() :
 
 void interfaces_utils_test::should_find_nothing_in_qobject()
 {
-	auto implements = extract_interfaces(qobject_type);
-	QCOMPARE(implements.size(), 0UL);
+	auto interfaces = extract_interfaces(qobject_type);
+	QCOMPARE(interfaces.size(), 0UL);
+	QVERIFY(!implements(qobject_type, qobject_type));
 }
 
 void interfaces_utils_test::should_find_one_in_direct_successor()
 {
-	auto implements = extract_interfaces(direct_successor_type);
-	QCOMPARE(implements, (types{direct_successor_type}));
+	auto interfaces = extract_interfaces(direct_successor_type);
+	QCOMPARE(interfaces, (types{direct_successor_type}));
+	QVERIFY(implements(direct_successor_type, direct_successor_type));
 }
 
 void interfaces_utils_test::should_find_two_in_indirect_successor_1()
 {
-	auto implements = extract_interfaces(indirect_successor_1_type);
-	QCOMPARE(implements, (types{direct_successor_type, indirect_successor_1_type}));
+	auto interfaces = extract_interfaces(indirect_successor_1_type);
+	QCOMPARE(interfaces, (types{direct_successor_type, indirect_successor_1_type}));
+	QVERIFY(!implements(indirect_successor_1_type, qobject_type));
+	QVERIFY(implements(indirect_successor_1_type, direct_successor_type));
+	QVERIFY(implements(indirect_successor_1_type, indirect_successor_1_type));
+	QVERIFY(!implements(indirect_successor_1_type, indirect_successor_2_type));
 }
 
 void interfaces_utils_test::should_find_three_in_indirect_successor_2()
 {
-	auto implements = extract_interfaces(indirect_successor_2_type);
-	QCOMPARE(implements, (types{direct_successor_type, indirect_successor_1_type, indirect_successor_2_type}));
+	auto interfaces = extract_interfaces(indirect_successor_2_type);
+	QCOMPARE(interfaces, (types{direct_successor_type, indirect_successor_1_type, indirect_successor_2_type}));
+	QVERIFY(implements(direct_successor_type, direct_successor_type));
+	QVERIFY(!implements(indirect_successor_2_type, qobject_type));
+	QVERIFY(implements(indirect_successor_2_type, direct_successor_type));
+	QVERIFY(implements(indirect_successor_2_type, indirect_successor_1_type));
+	QVERIFY(implements(indirect_successor_2_type, indirect_successor_2_type));
 }
 
 QTEST_APPLESS_MAIN(interfaces_utils_test);
