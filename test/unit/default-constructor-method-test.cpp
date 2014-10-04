@@ -74,31 +74,36 @@ private slots:
 
 void default_constructor_method_test::should_return_empty_when_default_constructed()
 {
-	QVERIFY(default_constructor_method{}.is_empty());
+	auto c = default_constructor_method{};
+	QVERIFY(c.is_empty());
 }
 
 void default_constructor_method_test::should_return_empty_when_created_with_not_default_constructor()
 {
-	QVERIFY(make_default_constructor_method(make_type<no_default_constructor>()).is_empty());
+	auto c = make_default_constructor_method(make_type<no_default_constructor>());
+	QVERIFY(c.is_empty());
 }
 
 void default_constructor_method_test::should_return_empty_when_created_with_not_invokable_constructor()
 {
-	QVERIFY(make_default_constructor_method(make_type<default_not_invokable_constructor>()).is_empty());
+	auto c = make_default_constructor_method(make_type<default_not_invokable_constructor>());
+	QVERIFY(c.is_empty());
 }
 
 void default_constructor_method_test::should_create_valid_with_invokable_constructor()
 {
 	auto c = make_default_constructor_method(make_type<default_invokable_constructor>());
+	QVERIFY(!c.is_empty());
 	QCOMPARE(c.object_type(), make_type<default_invokable_constructor>());
 }
 
 void default_constructor_method_test::should_create_object_with_default_constructor()
 {
-	auto constructor = make_default_constructor_method(make_type<default_invokable_constructor>());
-	auto object = constructor.invoke();
-	auto cast = qobject_cast<default_invokable_constructor *>(object.get());
+	auto c = make_default_constructor_method(make_type<default_invokable_constructor>());
+	QVERIFY(!c.is_empty());
 
+	auto object = c.invoke();
+	auto cast = qobject_cast<default_invokable_constructor *>(object.get());
 	QVERIFY(cast != nullptr);
 }
 
