@@ -43,6 +43,6 @@ void expect(std::function<void()> call)
 	}
 	catch (...)
 	{
-		QFAIL("Unexpected exception thrown: %1");
+		QFAIL("Unexpected exception thrown");
 	}
 }
