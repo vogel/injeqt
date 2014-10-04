@@ -20,6 +20,7 @@
 
 #include "provider-by-factory.h"
 
+#include "exception/instantiation-failed-exception.h"
 #include "injector-impl.h"
 
 namespace injeqt { namespace internal {
@@ -60,6 +61,8 @@ QObject * provider_by_factory::provide(injector_impl &i)
 	{
 		auto factory_object = i.get(_factory.object_type());
 		_object = _factory.invoke(factory_object);
+		if (!_object)
+			throw exception::instantiation_failed_exception{provided_type().name()};
 	}
 
 	return _object.get();

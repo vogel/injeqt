@@ -20,6 +20,8 @@
 
 #include "provider-by-default-constructor.h"
 
+#include "exception/instantiation-failed-exception.h"
+
 #include <cassert>
 
 namespace injeqt { namespace internal {
@@ -57,9 +59,12 @@ const default_constructor_method & provider_by_default_constructor::constructor(
 
 QObject * provider_by_default_constructor::provide(injector_impl &)
 {
-	// todo: thread safety
 	if (!_object)
+	{
 		_object = _constructor.invoke();
+		if (!_object)
+			throw exception::instantiation_failed_exception{provided_type().name()};
+	}
 	return _object.get();
 }
 

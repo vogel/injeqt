@@ -20,7 +20,6 @@
 
 #include "injector-impl.h"
 
-#include "exception/instantiation-failed-exception.h"
 #include "exception/unknown-type-exception.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
@@ -104,10 +103,6 @@ implementations injector_impl::objects_with(implementations objects, const types
 
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		auto instance = provider_it->get()->provide(*this);
-
-		if (!instance)
-			throw exception::instantiation_failed_exception{type_to_instantiate.name()};
-
 		auto i = make_implementation(type_to_instantiate, instance);
 		objects_to_resolve.emplace_back(i);
 	}
