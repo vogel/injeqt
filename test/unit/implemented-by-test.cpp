@@ -55,43 +55,26 @@ class implemented_by_test : public QObject
 {
 	Q_OBJECT
 
-public:
-	implemented_by_test();
-
 private slots:
 	void should_accept_implemented_by_self();
 	void should_accept_implemented_by_subtype();
 
-private:
-	type type_1_type;
-	type type_2_type;
-	type type_1_subtype_1_type;
-	type type_1_subtype_1_subtype_1_type;
-
 };
-
-implemented_by_test::implemented_by_test() :
-	type_1_type{make_type<type_1>()},
-	type_2_type{make_type<type_2>()},
-	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
-	type_1_subtype_1_subtype_1_type{make_type<type_1_subtype_1_subtype_1>()}
-{
-}
 
 void implemented_by_test::should_accept_implemented_by_self()
 {
-	auto i = implemented_by{type_1_type, type_1_type};
+	auto i = implemented_by{make_type<type_1>(), make_type<type_1>()};
 
-	QCOMPARE(type_1_type, i.interface_type());
-	QCOMPARE(type_1_type, i.implementation_type());
+	QCOMPARE(make_type<type_1>(), i.interface_type());
+	QCOMPARE(make_type<type_1>(), i.implementation_type());
 }
 
 void implemented_by_test::should_accept_implemented_by_subtype()
 {
-	auto i = implemented_by{type_1_type, type_1_subtype_1_subtype_1_type};
+	auto i = implemented_by{make_type<type_1>(), make_type<type_1_subtype_1_subtype_1>()};
 
-	QCOMPARE(type_1_type, i.interface_type());
-	QCOMPARE(type_1_subtype_1_subtype_1_type, i.implementation_type());
+	QCOMPARE(make_type<type_1>(), i.interface_type());
+	QCOMPARE(make_type<type_1_subtype_1_subtype_1>(), i.implementation_type());
 }
 
 QTEST_APPLESS_MAIN(implemented_by_test)
