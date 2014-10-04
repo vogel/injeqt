@@ -19,8 +19,8 @@
  */
 
 #include "exception/exception.cpp"
-#include "extract-interfaces.cpp"
 #include "factory-method.cpp"
+#include "interfaces-utils.cpp"
 #include "type.cpp"
 
 #include "expect.h"

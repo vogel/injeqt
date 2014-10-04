@@ -23,8 +23,8 @@
 #include "exception/interface-not-implemented-exception.cpp"
 #include "exception/invalid-qobject-exception.cpp"
 #include "exception/qobject-type-exception.cpp"
-#include "extract-interfaces.cpp"
 #include "implementation.cpp"
+#include "interfaces-utils.cpp"
 #include "type.cpp"
 
 #include "expect.h"

@@ -20,7 +20,7 @@
 
 #include "factory-method.h"
 
-#include "extract-interfaces.h"
+#include "interfaces-utils.h"
 
 #include <cassert>
 

@@ -24,7 +24,7 @@
 #include "exception/invalid-qobject-exception.cpp"
 #include "exception/qobject-type-exception.cpp"
 #include "dependency.cpp"
-#include "extract-interfaces.cpp"
+#include "interfaces-utils.cpp"
 #include "setter-method.cpp"
 #include "type.cpp"
 

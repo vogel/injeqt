@@ -21,8 +21,8 @@
 #include "required-to-instantiate.h"
 
 #include "dependencies.h"
-#include "extract-interfaces.h"
 #include "implemented-by.h"
+#include "interfaces-utils.h"
 
 #include <cassert>
 #include <set>

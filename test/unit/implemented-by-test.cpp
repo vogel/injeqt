@@ -19,7 +19,7 @@
  */
 
 #include "exception/exception.cpp"
-#include "extract-interfaces.cpp"
+#include "interfaces-utils.cpp"
 #include "implemented-by.cpp"
 #include "type.cpp"
 

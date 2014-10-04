@@ -19,8 +19,8 @@
  */
 
 #include "exception/exception.cpp"
-#include "extract-interfaces.cpp"
 #include "implemented-by.cpp"
+#include "interfaces-utils.cpp"
 #include "type-relations.cpp"
 #include "type.cpp"
 

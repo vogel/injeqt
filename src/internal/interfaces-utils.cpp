@@ -18,34 +18,47 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "interfaces-utils.h"
 
-#include "injeqt.h"
-#include "types.h"
+#include "type.h"
 
-/**
- * @file
- * @brief Contains functions for extracting interfaces from a type.
- */
+#include <QtCore/QMetaObject>
+#include <cassert>
 
 namespace injeqt { namespace internal {
 
-/**
- * @brief Return list of interfaces that given type implements.
- * @pre !for_type.is_empty()
- *
- * QObject meta type system supports only single inheritance. This method
- * gets all QObject-based ancestors of for_type (including for_type itself,
- * excluding QObject) and returns it as a types collection. If for_type
- * object is not valid an empty collection is returned.
- */
-types extract_interfaces(const type &for_type);
+namespace
+{
 
-/**
- * @brief Return true if @p implementation implements @p interface
- * @pre !implementation.is_empty()
- * @pre !interface.is_empty()
- */
-bool implements(const type &implementation, const type &interface);
+bool is_qobject(const QMetaObject * const meta_object)
+{
+	return !meta_object->superClass();
+}
+
+}
+
+types extract_interfaces(const type &for_type)
+{
+	assert(!for_type.is_empty());
+
+	auto result = std::vector<type>{};
+	auto meta_object = for_type.meta_object();
+	while (meta_object && !is_qobject(meta_object))
+	{
+		result.emplace_back(meta_object);
+		meta_object = meta_object->superClass();
+	}
+
+	return types{result};
+}
+
+bool implements(const type &implementation, const type &interface)
+{
+	assert(!implementation.is_empty());
+	assert(!interface.is_empty());
+
+	auto interfaces = extract_interfaces(implementation);
+	return std::find(std::begin(interfaces), std::end(interfaces), interface) != std::end(interfaces);
+}
 
 }}

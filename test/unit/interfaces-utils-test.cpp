@@ -19,7 +19,7 @@
  */
 
 #include "exception/exception.cpp"
-#include "extract-interfaces.cpp"
+#include "interfaces-utils.cpp"
 #include "type.cpp"
 
 #include <QtTest/QtTest>
@@ -42,12 +42,12 @@ class indirect_successor_2 : public indirect_successor_1
 	Q_OBJECT
 };
 
-class extract_interfaces_test : public QObject
+class interfaces_utils_test : public QObject
 {
 	Q_OBJECT
 
 public:
-	extract_interfaces_test();
+	interfaces_utils_test();
 
 private slots:
 	void should_find_nothing_in_qobject();
@@ -63,7 +63,7 @@ private:
 
 };
 
-extract_interfaces_test::extract_interfaces_test() :
+interfaces_utils_test::interfaces_utils_test() :
 	qobject_type{type(&QObject::staticMetaObject)},
 	direct_successor_type{make_type<direct_successor>()},
 	indirect_successor_1_type{make_type<indirect_successor_1>()},
@@ -71,30 +71,30 @@ extract_interfaces_test::extract_interfaces_test() :
 {
 }
 
-void extract_interfaces_test::should_find_nothing_in_qobject()
+void interfaces_utils_test::should_find_nothing_in_qobject()
 {
 	auto implements = extract_interfaces(qobject_type);
 	QCOMPARE(implements.size(), 0UL);
 }
 
-void extract_interfaces_test::should_find_one_in_direct_successor()
+void interfaces_utils_test::should_find_one_in_direct_successor()
 {
 	auto implements = extract_interfaces(direct_successor_type);
 	QCOMPARE(implements, (types{direct_successor_type}));
 }
 
-void extract_interfaces_test::should_find_two_in_indirect_successor_1()
+void interfaces_utils_test::should_find_two_in_indirect_successor_1()
 {
 	auto implements = extract_interfaces(indirect_successor_1_type);
 	QCOMPARE(implements, (types{direct_successor_type, indirect_successor_1_type}));
 }
 
-void extract_interfaces_test::should_find_three_in_indirect_successor_2()
+void interfaces_utils_test::should_find_three_in_indirect_successor_2()
 {
 	auto implements = extract_interfaces(indirect_successor_2_type);
 	QCOMPARE(implements, (types{direct_successor_type, indirect_successor_1_type, indirect_successor_2_type}));
 }
 
-QTEST_APPLESS_MAIN(extract_interfaces_test);
+QTEST_APPLESS_MAIN(interfaces_utils_test);
 
-#include "extract-interfaces-test.moc"
+#include "interfaces-utils-test.moc"

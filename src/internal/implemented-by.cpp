@@ -20,7 +20,7 @@
 
 #include "implemented-by.h"
 
-#include "extract-interfaces.h"
+#include "interfaces-utils.h"
 #include "type.h"
 
 #include <cassert>

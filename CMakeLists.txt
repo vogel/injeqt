@@ -61,11 +61,11 @@ set(INJEQT_SRCS
 	src/internal/default-constructor-method.cpp
 	src/internal/dependencies.cpp
 	src/internal/dependency.cpp
-	src/internal/extract-interfaces.cpp
 	src/internal/factory-method.cpp
 	src/internal/implementation.cpp
 	src/internal/implemented-by.cpp
 	src/internal/injector-impl.cpp
+	src/internal/interfaces-utils.cpp
 	src/internal/module-impl.cpp
 	src/internal/provider-by-default-constructor.cpp
 	src/internal/provider-by-factory.cpp

@@ -28,7 +28,7 @@
 #include "exception/invalid-dependency-exception.h"
 #include "exception/invalid-setter-exception.h"
 #include "dependency.h"
-#include "extract-interfaces.h"
+#include "interfaces-utils.h"
 #include "setter-method.h"
 #include "type.h"
 #include "type-relations.h"

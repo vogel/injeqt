@@ -20,7 +20,7 @@
 
 #include "type-relations.h"
 
-#include "extract-interfaces.h"
+#include "interfaces-utils.h"
 
 #include <map>
 

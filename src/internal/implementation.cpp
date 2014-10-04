@@ -24,7 +24,7 @@
 #include "exception/interface-not-implemented-exception.h"
 #include "exception/invalid-qobject-exception.h"
 #include "exception/qobject-type-exception.h"
-#include "extract-interfaces.h"
+#include "interfaces-utils.h"
 
 #include <QtCore/QObject>
 #include <cassert>
