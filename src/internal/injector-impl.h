@@ -40,9 +40,6 @@ namespace injeqt { namespace v1 {
 
 namespace injeqt { namespace internal {
 
-INJEQT_EXCEPTION(injector_exception, ::injeqt::v1::exception::exception);
-INJEQT_EXCEPTION(type_not_instantiated_exception, injector_exception);
-
 /**
  * @brief Implementation of injector class.
  * @see injector class

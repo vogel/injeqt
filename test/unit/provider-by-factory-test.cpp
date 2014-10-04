@@ -26,6 +26,7 @@
 #include "exception/dependency-on-supertype-exception.cpp"
 #include "exception/empty-type-exception.cpp"
 #include "exception/exception.cpp"
+#include "exception/instantiation-failed-exception.cpp"
 #include "exception/interface-not-implemented-exception.cpp"
 #include "exception/invalid-dependency-exception.cpp"
 #include "exception/invalid-qobject-exception.cpp"

@@ -48,6 +48,7 @@ set(INJEQT_SRCS
 	src/exception/dependency-on-supertype-exception.cpp
 	src/exception/empty-type-exception.cpp
 	src/exception/exception.cpp
+	src/exception/instantiation-failed-exception.cpp
 	src/exception/interface-not-implemented-exception.cpp
 	src/exception/invalid-dependency-exception.cpp
 	src/exception/invalid-qobject-exception.cpp

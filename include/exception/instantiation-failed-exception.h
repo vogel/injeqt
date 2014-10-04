@@ -20,24 +20,19 @@
 
 #pragma once
 
-#include "injeqt.h"
-
-#include <exception>
-#include <string>
+#include "exception/exception.h"
 
 namespace injeqt { namespace v1 { namespace exception {
 
-class INJEQT_API exception : public std::exception
+/**
+ * @brief Exception throw when instantiation of a type failed.
+ */
+class INJEQT_API instantiation_failed_exception : public exception
 {
 
 public:
-	explicit exception(std::string what = std::string{});
-	virtual ~exception();
-
-	virtual const char * what() const noexcept override;
-
-private:
-	std::string _what;
+	explicit instantiation_failed_exception(std::string what = std::string{});
+	virtual ~instantiation_failed_exception();
 
 };
 

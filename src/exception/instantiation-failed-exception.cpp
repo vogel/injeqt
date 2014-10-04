@@ -18,27 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include "injeqt.h"
-
-#include <exception>
-#include <string>
+#include "exception/instantiation-failed-exception.h"
 
 namespace injeqt { namespace v1 { namespace exception {
 
-class INJEQT_API exception : public std::exception
+instantiation_failed_exception::instantiation_failed_exception(std::string what) :
+	exception{std::move(what)}
 {
+}
 
-public:
-	explicit exception(std::string what = std::string{});
-	virtual ~exception();
-
-	virtual const char * what() const noexcept override;
-
-private:
-	std::string _what;
-
-};
+instantiation_failed_exception::~instantiation_failed_exception()
+{
+}
 
 }}}
