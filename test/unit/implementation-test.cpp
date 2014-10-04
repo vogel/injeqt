@@ -59,9 +59,6 @@ class implementation_test : public QObject
 {
 	Q_OBJECT
 
-public:
-	implementation_test();
-
 private slots:
 	void should_throw_when_type_is_empty();
 	void should_throw_when_type_is_qobject();
@@ -72,21 +69,7 @@ private slots:
 	void should_not_accept_object_of_super_type();
 	void should_not_accept_object_of_other_type();
 
-private:
-	type type_1_type;
-	type type_2_type;
-	type type_1_subtype_1_type;
-	type type_1_subtype_1_subtype_1_type;
-
 };
-
-implementation_test::implementation_test() :
-	type_1_type{make_type<type_1>()},
-	type_2_type{make_type<type_2>()},
-	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
-	type_1_subtype_1_subtype_1_type{make_type<type_1_subtype_1_subtype_1>()}
-{
-}
 
 void implementation_test::should_throw_when_type_is_empty()
 {
@@ -107,34 +90,34 @@ void implementation_test::should_throw_when_type_is_qobject()
 void implementation_test::should_throw_when_object_is_null()
 {
 	expect<exception::invalid_qobject_exception>([&]{
-		auto i = make_implementation(type_1_type, nullptr);
+		auto i = make_implementation(make_type<type_1>(), nullptr);
 	});
 }
 
 void implementation_test::should_accept_object_of_type()
 {
 	auto object = make_object<type_1>();
-	auto i = make_implementation(type_1_type, object.get());
+	auto i = make_implementation(make_type<type_1>(), object.get());
 
-	QCOMPARE(type_1_type, i.interface_type());
+	QCOMPARE(make_type<type_1>(), i.interface_type());
 	QCOMPARE(object.get(), i.object());
 }
 
 void implementation_test::should_accept_object_of_sub_type()
 {
 	auto object = make_object<type_1_subtype_1>();
-	auto i = make_implementation(type_1_type, object.get());
+	auto i = make_implementation(make_type<type_1>(), object.get());
 
-	QCOMPARE(type_1_type, i.interface_type());
+	QCOMPARE(make_type<type_1>(), i.interface_type());
 	QCOMPARE(object.get(), i.object());
 }
 
 void implementation_test::should_accept_object_of_sub_sub_type()
 {
 	auto object = make_object<type_1_subtype_1_subtype_1>();
-	auto i = make_implementation(type_1_type, object.get());
+	auto i = make_implementation(make_type<type_1>(), object.get());
 
-	QCOMPARE(type_1_type, i.interface_type());
+	QCOMPARE(make_type<type_1>(), i.interface_type());
 	QCOMPARE(object.get(), i.object());
 }
 
@@ -142,7 +125,7 @@ void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
 	expect<exception::interface_not_implemented_exception>([&]{
-		auto i = make_implementation(type_1_subtype_1_subtype_1_type, object.get());
+		auto i = make_implementation(make_type<type_1_subtype_1_subtype_1>(), object.get());
 	});
 }
 
@@ -150,7 +133,7 @@ void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
 	expect<exception::interface_not_implemented_exception>([&]{
-		auto i = make_implementation(type_2_type, object.get());
+		auto i = make_implementation(make_type<type_2>(), object.get());
 	});
 }
 
