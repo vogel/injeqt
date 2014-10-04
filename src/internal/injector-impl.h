@@ -41,7 +41,6 @@ namespace injeqt { namespace v1 {
 namespace injeqt { namespace internal {
 
 INJEQT_EXCEPTION(injector_exception, ::injeqt::v1::exception::exception);
-INJEQT_EXCEPTION(type_not_configured_exception, injector_exception);
 INJEQT_EXCEPTION(type_not_instantiated_exception, injector_exception);
 
 /**
@@ -91,6 +90,7 @@ public:
 	/**
 	 * @brief Returns pointer to object of given type interface_type
 	 * @param interface_type type of object to return.
+	 * @throw unknown_type_exception if @p interface_type was not configured in injector
 	 * @see injector::get<T>()
 	 */
 	QObject * get(const type &interface_type);

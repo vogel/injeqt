@@ -30,6 +30,7 @@
 #include "exception/invalid-qobject-exception.cpp"
 #include "exception/invalid-setter-exception.cpp"
 #include "exception/qobject-type-exception.cpp"
+#include "exception/unknown-type-exception.cpp"
 #include "exception/unresolvable-dependencies-exception.cpp"
 #include "dependencies.cpp"
 #include "dependency.cpp"

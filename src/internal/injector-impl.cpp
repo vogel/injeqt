@@ -20,6 +20,7 @@
 
 #include "injector-impl.h"
 
+#include "exception/unknown-type-exception.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
@@ -65,7 +66,7 @@ QObject * injector_impl::get(const type &interface_type)
 {
 	auto implementation_type_it = _types_model.available_types().get(interface_type);
 	if (implementation_type_it == end(_types_model.available_types()))
-		throw type_not_configured_exception{interface_type.name()};
+		throw exception::unknown_type_exception{interface_type.name()};
 
 	auto implementation_type = implementation_type_it->implementation_type();
 	auto object_it = _objects.get(implementation_type);
@@ -89,8 +90,7 @@ implementations injector_impl::objects_with(implementations objects, const types
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
 		auto provider_it = _available_providers.get(type_to_instantiate);
-		if (provider_it == end(_available_providers))
-			throw type_not_configured_exception{type_to_instantiate.name()};
+		assert(provider_it != end(_available_providers));
 
 		for (auto &&required_type : provider_it->get()->required_types())
 			objects = objects_with(objects, required_type);

@@ -99,6 +99,7 @@ public:
 	 * @brief Returns pointer to object of given type T.
 	 * @tparam T type of object to return
 	 * @throw invalid_type_exception if T is not valid QObject derived type
+	 * @throw unknown_type_exception if @p interface_type was not configured in injector
 	 *
 	 * When object of given type is requested by get<T>() method, injector first check if T is in set of
 	 * available types. If not, an exception is thrown. Next an unique configured type U that implements T
@@ -119,6 +120,7 @@ public:
 	 * @brief Returns pointer to object of given type interface_type.
 	 * @param interface_type type of object to return
 	 * @throw invalid_type_exception if interface_type is not valid type
+	 * @throw unknown_type_exception if @p interface_type was not configured in injector
 	 *
 	 * @see T * get<T>()
 	 */
