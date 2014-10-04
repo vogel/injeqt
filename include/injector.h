@@ -76,11 +76,12 @@ public:
 	 * @param modules list of modules
 	 * @throw ambiguous_types_exception if one or more types in @p modules is ambiguous
 	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
-	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency of another type
+	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency
 	 * @throw dependency_on_self_exception when type depends on self
 	 * @throw dependency_on_subtype_exception when type depends on own supertype
 	 * @throw dependency_on_subtype_exception when type depends on own subtype
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
+	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject pointer
 	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
 	 *
 	 * Creates injector with all types from modules configured. If combined configuration
@@ -98,8 +99,10 @@ public:
 	/**
 	 * @brief Returns pointer to object of given type T.
 	 * @tparam T type of object to return
-	 * @throw invalid_type_exception if T is not valid QObject derived type
+	 * @throw empty_type_exception if T is not valid QObject derived type
+	 * @throw qobject_type_exception if T is QObject
 	 * @throw unknown_type_exception if @p interface_type was not configured in injector
+	 * @throw instantiation_failed_exception if instantiation of one of required types failed
 	 *
 	 * When object of given type is requested by get<T>() method, injector first check if T is in set of
 	 * available types. If not, an exception is thrown. Next an unique configured type U that implements T
@@ -119,8 +122,10 @@ public:
 	/**
 	 * @brief Returns pointer to object of given type interface_type.
 	 * @param interface_type type of object to return
-	 * @throw invalid_type_exception if interface_type is not valid type
+	 * @throw empty_type_exception if interface_type is empty
+	 * @throw qobject_type_exception if interface_type represents QObject
 	 * @throw unknown_type_exception if @p interface_type was not configured in injector
+	 * @throw instantiation_failed_exception if instantiation of one of required types failed
 	 *
 	 * @see T * get<T>()
 	 */

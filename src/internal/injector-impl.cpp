@@ -73,7 +73,6 @@ QObject * injector_impl::get(const type &interface_type)
 	if (object_it != end(_objects))
 		return object_it->object();
 
-	// throws if object of implementation_type was not created
 	_objects = objects_with(_objects, implementation_type);
 	return _objects.get(implementation_type)->object();
 }

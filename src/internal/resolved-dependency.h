@@ -68,9 +68,7 @@ public:
 	 * @pre on != nullptr
 	 * @pre type{on->metaObject()} == setter().object_type()
 	 *
-	 * This method can only be called on valid resolved_dependency object. If @p on parameter is
-	 * null or is of different type than setter_method::object_type() of setter() object an
-	 * exception will be thrown.
+	 * This method can only be called on valid resolved_dependency object.
 	 */
 	bool apply_on(QObject *on);
 

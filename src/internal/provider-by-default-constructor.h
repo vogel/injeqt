@@ -63,6 +63,9 @@ public:
 
 	/**
 	 * @return object created by default constructor
+	 * @post result != nullptr
+	 * @post implements(type{result->metaObject()}, provided_type())
+	 * @throw instantiation_failed_exception if instantiation of provided type failed
 	 *
 	 * If object was not yet created the constructor() method is called and object is stored
 	 * in internal cache. Then object from cache is returned.

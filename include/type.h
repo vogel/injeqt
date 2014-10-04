@@ -53,13 +53,8 @@ namespace v1
  *
  * Direct instantiations of this class should not be needed in user code.
  *
- * Use convienance free function make_type&lt;T&gt; and make_type&lt;T&gt;
- * that also registers type T in Qt meta-type that is required for Injeqt to function
- * properly.
- *
- * Internal code assumes that all passes type instances are not empty and not qobject.
- * All public API functions always check user-provided types validity and throw an
- * invalid_type_exception if neccessary.
+ * Use convienance free function make_type&lt;T&gt; that also registers type T
+ * in Qt meta-type that is required for Injeqt to function properly.
  *
  * Type name can be retrieived by name() member. Original QMetaObject can be read
  * using meta_object() member.

@@ -55,11 +55,13 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
 /**
  * @brief Extract set of dependencies from type.
  * @param for_type type to extract dependencies from.
+ * @pre !for_type.is_empty()
  * @throw dependency_duplicated_exception when one type occurs twice as a dependency.
  * @throw dependency_on_self_exception when type depends on self.
  * @throw dependency_on_subtype_exception when type depends on own supertype.
  * @throw dependency_on_subtype_exception when type depends on own subtype.
- * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-based pointer
+ * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
+ * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject pointer
  * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
  *
  * This function computes and returns set of all dependencies of a given type. All slots methods tagged

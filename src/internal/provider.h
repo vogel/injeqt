@@ -63,6 +63,7 @@ public:
 	 * @param i injector_impl that requests object
 	 * @post result != nullptr
 	 * @post implements(type{result->metaObject()}, provided_type())
+	 * @throw instantiation_failed_exception if instantiation of provided type failed
 	 *
 	 * Provider can require some types with required_types() to be already available
 	 * in injector_impl. Provider may or may no take ownership of a provided object -

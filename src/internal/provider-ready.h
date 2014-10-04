@@ -56,6 +56,8 @@ public:
 
 	/**
 	 * @return object passed in constructor
+	 * @post result != nullptr
+	 * @post implements(type{result->metaObject()}, provided_type())
 	 */
 	virtual QObject * provide(injector_impl &i) override;
 

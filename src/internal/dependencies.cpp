@@ -68,7 +68,7 @@ std::vector<setter_method> extract_setters(const type &for_type)
 		if (probably_setter.parameterCount() != 1)
 			throw exception::invalid_setter_exception{};
 		auto parameter_type = type{QMetaType::metaObjectForType(probably_setter.parameterType(0))};
-		if (parameter_type.is_empty())
+		if (parameter_type.is_empty() || parameter_type.is_qobject())
 			throw exception::invalid_setter_exception{};
 
 		result.emplace_back(setter_method{probably_setter});

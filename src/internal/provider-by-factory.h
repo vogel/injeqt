@@ -63,6 +63,9 @@ public:
 
 	/**
 	 * @return object created by factory method
+	 * @post result != nullptr
+	 * @post implements(type{result->metaObject()}, provided_type())
+	 * @throw instantiation_failed_exception if instantiation of provided type failed
 	 *
 	 * If object was not yet created the object of type factory_method::object_type() is requested
 	 * from @p i and the factory method is called on it to get object and stoe it in internal cache,
