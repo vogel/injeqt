@@ -39,6 +39,7 @@ endfunction ()
 
 injeqt_add_test(default-constructor-method-test unit/default-constructor-method-test.cpp)
 injeqt_add_test(dependencies-test unit/dependencies-test.cpp)
+injeqt_add_test(dependency-test unit/dependency-test.cpp)
 injeqt_add_test(extract-interfaces-test unit/extract-interfaces-test.cpp)
 injeqt_add_test(factory-method-test unit/factory-method-test.cpp)
 injeqt_add_test(implementation-test unit/implementation-test.cpp)
