@@ -72,41 +72,18 @@ class resolved_dependency_test : public QObject
 {
 	Q_OBJECT
 
-public:
-	resolved_dependency_test();
-
 private slots:
 	void should_properly_apply_on_valid_object();
 
-private:
-	type type_1_type;
-	type type_1_subtype_1_type;
-	type type_2_type;
-	type injected_type_type;
-	setter_method setter_1_method;
-	setter_method setter_1_subtype_1_method;
-	setter_method setter_2_method;
-
 };
-
-resolved_dependency_test::resolved_dependency_test() :
-	type_1_type{make_type<type_1>()},
-	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
-	type_2_type{make_type<type_2>()},
-	injected_type_type{make_type<injected_type>()},
-	setter_1_method{make_setter_method<injected_type>("setter_1(type_1*)")},
-	setter_1_subtype_1_method{make_setter_method<injected_type>("setter_1_subtype_1(type_1_subtype_1*)")},
-	setter_2_method{make_setter_method<injected_type>("setter_2(type_2*)")}
-{
-}
 
 void resolved_dependency_test::should_properly_apply_on_valid_object()
 {
 	auto object_1 = make_object<type_1>();
 	auto object_2 = make_object<type_2>();
 	auto apply_on_object = make_object<injected_type>();
-	auto resolved_1 = resolved_dependency{implementation{type_1_type, object_1.get()}, setter_1_method};
-	auto resolved_2 = resolved_dependency{implementation{type_2_type, object_2.get()}, setter_2_method};
+	auto resolved_1 = resolved_dependency{implementation{make_type<type_1>(), object_1.get()}, make_setter_method<injected_type>("setter_1(type_1*)")};
+	auto resolved_2 = resolved_dependency{implementation{make_type<type_2>(), object_2.get()}, make_setter_method<injected_type>("setter_2(type_2*)")};
 
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<injected_type *>(apply_on_object.get())->_1);
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<injected_type *>(apply_on_object.get())->_2);
