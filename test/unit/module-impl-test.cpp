@@ -18,41 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/ambiguous-types-exception.cpp"
-#include "exception/dependency-duplicated-exception.cpp"
-#include "exception/dependency-on-self-exception.cpp"
-#include "exception/dependency-on-subtype-exception.cpp"
-#include "exception/dependency-on-supertype-exception.cpp"
-#include "exception/empty-type-exception.cpp"
-#include "exception/exception.cpp"
-#include "exception/instantiation-failed-exception.cpp"
-#include "exception/interface-not-implemented-exception.cpp"
-#include "exception/invalid-dependency-exception.cpp"
-#include "exception/invalid-qobject-exception.cpp"
-#include "exception/invalid-setter-exception.cpp"
-#include "exception/qobject-type-exception.cpp"
-#include "exception/unknown-type-exception.cpp"
-#include "exception/unresolvable-dependencies-exception.cpp"
-#include "default-constructor-method.cpp"
-#include "dependencies.cpp"
-#include "dependency.cpp"
-#include "factory-method.cpp"
-#include "implemented-by.cpp"
-#include "implementation.cpp"
-#include "injector-impl.cpp"
-#include "interfaces-utils.cpp"
 #include "module-impl.cpp"
-#include "provider-by-default-constructor.cpp"
-#include "provider-by-factory.cpp"
-#include "provider-ready.cpp"
-#include "required-to-instantiate.cpp"
-#include "resolve-dependencies.cpp"
-#include "resolved-dependency.cpp"
-#include "setter-method.cpp"
 #include "type.cpp"
-#include "type-dependencies.cpp"
-#include "type-relations.cpp"
-#include "types-model.cpp"
 
 #include "expect.h"
 #include "utils.h"
@@ -62,6 +29,27 @@
 
 using namespace injeqt::internal;
 using namespace injeqt::v1;
+
+class mocked_provider : public provider
+{
+
+public:
+	explicit mocked_provider(type provided_type, types required_types) :
+		_provided_type{std::move(provided_type)},
+		_required_types{std::move(required_types)} {}
+	virtual ~mocked_provider() {}
+
+	virtual const type & provided_type() const override { return _provided_type; };
+
+	virtual QObject * provide(injector_impl &i) override { return nullptr; };
+
+	virtual types required_types() const override { return _required_types; };
+
+private:
+	type _provided_type;
+	types _required_types;
+
+};
 
 class type_1 : public QObject
 {
@@ -95,24 +83,20 @@ void module_impl_test::should_properly_add_providers()
 	auto m = module_impl{};
 	QCOMPARE(m.providers().size(), 0UL);
 
-	auto c = make_default_constructor_method(make_type<type_1>());
-	auto p1 = std::unique_ptr<provider_by_default_constructor>(new provider_by_default_constructor{c});
+	auto p1 = std::unique_ptr<mocked_provider>(new mocked_provider{type{}, types{}});
 	auto p1_ptr = p1.get();
 	m.add_provider(std::move(p1));
 	QCOMPARE(m.providers().size(), 1UL);
 	QCOMPARE(m.providers()[0].get(), p1_ptr);
 
-	auto fm = make_factory_method(make_type<type_1>(), make_type<factory_type_1>());
-	auto p2 = std::unique_ptr<provider_by_factory>(new provider_by_factory{fm});
+	auto p2 = std::unique_ptr<mocked_provider>(new mocked_provider{type{}, types{}});
 	auto p2_ptr = p2.get();
 	m.add_provider(std::move(p2));
 	QCOMPARE(m.providers().size(), 2UL);
 	QCOMPARE(m.providers()[0].get(), p1_ptr);
 	QCOMPARE(m.providers()[1].get(), p2_ptr);
 
-	auto o = std::unique_ptr<type_1>(new type_1{});
-	auto i = make_implementation(make_type<type_1>(), o.get());
-	auto p3 = std::unique_ptr<provider_ready>(new provider_ready(i));
+	auto p3 = std::unique_ptr<mocked_provider>(new mocked_provider{type{}, types{}});
 	auto p3_ptr = p3.get();
 	m.add_provider(std::move(p3));
 	QCOMPARE(m.providers().size(), 3UL);
