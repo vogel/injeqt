@@ -18,13 +18,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "injector.h"
+#include <injeqt/injector.h>
 
-#include "exception/empty-type-exception.h"
-#include "exception/qobject-type-exception.h"
+#include <injeqt/exception/empty-type-exception.h>
+#include <injeqt/exception/qobject-type-exception.h>
+#include <injeqt/module.h>
+
 #include "injector-impl.h"
 #include "module-impl.h"
-#include "module.h"
 #include "provider.h"
 
 using namespace injeqt::internal;

@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include "exception/exception.h"
-#include "injeqt.h"
+#include <injeqt/exception/exception.h>
+#include <injeqt/injeqt.h>
 
 #include <QtCore/QMetaType>
 

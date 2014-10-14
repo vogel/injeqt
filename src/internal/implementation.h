@@ -20,9 +20,8 @@
 
 #pragma once
 
-#include "exception/exception.h"
-#include "injeqt.h"
-#include "type.h"
+#include <injeqt/injeqt.h>
+#include <injeqt/type.h>
 
 /**
  * @file

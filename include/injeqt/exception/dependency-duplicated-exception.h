@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/invalid-dependency-exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when an invalid QObject was passed to a function.
+ * @brief Exception throw when two identical dependencies are found in type.
  */
-class INJEQT_API invalid_qobject_exception : public exception
+class INJEQT_API dependency_duplicated_exception : public invalid_dependency_exception
 {
 
 public:
-	explicit invalid_qobject_exception(std::string what = std::string{});
-	virtual ~invalid_qobject_exception();
+	explicit dependency_duplicated_exception(std::string what = std::string{});
+	virtual ~dependency_duplicated_exception();
 
 };
 

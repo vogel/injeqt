@@ -20,24 +20,19 @@
 
 #pragma once
 
-#include "injeqt.h"
-
-#include <exception>
-#include <string>
+#include <injeqt/exception/invalid-dependency-exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
-class INJEQT_API exception : public std::exception
+/**
+ * @brief Exception throw when a type depends on own subtype
+ */
+class INJEQT_API dependency_on_subtype_exception : public invalid_dependency_exception
 {
 
 public:
-	explicit exception(std::string what = std::string{});
-	virtual ~exception();
-
-	virtual const char * what() const noexcept override;
-
-private:
-	std::string _what;
+	explicit dependency_on_subtype_exception(std::string what = std::string{});
+	virtual ~dependency_on_subtype_exception();
 
 };
 

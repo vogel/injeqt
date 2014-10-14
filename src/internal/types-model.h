@@ -20,10 +20,11 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+#include <injeqt/type.h>
+
 #include "implemented-by-mapping.h"
-#include "injeqt.h"
 #include "types-dependencies.h"
-#include "type.h"
 
 /**
  * @file

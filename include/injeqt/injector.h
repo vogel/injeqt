@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include "injeqt.h"
-#include "type.h"
+#include <injeqt/injeqt.h>
+#include <injeqt/type.h>
 
 #include <memory>
 #include <vector>

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 

@@ -20,9 +20,10 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+#include <injeqt/type.h>
+
 #include "dependencies.h"
-#include "injeqt.h"
-#include "type.h"
 
 #include <cassert>
 

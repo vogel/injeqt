@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/invalid-dependency-exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when an invalid dependency is found.
+ * @brief Exception throw when a type depends on own supertype
  */
-class INJEQT_API invalid_dependency_exception : public exception
+class INJEQT_API dependency_on_supertype_exception : public invalid_dependency_exception
 {
 
 public:
-	explicit invalid_dependency_exception(std::string what = std::string{});
-	virtual ~invalid_dependency_exception();
+	explicit dependency_on_supertype_exception(std::string what = std::string{});
+	virtual ~dependency_on_supertype_exception();
 
 };
 

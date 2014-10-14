@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/invalid-dependency-exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when two identical dependencies are found in type.
+ * @brief Exception throw when setter with bad number of arguments or with bad argument was found with INJEQT_SETTER tag.
  */
-class INJEQT_API dependency_duplicated_exception : public invalid_dependency_exception
+class INJEQT_API invalid_setter_exception : public exception
 {
 
 public:
-	explicit dependency_duplicated_exception(std::string what = std::string{});
-	virtual ~dependency_duplicated_exception();
+	explicit invalid_setter_exception(std::string what = std::string{});
+	virtual ~invalid_setter_exception();
 
 };
 

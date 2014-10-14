@@ -20,8 +20,9 @@
 
 #include "types-model.h"
 
-#include "exception/ambiguous-types-exception.h"
-#include "exception/unresolvable-dependencies-exception.h"
+#include <injeqt/exception/ambiguous-types-exception.h>
+#include <injeqt/exception/unresolvable-dependencies-exception.h>
+
 #include "type-relations.h"
 
 #include <cassert>

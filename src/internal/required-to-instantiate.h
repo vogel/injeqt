@@ -20,8 +20,9 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+
 #include "implementations.h"
-#include "injeqt.h"
 #include "types-model.h"
 #include "types.h"
 

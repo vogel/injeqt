@@ -20,19 +20,24 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/injeqt.h>
+
+#include <exception>
+#include <string>
 
 namespace injeqt { namespace v1 { namespace exception {
 
-/**
- * @brief Exception throw when setter with bad number of arguments or with bad argument was found with INJEQT_SETTER tag.
- */
-class INJEQT_API invalid_setter_exception : public exception
+class INJEQT_API exception : public std::exception
 {
 
 public:
-	explicit invalid_setter_exception(std::string what = std::string{});
-	virtual ~invalid_setter_exception();
+	explicit exception(std::string what = std::string{});
+	virtual ~exception();
+
+	virtual const char * what() const noexcept override;
+
+private:
+	std::string _what;
 
 };
 

@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "exception/exception.h"
-#include "injeqt.h"
-#include "type.h"
+#include <injeqt/exception/exception.h>
+#include <injeqt/injeqt.h>
+#include <injeqt/type.h>
 
 #include <QtCore/QMetaMethod>
 

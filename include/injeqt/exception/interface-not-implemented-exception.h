@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when an empty type object was passed to a function.
+ * @brief Exception throw when a QObject that does not implement specified was passed to a function.
  */
-class INJEQT_API empty_type_exception : public exception
+class INJEQT_API interface_not_implemented_exception : public exception
 {
 
 public:
-	explicit empty_type_exception(std::string what = std::string{});
-	virtual ~empty_type_exception();
+	explicit interface_not_implemented_exception(std::string what = std::string{});
+	virtual ~interface_not_implemented_exception();
 
 };
 

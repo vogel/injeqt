@@ -18,14 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module.h"
+#include <injeqt/module.h>
 
-#include "exception/default-constructor-not-found-exception.h"
-#include "exception/empty-type-exception.h"
-#include "exception/interface-not-implemented-exception.h"
-#include "exception/invalid-qobject-exception.h"
-#include "exception/qobject-type-exception.h"
-#include "exception/unique-factory-method-not-found-exception.h"
+#include <injeqt/exception/default-constructor-not-found-exception.h>
+#include <injeqt/exception/empty-type-exception.h>
+#include <injeqt/exception/interface-not-implemented-exception.h>
+#include <injeqt/exception/invalid-qobject-exception.h>
+#include <injeqt/exception/qobject-type-exception.h>
+#include <injeqt/exception/unique-factory-method-not-found-exception.h>
+
 #include "default-constructor-method.h"
 #include "implementation.h"
 #include "interfaces-utils.h"

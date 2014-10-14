@@ -20,8 +20,9 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+
 #include "implemented-by-mapping.h"
-#include "injeqt.h"
 #include "types.h"
 
 /**

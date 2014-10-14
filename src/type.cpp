@@ -20,7 +20,7 @@
 
 /** @file */
 
-#include "type.h"
+#include <injeqt/type.h>
 
 #include <QtCore/QMetaObject>
 #include <cassert>

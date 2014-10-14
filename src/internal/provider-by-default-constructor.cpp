@@ -20,7 +20,7 @@
 
 #include "provider-by-default-constructor.h"
 
-#include "exception/instantiation-failed-exception.h"
+#include <injeqt/exception/instantiation-failed-exception.h>
 
 #include <cassert>
 

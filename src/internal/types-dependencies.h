@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "injeqt.h"
+#include <injeqt/injeqt.h>
+
 #include "sorted-unique-vector.h"
 #include "type-dependencies.h"
 

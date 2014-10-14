@@ -20,9 +20,10 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+
 #include "factory-method.h"
 #include "provider.h"
-#include "injeqt.h"
 
 /**
  * @file

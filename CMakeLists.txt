@@ -100,7 +100,7 @@ install(TARGETS
 )
 
 install(DIRECTORY
-	include/ DESTINATION include/injeqt
+	include/injeqt DESTINATION include/injeqt
 )
 
 set(prefix ${CMAKE_INSTALL_PREFIX})

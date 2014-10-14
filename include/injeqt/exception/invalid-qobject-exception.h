@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception thrown when type F does not have unique factory method for T in module::add_factory<T, F>() call.
+ * @brief Exception throw when an invalid QObject was passed to a function.
  */
-class INJEQT_API unique_factory_method_not_found_exception : public exception
+class INJEQT_API invalid_qobject_exception : public exception
 {
 
 public:
-	explicit unique_factory_method_not_found_exception(std::string what = std::string{});
-	virtual ~unique_factory_method_not_found_exception();
+	explicit invalid_qobject_exception(std::string what = std::string{});
+	virtual ~invalid_qobject_exception();
 
 };
 

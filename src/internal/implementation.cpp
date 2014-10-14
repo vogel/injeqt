@@ -20,10 +20,11 @@
 
 #include "implementation.h"
 
-#include "exception/empty-type-exception.h"
-#include "exception/interface-not-implemented-exception.h"
-#include "exception/invalid-qobject-exception.h"
-#include "exception/qobject-type-exception.h"
+#include <injeqt/exception/empty-type-exception.h>
+#include <injeqt/exception/interface-not-implemented-exception.h>
+#include <injeqt/exception/invalid-qobject-exception.h>
+#include <injeqt/exception/qobject-type-exception.h>
+
 #include "interfaces-utils.h"
 
 #include <QtCore/QObject>

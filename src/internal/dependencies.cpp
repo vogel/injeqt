@@ -20,17 +20,18 @@
 
 #include "dependencies.h"
 
-#include "exception/dependency-duplicated-exception.h"
-#include "exception/dependency-on-self-exception.h"
-#include "exception/dependency-on-subtype-exception.h"
-#include "exception/dependency-on-supertype-exception.h"
-#include "exception/exception.h"
-#include "exception/invalid-dependency-exception.h"
-#include "exception/invalid-setter-exception.h"
+#include <injeqt/exception/dependency-duplicated-exception.h>
+#include <injeqt/exception/dependency-on-self-exception.h>
+#include <injeqt/exception/dependency-on-subtype-exception.h>
+#include <injeqt/exception/dependency-on-supertype-exception.h>
+#include <injeqt/exception/exception.h>
+#include <injeqt/exception/invalid-dependency-exception.h>
+#include <injeqt/exception/invalid-setter-exception.h>
+#include <injeqt/type.h>
+
 #include "dependency.h"
 #include "interfaces-utils.h"
 #include "setter-method.h"
-#include "type.h"
 #include "type-relations.h"
 
 #include <QtCore/QMetaMethod>

@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include "type.h"
-#include "injeqt.h"
+#include <injeqt/type.h>
+#include <injeqt/injeqt.h>
+
 #include "sorted-unique-vector.h"
 
 /**

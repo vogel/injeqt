@@ -20,19 +20,20 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when injector is configured with some dependnecies unresolable.
+ * @brief Exception throw when some ambiguous types were configured in injector
+ * @todo check what happens when typeA: typeP and typeB: typeP are configured, but some dependency requires typeP
  */
-class INJEQT_API unresolvable_dependencies_exception : public exception
+class INJEQT_API ambiguous_types_exception : public exception
 {
 
 public:
-	explicit unresolvable_dependencies_exception(std::string what = std::string{});
-	virtual ~unresolvable_dependencies_exception();
+	explicit ambiguous_types_exception(std::string what = std::string{});
+	virtual ~ambiguous_types_exception();
 
 };
 

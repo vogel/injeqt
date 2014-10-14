@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when type that was not confiugred was requested from injector
+ * @brief Exception throw when an empty type object was passed to a function.
  */
-class INJEQT_API unknown_type_exception : public exception
+class INJEQT_API empty_type_exception : public exception
 {
 
 public:
-	explicit unknown_type_exception(std::string what = std::string{});
-	virtual ~unknown_type_exception();
+	explicit empty_type_exception(std::string what = std::string{});
+	virtual ~empty_type_exception();
 
 };
 

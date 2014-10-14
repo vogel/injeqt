@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/unique-factory-method-not-found-exception.h"
+#include <injeqt/exception/unique-factory-method-not-found-exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 

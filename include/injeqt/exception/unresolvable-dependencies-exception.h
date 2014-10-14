@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when a qobject type object was passed to a function.
+ * @brief Exception throw when injector is configured with some dependnecies unresolable.
  */
-class INJEQT_API qobject_type_exception : public exception
+class INJEQT_API unresolvable_dependencies_exception : public exception
 {
 
 public:
-	explicit qobject_type_exception(std::string what = std::string{});
-	virtual ~qobject_type_exception();
+	explicit unresolvable_dependencies_exception(std::string what = std::string{});
+	virtual ~unresolvable_dependencies_exception();
 
 };
 

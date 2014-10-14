@@ -20,12 +20,13 @@
 
 #include "injector-impl.h"
 
-#include "exception/unknown-type-exception.h"
+#include <injeqt/exception/unknown-type-exception.h>
+#include <injeqt/module.h>
+
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
 #include "module-impl.h"
-#include "module.h"
 #include "required-to-instantiate.h"
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"

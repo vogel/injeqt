@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/empty-type-exception.h"
+#include <injeqt/exception/empty-type-exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 

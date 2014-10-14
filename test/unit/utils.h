@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "exception/exception.h"
+#include "injeqt/exception/exception.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QObject>

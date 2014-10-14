@@ -20,19 +20,19 @@
 
 #pragma once
 
-#include "exception/invalid-dependency-exception.h"
+#include <injeqt/exception/exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when a type depends on own supertype
+ * @brief Exception thrown when type F does not have unique factory method for T in module::add_factory<T, F>() call.
  */
-class INJEQT_API dependency_on_supertype_exception : public invalid_dependency_exception
+class INJEQT_API unique_factory_method_not_found_exception : public exception
 {
 
 public:
-	explicit dependency_on_supertype_exception(std::string what = std::string{});
-	virtual ~dependency_on_supertype_exception();
+	explicit unique_factory_method_not_found_exception(std::string what = std::string{});
+	virtual ~unique_factory_method_not_found_exception();
 
 };
 

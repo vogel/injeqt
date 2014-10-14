@@ -20,9 +20,10 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+
 #include "provider.h"
 #include "implementation.h"
-#include "injeqt.h"
 
 /**
  * @file

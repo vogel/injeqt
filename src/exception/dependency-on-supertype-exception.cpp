@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/dependency-on-supertype-exception.h"
+#include <injeqt/exception/dependency-on-supertype-exception.h>
 
 namespace injeqt { namespace v1 { namespace exception {
 

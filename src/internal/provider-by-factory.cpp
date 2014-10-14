@@ -20,7 +20,8 @@
 
 #include "provider-by-factory.h"
 
-#include "exception/instantiation-failed-exception.h"
+#include <injeqt/exception/instantiation-failed-exception.h>
+
 #include "injector-impl.h"
 
 namespace injeqt { namespace internal {

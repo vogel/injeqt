@@ -20,8 +20,9 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+
 #include "implementation.h"
-#include "injeqt.h"
 #include "setter-method.h"
 
 /**

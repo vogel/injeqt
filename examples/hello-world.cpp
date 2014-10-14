@@ -18,9 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "injector.h"
-#include "injeqt.h"
-#include "module.h"
+#include <injeqt/injector.h>
+#include <injeqt/module.h>
 
 #include <QtCore/QDebug>
 #include <QtCore/QObject>

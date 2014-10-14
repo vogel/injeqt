@@ -20,8 +20,9 @@
 
 #include "setter-method.h"
 
+#include <injeqt/type.h>
+
 #include "interfaces-utils.h"
-#include "type.h"
 
 #include <cassert>
 

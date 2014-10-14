@@ -20,11 +20,12 @@
 
 #pragma once
 
+#include <injeqt/injeqt.h>
+#include <injeqt/type.h>
+
 #include "implementations.h"
-#include "injeqt.h"
 #include "providers.h"
 #include "types-model.h"
-#include "type.h"
 
 #include <vector>
 #include <QtCore/QObject>
