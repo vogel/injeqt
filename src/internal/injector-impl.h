@@ -62,7 +62,7 @@ public:
 	 * @brief Create empty injector_impl with no configuration.
 	 *
 	 * Injector with empty configuration will not be able to return any objects. Each call
-	 * to get(const type &) will result in type_not_configured_exception
+	 * to get(const type &) will result in type_not_configured
 	 */
 	injector_impl();
 
@@ -70,15 +70,15 @@ public:
 	 * @brief Create injector confiugred with set of modules.
 	 * @param modules set of modules containing configuration of injector
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
-	 * @throw ambiguous_types_exception if one or more types in @p modules is ambiguous
-	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p modules
-	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency
-	 * @throw dependency_on_self_exception when type depends on self
-	 * @throw dependency_on_subtype_exception when type depends on own supertype
-	 * @throw dependency_on_subtype_exception when type depends on own subtype
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
-	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
+	 * @throw ambiguous_types if one or more types in @p modules is ambiguous
+	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p modules
+	 * @throw dependency_duplicated when one type occurs twice as a dependency
+	 * @throw dependency_on_self when type depends on self
+	 * @throw dependency_on_subtype when type depends on own supertype
+	 * @throw dependency_on_subtype when type depends on own subtype
+	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+	 * @throw invalid_setter if any tagged setter has other number of parameters than one
 	 *
 	 * This constructor extract all providers from all modules and creates types_model object
 	 * to get all required information from them. After calling that all providers will be moved-out from
@@ -89,8 +89,8 @@ public:
 	/**
 	 * @brief Returns pointer to object of given type interface_type
 	 * @param interface_type type of object to return.
-	 * @throw unknown_type_exception if @p interface_type was not configured in injector
-	 * @throw instantiation_failed_exception if instantiation of one of required types failed
+	 * @throw unknown_type if @p interface_type was not configured in injector
+	 * @throw instantiation_failed if instantiation of one of required types failed
 	 * @see injector::get<T>()
 	 */
 	QObject * get(const type &interface_type);
@@ -110,15 +110,15 @@ private:
 
 	/**
 	 * @brief Extract all provided types and makes a types_model from them.
-	 * @throw ambiguous_types_exception if one or more types in @p all_providers is ambiguous
-	 * @throw unresolvable_dependencies_exception if a type with unresolvable dependency is found in @p all_providers
-	 * @throw dependency_duplicated_exception when one type occurs twice as a dependency
-	 * @throw dependency_on_self_exception when type depends on self
-	 * @throw dependency_on_subtype_exception when type depends on own supertype
-	 * @throw dependency_on_subtype_exception when type depends on own subtype
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
-	 * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
-	 * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
+	 * @throw ambiguous_types if one or more types in @p all_providers is ambiguous
+	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p all_providers
+	 * @throw dependency_duplicated when one type occurs twice as a dependency
+	 * @throw dependency_on_self when type depends on self
+	 * @throw dependency_on_subtype when type depends on own supertype
+	 * @throw dependency_on_subtype when type depends on own subtype
+	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+	 * @throw invalid_setter if any tagged setter has other number of parameters than one
 	 */
 	types_model create_types_model(const providers &all_providers) const;
 
@@ -126,7 +126,7 @@ private:
 	 * @brief Create new list of implementation objects with object of type implementation_type
 	 * @param objects list of already created objects
 	 * @param implementation_type type of object to create
-	 * @throw instantiation_failed_exception if instantiation of one of required types failed
+	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
 	 * This method get list of all not-already created objects required to properly instantiate implementation_type
 	 * using required_to_instantiate(const type &, const types_model &, const implementations &) and then uses
@@ -138,7 +138,7 @@ private:
 	 * @brief Create new list of implementation objects with objects of types implementation_types
 	 * @param objects list of already created objects
 	 * @param implementation_types set of types of object to create
-	 * @throw instantiation_failed_exception if instantiation of one of required types failed
+	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
 	 * For each type in the list this method check if that type requires other one using provider::required_types()
 	 * and if so, calls objects_with(implementations, const type &) to update list with that requires object.

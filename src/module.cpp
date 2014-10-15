@@ -20,12 +20,12 @@
 
 #include <injeqt/module.h>
 
-#include <injeqt/exception/default-constructor-not-found-exception.h>
-#include <injeqt/exception/empty-type-exception.h>
-#include <injeqt/exception/interface-not-implemented-exception.h>
-#include <injeqt/exception/invalid-qobject-exception.h>
-#include <injeqt/exception/qobject-type-exception.h>
-#include <injeqt/exception/unique-factory-method-not-found-exception.h>
+#include <injeqt/exception/default-constructor-not-found.h>
+#include <injeqt/exception/empty-type.h>
+#include <injeqt/exception/interface-not-implemented.h>
+#include <injeqt/exception/invalid-qobject.h>
+#include <injeqt/exception/qobject-type.h>
+#include <injeqt/exception/unique-factory-method-not-found.h>
 
 #include "default-constructor-method.h"
 #include "implementation.h"
@@ -58,13 +58,13 @@ void module::add_ready_object(type t, QObject *object)
 void module::add_type(type t)
 {
 	if (t.is_empty())
-		throw exception::empty_type_exception{};
+		throw exception::empty_type{};
 	if (t.is_qobject())
-		throw exception::qobject_type_exception();
+		throw exception::qobject_type();
 
 	auto c = internal::make_default_constructor_method(t);
 	if (c.is_empty())
-		throw exception::default_constructor_not_found_exception{t.name()};
+		throw exception::default_constructor_not_found{t.name()};
 
 	auto p = std::unique_ptr<internal::provider_by_default_constructor>{new internal::provider_by_default_constructor{std::move(c)}};
 	_pimpl->add_provider(std::move(p));
@@ -73,17 +73,17 @@ void module::add_type(type t)
 void module::add_factory(type t, type f)
 {
 	if (t.is_empty())
-		throw exception::empty_type_exception{};
+		throw exception::empty_type{};
 	if (t.is_qobject())
-		throw exception::qobject_type_exception();
+		throw exception::qobject_type();
 	if (f.is_empty())
-		throw exception::empty_type_exception{};
+		throw exception::empty_type{};
 	if (f.is_qobject())
-		throw exception::qobject_type_exception();
+		throw exception::qobject_type();
 
 	auto fm = internal::make_factory_method(t, f);
 	if (fm.is_empty())
-		throw exception::unique_factory_method_not_found_exception{t.name() + " in " + f.name()};
+		throw exception::unique_factory_method_not_found{t.name() + " in " + f.name()};
 
 	auto p = std::unique_ptr<internal::provider_by_factory>{new internal::provider_by_factory{std::move(fm)}};
 	_pimpl->add_provider(std::move(p));

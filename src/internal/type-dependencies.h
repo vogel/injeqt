@@ -76,13 +76,13 @@ bool operator != (const type_dependencies &x, const type_dependencies &y);
  * @brief Create valid type_dependencies from given type.
  * @param dependent_type type to get dependecies from.
  * @pre !dependent_type.is_empty()
- * @throw dependency_duplicated_exception when one type occurs twice as a dependency
- * @throw dependency_on_self_exception when type depends on self
- * @throw dependency_on_subtype_exception when type depends on own supertype
- * @throw dependency_on_subtype_exception when type depends on own subtype
- * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
- * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
- * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
+ * @throw dependency_duplicated when one type occurs twice as a dependency
+ * @throw dependency_on_self when type depends on self
+ * @throw dependency_on_subtype when type depends on own supertype
+ * @throw dependency_on_subtype when type depends on own subtype
+ * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+ * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+ * @throw invalid_setter if any tagged setter has other number of parameters than one
  */
 inline type_dependencies make_type_dependencies(type dependent_type)
 {

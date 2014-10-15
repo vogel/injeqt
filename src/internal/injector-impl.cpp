@@ -20,7 +20,7 @@
 
 #include "injector-impl.h"
 
-#include <injeqt/exception/unknown-type-exception.h>
+#include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
 #include "provider-by-default-constructor.h"
@@ -67,7 +67,7 @@ QObject * injector_impl::get(const type &interface_type)
 {
 	auto implementation_type_it = _types_model.available_types().get(interface_type);
 	if (implementation_type_it == end(_types_model.available_types()))
-		throw exception::unknown_type_exception{interface_type.name()};
+		throw exception::unknown_type{interface_type.name()};
 
 	auto implementation_type = implementation_type_it->implementation_type();
 	auto object_it = _objects.get(implementation_type);

@@ -20,13 +20,13 @@
 
 #include "dependencies.h"
 
-#include <injeqt/exception/dependency-duplicated-exception.h>
-#include <injeqt/exception/dependency-on-self-exception.h>
-#include <injeqt/exception/dependency-on-subtype-exception.h>
-#include <injeqt/exception/dependency-on-supertype-exception.h>
+#include <injeqt/exception/dependency-duplicated.h>
+#include <injeqt/exception/dependency-on-self.h>
+#include <injeqt/exception/dependency-on-subtype.h>
+#include <injeqt/exception/dependency-on-supertype.h>
 #include <injeqt/exception/exception.h>
-#include <injeqt/exception/invalid-dependency-exception.h>
-#include <injeqt/exception/invalid-setter-exception.h>
+#include <injeqt/exception/invalid-dependency.h>
+#include <injeqt/exception/invalid-setter.h>
 #include <injeqt/type.h>
 
 #include "dependency.h"
@@ -67,10 +67,10 @@ std::vector<setter_method> extract_setters(const type &for_type)
 		if (probably_setter.methodType() != QMetaMethod::Slot)
 			continue;
 		if (probably_setter.parameterCount() != 1)
-			throw exception::invalid_setter_exception{};
+			throw exception::invalid_setter{};
 		auto parameter_type = type{QMetaType::metaObjectForType(probably_setter.parameterType(0))};
 		if (parameter_type.is_empty() || parameter_type.is_qobject())
-			throw exception::invalid_setter_exception{};
+			throw exception::invalid_setter{};
 
 		result.emplace_back(setter_method{probably_setter});
 	}
@@ -101,12 +101,12 @@ dependencies extract_dependencies(const type &for_type)
 	{
 		auto parameter_type = setter.parameter_type();
 		if (parameter_type == for_type)
-			throw exception::dependency_on_self_exception{};
+			throw exception::dependency_on_self{};
 		if (std::find(std::begin(interfaces), std::end(interfaces), parameter_type) != std::end(interfaces))
-			throw exception::dependency_on_supertype_exception{};
+			throw exception::dependency_on_supertype{};
 		auto parameter_interfaces = extract_interfaces(parameter_type);
 		if (std::find(std::begin(parameter_interfaces), std::end(parameter_interfaces), for_type) != std::end(parameter_interfaces))
-			throw exception::dependency_on_subtype_exception{};
+			throw exception::dependency_on_subtype{};
 	}
 
 	auto parameter_types = extract_parameter_types(setters);
@@ -114,7 +114,7 @@ dependencies extract_dependencies(const type &for_type)
 
 	auto matches = match(types{parameter_types}, relations.ambiguous());
 	if (!matches.matched.empty())
-		throw exception::dependency_duplicated_exception{exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object())};
+		throw exception::dependency_duplicated{exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object())};
 
 	auto result = std::vector<dependency>{};
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),

@@ -18,11 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/empty-type-exception.cpp"
+#include "exception/empty-type.cpp"
 #include "exception/exception.cpp"
-#include "exception/interface-not-implemented-exception.cpp"
-#include "exception/invalid-qobject-exception.cpp"
-#include "exception/qobject-type-exception.cpp"
+#include "exception/interface-not-implemented.cpp"
+#include "exception/invalid-qobject.cpp"
+#include "exception/qobject-type.cpp"
 #include "dependency.cpp"
 #include "implementation.cpp"
 #include "interfaces-utils.cpp"

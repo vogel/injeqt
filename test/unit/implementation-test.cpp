@@ -18,11 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/empty-type-exception.cpp"
+#include "exception/empty-type.cpp"
 #include "exception/exception.cpp"
-#include "exception/interface-not-implemented-exception.cpp"
-#include "exception/invalid-qobject-exception.cpp"
-#include "exception/qobject-type-exception.cpp"
+#include "exception/interface-not-implemented.cpp"
+#include "exception/invalid-qobject.cpp"
+#include "exception/qobject-type.cpp"
 #include "implementation.cpp"
 #include "interfaces-utils.cpp"
 #include "type.cpp"
@@ -74,7 +74,7 @@ private slots:
 void implementation_test::should_throw_when_type_is_empty()
 {
 	auto object = make_object<type_1>();
-	expect<exception::empty_type_exception>([&]{
+	expect<exception::empty_type>([&]{
 		auto i = make_implementation(type{}, object.get());
 	});
 }
@@ -82,14 +82,14 @@ void implementation_test::should_throw_when_type_is_empty()
 void implementation_test::should_throw_when_type_is_qobject()
 {
 	auto object = make_object<type_1>();
-	expect<exception::qobject_type_exception>([&]{
+	expect<exception::qobject_type>([&]{
 		auto i = make_implementation(make_type<QObject>(), object.get());
 	});
 }
 
 void implementation_test::should_throw_when_object_is_null()
 {
-	expect<exception::invalid_qobject_exception>([&]{
+	expect<exception::invalid_qobject>([&]{
 		auto i = make_implementation(make_type<type_1>(), nullptr);
 	});
 }
@@ -124,7 +124,7 @@ void implementation_test::should_accept_object_of_sub_sub_type()
 void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
-	expect<exception::interface_not_implemented_exception>([&]{
+	expect<exception::interface_not_implemented>([&]{
 		auto i = make_implementation(make_type<type_1_subtype_1_subtype_1>(), object.get());
 	});
 }
@@ -132,7 +132,7 @@ void implementation_test::should_not_accept_object_of_super_type()
 void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
-	expect<exception::interface_not_implemented_exception>([&]{
+	expect<exception::interface_not_implemented>([&]{
 		auto i = make_implementation(make_type<type_2>(), object.get());
 	});
 }

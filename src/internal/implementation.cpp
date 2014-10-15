@@ -20,10 +20,10 @@
 
 #include "implementation.h"
 
-#include <injeqt/exception/empty-type-exception.h>
-#include <injeqt/exception/interface-not-implemented-exception.h>
-#include <injeqt/exception/invalid-qobject-exception.h>
-#include <injeqt/exception/qobject-type-exception.h>
+#include <injeqt/exception/empty-type.h>
+#include <injeqt/exception/interface-not-implemented.h>
+#include <injeqt/exception/invalid-qobject.h>
+#include <injeqt/exception/qobject-type.h>
 
 #include "interfaces-utils.h"
 
@@ -72,13 +72,13 @@ bool operator != (const implementation &x, const implementation &y)
 implementation make_implementation(type interface_type, QObject *object)
 {
 	if (interface_type.is_empty())
-		throw exception::empty_type_exception{};
+		throw exception::empty_type{};
 	if (interface_type.is_qobject())
-		throw exception::qobject_type_exception();
+		throw exception::qobject_type();
 	if (!object || !object->metaObject())
-		throw exception::invalid_qobject_exception{};
+		throw exception::invalid_qobject{};
 	if (!implements(type{object->metaObject()}, interface_type))
-		throw exception::interface_not_implemented_exception{interface_type.name()};
+		throw exception::interface_not_implemented{interface_type.name()};
 
 	return implementation{interface_type, object};
 }

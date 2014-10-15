@@ -40,23 +40,23 @@ set(INJEQT_SRCS
 	src/module.cpp
 	src/type.cpp
 
-	src/exception/ambiguous-types-exception.cpp
-	src/exception/default-constructor-not-found-exception.cpp
-	src/exception/dependency-duplicated-exception.cpp
-	src/exception/dependency-on-self-exception.cpp
-	src/exception/dependency-on-subtype-exception.cpp
-	src/exception/dependency-on-supertype-exception.cpp
-	src/exception/empty-type-exception.cpp
+	src/exception/ambiguous-types.cpp
+	src/exception/default-constructor-not-found.cpp
+	src/exception/dependency-duplicated.cpp
+	src/exception/dependency-on-self.cpp
+	src/exception/dependency-on-subtype.cpp
+	src/exception/dependency-on-supertype.cpp
+	src/exception/empty-type.cpp
 	src/exception/exception.cpp
-	src/exception/instantiation-failed-exception.cpp
-	src/exception/interface-not-implemented-exception.cpp
-	src/exception/invalid-dependency-exception.cpp
-	src/exception/invalid-qobject-exception.cpp
-	src/exception/invalid-setter-exception.cpp
-	src/exception/qobject-type-exception.cpp
-	src/exception/unknown-type-exception.cpp
-	src/exception/unique-factory-method-not-found-exception.cpp
-	src/exception/unresolvable-dependencies-exception.cpp
+	src/exception/instantiation-failed.cpp
+	src/exception/interface-not-implemented.cpp
+	src/exception/invalid-dependency.cpp
+	src/exception/invalid-qobject.cpp
+	src/exception/invalid-setter.cpp
+	src/exception/qobject-type.cpp
+	src/exception/unknown-type.cpp
+	src/exception/unique-factory-method-not-found.cpp
+	src/exception/unresolvable-dependencies.cpp
 
 	src/internal/default-constructor-method.cpp
 	src/internal/dependencies.cpp

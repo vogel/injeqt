@@ -66,10 +66,10 @@ protected:
 	 * @brief Add already constructed object to module.
 	 * @tparam T type of added object (must be inherited from QObject).
 	 * @param object added object
-	 * @throw empty_type_exception when passed type @p T is an empty type
-	 * @throw qobject_type_exception when passed type @p T represents QObject
-	 * @throw invalid_qobject_exception when passed @p object is nullptr or does not have valid QMetaType
-	 * @throw interface_not_implemented_exception when passed @p object does not implements type @p T
+	 * @throw empty_type when passed type @p T is an empty type
+	 * @throw qobject_type when passed type @p T represents QObject
+	 * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaType
+	 * @throw interface_not_implemented when passed @p object does not implements type @p T
 	 *
 	 * It has to be fully constructed and must not expect any injection to take place on it
 	 * (even if it has INJEQT_SETTER methods). However this object could be injected into other
@@ -122,9 +122,9 @@ protected:
 	/**
 	 * @brief Add type that can be default-constructed to module.
 	 * @tparam T type added to module (must be inherited from QObject).
-	 * @throw empty_type_exception when passed type @p T is an empty type
-	 * @throw qobject_type_exception when passed type @p T represents QObject
-	 * @throw default_constructor_not_found_exception is @p T does not have default constructor tagged with Q_INVOKABLE
+	 * @throw empty_type when passed type @p T is an empty type
+	 * @throw qobject_type when passed type @p T represents QObject
+	 * @throw default_constructor_not_found is @p T does not have default constructor tagged with Q_INVOKABLE
 	 *
 	 * When an object of that type (or one of inherited types) is requested from injector or
 	 * as a dependency to other objects then default constructor of T is invoked to create it.
@@ -170,11 +170,11 @@ protected:
 	 * @brief Add type that can be created by factory to module.
 	 * @tparam T type added to module (must be inherited from QObject).
 	 * @tparam F factory type (must be inherited from QObject).
-	 * @throw empty_type_exception when passed type @p T is an empty type
-	 * @throw qobject_type_exception when passed type @p T represents QObject
-	 * @throw empty_type_exception when passed type @p F is an empty type
-	 * @throw qobject_type_exception when passed type @p F represents QObject
-	 * @throw unique_factory_method_not_found_exception when type F does not have unique factory method for T
+	 * @throw empty_type when passed type @p T is an empty type
+	 * @throw qobject_type when passed type @p T represents QObject
+	 * @throw empty_type when passed type @p F is an empty type
+	 * @throw qobject_type when passed type @p F represents QObject
+	 * @throw unique_factory_method_not_found when type F does not have unique factory method for T
 	 *
 	 * When an object of that type (or one of inherited types) is requested from injector or
 	 * as a dependency to other objects then object of type F is requted first and its method

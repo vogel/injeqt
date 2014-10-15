@@ -18,53 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <injeqt/injector.h>
-
 #include <injeqt/exception/empty-type.h>
-#include <injeqt/exception/qobject-type.h>
-#include <injeqt/module.h>
 
-#include "injector-impl.h"
-#include "module-impl.h"
-#include "provider.h"
+namespace injeqt { namespace v1 { namespace exception {
 
-using namespace injeqt::internal;
-
-namespace injeqt { namespace v1 {
-
-injector::injector() :
-	_pimpl{new ::injeqt::internal::injector_impl{}}
+empty_type::empty_type(std::string what) :
+	exception{std::move(what)}
 {
 }
 
-injector::injector(std::vector<std::unique_ptr<module>> modules) :
-	_pimpl{new ::injeqt::internal::injector_impl{std::move(modules)}}
+empty_type::~empty_type()
 {
 }
 
-injector::injector(injector &&x) :
-	_pimpl{std::move(x._pimpl)}
-{
-}
-
-injector::~injector()
-{
-}
-
-injector & injector::operator = (injector &&x)
-{
-	_pimpl = std::move(x._pimpl);
-	return *this;
-}
-
-QObject * injector::get(const type &interface_type)
-{
-	if (interface_type.is_empty())
-		throw exception::empty_type{};
-	if (interface_type.is_qobject())
-		throw exception::qobject_type{};
-
-	return _pimpl->get(interface_type);
-}
-
-}}
+}}}

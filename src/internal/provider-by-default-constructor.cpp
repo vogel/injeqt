@@ -20,7 +20,7 @@
 
 #include "provider-by-default-constructor.h"
 
-#include <injeqt/exception/instantiation-failed-exception.h>
+#include <injeqt/exception/instantiation-failed.h>
 
 #include <cassert>
 
@@ -63,7 +63,7 @@ QObject * provider_by_default_constructor::provide(injector_impl &)
 	{
 		_object = _constructor.invoke();
 		if (!_object)
-			throw exception::instantiation_failed_exception{provided_type().name()};
+			throw exception::instantiation_failed{provided_type().name()};
 	}
 	return _object.get();
 }

@@ -20,8 +20,8 @@
 
 #include "types-model.h"
 
-#include <injeqt/exception/ambiguous-types-exception.h>
-#include <injeqt/exception/unresolvable-dependencies-exception.h>
+#include <injeqt/exception/ambiguous-types.h>
+#include <injeqt/exception/unresolvable-dependencies.h>
 
 #include "type-relations.h"
 
@@ -100,7 +100,7 @@ types_model make_types_model(const std::vector<type> &all_types)
 		}
 
 		if (!message.empty())
-			throw exception::ambiguous_types_exception{message};
+			throw exception::ambiguous_types{message};
 	}
 
 	auto all_dependencies = std::vector<type_dependencies>{};
@@ -122,7 +122,7 @@ types_model make_types_model(const std::vector<type> &all_types)
 			message.append(unresolvable_dependency.setter().signature());
 			message.append("\n");
 		}
-		throw exception::unresolvable_dependencies_exception{message};
+		throw exception::unresolvable_dependencies{message};
 	}
 
 	return result;

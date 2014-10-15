@@ -105,15 +105,15 @@ bool operator != (const types_model &x, const types_model &y);
  * @brief Create types_model from given set of types.
  * @param all_types set of types to make model from, all types must be valid.
  * @post result.get_unresolvable_dependencies().empty()
- * @throw ambiguous_types_exception if one or more types is ambiguous (@see make_type_relations)
- * @throw unresolvable_dependencies_exception if a type has a dependency type not in @p all_types set
- * @throw dependency_duplicated_exception when one type occurs twice as a dependency
- * @throw dependency_on_self_exception when type depends on self
- * @throw dependency_on_subtype_exception when type depends on own supertype
- * @throw dependency_on_subtype_exception when type depends on own subtype
- * @throw invalid_setter_exception if any tagged setter has parameter that is not a QObject-derived pointer
- * @throw invalid_setter_exception if any tagged setter has parameter that is a QObject pointer
- * @throw invalid_setter_exception if any tagged setter has other number of parameters than one
+ * @throw ambiguous_types if one or more types is ambiguous (@see make_type_relations)
+ * @throw unresolvable_dependencies if a type has a dependency type not in @p all_types set
+ * @throw dependency_duplicated when one type occurs twice as a dependency
+ * @throw dependency_on_self when type depends on self
+ * @throw dependency_on_subtype when type depends on own supertype
+ * @throw dependency_on_subtype when type depends on own subtype
+ * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+ * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+ * @throw invalid_setter if any tagged setter has other number of parameters than one
  */
 types_model make_types_model(const std::vector<type> &all_types);
 
