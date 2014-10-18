@@ -40,6 +40,7 @@ injector_impl::injector_impl()
 }
 
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
+	// modules are only stored because these can own objects used by injector
 	_modules{std::move(modules)},
 	_available_providers(extract_providers(_modules)),
 	_types_model(create_types_model(_available_providers))
