@@ -46,17 +46,19 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 {
 }
 
-providers injector_impl::extract_providers(const std::vector<std::unique_ptr<module>> &modules) const
+std::vector<std::unique_ptr<provider>> injector_impl::extract_providers(const std::vector<std::unique_ptr<module>> &modules) const
 {
-	// TODO: should check if there are 2 providers of the same type
 	auto result = std::vector<std::unique_ptr<provider>>{};
 	for (auto &&module : _modules)
 		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(result));
-	return providers{std::move(result)};
+	return result;
 }
 
 QObject * injector_impl::get(const type &interface_type)
 {
+	assert(!interface_type.is_empty());
+	assert(!interface_type.is_qobject());
+
 	return _core.get(interface_type);
 }
 

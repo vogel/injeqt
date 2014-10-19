@@ -39,7 +39,7 @@ injector_core::injector_core()
 {
 }
 
-injector_core::injector_core(providers &&all_providers) :
+injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_providers) :
 	_available_providers(std::move(all_providers)),
 	_types_model(create_types_model(_available_providers))
 {
@@ -55,6 +55,9 @@ types_model injector_core::create_types_model(const providers &all_providers) co
 
 QObject * injector_core::get(const type &interface_type)
 {
+	assert(!interface_type.is_empty());
+	assert(!interface_type.is_qobject());
+
 	auto implementation_type_it = _types_model.available_types().get(interface_type);
 	if (implementation_type_it == end(_types_model.available_types()))
 		throw exception::unknown_type{interface_type.name()};

@@ -106,10 +106,10 @@ void provider_by_factory_test::should_return_always_the_same_object()
 	auto fp = std::unique_ptr<provider_by_factory>{new provider_by_factory{fm}};
 	auto p = fp.get();
 
-	auto ps = std::vector<std::unique_ptr<provider>>{};
-	ps.emplace_back(std::move(fp));
-	ps.emplace_back(std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(make_type<factory_type>())}});
-	auto injector = injector_core{providers{std::move(ps)}};
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.emplace_back(std::move(fp));
+	configuration.emplace_back(std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(make_type<factory_type>())}});
+	auto injector = injector_core{std::move(configuration)};
 
 	QCOMPARE(p->provided_type(), make_type<by_factory_type>());
 	QCOMPARE(p->required_types(), types{make_type<factory_type>()});

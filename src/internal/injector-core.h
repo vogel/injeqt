@@ -80,13 +80,15 @@ public:
 	 * This constructor creates types_model object to get all required information from providers. This object
 	 * takes ownership of passed providers.
 	 */
-	explicit injector_core(providers &&all_providers);
+	explicit injector_core(std::vector<std::unique_ptr<provider>> &&all_providers);
 
 	/**
 	 * @brief Returns pointer to object of given type interface_type
 	 * @param interface_type type of object to return.
 	 * @throw unknown_type if @p interface_type was not configured in injector
 	 * @throw instantiation_failed if instantiation of one of required types failed
+	 * @pre !interface_type.is_empty()
+	 * @pre !interface_type.is_qobject()
 	 * @see injector::get<T>()
 	 */
 	QObject * get(const type &interface_type);

@@ -85,6 +85,8 @@ public:
 	 * @param interface_type type of object to return.
 	 * @throw unknown_type if @p interface_type was not configured in injector
 	 * @throw instantiation_failed if instantiation of one of required types failed
+	 * @pre !interface_type.is_empty()
+	 * @pre !interface_type.is_qobject()
 	 * @see injector::get<T>()
 	 */
 	QObject * get(const type &interface_type);
@@ -96,9 +98,8 @@ private:
 	/**
 	 * @brief Extract set of providers from all modules
 	 * @todo move outside
-	 * @todo Should check if types do not have duplicates
 	 */
-	providers extract_providers(const std::vector<std::unique_ptr<module>> &modules) const;
+	std::vector<std::unique_ptr<provider>> extract_providers(const std::vector<std::unique_ptr<module>> &modules) const;
 
 };
 

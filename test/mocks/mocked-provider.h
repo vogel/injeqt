@@ -23,6 +23,7 @@
 #include "provider.h"
 
 #include <functional>
+#include <memory>
 
 using namespace injeqt::internal;
 using namespace injeqt::v1;
@@ -50,3 +51,9 @@ private:
 	std::function<QObject *()> _provide;
 
 };
+
+template<typename T>
+std::unique_ptr<provider> make_mocked_provider()
+{
+	return std::unique_ptr<provider>(new mocked_provider{make_type<T>(), types{}, [](){ return new T(); }});
+}
