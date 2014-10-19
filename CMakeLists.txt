@@ -64,6 +64,7 @@ set(INJEQT_SRCS
 	src/internal/factory-method.cpp
 	src/internal/implementation.cpp
 	src/internal/implemented-by.cpp
+	src/internal/injector-core.cpp
 	src/internal/injector-impl.cpp
 	src/internal/interfaces-utils.cpp
 	src/internal/module-impl.cpp

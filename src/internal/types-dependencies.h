@@ -43,7 +43,7 @@ inline type type_from_type_dependencies(const type_dependencies &td)
 /**
  * @brief Set of type_dependencies objects.
  *
- * Used in model and injector_impl to do fast lookup of type_dependencies for given type.
+ * Used in model and injector_core to do fast lookup of type_dependencies for given type.
  */
 using types_dependencies = sorted_unique_vector<type, type_dependencies, type_from_type_dependencies>;
 

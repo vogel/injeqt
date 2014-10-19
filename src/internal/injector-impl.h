@@ -24,8 +24,8 @@
 #include <injeqt/type.h>
 
 #include "implementations.h"
+#include "injector-core.h"
 #include "providers.h"
-#include "types-model.h"
 
 #include <vector>
 #include <QtCore/QObject>
@@ -43,16 +43,11 @@ namespace injeqt { namespace internal {
 
 /**
  * @brief Implementation of injector class.
- * @see injector class
+ * @see injector
+ * @see injector_core
  *
- * This class is core of Injeqt library.
- *
- * Its main purpose is to gather configuration from set of modules and construct objects with
- * resolved dependencies.
- *
- * Injector keeps list of all configured providers and of all already created objects.
- * Two methods objects_with(implementations, const type &) and objects_with(implementations, const types &)
- * are used to update list of already created objects with new ones.
+ * Its main purpose is to own all modules passed to injector constructor and to pass everthing else
+ * to injector_core class.
  */
 class INJEQT_API injector_impl final
 {
@@ -67,7 +62,7 @@ public:
 	injector_impl();
 
 	/**
-	 * @brief Create injector confiugred with set of modules.
+	 * @brief Create injector configured with set of modules.
 	 * @param modules set of modules containing configuration of injector
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
 	 * @throw ambiguous_types if one or more types in @p modules is ambiguous
@@ -80,9 +75,8 @@ public:
 	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
 	 * @throw invalid_setter if any tagged setter has other number of parameters than one
 	 *
-	 * This constructor extract all providers from all modules and creates types_model object
-	 * to get all required information from them. After calling that all providers will be moved-out from
-	 * modules.
+	 * This constructor extract all providers from all modules and creates injector_core object
+	 * with these providers.
 	 */
 	explicit injector_impl(std::vector<std::unique_ptr<::injeqt::v1::module>> modules);
 
@@ -97,55 +91,14 @@ public:
 
 private:
 	std::vector<std::unique_ptr<module>> _modules;
-
-	providers _available_providers;
-	implementations _objects;
-	types_model _types_model;
+	injector_core _core;
 
 	/**
 	 * @brief Extract set of providers from all modules
-	 * @todo Should check if types do not have duplicated
+	 * @todo move outside
+	 * @todo Should check if types do not have duplicates
 	 */
 	providers extract_providers(const std::vector<std::unique_ptr<module>> &modules) const;
-
-	/**
-	 * @brief Extract all provided types and makes a types_model from them.
-	 * @throw ambiguous_types if one or more types in @p all_providers is ambiguous
-	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p all_providers
-	 * @throw dependency_duplicated when one type occurs twice as a dependency
-	 * @throw dependency_on_self when type depends on self
-	 * @throw dependency_on_subtype when type depends on own supertype
-	 * @throw dependency_on_subtype when type depends on own subtype
-	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
-	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
-	 * @throw invalid_setter if any tagged setter has other number of parameters than one
-	 */
-	types_model create_types_model(const providers &all_providers) const;
-
-	/**
-	 * @brief Create new list of implementation objects with object of type implementation_type
-	 * @param objects list of already created objects
-	 * @param implementation_type type of object to create
-	 * @throw instantiation_failed if instantiation of one of required types failed
-	 *
-	 * This method get list of all not-already created objects required to properly instantiate implementation_type
-	 * using required_to_instantiate(const type &, const types_model &, const implementations &) and then uses
-	 * objects_with(implementations, const types &) to create all these objects.
-	 */
-	implementations objects_with(implementations objects, const type &implementation_type);
-
-	/**
-	 * @brief Create new list of implementation objects with objects of types implementation_types
-	 * @param objects list of already created objects
-	 * @param implementation_types set of types of object to create
-	 * @throw instantiation_failed if instantiation of one of required types failed
-	 *
-	 * For each type in the list this method check if that type requires other one using provider::required_types()
-	 * and if so, calls objects_with(implementations, const type &) to update list with that requires object.
-	 * After all these requiremens are met all types from implementation_types list that still were not instantiated
-	 * are instantiated. Last step is to resolve and apply dependencies on newly created objects.
-	 */
-	implementations objects_with(implementations objects, const types &implementation_types);
 
 };
 

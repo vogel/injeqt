@@ -60,7 +60,7 @@ public:
 	 * @post result != nullptr
 	 * @post implements(type{result->metaObject()}, provided_type())
 	 */
-	virtual QObject * provide(injector_impl &i) override;
+	virtual QObject * provide(injector_core &i) override;
 
 	/**
 	 * @return empty set of object - this provider already has instance of a type

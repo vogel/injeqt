@@ -37,10 +37,10 @@ namespace injeqt { namespace internal {
  *
  * This provider implementation will return object using factory method. Its provided_type() returns
  * type of factory method return type and its required_types() returns type of object of factory method.
- * On first call of provide(injector_impl &) it will ask injector_impl for object of type
+ * On first call of provide(injector_core &) it will ask injector_core for object of type
  * factory_method::object_method() to be able to invoke this method on that object.
  *
- * Once created, object will be stored inside and return on subsequents calls to provide(injector_impl &).
+ * Once created, object will be stored inside and return on subsequents calls to provide(injector_core &).
  * This provider has ownershipd over created object and will destroy it at own destruction.
  */
 class provider_by_factory final : public provider
@@ -72,7 +72,7 @@ public:
 	 * from @p i and the factory method is called on it to get object and stoe it in internal cache,
 	 * Then object from cache is returned.
 	 */
-	virtual QObject * provide(injector_impl &i) override;
+	virtual QObject * provide(injector_core &i) override;
 
 	/**
 	 * @return factory_method::object_type() from object passed to constructor

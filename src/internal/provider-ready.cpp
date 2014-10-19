@@ -37,7 +37,7 @@ const implementation & provider_ready::ready_implementation() const
 	return _ready_implementation;
 }
 
-QObject * provider_ready::provide(injector_impl &)
+QObject * provider_ready::provide(injector_core &)
 {
 	return _ready_implementation.object();
 }

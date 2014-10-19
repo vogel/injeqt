@@ -42,8 +42,7 @@ injector_impl::injector_impl()
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	// modules are only stored because these can own objects used by injector
 	_modules{std::move(modules)},
-	_available_providers(extract_providers(_modules)),
-	_types_model(create_types_model(_available_providers))
+	_core{extract_providers(_modules)}
 {
 }
 
@@ -56,74 +55,9 @@ providers injector_impl::extract_providers(const std::vector<std::unique_ptr<mod
 	return providers{std::move(result)};
 }
 
-types_model injector_impl::create_types_model(const providers &all_providers) const
-{
-	auto result = std::vector<type>{};
-	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
-		[](const std::unique_ptr<provider> &c){ return c->provided_type(); });
-	return make_types_model(result);
-}
-
 QObject * injector_impl::get(const type &interface_type)
 {
-	auto implementation_type_it = _types_model.available_types().get(interface_type);
-	if (implementation_type_it == end(_types_model.available_types()))
-		throw exception::unknown_type{interface_type.name()};
-
-	auto implementation_type = implementation_type_it->implementation_type();
-	auto object_it = _objects.get(implementation_type);
-	if (object_it != end(_objects))
-		return object_it->object();
-
-	_objects = objects_with(_objects, implementation_type);
-	return _objects.get(implementation_type)->object();
-}
-
-implementations injector_impl::objects_with(implementations objects, const type &implementation_type)
-{
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _types_model, objects);
-	return objects_with(objects, types_to_instantiate);
-}
-
-implementations injector_impl::objects_with(implementations objects, const types &types_to_instantiate)
-{
-	auto objects_to_resolve = std::vector<implementation>{};
-	for (auto &&type_to_instantiate : types_to_instantiate)
-	{
-		auto provider_it = _available_providers.get(type_to_instantiate);
-		assert(provider_it != end(_available_providers));
-
-		for (auto &&required_type : provider_it->get()->required_types())
-			objects = objects_with(objects, required_type);
-	}
-
-	for (auto &&type_to_instantiate : types_to_instantiate)
-	{
-		if (objects.get(type_to_instantiate) != end(objects))
-			continue;
-
-		auto provider_it = _available_providers.get(type_to_instantiate);
-		auto instance = provider_it->get()->provide(*this);
-		auto i = make_implementation(type_to_instantiate, instance);
-		objects_to_resolve.emplace_back(i);
-	}
-
-	objects.merge(implementations{objects_to_resolve});
-
-	for (auto &&object_to_resolve : objects_to_resolve)
-	{
-		auto to_resolve = _types_model.mapped_dependencies().get(object_to_resolve.interface_type())->dependency_list();
-		auto resolved_dependencies = resolve_dependencies(to_resolve, objects);
-		assert(resolved_dependencies.unresolved.empty());
-
-		for (auto &&resolved : resolved_dependencies.resolved)
-		{
-			assert(object_to_resolve.interface_type() == resolved.setter().object_type());
-			resolved.apply_on(object_to_resolve.object());
-		}
-	}
-
-	return objects;
+	return _core.get(interface_type);
 }
 
 }}

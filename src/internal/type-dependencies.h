@@ -40,7 +40,7 @@ namespace injeqt { namespace internal {
  * This class is used to represent type with connection of all its dependencies. Instances created
  * with make_type_dependencies(type) function are guaranteed to be valid.
  *
- * Used in model class to store all dependnecies and in injector_impl to resolve them.
+ * Used in model class to store all dependnecies and in injector_core to resolve them.
  */
 class type_dependencies final
 {

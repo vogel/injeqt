@@ -25,7 +25,7 @@
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when type that was not confiugred was requested from injector
+ * @brief Exception throw when type that was not configured was requested from injector
  */
 class INJEQT_API unknown_type : public exception
 {

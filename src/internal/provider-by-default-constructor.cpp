@@ -57,7 +57,7 @@ const default_constructor_method & provider_by_default_constructor::constructor(
 	return _constructor;
 }
 
-QObject * provider_by_default_constructor::provide(injector_impl &)
+QObject * provider_by_default_constructor::provide(injector_core &)
 {
 	if (!_object)
 	{

@@ -38,7 +38,7 @@ namespace injeqt { namespace internal {
  * Resolved dependency consists of implementation and a setter_method. To resolve dependency
  * on an object call apply_on(QObject *) method. To get instances of resolved_dependency call
  * resolve_dependencies(const dependencies &, const implementations &). This class is currently
- * only used in injector_impl.
+ * only used in injector_core.
  */
 class resolved_dependency final
 {

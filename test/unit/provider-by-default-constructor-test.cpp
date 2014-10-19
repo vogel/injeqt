@@ -38,9 +38,8 @@
 #include "default-constructor-method.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"
-#include "injector-impl.cpp"
+#include "injector-core.cpp"
 #include "interfaces-utils.cpp"
-#include "module-impl.cpp"
 #include "provider-by-default-constructor.cpp"
 #include "required-to-instantiate.cpp"
 #include "resolve-dependencies.cpp"
@@ -79,8 +78,8 @@ private slots:
 
 void provider_by_default_constructor_test::should_return_always_the_same_object()
 {
-	auto empty_injector1 = injector_impl{};
-	auto empty_injector2 = injector_impl{};
+	auto empty_injector1 = injector_core{};
+	auto empty_injector2 = injector_core{};
 	auto c = make_default_constructor_method(make_type<default_constructor_type>());
 	auto p = provider_by_default_constructor{c};
 

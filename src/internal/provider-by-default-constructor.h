@@ -39,7 +39,7 @@ namespace injeqt { namespace internal {
  * Its provided_type() returns type of object that contains passed constructor. Its required_types()
  * returns empty set of types no other objects are required for construction.
  *
- * Once created, object will be stored inside and return on subsequents calls to provide(injector_impl &).
+ * Once created, object will be stored inside and return on subsequents calls to provide(injector_core &).
  * This provider has ownershipd over created object and will destroy it at own destruction.
  */
 class provider_by_default_constructor final : public provider
@@ -71,7 +71,7 @@ public:
 	 * If object was not yet created the constructor() method is called and object is stored
 	 * in internal cache. Then object from cache is returned.
 	 */
-	virtual QObject * provide(injector_impl &i) override;
+	virtual QObject * provide(injector_core &i) override;
 
 	/**
 	 * @return empty set of object - this provider does not require another object to instantiate

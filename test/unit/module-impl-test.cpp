@@ -41,7 +41,7 @@ public:
 
 	virtual const type & provided_type() const override { return _provided_type; };
 
-	virtual QObject * provide(injector_impl &i) override { return nullptr; };
+	virtual QObject * provide(injector_core &i) override { return nullptr; };
 
 	virtual types required_types() const override { return _required_types; };
 

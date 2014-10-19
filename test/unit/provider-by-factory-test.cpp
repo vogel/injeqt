@@ -41,10 +41,8 @@
 #include "factory-method.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"
-#include "injector-impl.cpp"
+#include "injector-core.cpp"
 #include "interfaces-utils.cpp"
-#include "module.cpp"
-#include "module-impl.cpp"
 #include "provider-by-default-constructor.cpp"
 #include "provider-by-factory.cpp"
 #include "provider-ready.cpp"
@@ -104,21 +102,22 @@ private slots:
 
 void provider_by_factory_test::should_return_always_the_same_object()
 {
-	// should be mocked
-	auto modules = std::vector<std::unique_ptr<::injeqt::v1::module>>{};
-	modules.emplace_back(std::unique_ptr<module>{new factory_module()});
-	auto injector = injector_impl{std::move(modules)};
-
 	auto fm = make_factory_method(make_type<by_factory_type>(), make_type<factory_type>());
-	auto p = provider_by_factory{fm};
+	auto fp = std::unique_ptr<provider_by_factory>{new provider_by_factory{fm}};
+	auto p = fp.get();
 
-	QCOMPARE(p.provided_type(), make_type<by_factory_type>());
-	QCOMPARE(p.required_types(), types{make_type<factory_type>()});
-	QCOMPARE(p.factory(), fm);
+	auto ps = std::vector<std::unique_ptr<provider>>{};
+	ps.emplace_back(std::move(fp));
+	ps.emplace_back(std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(make_type<factory_type>())}});
+	auto injector = injector_core{providers{std::move(ps)}};
 
-	auto o = p.provide(injector);
-	QCOMPARE(p.provide(injector), o);
-	QCOMPARE(p.provide(injector), o);
+	QCOMPARE(p->provided_type(), make_type<by_factory_type>());
+	QCOMPARE(p->required_types(), types{make_type<factory_type>()});
+	QCOMPARE(p->factory(), fm);
+
+	auto o = p->provide(injector);
+	QCOMPARE(p->provide(injector), o);
+	QCOMPARE(p->provide(injector), o);
 	QCOMPARE(o->metaObject(), &by_factory_type::staticMetaObject);
 }
 

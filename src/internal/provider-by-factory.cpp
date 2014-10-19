@@ -56,7 +56,7 @@ const factory_method & provider_by_factory::factory() const
 	return _factory;
 }
 
-QObject * provider_by_factory::provide(injector_impl &i)
+QObject * provider_by_factory::provide(injector_core &i)
 {
 	if (!_object)
 	{

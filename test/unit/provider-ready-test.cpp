@@ -37,9 +37,8 @@
 #include "dependency.cpp"
 #include "implementation.cpp"
 #include "implemented-by.cpp"
-#include "injector-impl.cpp"
+#include "injector-core.cpp"
 #include "interfaces-utils.cpp"
-#include "module-impl.cpp"
 #include "provider-ready.cpp"
 #include "required-to-instantiate.cpp"
 #include "resolve-dependencies.cpp"
@@ -74,8 +73,8 @@ private slots:
 
 void provider_ready_test::should_return_always_the_same_object()
 {
-	auto empty_injector1 = injector_impl{};
-	auto empty_injector2 = injector_impl{};
+	auto empty_injector1 = injector_core{};
+	auto empty_injector2 = injector_core{};
 	auto object = std::unique_ptr<QObject>(new ready_type());
 	auto i = implementation{make_type<ready_type>(), object.get()};
 	auto p = provider_ready{i};

@@ -33,7 +33,7 @@ class QObject;
 
 namespace injeqt { namespace internal {
 
-class injector_impl;
+class injector_core;
 
 /**
  * @brief Abstract provider of objects.
@@ -61,19 +61,19 @@ public:
 
 	/**
 	 * @return provided object
-	 * @param i injector_impl that requests object
+	 * @param i injector_core that requests object
 	 * @post result != nullptr
 	 * @post implements(type{result->metaObject()}, provided_type())
 	 * @throw instantiation_failed if instantiation of provided type failed
 	 *
 	 * Provider can require some types with required_types() to be already available
-	 * in injector_impl. Provider may or may no take ownership of a provided object -
+	 * in injector_core. Provider may or may no take ownership of a provided object -
 	 * look for concrete types for more information.
 	 */
-	virtual QObject * provide(injector_impl &i) = 0;
+	virtual QObject * provide(injector_core &i) = 0;
 
 	/**
-	 * @return list of types that must be instantiated in injector_impl before calling provide(injector_impl) method
+	 * @return list of types that must be instantiated in injector_core before calling provide(injector_core) method
 	 */
 	virtual types required_types() const = 0;
 

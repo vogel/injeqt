@@ -48,7 +48,7 @@ inline type type_from_implementation(const implementation &i)
  * by implementation::interface_type() and it can be matched with other type based sets (like dependencies)
  * using match() function.
  *
- * This class is mostly used by injector_impl to store objects created by injector or provided to it
+ * This class is mostly used by injector_core to store objects created by injector or provided to it
  * by module::add_ready_object<T>(QObject *).
  */
 using implementations = sorted_unique_vector<type, implementation, type_from_implementation>;
