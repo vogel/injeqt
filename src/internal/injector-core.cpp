@@ -20,6 +20,7 @@
 
 #include "injector-core.h"
 
+#include <injeqt/exception/ambiguous-types.h>
 #include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
@@ -39,10 +40,16 @@ injector_core::injector_core()
 {
 }
 
-injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_providers) :
-	_available_providers(std::move(all_providers)),
-	_types_model(create_types_model(_available_providers))
+injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_providers)
 {
+	auto all_providers_size = all_providers.size();
+	_available_providers = providers{std::move(all_providers)};
+
+	// some types were removed, because of duplication
+	if (_available_providers.size() != all_providers_size)
+		throw exception::ambiguous_types{}; // TODO: find a way to extract type names
+
+	_types_model = create_types_model(_available_providers);
 }
 
 types_model injector_core::create_types_model(const providers &all_providers) const
