@@ -1,0 +1,47 @@
+/*
+ * %injeqt copyright begin%
+ * Copyright 2014 Rafał Malinowski (rafal.przemyslaw.malinowski@gmail.com)
+ * %injeqt copyright end%
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+#pragma once
+
+#include "provider.h"
+
+using namespace injeqt::internal;
+using namespace injeqt::v1;
+
+class mocked_provider : public provider
+{
+
+public:
+	explicit mocked_provider(type provided_type, types required_types) :
+		_provided_type{std::move(provided_type)},
+		_required_types{std::move(required_types)} {}
+	virtual ~mocked_provider() {}
+
+	virtual const type & provided_type() const override { return _provided_type; };
+
+	virtual QObject * provide(injector_core &i) override { return nullptr; };
+
+	virtual types required_types() const override { return _required_types; };
+
+private:
+	type _provided_type;
+	types _required_types;
+
+};
