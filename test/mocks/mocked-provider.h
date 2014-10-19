@@ -22,6 +22,8 @@
 
 #include "provider.h"
 
+#include <functional>
+
 using namespace injeqt::internal;
 using namespace injeqt::v1;
 
@@ -29,19 +31,22 @@ class mocked_provider : public provider
 {
 
 public:
-	explicit mocked_provider(type provided_type, types required_types) :
+	explicit mocked_provider(type provided_type, types required_types, std::function<QObject *()> provide = [](){ return nullptr; }) :
 		_provided_type{std::move(provided_type)},
-		_required_types{std::move(required_types)} {}
+		_required_types{std::move(required_types)},
+		_provide{std::move(provide)}
+	{}
 	virtual ~mocked_provider() {}
 
 	virtual const type & provided_type() const override { return _provided_type; };
 
-	virtual QObject * provide(injector_core &i) override { return nullptr; };
+	virtual QObject * provide(injector_core &i) override { return _provide(); };
 
 	virtual types required_types() const override { return _required_types; };
 
 private:
 	type _provided_type;
 	types _required_types;
+	std::function<QObject *()> _provide;
 
 };
