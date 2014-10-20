@@ -32,6 +32,7 @@
 #include "exception/invalid-qobject.cpp"
 #include "exception/invalid-setter.cpp"
 #include "exception/qobject-type.cpp"
+#include "exception/unavailable-required-types.cpp"
 #include "exception/unknown-type.cpp"
 #include "exception/unique-factory-method-not-found.cpp"
 #include "exception/unresolvable-dependencies.cpp"
@@ -108,6 +109,9 @@ private slots:
 	void should_accept_resolvable_supertype_dependency();
 	void should_not_accept_ambiguous_supertype_dependency();
 	void should_not_accept_unknown_required_type();
+	void should_accept_known_required_type();
+	void should_accept_known_required_supertype();
+	void should_not_accept_ambiguous_required_supertype();
 
 };
 
@@ -260,7 +264,64 @@ void injector_core_test::should_not_accept_unknown_required_type()
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.push_back(make_mocked_provider<type_3, type_1>());
 
-	expect<exception::exception>([&](){
+	expect<exception::unavailable_required_types>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+
+void injector_core_test::should_accept_known_required_type()
+{
+	auto type_1_provider_p = make_mocked_provider<type_1>();
+	auto type_1_provider = type_1_provider_p.get();
+	auto type_3_provider_p = make_mocked_provider<type_3, type_1>();
+	auto type_3_provider = type_3_provider_p.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_1_provider_p));
+	configuration.push_back(std::move(type_3_provider_p));
+
+	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_1_provider->object() == nullptr);
+	QVERIFY(type_3_provider->object() == nullptr);
+
+	auto o3 = get<type_3>(i);
+	auto o1 = type_1_provider->object();
+	QVERIFY(o3 != nullptr);
+	QVERIFY(o1 != nullptr);
+	QVERIFY(o1 == get<type_1>(i));
+}
+
+void injector_core_test::should_accept_known_required_supertype()
+{
+	auto type_1_provider_p = make_mocked_provider<type_1_subtype_1>();
+	auto type_1_provider = type_1_provider_p.get();
+	auto type_3_provider_p = make_mocked_provider<type_3, type_1>();
+	auto type_3_provider = type_3_provider_p.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_1_provider_p));
+	configuration.push_back(std::move(type_3_provider_p));
+
+	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_1_provider->object() == nullptr);
+	QVERIFY(type_3_provider->object() == nullptr);
+
+	auto o3 = get<type_3>(i);
+	auto o1 = type_1_provider->object();
+	QVERIFY(o3 != nullptr);
+	QVERIFY(o1 != nullptr);
+	QVERIFY(o1 == get<type_1>(i));
+	QVERIFY(o1 == get<type_1_subtype_1>(i));
+}
+
+void injector_core_test::should_not_accept_ambiguous_required_supertype()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_3, type_1>());
+	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
+	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
+
+	expect<exception::unavailable_required_types>([&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }

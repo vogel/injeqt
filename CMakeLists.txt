@@ -54,6 +54,7 @@ set(INJEQT_SRCS
 	src/exception/invalid-qobject.cpp
 	src/exception/invalid-setter.cpp
 	src/exception/qobject-type.cpp
+	src/exception/unavailable-required-types.cpp
 	src/exception/unknown-type.cpp
 	src/exception/unique-factory-method-not-found.cpp
 	src/exception/unresolvable-dependencies.cpp

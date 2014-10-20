@@ -21,6 +21,7 @@
 #include "injector-core.h"
 
 #include <injeqt/exception/ambiguous-types.h>
+#include <injeqt/exception/unavailable-required-types.h>
 #include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
@@ -51,6 +52,23 @@ injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_provid
 		throw exception::ambiguous_types{}; // TODO: find a way to extract type names
 
 	_types_model = create_types_model(_available_providers);
+
+	auto required_types = std::vector<type>{};
+	for (auto &&p : _available_providers)
+		for (auto &&r : p->required_types())
+			required_types.push_back(r);
+
+	auto unavailable_required_types = match(types{required_types}, _types_model.available_types()).unmatched_1;
+	if (!unavailable_required_types.empty())
+	{
+		auto message = std::string{};
+		for (auto &&t : unavailable_required_types)
+		{
+			message.append(t.name());
+			message.append("\n");
+		}
+		throw exception::unavailable_required_types{message};
+	}
 }
 
 types_model injector_core::create_types_model(const providers &all_providers) const

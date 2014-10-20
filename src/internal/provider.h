@@ -74,6 +74,8 @@ public:
 
 	/**
 	 * @return list of types that must be instantiated in injector_core before calling provide(injector_core) method
+	 * 
+	 * Return value of this method must be the same for whole lifetime of this object.
 	 */
 	virtual types required_types() const = 0;
 
