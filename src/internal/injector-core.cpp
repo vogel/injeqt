@@ -24,6 +24,7 @@
 #include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
+#include "interfaces-utils.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
@@ -87,6 +88,7 @@ implementations injector_core::objects_with(implementations objects, const type 
 implementations injector_core::objects_with(implementations objects, const types &types_to_instantiate)
 {
 	auto objects_to_resolve = std::vector<implementation>{};
+	auto objects_to_store = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
 		auto provider_it = _available_providers.get(type_to_instantiate);
@@ -103,11 +105,20 @@ implementations injector_core::objects_with(implementations objects, const types
 
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		auto instance = provider_it->get()->provide(*this);
+
 		auto i = make_implementation(type_to_instantiate, instance);
 		objects_to_resolve.emplace_back(i);
+
+		auto interfaces = extract_interfaces(type_to_instantiate);
+		auto matched = match(interfaces, _types_model.available_types()).matched;
+		for (auto &&m : matched)
+		{
+			auto i = implementation{m.first, instance}; // no need to check preconditions again with make_implementation
+			objects_to_store.emplace_back(i);
+		}
 	}
 
-	objects.merge(implementations{objects_to_resolve});
+	objects.merge(implementations{objects_to_store});
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
