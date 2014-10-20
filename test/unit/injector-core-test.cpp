@@ -83,6 +83,11 @@ private slots:
 	INJEQT_SETTER void set_type_1(type_1 *) {}
 };
 
+class type_3 : public QObject
+{
+	Q_OBJECT
+};
+
 class injector_core_test : public QObject
 {
 	Q_OBJECT
@@ -100,7 +105,9 @@ private slots:
 	void should_accept_two_subtypes();
 	void should_not_accept_unresolvable_dependency();
 	void should_accept_resolvable_dependency();
-	void should_accept_resolvable_supretype_dependency();
+	void should_accept_resolvable_supertype_dependency();
+	void should_not_accept_ambiguous_supertype_dependency();
+	void should_not_accept_unknown_required_type();
 
 };
 
@@ -213,7 +220,7 @@ void injector_core_test::should_accept_resolvable_dependency()
 	QVERIFY(o1 == get<type_1>(i));
 }
 
-void injector_core_test::should_accept_resolvable_supretype_dependency()
+void injector_core_test::should_accept_resolvable_supertype_dependency()
 {
 	auto type_1_provider_p = make_mocked_provider<type_1_subtype_1>();
 	auto type_1_provider = type_1_provider_p.get();
@@ -234,6 +241,28 @@ void injector_core_test::should_accept_resolvable_supretype_dependency()
 	QVERIFY(o2 != nullptr);
 	QVERIFY(o1 == get<type_1>(i));
 	QVERIFY(o1 == get<type_1_subtype_1>(i));
+}
+
+void injector_core_test::should_not_accept_ambiguous_supertype_dependency()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
+	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
+	configuration.push_back(make_mocked_provider<type_2>());
+
+	expect<exception::unresolvable_dependencies>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+
+void injector_core_test::should_not_accept_unknown_required_type()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_3, type_1>());
+
+	expect<exception::exception>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
 }
 
 QTEST_APPLESS_MAIN(injector_core_test)

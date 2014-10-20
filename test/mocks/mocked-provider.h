@@ -61,8 +61,8 @@ private:
 
 };
 
-template<typename T>
+template<typename T, typename... R>
 std::unique_ptr<mocked_provider> make_mocked_provider()
 {
-	return std::unique_ptr<mocked_provider>(new mocked_provider{make_type<T>(), types{}, [](){ return new T(); }});
+	return std::unique_ptr<mocked_provider>(new mocked_provider{make_type<T>(), types{make_type<R>()...}, [](){ return new T(); }});
 }
