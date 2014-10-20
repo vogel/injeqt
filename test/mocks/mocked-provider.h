@@ -35,25 +35,34 @@ public:
 	explicit mocked_provider(type provided_type, types required_types, std::function<QObject *()> provide = [](){ return nullptr; }) :
 		_provided_type{std::move(provided_type)},
 		_required_types{std::move(required_types)},
-		_provide{std::move(provide)}
+		_provide{std::move(provide)},
+		_object{nullptr}
 	{}
 	virtual ~mocked_provider() {}
 
 	virtual const type & provided_type() const override { return _provided_type; };
 
-	virtual QObject * provide(injector_core &i) override { return _provide(); };
+	virtual QObject * provide(injector_core &i) override
+	{
+		if (!_object)
+			_object = _provide();
+		return _object;
+	};
 
 	virtual types required_types() const override { return _required_types; };
+	
+	QObject * object() const { return _object; }
 
 private:
 	type _provided_type;
 	types _required_types;
 	std::function<QObject *()> _provide;
+	QObject *_object;
 
 };
 
 template<typename T>
-std::unique_ptr<provider> make_mocked_provider()
+std::unique_ptr<mocked_provider> make_mocked_provider()
 {
-	return std::unique_ptr<provider>(new mocked_provider{make_type<T>(), types{}, [](){ return new T(); }});
+	return std::unique_ptr<mocked_provider>(new mocked_provider{make_type<T>(), types{}, [](){ return new T(); }});
 }

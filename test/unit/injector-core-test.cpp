@@ -87,14 +87,20 @@ void injector_core_test::should_create_empty_injector_core()
 
 void injector_core_test::should_create_simple_injector_core_and_return_object()
 {
+	auto type_1_provider_p = make_mocked_provider<type_1>();
+	auto type_1_provider = type_1_provider_p.get();
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
-	configuration.push_back(make_mocked_provider<type_1>());
+	configuration.push_back(std::move(type_1_provider_p));
+
 	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_1_provider->object() == nullptr);
+
 	auto o1 = qobject_cast<type_1 *>(i.get(make_type<type_1>()));
 	auto o2 = qobject_cast<type_1 *>(i.get(make_type<type_1>()));
 
 	QVERIFY(o1 != nullptr);
 	QVERIFY(o1 == o2);
+	QVERIFY(type_1_provider->object() == o1);
 }
 
 void injector_core_test::should_not_accept_doubled_type()
