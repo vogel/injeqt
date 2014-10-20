@@ -66,14 +66,42 @@ class type_1 : public QObject
 	Q_OBJECT
 };
 
+class type_1_subtype_1 : public type_1
+{
+	Q_OBJECT
+};
+
+class type_1_subtype_2 : public type_1
+{
+	Q_OBJECT
+};
+
+class type_2 : public QObject
+{
+	Q_OBJECT
+
+private slots:
+	INJEQT_SETTER void set_type_1(type_1 *) {}
+};
+
 class injector_core_test : public QObject
 {
 	Q_OBJECT
+
+private:
+	template<typename T>
+	T * get(injector_core &i) { return qobject_cast<T *>(i.get(make_type<T>())); }
 
 private slots:
 	void should_create_empty_injector_core();
 	void should_create_simple_injector_core_and_return_object();
 	void should_not_accept_doubled_type();
+	void should_not_accept_type_and_subtype();
+	void should_not_accept_subtype_and_type();
+	void should_accept_two_subtypes();
+	void should_not_accept_unresolvable_dependency();
+	void should_accept_resolvable_dependency();
+	void should_accept_resolvable_supretype_dependency();
 
 };
 
@@ -95,8 +123,8 @@ void injector_core_test::should_create_simple_injector_core_and_return_object()
 	auto i = injector_core{std::move(configuration)};
 	QVERIFY(type_1_provider->object() == nullptr);
 
-	auto o1 = qobject_cast<type_1 *>(i.get(make_type<type_1>()));
-	auto o2 = qobject_cast<type_1 *>(i.get(make_type<type_1>()));
+	auto o1 = get<type_1>(i);
+	auto o2 = get<type_1>(i);
 
 	QVERIFY(o1 != nullptr);
 	QVERIFY(o1 == o2);
@@ -112,6 +140,101 @@ void injector_core_test::should_not_accept_doubled_type()
 	expect<exception::ambiguous_types>([&](){
 		auto i = injector_core{std::move(configuration)};
 	});
+}
+
+void injector_core_test::should_not_accept_type_and_subtype()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_1>());
+	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
+
+	expect<exception::ambiguous_types>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+
+void injector_core_test::should_not_accept_subtype_and_type()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
+	configuration.push_back(make_mocked_provider<type_1>());
+
+	expect<exception::ambiguous_types>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+
+void injector_core_test::should_accept_two_subtypes()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
+	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
+
+	auto i = injector_core{std::move(configuration)};
+	auto o1 = get<type_1_subtype_1>(i);
+	auto o2 = get<type_1_subtype_2>(i);
+
+	QVERIFY(o1 != nullptr);
+	QVERIFY(o2 != nullptr);
+
+	expect<exception::unknown_type>([&](){
+		auto o3 = get<type_1>(i);
+	});
+}
+
+void injector_core_test::should_not_accept_unresolvable_dependency()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_2>());
+
+	expect<exception::unresolvable_dependencies>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+
+void injector_core_test::should_accept_resolvable_dependency()
+{
+	auto type_1_provider_p = make_mocked_provider<type_1>();
+	auto type_1_provider = type_1_provider_p.get();
+	auto type_2_provider_p = make_mocked_provider<type_2>();
+	auto type_2_provider = type_2_provider_p.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_1_provider_p));
+	configuration.push_back(std::move(type_2_provider_p));
+
+	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_1_provider->object() == nullptr);
+	QVERIFY(type_2_provider->object() == nullptr);
+
+	auto o2 = get<type_2>(i);
+	auto o1 = type_1_provider->object();
+	QVERIFY(o1 != nullptr);
+	QVERIFY(o2 != nullptr);
+	QVERIFY(o1 == get<type_1>(i));
+}
+
+void injector_core_test::should_accept_resolvable_supretype_dependency()
+{
+	auto type_1_provider_p = make_mocked_provider<type_1_subtype_1>();
+	auto type_1_provider = type_1_provider_p.get();
+	auto type_2_provider_p = make_mocked_provider<type_2>();
+	auto type_2_provider = type_2_provider_p.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_1_provider_p));
+	configuration.push_back(std::move(type_2_provider_p));
+
+	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_1_provider->object() == nullptr);
+	QVERIFY(type_2_provider->object() == nullptr);
+
+	auto o2 = get<type_2>(i);
+	auto o1 = type_1_provider->object();
+	QVERIFY(o1 != nullptr);
+	QVERIFY(o2 != nullptr);
+	QVERIFY(o1 == get<type_1>(i));
+	QVERIFY(o1 == get<type_1_subtype_1>(i));
 }
 
 QTEST_APPLESS_MAIN(injector_core_test)
