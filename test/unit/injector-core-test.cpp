@@ -80,11 +80,61 @@ class type_2 : public QObject
 {
 	Q_OBJECT
 
+public:
+	type_1 *o = nullptr;
+
 private slots:
-	INJEQT_SETTER void set_type_1(type_1 *) {}
+	INJEQT_SETTER void set_type_1(type_1 *x) { o = x; }
 };
 
 class type_3 : public QObject
+{
+	Q_OBJECT
+};
+
+class type_4;
+class type_5;
+class type_6;
+
+class type_4 : public QObject
+{
+	Q_OBJECT
+
+public:
+	type_5 *o = nullptr;
+
+private slots:
+	INJEQT_SETTER void set_type_5(type_5 *x) { o = x; }
+};
+
+class type_5 : public QObject
+{
+	Q_OBJECT
+
+public:
+	type_6 *o = nullptr;
+
+private slots:
+	INJEQT_SETTER void set_type_6(type_6 *x) { o = x; }
+};
+
+class type_6 : public QObject
+{
+	Q_OBJECT
+
+public:
+	type_4 *o = nullptr;
+
+private slots:
+	INJEQT_SETTER void set_type_4(type_4 *x) { o = x; }
+};
+
+class type_7 : public QObject
+{
+	Q_OBJECT
+};
+
+class type_8 : public QObject
 {
 	Q_OBJECT
 };
@@ -112,6 +162,12 @@ private slots:
 	void should_accept_known_required_type();
 	void should_accept_known_required_supertype();
 	void should_not_accept_ambiguous_required_supertype();
+	void should_accept_cyclic_dependencies();
+	// TODO: https://github.com/vogel/injeqt/issues/3
+	/*
+		void should_not_accept_cyclic_required_types();
+		void should_not_accept_dependent_as_required_type();
+	*/
 
 };
 
@@ -222,6 +278,7 @@ void injector_core_test::should_accept_resolvable_dependency()
 	QVERIFY(o1 != nullptr);
 	QVERIFY(o2 != nullptr);
 	QVERIFY(o1 == get<type_1>(i));
+	QVERIFY(o1 == o2->o);
 }
 
 void injector_core_test::should_accept_resolvable_supertype_dependency()
@@ -245,6 +302,7 @@ void injector_core_test::should_accept_resolvable_supertype_dependency()
 	QVERIFY(o2 != nullptr);
 	QVERIFY(o1 == get<type_1>(i));
 	QVERIFY(o1 == get<type_1_subtype_1>(i));
+	QVERIFY(o1 = o2->o);
 }
 
 void injector_core_test::should_not_accept_ambiguous_supertype_dependency()
@@ -325,6 +383,64 @@ void injector_core_test::should_not_accept_ambiguous_required_supertype()
 		auto i = injector_core{std::move(configuration)};
 	});
 }
+
+void injector_core_test::should_accept_cyclic_dependencies()
+{
+	auto type_4_provider_p = make_mocked_provider<type_4>();
+	auto type_4_provider = type_4_provider_p.get();
+	auto type_5_provider_p = make_mocked_provider<type_5>();
+	auto type_5_provider = type_5_provider_p.get();
+	auto type_6_provider_p = make_mocked_provider<type_6>();
+	auto type_6_provider = type_6_provider_p.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_4_provider_p));
+	configuration.push_back(std::move(type_5_provider_p));
+	configuration.push_back(std::move(type_6_provider_p));
+
+	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_4_provider->object() == nullptr);
+	QVERIFY(type_5_provider->object() == nullptr);
+	QVERIFY(type_6_provider->object() == nullptr);
+
+	auto o5 = get<type_5>(i);
+	auto o4 = type_4_provider->object();
+	auto o6 = type_6_provider->object();
+	QVERIFY(o4 != nullptr);
+	QVERIFY(o5 != nullptr);
+	QVERIFY(o6 != nullptr);
+	QVERIFY(o4 == get<type_4>(i));
+	QVERIFY(o6 == get<type_6>(i));
+	QVERIFY(o4 == get<type_6>(i)->o);
+	QVERIFY(o5 == get<type_4>(i)->o);
+	QVERIFY(o6 == get<type_5>(i)->o);
+}
+
+// TODO: https://github.com/vogel/injeqt/issues/3
+/*
+void injector_core_test::should_not_accept_cyclic_required_types()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_1, type_7>());
+	configuration.push_back(make_mocked_provider<type_7, type_8>());
+	configuration.push_back(make_mocked_provider<type_8, type_1>());
+
+	expect<exception::exception>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+
+void injector_core_test::should_not_accept_dependent_as_required_type()
+{
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(make_mocked_provider<type_2>());
+	configuration.push_back(make_mocked_provider<type_1, type_2>());
+
+	expect<exception::exception>([&](){
+		auto i = injector_core{std::move(configuration)};
+	});
+}
+*/
 
 QTEST_APPLESS_MAIN(injector_core_test)
 #include "injector-core-test.moc"
