@@ -51,7 +51,7 @@ injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_provid
 	if (_available_providers.size() != all_providers_size)
 		throw exception::ambiguous_types{}; // TODO: find a way to extract type names
 
-	_types_model = create_types_model(_available_providers);
+	_types_model = create_types_model();
 
 	auto required_types = std::vector<type>{};
 	for (auto &&p : _available_providers)
@@ -71,7 +71,7 @@ injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_provid
 	}
 }
 
-types_model injector_core::create_types_model(const providers &all_providers) const
+types_model injector_core::create_types_model() const
 {
 	auto result = std::vector<type>{};
 	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),

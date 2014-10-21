@@ -47,7 +47,7 @@ class factory_not_invokable : public QObject
 	Q_OBJECT
 
 public:
-	result_object * create_result_object() {}
+	result_object * create_result_object() { return nullptr; }
 
 };
 
@@ -56,8 +56,8 @@ class non_unique_factory : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE result_object * create_result_object_1() {}
-	Q_INVOKABLE result_object * create_result_object_2() {}
+	Q_INVOKABLE result_object * create_result_object_1() { return nullptr; }
+	Q_INVOKABLE result_object * create_result_object_2() { return nullptr; }
 
 };
 

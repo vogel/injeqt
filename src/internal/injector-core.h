@@ -111,7 +111,7 @@ private:
 	 * @throw invalid_setter if any tagged setter has other number of parameters than one
 	 * @todo can be moved outside of class
 	 */
-	types_model create_types_model(const providers &all_providers) const;
+	types_model create_types_model() const;
 
 	/**
 	 * @brief Create new list of implementation objects with object of type implementation_type

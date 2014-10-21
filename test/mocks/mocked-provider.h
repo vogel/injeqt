@@ -42,7 +42,7 @@ public:
 
 	virtual const type & provided_type() const override { return _provided_type; };
 
-	virtual QObject * provide(injector_core &i) override
+	virtual QObject * provide(injector_core &) override
 	{
 		if (!_object)
 			_object = _provide();

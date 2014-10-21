@@ -244,7 +244,7 @@ void injector_core_test::should_accept_two_subtypes()
 	QVERIFY(o2 != nullptr);
 
 	expect<exception::unknown_type>([&](){
-		auto o3 = get<type_1>(i);
+		get<type_1>(i);
 	});
 }
 

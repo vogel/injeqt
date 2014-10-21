@@ -75,7 +75,7 @@ void implementation_test::should_throw_when_type_is_empty()
 {
 	auto object = make_object<type_1>();
 	expect<exception::empty_type>([&]{
-		auto i = make_implementation(type{}, object.get());
+		make_implementation(type{}, object.get());
 	});
 }
 
@@ -83,14 +83,14 @@ void implementation_test::should_throw_when_type_is_qobject()
 {
 	auto object = make_object<type_1>();
 	expect<exception::qobject_type>([&]{
-		auto i = make_implementation(make_type<QObject>(), object.get());
+		make_implementation(make_type<QObject>(), object.get());
 	});
 }
 
 void implementation_test::should_throw_when_object_is_null()
 {
 	expect<exception::invalid_qobject>([&]{
-		auto i = make_implementation(make_type<type_1>(), nullptr);
+		make_implementation(make_type<type_1>(), nullptr);
 	});
 }
 
@@ -125,7 +125,7 @@ void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
 	expect<exception::interface_not_implemented>([&]{
-		auto i = make_implementation(make_type<type_1_subtype_1_subtype_1>(), object.get());
+		make_implementation(make_type<type_1_subtype_1_subtype_1>(), object.get());
 	});
 }
 
@@ -133,7 +133,7 @@ void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
 	expect<exception::interface_not_implemented>([&]{
-		auto i = make_implementation(make_type<type_2>(), object.get());
+		make_implementation(make_type<type_2>(), object.get());
 	});
 }
 

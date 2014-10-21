@@ -28,17 +28,6 @@
 
 namespace injeqt { namespace internal {
 
-namespace {
-
-std::string exception_message(const QMetaMethod &method)
-{
-	return method.enclosingMetaObject()
-		? std::string{method.enclosingMetaObject()->className()} + "::" + method.methodSignature().data()
-		: std::string{"<no-object>::"} + method.methodSignature().data();
-}
-
-}
-
 setter_method::setter_method()
 {
 }

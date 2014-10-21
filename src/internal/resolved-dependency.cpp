@@ -47,7 +47,7 @@ bool resolved_dependency::apply_on(QObject *on)
 	assert(on != nullptr);
 	assert(type{on->metaObject()} == _setter.object_type());
 
-	_setter.invoke(on, _resolved_with.object());
+	return _setter.invoke(on, _resolved_with.object());
 }
 
 bool operator == (const resolved_dependency &x, const resolved_dependency &y)
