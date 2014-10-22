@@ -79,9 +79,6 @@ private:
 
 };
 
-bool operator == (const type_relations &x, const type_relations &y);
-bool operator != (const type_relations &x, const type_relations &y);
-
 /**
  * @brief Create valid type_relations from list of types.
  * @param main_types list of types to create relations from

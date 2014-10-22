@@ -46,22 +46,6 @@ const types & type_relations::ambiguous() const
 	return _ambiguous;
 }
 
-bool operator == (const type_relations &x, const type_relations &y)
-{
-	if (x.unique() != x.unique())
-		return false;
-
-	if (x.ambiguous() != y.ambiguous())
-		return false;
-
-	return true;
-}
-
-bool operator != (const type_relations &x, const type_relations &y)
-{
-	return !(x == y);
-}
-
 type_relations make_type_relations(const std::vector<type> &main_types)
 {
 	auto type_count = std::map<type, std::size_t>{};
