@@ -63,6 +63,7 @@ public:
 
 public slots:
 	INJEQT_SETTER void setter_1(type_1 *a) { _1 = a; }
+	INJEQT_SETTER void setter_1b(type_1 *a) { _1 = a; }
 	INJEQT_SETTER void setter_1_subtype_1(type_1_subtype_1 *) {}
 	INJEQT_SETTER void setter_2(type_2 *a) { _2 = a; }
 
@@ -74,6 +75,7 @@ class resolved_dependency_test : public QObject
 
 private slots:
 	void should_properly_apply_on_valid_object();
+	void should_properly_compare();
 
 };
 
@@ -97,6 +99,38 @@ void resolved_dependency_test::should_properly_apply_on_valid_object()
 
 	QCOMPARE(object_1.get(), static_cast<injected_type *>(apply_on_object.get())->_1);
 	QCOMPARE(object_2.get(), static_cast<injected_type *>(apply_on_object.get())->_2);
+}
+
+void resolved_dependency_test::should_properly_compare()
+{
+	auto object_1a = make_object<type_1>();
+	auto object_1b = make_object<type_1>();
+
+	auto i1a = implementation{make_type<type_1>(), object_1a.get()};
+	auto i1b = implementation{make_type<type_1>(), object_1b.get()};
+
+	auto rd1a = resolved_dependency{i1a, make_setter_method<injected_type>("setter_1(type_1*)")};
+	auto rd1b = resolved_dependency{i1a, make_setter_method<injected_type>("setter_1(type_1*)")};
+	auto rd2a = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1(type_1*)")};
+	auto rd2b = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1(type_1*)")};
+	auto rd3a = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1b(type_1*)")};
+	auto rd3b = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1b(type_1*)")};
+
+	QVERIFY(rd1a == rd1a);
+	QVERIFY(rd1b == rd1b);
+	QVERIFY(rd1a == rd1b);
+	QVERIFY(rd1b == rd1a);
+	QVERIFY(rd2a == rd2a);
+	QVERIFY(rd2b == rd2b);
+	QVERIFY(rd2a == rd2b);
+	QVERIFY(rd2b == rd2a);
+	QVERIFY(rd3a == rd3a);
+	QVERIFY(rd3b == rd3b);
+	QVERIFY(rd3a == rd3b);
+	QVERIFY(rd3b == rd3a);
+	QVERIFY(rd1a != rd2a);
+	QVERIFY(rd1a != rd3a);
+	QVERIFY(rd2a != rd3a);
 }
 
 QTEST_APPLESS_MAIN(resolved_dependency_test)
