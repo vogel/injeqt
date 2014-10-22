@@ -44,6 +44,8 @@ class sorted_unique_vector_test : public QObject
 private slots:
 	void should_be_empty_after_default_construction();
 	void should_be_empty_after_clear();
+	void should_be_valid_after_adding_two_same_items_to_empty();
+	void should_be_valid_after_adding_two_different_items_to_empty();
 	void should_be_valid_after_conversion_from_unique_vector();
 	void should_be_valid_after_conversion_from_non_unique_vector();
 	void should_be_valid_after_conversion_from_unique_sorted_vector();
@@ -96,6 +98,26 @@ void sorted_unique_vector_test::should_be_empty_after_clear()
 
 	QVERIFY(data.empty());
 	QCOMPARE(data.size(), 0ul);
+}
+
+void sorted_unique_vector_test::should_be_valid_after_adding_two_same_items_to_empty()
+{
+	auto data = suv_int{};
+	data.add(1);
+	data.add(1);
+
+	QVERIFY(!data.empty());
+	QCOMPARE(data.size(), 1ul);
+}
+
+void sorted_unique_vector_test::should_be_valid_after_adding_two_different_items_to_empty()
+{
+	auto data = suv_int{};
+	data.add(1);
+	data.add(2);
+
+	QVERIFY(!data.empty());
+	QCOMPARE(data.size(), 2ul);
 }
 
 void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_vector()
