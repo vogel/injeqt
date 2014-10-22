@@ -59,6 +59,15 @@ public:
 
 };
 
+class default_invokable_constructor_no_parameters : public QObject
+{
+	Q_OBJECT
+
+public:
+	Q_INVOKABLE default_invokable_constructor_no_parameters() {}
+
+};
+
 class default_constructor_method_test : public QObject
 {
 	Q_OBJECT
@@ -69,6 +78,7 @@ private slots:
 	void should_return_empty_when_created_with_not_invokable_constructor();
 	void should_create_valid_with_invokable_constructor();
 	void should_create_object_with_default_constructor();
+	void should_properly_compare_constructors();
 
 };
 
@@ -105,6 +115,28 @@ void default_constructor_method_test::should_create_object_with_default_construc
 	auto object = c.invoke();
 	auto cast = qobject_cast<default_invokable_constructor *>(object.get());
 	QVERIFY(cast != nullptr);
+}
+
+void default_constructor_method_test::should_properly_compare_constructors()
+{
+	auto c_empty = default_constructor_method{};
+	auto c1a = make_default_constructor_method(make_type<default_invokable_constructor>());
+	auto c1b = make_default_constructor_method(make_type<default_invokable_constructor>());
+	auto c2a = make_default_constructor_method(make_type<default_invokable_constructor_no_parameters>());
+	auto c2b = make_default_constructor_method(make_type<default_invokable_constructor_no_parameters>());
+
+	QVERIFY(c_empty == c_empty);
+	QVERIFY(c1a == c1a);
+	QVERIFY(c1b == c1b);
+	QVERIFY(c1a == c1b);
+	QVERIFY(c1b == c1a);
+	QVERIFY(c2a == c2a);
+	QVERIFY(c2b == c2b);
+	QVERIFY(c2a == c2b);
+	QVERIFY(c2b == c2a);
+	QVERIFY(c_empty != c1a);
+	QVERIFY(c_empty != c2a);
+	QVERIFY(c1a != c2a);
 }
 
 QTEST_APPLESS_MAIN(default_constructor_method_test)

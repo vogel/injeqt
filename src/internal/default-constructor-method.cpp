@@ -44,8 +44,6 @@ bool default_constructor_method::is_empty() const
 
 const type & default_constructor_method::object_type() const
 {
-	assert(!is_empty());
-
 	return _object_type;
 }
 
@@ -66,8 +64,7 @@ bool operator == (const default_constructor_method &x, const default_constructor
 	if (x.object_type() != y.object_type())
 		return false;
 
-	if (x.meta_method() != y.meta_method())
-		return false;
+	assert(x.meta_method() == y.meta_method());
 
 	return true;
 }

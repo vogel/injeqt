@@ -81,7 +81,6 @@ public:
 
 	/**
 	 * @return Type of objects created by default constructor.
-	 * @pre !is_empty()
 	 */
 	const type & object_type() const;
 
