@@ -94,13 +94,11 @@ public:
 
 	/**
 	 * @return Type of objects that owns this factory method.
-	 * @pre !is_empty()
 	 */
 	const type & object_type() const;
 
 	/**
 	 * @return Type of objects created by factory method.
-	 * @pre !is_empty()
 	 */
 	const type & result_type() const;
 

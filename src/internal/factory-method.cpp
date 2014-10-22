@@ -47,15 +47,11 @@ bool factory_method::is_empty() const
 
 const type & factory_method::object_type() const
 {
-	assert(!is_empty());
-
 	return _object_type;
 }
 
 const type & factory_method::result_type() const
 {
-	assert(!is_empty());
-
 	return _result_type;
 }
 

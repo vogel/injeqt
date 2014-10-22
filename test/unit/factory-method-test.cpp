@@ -70,6 +70,16 @@ public slots:
 
 };
 
+class valid_multi_factory : public QObject
+{
+	Q_OBJECT
+
+public slots:
+	Q_INVOKABLE result_object * create_result_object() { return new result_object{}; }
+	Q_INVOKABLE other_object * create_other_object() { return new other_object{}; }
+
+};
+
 class valid_factory_with_default_parameter : public QObject
 {
 	Q_OBJECT
@@ -101,6 +111,7 @@ private slots:
 	void should_create_valid_with_invokable_factory_method();
 	void should_create_valid_with_invokable_factory_with_default_parameter_method();
 	void should_create_object_with_factory_method();
+	void should_properly_compare();
 
 };
 
@@ -164,6 +175,37 @@ void factory_method_test::should_create_object_with_factory_method()
 	auto object = f.invoke(factory_object.get());
 	auto cast = qobject_cast<result_object *>(object.get());
 	QVERIFY(cast != nullptr);
+}
+
+void factory_method_test::should_properly_compare()
+{
+	auto fm_empty = factory_method{};
+	auto fm1a = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
+	auto fm1b = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
+	auto fm2a = make_factory_method(make_type<result_object>(), make_type<valid_multi_factory>());
+	auto fm2b = make_factory_method(make_type<result_object>(), make_type<valid_multi_factory>());
+	auto fm3a = make_factory_method(make_type<other_object>(), make_type<valid_multi_factory>());
+	auto fm3b = make_factory_method(make_type<other_object>(), make_type<valid_multi_factory>());
+
+	QVERIFY(fm_empty == fm_empty);
+	QVERIFY(fm1a == fm1a);
+	QVERIFY(fm1b == fm1b);
+	QVERIFY(fm1a == fm1b);
+	QVERIFY(fm1b == fm1a);
+	QVERIFY(fm2a == fm2a);
+	QVERIFY(fm2b == fm2b);
+	QVERIFY(fm2a == fm2b);
+	QVERIFY(fm2b == fm2a);
+	QVERIFY(fm3a == fm3a);
+	QVERIFY(fm3b == fm3b);
+	QVERIFY(fm3a == fm3b);
+	QVERIFY(fm3b == fm3a);
+	QVERIFY(fm_empty != fm1a);
+	QVERIFY(fm_empty != fm2a);
+	QVERIFY(fm_empty != fm3a);
+	QVERIFY(fm1a != fm2a);
+	QVERIFY(fm1a != fm3a);
+	QVERIFY(fm2a != fm3a);
 }
 
 QTEST_APPLESS_MAIN(factory_method_test)
