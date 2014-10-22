@@ -41,12 +41,19 @@ class type_1 : public QObject
 	Q_OBJECT
 };
 
+class type_2 : public QObject
+{
+	Q_OBJECT
+};
+
 class type_with_dependency : public QObject
 {
 	Q_OBJECT
 
 public slots:
 	INJEQT_SETTER void setter_1(type_1 *) { }
+	INJEQT_SETTER void setter_1b(type_1 *) { }
+	INJEQT_SETTER void setter_2(type_2 *) { }
 
 };
 
@@ -56,6 +63,7 @@ class dependency_test : public QObject
 
 private slots:
 	void should_create_valid_dependency();
+	void should_properly_compare();
 
 };
 
@@ -65,6 +73,32 @@ void dependency_test::should_create_valid_dependency()
 	auto d = dependency{s};
 	QCOMPARE(d.required_type(), make_type<type_1>());
 	QCOMPARE(d.setter(), s);
+}
+
+void dependency_test::should_properly_compare()
+{
+	auto s1a = dependency{make_setter_method<type_with_dependency>("setter_1(type_1*)")};
+	auto s1b = dependency{make_setter_method<type_with_dependency>("setter_1(type_1*)")};
+	auto s2a = dependency{make_setter_method<type_with_dependency>("setter_1b(type_1*)")};
+	auto s2b = dependency{make_setter_method<type_with_dependency>("setter_1b(type_1*)")};
+	auto s3a = dependency{make_setter_method<type_with_dependency>("setter_2(type_2*)")};
+	auto s3b = dependency{make_setter_method<type_with_dependency>("setter_2(type_2*)")};
+
+	QVERIFY(s1a == s1a);
+	QVERIFY(s1b == s1b);
+	QVERIFY(s1a == s1b);
+	QVERIFY(s1b == s1a);
+	QVERIFY(s2a == s2a);
+	QVERIFY(s2b == s2b);
+	QVERIFY(s2a == s2b);
+	QVERIFY(s2b == s2a);
+	QVERIFY(s3a == s3a);
+	QVERIFY(s3b == s3b);
+	QVERIFY(s3a == s3b);
+	QVERIFY(s3b == s3a);
+	QVERIFY(s1a != s2a);
+	QVERIFY(s1a != s3a);
+	QVERIFY(s2a != s3a);
 }
 
 QTEST_APPLESS_MAIN(dependency_test)

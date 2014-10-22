@@ -78,7 +78,7 @@ private slots:
 	void should_return_empty_when_created_with_not_invokable_constructor();
 	void should_create_valid_with_invokable_constructor();
 	void should_create_object_with_default_constructor();
-	void should_properly_compare_constructors();
+	void should_properly_compare();
 
 };
 
@@ -117,7 +117,7 @@ void default_constructor_method_test::should_create_object_with_default_construc
 	QVERIFY(cast != nullptr);
 }
 
-void default_constructor_method_test::should_properly_compare_constructors()
+void default_constructor_method_test::should_properly_compare()
 {
 	auto c_empty = default_constructor_method{};
 	auto c1a = make_default_constructor_method(make_type<default_invokable_constructor>());
