@@ -77,6 +77,9 @@ public slots:
 	void no_injeqt_setter_2(injectable_type2 *) {}
 	void no_injeqt_setter_3(int) {}
 
+signals:
+	INJEQT_SETTER void ignored_signal(injectable_type3 *);
+
 };
 
 class inheriting_valid_injected_type : public valid_injected_type
