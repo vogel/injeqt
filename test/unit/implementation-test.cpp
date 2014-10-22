@@ -68,6 +68,7 @@ private slots:
 	void should_accept_object_of_sub_sub_type();
 	void should_not_accept_object_of_super_type();
 	void should_not_accept_object_of_other_type();
+	void should_properly_compare();
 
 };
 
@@ -135,6 +136,36 @@ void implementation_test::should_not_accept_object_of_other_type()
 	expect<exception::interface_not_implemented>([&]{
 		make_implementation(make_type<type_2>(), object.get());
 	});
+}
+
+void implementation_test::should_properly_compare()
+{
+	auto o1a = make_object<type_1>();
+	auto o1b = make_object<type_1>();
+	auto o2 = make_object<type_2>();
+
+	auto i1a = make_implementation(make_type<type_1>(), o1a.get());
+	auto i1b = make_implementation(make_type<type_1>(), o1a.get());
+	auto i2a = make_implementation(make_type<type_1>(), o1b.get());
+	auto i2b = make_implementation(make_type<type_1>(), o1b.get());
+	auto i3a = make_implementation(make_type<type_2>(), o2.get());
+	auto i3b = make_implementation(make_type<type_2>(), o2.get());
+
+	QVERIFY(i1a == i1a);
+	QVERIFY(i1b == i1b);
+	QVERIFY(i1a == i1b);
+	QVERIFY(i1b == i1a);
+	QVERIFY(i2a == i2a);
+	QVERIFY(i2b == i2b);
+	QVERIFY(i2a == i2b);
+	QVERIFY(i2b == i2a);
+	QVERIFY(i3a == i3a);
+	QVERIFY(i3b == i3b);
+	QVERIFY(i3a == i3b);
+	QVERIFY(i3b == i3a);
+	QVERIFY(i1a != i2a);
+	QVERIFY(i1a != i3a);
+	QVERIFY(i2a != i3a);
 }
 
 QTEST_APPLESS_MAIN(implementation_test)
