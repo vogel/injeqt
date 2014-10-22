@@ -58,6 +58,7 @@ class implemented_by_test : public QObject
 private slots:
 	void should_accept_implemented_by_self();
 	void should_accept_implemented_by_subtype();
+	void should_properly_compare();
 
 };
 
@@ -75,6 +76,32 @@ void implemented_by_test::should_accept_implemented_by_subtype()
 
 	QCOMPARE(make_type<type_1>(), i.interface_type());
 	QCOMPARE(make_type<type_1_subtype_1_subtype_1>(), i.implementation_type());
+}
+
+void implemented_by_test::should_properly_compare()
+{
+	auto ib1a = implemented_by{make_type<type_1>(), make_type<type_1_subtype_1>()};
+	auto ib1b = implemented_by{make_type<type_1>(), make_type<type_1_subtype_1>()};
+	auto ib2a = implemented_by{make_type<type_1>(), make_type<type_1_subtype_1_subtype_1>()};
+	auto ib2b = implemented_by{make_type<type_1>(), make_type<type_1_subtype_1_subtype_1>()};
+	auto ib3a = implemented_by{make_type<type_1_subtype_1>(), make_type<type_1_subtype_1_subtype_1>()};
+	auto ib3b = implemented_by{make_type<type_1_subtype_1>(), make_type<type_1_subtype_1_subtype_1>()};
+
+	QVERIFY(ib1a == ib1a);
+	QVERIFY(ib1b == ib1b);
+	QVERIFY(ib1a == ib1b);
+	QVERIFY(ib1b == ib1a);
+	QVERIFY(ib2a == ib2a);
+	QVERIFY(ib2b == ib2b);
+	QVERIFY(ib2a == ib2b);
+	QVERIFY(ib2b == ib2a);
+	QVERIFY(ib3a == ib3a);
+	QVERIFY(ib3b == ib3b);
+	QVERIFY(ib3a == ib3b);
+	QVERIFY(ib3b == ib3a);
+	QVERIFY(ib1a != ib2a);
+	QVERIFY(ib1a != ib3a);
+	QVERIFY(ib2a != ib3a);
 }
 
 QTEST_APPLESS_MAIN(implemented_by_test)
