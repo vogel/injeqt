@@ -116,7 +116,6 @@ void types_model_test::should_create_empty_types_model()
 
 	QCOMPARE(empty_1.available_types(), implemented_by_mapping{});
 	QCOMPARE(empty_1.mapped_dependencies(), types_dependencies{});
-	QVERIFY(empty_1 == empty_2);
 }
 
 void types_model_test::should_create_one_type_types_model()

@@ -98,9 +98,6 @@ private:
 
 };
 
-bool operator == (const types_model &x, const types_model &y);
-bool operator != (const types_model &x, const types_model &y);
-
 /**
  * @brief Create types_model from given set of types.
  * @param all_types set of types to make model from, all types must be valid.

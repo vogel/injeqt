@@ -70,22 +70,6 @@ std::vector<dependency> types_model::get_unresolvable_dependencies() const
 	return result;
 }
 
-bool operator == (const types_model &x, const types_model &y)
-{
-	if (x.available_types() != y.available_types())
-		return false;
-
-	if (x.mapped_dependencies() != y.mapped_dependencies())
-		return false;
-
-	return true;
-}
-
-bool operator != (const types_model &x, const types_model &y)
-{
-	return !(x == y);
-}
-
 types_model make_types_model(const std::vector<type> &all_types)
 {
 	auto relations = make_type_relations(all_types);
