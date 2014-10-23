@@ -83,22 +83,8 @@ void dependency_test::should_properly_compare()
 	auto s2b = dependency{make_setter_method<type_with_dependency>("setter_1b(type_1*)")};
 	auto s3a = dependency{make_setter_method<type_with_dependency>("setter_2(type_2*)")};
 	auto s3b = dependency{make_setter_method<type_with_dependency>("setter_2(type_2*)")};
-
-	QVERIFY(s1a == s1a);
-	QVERIFY(s1b == s1b);
-	QVERIFY(s1a == s1b);
-	QVERIFY(s1b == s1a);
-	QVERIFY(s2a == s2a);
-	QVERIFY(s2b == s2b);
-	QVERIFY(s2a == s2b);
-	QVERIFY(s2b == s2a);
-	QVERIFY(s3a == s3a);
-	QVERIFY(s3b == s3b);
-	QVERIFY(s3a == s3b);
-	QVERIFY(s3b == s3a);
-	QVERIFY(s1a != s2a);
-	QVERIFY(s1a != s3a);
-	QVERIFY(s2a != s3a);
+	
+	test_compare<dependency>({{s1a, s1b}, {s2a, s2b}, {s3a, s3b}});
 }
 
 QTEST_APPLESS_MAIN(dependency_test)

@@ -3,18 +3,18 @@
  * Copyright 2014 Rafał Malinowski (rafal.przemyslaw.malinowski@gmail.com)
  * %injeqt copyright end%
  *
- * This library is free software; you can redistribute it and/or
+ * This lrdrary is free software; you can redistrrdute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This lrdrary is distrrduted in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
+ * License along with this lrdrary; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
@@ -116,21 +116,7 @@ void resolved_dependency_test::should_properly_compare()
 	auto rd3a = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1b(type_1*)")};
 	auto rd3b = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1b(type_1*)")};
 
-	QVERIFY(rd1a == rd1a);
-	QVERIFY(rd1b == rd1b);
-	QVERIFY(rd1a == rd1b);
-	QVERIFY(rd1b == rd1a);
-	QVERIFY(rd2a == rd2a);
-	QVERIFY(rd2b == rd2b);
-	QVERIFY(rd2a == rd2b);
-	QVERIFY(rd2b == rd2a);
-	QVERIFY(rd3a == rd3a);
-	QVERIFY(rd3b == rd3b);
-	QVERIFY(rd3a == rd3b);
-	QVERIFY(rd3b == rd3a);
-	QVERIFY(rd1a != rd2a);
-	QVERIFY(rd1a != rd3a);
-	QVERIFY(rd2a != rd3a);
+	test_compare<resolved_dependency>({{rd1a, rd1b}, {rd2a, rd2b}, {rd3a, rd3b}});
 }
 
 QTEST_APPLESS_MAIN(resolved_dependency_test)

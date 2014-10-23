@@ -124,19 +124,8 @@ void default_constructor_method_test::should_properly_compare()
 	auto c1b = make_default_constructor_method(make_type<default_invokable_constructor>());
 	auto c2a = make_default_constructor_method(make_type<default_invokable_constructor_no_parameters>());
 	auto c2b = make_default_constructor_method(make_type<default_invokable_constructor_no_parameters>());
-
-	QVERIFY(c_empty == c_empty);
-	QVERIFY(c1a == c1a);
-	QVERIFY(c1b == c1b);
-	QVERIFY(c1a == c1b);
-	QVERIFY(c1b == c1a);
-	QVERIFY(c2a == c2a);
-	QVERIFY(c2b == c2b);
-	QVERIFY(c2a == c2b);
-	QVERIFY(c2b == c2a);
-	QVERIFY(c_empty != c1a);
-	QVERIFY(c_empty != c2a);
-	QVERIFY(c1a != c2a);
+	
+	test_compare<default_constructor_method>({{c_empty}, {c1a, c1b}, {c2a, c2b}});
 }
 
 QTEST_APPLESS_MAIN(default_constructor_method_test)

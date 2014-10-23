@@ -187,25 +187,7 @@ void factory_method_test::should_properly_compare()
 	auto fm3a = make_factory_method(make_type<other_object>(), make_type<valid_multi_factory>());
 	auto fm3b = make_factory_method(make_type<other_object>(), make_type<valid_multi_factory>());
 
-	QVERIFY(fm_empty == fm_empty);
-	QVERIFY(fm1a == fm1a);
-	QVERIFY(fm1b == fm1b);
-	QVERIFY(fm1a == fm1b);
-	QVERIFY(fm1b == fm1a);
-	QVERIFY(fm2a == fm2a);
-	QVERIFY(fm2b == fm2b);
-	QVERIFY(fm2a == fm2b);
-	QVERIFY(fm2b == fm2a);
-	QVERIFY(fm3a == fm3a);
-	QVERIFY(fm3b == fm3b);
-	QVERIFY(fm3a == fm3b);
-	QVERIFY(fm3b == fm3a);
-	QVERIFY(fm_empty != fm1a);
-	QVERIFY(fm_empty != fm2a);
-	QVERIFY(fm_empty != fm3a);
-	QVERIFY(fm1a != fm2a);
-	QVERIFY(fm1a != fm3a);
-	QVERIFY(fm2a != fm3a);
+	test_compare<factory_method>({{fm_empty}, {fm1a, fm1b}, {fm2a, fm2b}, {fm3a, fm3b}});
 }
 
 QTEST_APPLESS_MAIN(factory_method_test)

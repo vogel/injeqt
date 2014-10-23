@@ -24,6 +24,7 @@
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QObject>
+#include <QtTest/QTest>
 #include <memory>
 
 namespace injeqt { namespace v1 {
@@ -38,6 +39,31 @@ template<typename T>
 inline QMetaMethod make_method(const std::string &signature)
 {
 	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()));
+}
+
+template<typename T>
+void test_compare(const std::vector<std::vector<T>> objects)
+{
+	for (decltype(objects.size()) i = 0; i < objects.size(); i++)
+		for (decltype(objects.size()) j = 0; j < objects.size(); j++)
+			if (i != j)
+			{
+				for (auto &&x : objects[i])
+					for (auto &&y : objects[j])
+					{
+						QVERIFY(x != y);
+						QVERIFY(y != x);
+					}
+			}
+			else
+			{
+				for (auto &&x : objects[i])
+					for (auto &&y : objects[j])
+					{
+						QVERIFY(x == y);
+						QVERIFY(y == x);
+					}
+			}
 }
 
 }}

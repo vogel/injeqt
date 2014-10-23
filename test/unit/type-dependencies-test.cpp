@@ -89,25 +89,7 @@ void type_dependencies_test::should_properly_compare()
 	auto td3a = type_dependencies{make_type<type_2>(), dependencies{d21, d22}};
 	auto td3b = type_dependencies{make_type<type_2>(), dependencies{d21, d22}};
 
-	QVERIFY(td_empty == td_empty);
-	QVERIFY(td1a == td1a);
-	QVERIFY(td1b == td1b);
-	QVERIFY(td1a == td1b);
-	QVERIFY(td1b == td1a);
-	QVERIFY(td2a == td2a);
-	QVERIFY(td2b == td2b);
-	QVERIFY(td2a == td2b);
-	QVERIFY(td2b == td2a);
-	QVERIFY(td3a == td3a);
-	QVERIFY(td3b == td3b);
-	QVERIFY(td3a == td3b);
-	QVERIFY(td3b == td3a);
-	QVERIFY(td_empty != td1a);
-	QVERIFY(td_empty != td2a);
-	QVERIFY(td_empty != td3a);
-	QVERIFY(td1a != td2a);
-	QVERIFY(td1a != td3a);
-	QVERIFY(td2a != td3a);
+	test_compare<type_dependencies>({{td_empty}, {td1a, td1b}, {td2a, td2b}, {td3a, td3b}});
 }
 
 QTEST_APPLESS_MAIN(type_dependencies_test)

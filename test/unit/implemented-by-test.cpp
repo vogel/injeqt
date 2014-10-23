@@ -87,21 +87,7 @@ void implemented_by_test::should_properly_compare()
 	auto ib3a = implemented_by{make_type<type_1_subtype_1>(), make_type<type_1_subtype_1_subtype_1>()};
 	auto ib3b = implemented_by{make_type<type_1_subtype_1>(), make_type<type_1_subtype_1_subtype_1>()};
 
-	QVERIFY(ib1a == ib1a);
-	QVERIFY(ib1b == ib1b);
-	QVERIFY(ib1a == ib1b);
-	QVERIFY(ib1b == ib1a);
-	QVERIFY(ib2a == ib2a);
-	QVERIFY(ib2b == ib2b);
-	QVERIFY(ib2a == ib2b);
-	QVERIFY(ib2b == ib2a);
-	QVERIFY(ib3a == ib3a);
-	QVERIFY(ib3b == ib3b);
-	QVERIFY(ib3a == ib3b);
-	QVERIFY(ib3b == ib3a);
-	QVERIFY(ib1a != ib2a);
-	QVERIFY(ib1a != ib3a);
-	QVERIFY(ib2a != ib3a);
+	test_compare<implemented_by>({{ib1a, ib1b}, {ib2a, ib2b}, {ib3a, ib3b}});
 }
 
 QTEST_APPLESS_MAIN(implemented_by_test)

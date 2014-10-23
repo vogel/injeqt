@@ -150,22 +150,8 @@ void implementation_test::should_properly_compare()
 	auto i2b = make_implementation(make_type<type_1>(), o1b.get());
 	auto i3a = make_implementation(make_type<type_2>(), o2.get());
 	auto i3b = make_implementation(make_type<type_2>(), o2.get());
-
-	QVERIFY(i1a == i1a);
-	QVERIFY(i1b == i1b);
-	QVERIFY(i1a == i1b);
-	QVERIFY(i1b == i1a);
-	QVERIFY(i2a == i2a);
-	QVERIFY(i2b == i2b);
-	QVERIFY(i2a == i2b);
-	QVERIFY(i2b == i2a);
-	QVERIFY(i3a == i3a);
-	QVERIFY(i3b == i3b);
-	QVERIFY(i3a == i3b);
-	QVERIFY(i3b == i3a);
-	QVERIFY(i1a != i2a);
-	QVERIFY(i1a != i3a);
-	QVERIFY(i2a != i3a);
+	
+	test_compare<implementation>({{i1a, i1b}, {i2a, i2b}, {i3a, i3b}});
 }
 
 QTEST_APPLESS_MAIN(implementation_test)
