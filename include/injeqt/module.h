@@ -66,7 +66,6 @@ protected:
 	 * @brief Add already constructed object to module.
 	 * @tparam T type of added object (must be inherited from QObject).
 	 * @param object added object
-	 * @throw empty_type when passed type @p T is an empty type
 	 * @throw qobject_type when passed type @p T represents QObject
 	 * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaType
 	 * @throw interface_not_implemented when passed @p object does not implements type @p T
@@ -122,7 +121,6 @@ protected:
 	/**
 	 * @brief Add type that can be default-constructed to module.
 	 * @tparam T type added to module (must be inherited from QObject).
-	 * @throw empty_type when passed type @p T is an empty type
 	 * @throw qobject_type when passed type @p T represents QObject
 	 * @throw default_constructor_not_found is @p T does not have default constructor tagged with Q_INVOKABLE
 	 *
@@ -170,9 +168,7 @@ protected:
 	 * @brief Add type that can be created by factory to module.
 	 * @tparam T type added to module (must be inherited from QObject).
 	 * @tparam F factory type (must be inherited from QObject).
-	 * @throw empty_type when passed type @p T is an empty type
 	 * @throw qobject_type when passed type @p T represents QObject
-	 * @throw empty_type when passed type @p F is an empty type
 	 * @throw qobject_type when passed type @p F represents QObject
 	 * @throw unique_factory_method_not_found when type F does not have unique factory method for T
 	 *
@@ -242,16 +238,20 @@ private:
 
 	/**
 	 * @see add_ready_object<T>(QObject *);
+	 * @pre !t.is_empty()
 	 */
 	void add_ready_object(type t, QObject *object);
 
 	/**
 	 * @see add_type<T>();
+	 * @pre !t.is_empty()
 	 */
 	void add_type(type t);
 
 	/**
 	 * @see add_factory<T, F>();
+	 * @pre !t.is_empty()
+	 * @pre !f.is_empty()
 	 */
 	void add_factory(type t, type f);
 

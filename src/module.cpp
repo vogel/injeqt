@@ -36,6 +36,7 @@
 #include "provider-ready.h"
 
 #include <QtCore/QMetaObject>
+#include <cassert>
 
 namespace injeqt { namespace v1 {
 
@@ -50,6 +51,8 @@ module::~module()
 
 void module::add_ready_object(type t, QObject *object)
 {
+	assert(!t.is_empty());
+
 	auto i = internal::make_implementation(std::move(t), object);
 	auto p = std::unique_ptr<internal::provider_ready>{new internal::provider_ready{std::move(i)}};
 	_pimpl->add_provider(std::move(p));
@@ -57,8 +60,8 @@ void module::add_ready_object(type t, QObject *object)
 
 void module::add_type(type t)
 {
-	if (t.is_empty())
-		throw exception::empty_type{};
+	assert(!t.is_empty());
+
 	if (t.is_qobject())
 		throw exception::qobject_type();
 
@@ -72,12 +75,11 @@ void module::add_type(type t)
 
 void module::add_factory(type t, type f)
 {
-	if (t.is_empty())
-		throw exception::empty_type{};
+	assert(!t.is_empty());
+	assert(!f.is_empty());
+
 	if (t.is_qobject())
 		throw exception::qobject_type();
-	if (f.is_empty())
-		throw exception::empty_type{};
 	if (f.is_qobject())
 		throw exception::qobject_type();
 
