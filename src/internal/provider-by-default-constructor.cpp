@@ -32,19 +32,8 @@ provider_by_default_constructor::provider_by_default_constructor(default_constru
 	assert(!_constructor.is_empty());
 }
 
-provider_by_default_constructor::provider_by_default_constructor(provider_by_default_constructor &&x)
-{
-	std::swap(*this, x);
-}
-
 provider_by_default_constructor::~provider_by_default_constructor()
 {
-}
-
-provider_by_default_constructor & provider_by_default_constructor::operator = (provider_by_default_constructor &&x)
-{
-	std::swap(*this, x);
-	return *this;
 }
 
 const type & provider_by_default_constructor::provided_type() const

@@ -52,10 +52,10 @@ public:
 	 * @pre !constructor.is_empty()
 	 */
 	explicit provider_by_default_constructor(default_constructor_method constructor);
-	provider_by_default_constructor(provider_by_default_constructor &&x);
 	virtual ~provider_by_default_constructor();
 
-	provider_by_default_constructor & operator = (provider_by_default_constructor &&x);
+	provider_by_default_constructor(provider_by_default_constructor &&x) = delete;
+	provider_by_default_constructor & operator = (provider_by_default_constructor &&x) = delete;
 
 	/**
 	 * @return default_constructor_method::object_type() of object passed to construtor

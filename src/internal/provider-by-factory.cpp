@@ -31,19 +31,8 @@ provider_by_factory::provider_by_factory(factory_method factory) :
 {
 }
 
-provider_by_factory::provider_by_factory(provider_by_factory &&x)
-{
-	std::swap(*this, x);
-}
-
 provider_by_factory::~provider_by_factory()
 {
-}
-
-provider_by_factory & provider_by_factory::operator = (provider_by_factory &&x)
-{
-	std::swap(*this, x);
-	return *this;
 }
 
 const type & provider_by_factory::provided_type() const

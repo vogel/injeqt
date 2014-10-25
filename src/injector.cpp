@@ -28,6 +28,8 @@
 #include "module-impl.h"
 #include "provider.h"
 
+#include <cassert>
+
 using namespace injeqt::internal;
 
 namespace injeqt { namespace v1 {
@@ -59,8 +61,8 @@ injector & injector::operator = (injector &&x)
 
 QObject * injector::get(const type &interface_type)
 {
-	if (interface_type.is_empty())
-		throw exception::empty_type{};
+	assert(!interface_type.is_empty());
+
 	if (interface_type.is_qobject())
 		throw exception::qobject_type{};
 

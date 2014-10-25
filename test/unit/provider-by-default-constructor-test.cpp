@@ -82,15 +82,15 @@ void provider_by_default_constructor_test::should_return_always_the_same_object(
 	auto empty_injector1 = injector_core{};
 	auto empty_injector2 = injector_core{};
 	auto c = make_default_constructor_method(make_type<default_constructor_type>());
-	auto p = provider_by_default_constructor{c};
+	auto p = std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{c}};
 
-	QCOMPARE(p.provided_type(), make_type<default_constructor_type>());
-	QCOMPARE(p.required_types(), types{});
-	QCOMPARE(p.constructor(), c);
+	QCOMPARE(p->provided_type(), make_type<default_constructor_type>());
+	QCOMPARE(p->required_types(), types{});
+	QCOMPARE(p->constructor(), c);
 
-	auto o = p.provide(empty_injector1);
-	QCOMPARE(p.provide(empty_injector1), o);
-	QCOMPARE(p.provide(empty_injector2), o);
+	auto o = p->provide(empty_injector1);
+	QCOMPARE(p->provide(empty_injector1), o);
+	QCOMPARE(p->provide(empty_injector2), o);
 	QCOMPARE(o->metaObject(), &default_constructor_type::staticMetaObject);
 }
 

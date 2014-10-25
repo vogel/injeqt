@@ -99,7 +99,6 @@ public:
 	/**
 	 * @brief Returns pointer to object of given type T.
 	 * @tparam T type of object to return
-	 * @throw empty_type if T is not valid QObject derived type
 	 * @throw qobject_type if T is QObject
 	 * @throw unknown_type if @p interface_type was not configured in injector
 	 * @throw instantiation_failed if instantiation of one of required types failed
