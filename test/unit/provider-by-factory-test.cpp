@@ -83,6 +83,16 @@ public:
 
 };
 
+class invalid_factory_type : public QObject
+{
+	Q_OBJECT
+
+public:
+	Q_INVOKABLE invalid_factory_type() {}
+	Q_INVOKABLE by_factory_type * create() { return nullptr; }
+
+};
+
 class factory_module : public module
 {
 
@@ -98,6 +108,7 @@ class provider_by_factory_test : public QObject
 
 private slots:
 	void should_return_always_the_same_object();
+	void should_throw_instantiation_failed_when_invalid_factory();
 
 };
 
@@ -120,6 +131,26 @@ void provider_by_factory_test::should_return_always_the_same_object()
 	QCOMPARE(p->provide(injector), o);
 	QCOMPARE(p->provide(injector), o);
 	QCOMPARE(o->metaObject(), &by_factory_type::staticMetaObject);
+}
+
+void provider_by_factory_test::should_throw_instantiation_failed_when_invalid_factory()
+{
+	auto fm = make_factory_method(make_type<by_factory_type>(), make_type<invalid_factory_type>());
+	auto fp = std::unique_ptr<provider_by_factory>{new provider_by_factory{fm}};
+	auto p = fp.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.emplace_back(std::move(fp));
+	configuration.emplace_back(std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(make_type<invalid_factory_type>())}});
+	auto injector = injector_core{std::move(configuration)};
+
+	QCOMPARE(p->provided_type(), make_type<by_factory_type>());
+	QCOMPARE(p->required_types(), types{make_type<invalid_factory_type>()});
+	QCOMPARE(p->factory(), fm);
+
+	expect<exception::instantiation_failed>([&](){
+		p->provide(injector);
+	});
 }
 
 QTEST_APPLESS_MAIN(provider_by_factory_test)
