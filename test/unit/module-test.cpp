@@ -147,7 +147,7 @@ void module_test::should_not_accept_null_ready_object()
 		}
 	};
 
-	expect<exception::invalid_qobject>([&](){
+	expect<exception::invalid_qobject>({"not_default_constructible_type"}, [&](){
 		test_module{};
 	});
 }
@@ -209,7 +209,7 @@ void module_test::should_not_accept_supertype_ready_object()
 		}
 	};
 
-	expect<exception::interface_not_implemented>([&](){
+	expect<exception::interface_not_implemented>({"not_default_constructible_type", "not_default_constructible_type_subtype"}, [&](){
 		test_module{};
 	});
 }
@@ -241,7 +241,7 @@ void module_test::should_not_accept_not_default_constructible_type()
 		}
 	};
 
-	expect<exception::default_constructor_not_found>([&](){
+	expect<exception::default_constructor_not_found>({"not_default_constructible_type"}, [&](){
 		test_module{};
 	});
 }
@@ -316,7 +316,7 @@ void module_test::should_not_accept_subtype_factory_type()
 		}
 	};
 
-	expect<exception::unique_factory_method_not_found>([&](){
+	expect<exception::unique_factory_method_not_found>({"not_default_constructible_type_subtype"}, [&](){
 		test_module{};
 	});
 }
@@ -346,7 +346,7 @@ void module_test::should_not_accept_double_factory_type()
 		}
 	};
 
-	expect<exception::unique_factory_method_not_found>([&](){
+	expect<exception::unique_factory_method_not_found>({"not_default_constructible_type"}, [&](){
 		test_module{};
 	});
 }

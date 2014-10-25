@@ -78,7 +78,7 @@ implementation make_implementation(type interface_type, QObject *object)
 	if (!object || !object->metaObject())
 		throw exception::invalid_qobject{};
 	if (!implements(type{object->metaObject()}, interface_type))
-		throw exception::interface_not_implemented{interface_type.name()};
+		throw exception::interface_not_implemented{type{object->metaObject()}.name() + ": " + interface_type.name()};
 
 	return implementation{interface_type, object};
 }

@@ -89,10 +89,10 @@ void test_compare_ex(const std::vector<std::vector<T>> objects)
 					{
 						QVERIFY(x != y);
 						QVERIFY(y != x);
-						QVERIFY(x < y ^ y < x);
-						QVERIFY(x > y ^ y > x);
-						QVERIFY(x <= y ^ y <= x);
-						QVERIFY(x >= y ^ y >= x);
+						QVERIFY((x < y) ^ (y < x));
+						QVERIFY((x > y) ^ (y > x));
+						QVERIFY((x <= y) ^ (y <= x));
+						QVERIFY((x >= y) ^ (y >= x));
 						if (first)
 						{
 							c1 = x < y;

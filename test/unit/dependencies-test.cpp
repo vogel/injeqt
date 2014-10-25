@@ -271,70 +271,70 @@ void dependencies_test::should_find_dependencies_with_common_superclass()
 
 void dependencies_test::should_fail_when_duplicate_dependency()
 {
-	expect<exception::dependency_duplicated>([&]{
+	expect<exception::dependency_duplicated>({"injectable_type1"}, [&]{
 		auto dependencies = extract_dependencies(make_type<duplicate_dependency_invalid_injected_type>());
 	});
 }
 
 void dependencies_test::should_fail_with_superclass_dependency()
 {
-	expect<exception::dependency_duplicated>([&]{
+	expect<exception::dependency_duplicated>({"injectable_type1", "subinjectable_type1"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_injected_type_with_superclass>());
 	});
 }
 
 void dependencies_test::should_fail_with_superclass_inverted_dependency()
 {
-	expect<exception::dependency_duplicated>([&]{
+	expect<exception::dependency_duplicated>({"injectable_type1", "subinjectable_type1"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_injected_type_with_superclass_inverted>());
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_self()
 {
-	expect<exception::dependency_on_self>([&]{
+	expect<exception::dependency_on_self>({"invalid_injected_type_depends_on_self"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_injected_type_depends_on_self>());
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_subtype()
 {
-	expect<exception::dependency_on_subtype>([&]{
+	expect<exception::dependency_on_subtype>({"invalid_injected_type_depends_on_subtype", "invalid_injected_type_depends_on_subtype_subtype"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_injected_type_depends_on_subtype>());
 	});
 }
 
 void dependencies_test::should_fail_when_depends_on_supertype()
 {
-	expect<exception::dependency_on_supertype>([&]{
+	expect<exception::dependency_on_supertype>({"invalid_injected_type_depends_on_supertype", "invalid_injected_type_depends_on_supertype_supertype"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_injected_type_depends_on_supertype>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_empty_type()
 {
-	expect<exception::invalid_setter>([&]{
+	expect<exception::invalid_setter>({"setter"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_empty_type>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_qobject_type()
 {
-	expect<exception::invalid_setter>([&]{
+	expect<exception::invalid_setter>({"setter"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_qobject_type>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_no_parameters()
 {
-	expect<exception::invalid_setter>([&]{
+	expect<exception::invalid_setter>({"setter"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_no_paremters>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_two_parameters()
 {
-	expect<exception::invalid_setter>([&]{
+	expect<exception::invalid_setter>({"setter"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_two_paremters>());
 	});
 }

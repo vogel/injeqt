@@ -148,7 +148,7 @@ void provider_by_factory_test::should_throw_instantiation_failed_when_invalid_fa
 	QCOMPARE(p->required_types(), types{make_type<invalid_factory_type>()});
 	QCOMPARE(p->factory(), fm);
 
-	expect<exception::instantiation_failed>([&](){
+	expect<exception::instantiation_failed>({"by_factory_type"}, [&](){
 		p->provide(injector);
 	});
 }

@@ -188,7 +188,7 @@ private slots:
 void injector_core_test::should_create_empty_injector_core()
 {
 	auto i = injector_core{};
-	expect<exception::unknown_type>([&](){
+	expect<exception::unknown_type>({"type_1"}, [&](){
 		i.get(make_type<type_1>());
 	});
 }
@@ -217,7 +217,7 @@ void injector_core_test::should_not_accept_doubled_type()
 	configuration.push_back(make_mocked_provider<type_1>());
 	configuration.push_back(make_mocked_provider<type_1>());
 
-	expect<exception::ambiguous_types>([&](){
+	expect<exception::ambiguous_types>({"type_1"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }
@@ -228,7 +228,7 @@ void injector_core_test::should_not_accept_type_and_subtype()
 	configuration.push_back(make_mocked_provider<type_1>());
 	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
 
-	expect<exception::ambiguous_types>([&](){
+	expect<exception::ambiguous_types>({"type_1", "type_1_subtype_1"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }
@@ -239,7 +239,7 @@ void injector_core_test::should_not_accept_subtype_and_type()
 	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
 	configuration.push_back(make_mocked_provider<type_1>());
 
-	expect<exception::ambiguous_types>([&](){
+	expect<exception::ambiguous_types>({"type_1", "type_1_subtype_1"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }
@@ -257,7 +257,7 @@ void injector_core_test::should_accept_two_subtypes()
 	QVERIFY(o1 != nullptr);
 	QVERIFY(o2 != nullptr);
 
-	expect<exception::unknown_type>([&](){
+	expect<exception::unknown_type>({"type_1"}, [&](){
 		get<type_1>(i);
 	});
 }
@@ -267,7 +267,7 @@ void injector_core_test::should_not_accept_unresolvable_dependency()
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.push_back(make_mocked_provider<type_2>());
 
-	expect<exception::unresolvable_dependencies>([&](){
+	expect<exception::unresolvable_dependencies>({"set_type_1"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }
@@ -326,7 +326,7 @@ void injector_core_test::should_not_accept_ambiguous_supertype_dependency()
 	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
 	configuration.push_back(make_mocked_provider<type_2>());
 
-	expect<exception::unresolvable_dependencies>([&](){
+	expect<exception::unresolvable_dependencies>({"set_type_1"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }
@@ -336,7 +336,7 @@ void injector_core_test::should_not_accept_unknown_required_type()
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.push_back(make_mocked_provider<type_3, type_1>());
 
-	expect<exception::unavailable_required_types>([&](){
+	expect<exception::unavailable_required_types>({"type_1", "type_3"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }
@@ -393,7 +393,7 @@ void injector_core_test::should_not_accept_ambiguous_required_supertype()
 	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
 	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
 
-	expect<exception::unavailable_required_types>([&](){
+	expect<exception::unavailable_required_types>({"type_1", "type_3"}, [&](){
 		auto i = injector_core{std::move(configuration)};
 	});
 }

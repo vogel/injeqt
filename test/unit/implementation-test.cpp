@@ -90,7 +90,7 @@ void implementation_test::should_throw_when_type_is_qobject()
 
 void implementation_test::should_throw_when_object_is_null()
 {
-	expect<exception::invalid_qobject>([&]{
+	expect<exception::invalid_qobject>({"type_1"}, [&]{
 		make_implementation(make_type<type_1>(), nullptr);
 	});
 }
@@ -125,7 +125,7 @@ void implementation_test::should_accept_object_of_sub_sub_type()
 void implementation_test::should_not_accept_object_of_super_type()
 {
 	auto object = make_object<type_1>();
-	expect<exception::interface_not_implemented>([&]{
+	expect<exception::interface_not_implemented>({"type_1", "type_1_subtype_1_subtype_1"}, [&]{
 		make_implementation(make_type<type_1_subtype_1_subtype_1>(), object.get());
 	});
 }
@@ -133,7 +133,7 @@ void implementation_test::should_not_accept_object_of_super_type()
 void implementation_test::should_not_accept_object_of_other_type()
 {
 	auto object = make_object<type_1>();
-	expect<exception::interface_not_implemented>([&]{
+	expect<exception::interface_not_implemented>({"type_1", "type_2"}, [&]{
 		make_implementation(make_type<type_2>(), object.get());
 	});
 }
