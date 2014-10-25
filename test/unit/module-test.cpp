@@ -85,6 +85,28 @@ public:
 	Q_INVOKABLE default_constructible_type() {}
 };
 
+class factory_type : public QObject
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE not_default_constructible_type * create() const { return nullptr; }
+};
+
+class factory_subtype_type : public QObject
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE not_default_constructible_type_subtype * create() const { return nullptr; }
+};
+
+class factory_double_type : public QObject
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE not_default_constructible_type * create1() const { return nullptr; }
+	Q_INVOKABLE not_default_constructible_type * create2() const { return nullptr; }
+};
+
 class module_test : public QObject
 {
 	Q_OBJECT
@@ -99,6 +121,12 @@ private slots:
 	void should_not_accept_qobject_type();
 	void should_not_accept_not_default_constructible_type();
 	void should_accept_default_constructible_type();
+	void should_not_accept_qobject_factory_type();
+	void should_not_accept_qobject_created_type();
+	void should_accept_valid_factory_type();
+	void should_accept_supertype_factory_type();
+	void should_not_accept_subtype_factory_type();
+	void should_not_accept_double_factory_type();
 
 };
 
@@ -152,7 +180,6 @@ void module_test::should_accept_valid_ready_object()
 			add_ready_object<not_default_constructible_type>(&object);
 		}
 	};
-
 	test_module{};
 }
 
@@ -167,7 +194,6 @@ void module_test::should_accept_subtype_ready_object()
 			add_ready_object<not_default_constructible_type>(&object);
 		}
 	};
-
 	test_module{};
 }
 
@@ -231,6 +257,98 @@ void module_test::should_accept_default_constructible_type()
 		}
 	};
 	test_module{};
+}
+
+void module_test::should_not_accept_qobject_factory_type()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_factory<not_default_constructible_type, QObject>();
+		}
+	};
+
+	expect<exception::qobject_type>([&](){
+		test_module{};
+	});
+}
+
+void module_test::should_not_accept_qobject_created_type()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_factory<QObject, factory_type>();
+		}
+	};
+
+	expect<exception::qobject_type>([&](){
+		test_module{};
+	});
+}
+
+void module_test::should_accept_valid_factory_type()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_factory<not_default_constructible_type, factory_type>();
+			add_factory<not_default_constructible_type_subtype, factory_subtype_type>();
+		}
+	};
+	test_module{};
+}
+
+void module_test::should_not_accept_subtype_factory_type()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_factory<not_default_constructible_type_subtype, factory_type>();
+		}
+	};
+
+	expect<exception::unique_factory_method_not_found>([&](){
+		test_module{};
+	});
+}
+
+void module_test::should_accept_supertype_factory_type()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_factory<not_default_constructible_type, factory_subtype_type>();
+		}
+	};
+
+	test_module{};
+}
+
+void module_test::should_not_accept_double_factory_type()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_factory<not_default_constructible_type, factory_double_type>();
+		}
+	};
+
+	expect<exception::unique_factory_method_not_found>([&](){
+		test_module{};
+	});
 }
 
 QTEST_APPLESS_MAIN(module_test)
