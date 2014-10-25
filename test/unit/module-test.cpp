@@ -73,6 +73,11 @@ class not_default_constructible_type : public QObject
 	Q_OBJECT
 };
 
+class not_default_constructible_type_subtype : public not_default_constructible_type
+{
+	Q_OBJECT
+};
+
 class default_constructible_type : public QObject
 {
 	Q_OBJECT
@@ -86,6 +91,11 @@ class module_test : public QObject
 
 private slots:
 	void should_accept_empty_module();
+	void should_not_accept_null_ready_object();
+	void should_not_accept_qobject_ready_object();
+	void should_accept_valid_ready_object();
+	void should_accept_subtype_ready_object();
+	void should_not_accept_supertype_ready_object();
 	void should_not_accept_qobject_type();
 	void should_not_accept_not_default_constructible_type();
 	void should_accept_default_constructible_type();
@@ -96,6 +106,86 @@ void module_test::should_accept_empty_module()
 {
 	class test_module : public module { };
 	test_module{};
+}
+
+void module_test::should_not_accept_null_ready_object()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			add_ready_object<not_default_constructible_type>(nullptr);
+		}
+	};
+
+	expect<exception::invalid_qobject>([&](){
+		test_module{};
+	});
+}
+
+void module_test::should_not_accept_qobject_ready_object()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			not_default_constructible_type object;
+			add_ready_object<QObject>(&object);
+		}
+	};
+
+	expect<exception::qobject_type>([&](){
+		test_module{};
+	});
+}
+
+void module_test::should_accept_valid_ready_object()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			not_default_constructible_type object;
+			add_ready_object<not_default_constructible_type>(&object);
+		}
+	};
+
+	test_module{};
+}
+
+void module_test::should_accept_subtype_ready_object()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			not_default_constructible_type_subtype object;
+			add_ready_object<not_default_constructible_type>(&object);
+		}
+	};
+
+	test_module{};
+}
+
+void module_test::should_not_accept_supertype_ready_object()
+{
+	class test_module : public module
+	{
+	public:
+		test_module()
+		{
+			not_default_constructible_type object;
+			add_ready_object<not_default_constructible_type_subtype>(&object);
+		}
+	};
+
+	expect<exception::interface_not_implemented>([&](){
+		test_module{};
+	});
 }
 
 void module_test::should_not_accept_qobject_type()
