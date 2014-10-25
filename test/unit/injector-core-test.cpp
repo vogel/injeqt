@@ -139,6 +139,19 @@ class type_8 : public QObject
 	Q_OBJECT
 };
 
+class type_9 : public QObject
+{
+	Q_OBJECT
+
+public:
+	type_7 *o7 = nullptr;
+	type_8 *o8 = nullptr;
+
+private slots:
+	INJEQT_SETTER void set_type_7(type_7 *x) { o7 = x; }
+	INJEQT_SETTER void set_type_8(type_8 *x) { o8 = x; }
+};
+
 class injector_core_test : public QObject
 {
 	Q_OBJECT
@@ -163,6 +176,7 @@ private slots:
 	void should_accept_known_required_supertype();
 	void should_not_accept_ambiguous_required_supertype();
 	void should_accept_cyclic_dependencies();
+	void should_accept_dependencies_that_are_required();
 	// TODO: https://github.com/vogel/injeqt/issues/3
 	/*
 		void should_not_accept_cyclic_required_types();
@@ -414,6 +428,35 @@ void injector_core_test::should_accept_cyclic_dependencies()
 	QVERIFY(o4 == get<type_6>(i)->o);
 	QVERIFY(o5 == get<type_4>(i)->o);
 	QVERIFY(o6 == get<type_5>(i)->o);
+}
+
+void injector_core_test::should_accept_dependencies_that_are_required()
+{
+	auto type_7_provider_p = make_mocked_provider<type_7>();
+	auto type_7_provider = type_7_provider_p.get();
+	auto type_8_provider_p = make_mocked_provider<type_8, type_7>();
+	auto type_8_provider = type_8_provider_p.get();
+	auto type_9_provider_p = make_mocked_provider<type_9>();
+	auto type_9_provider = type_8_provider_p.get();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_7_provider_p));
+	configuration.push_back(std::move(type_8_provider_p));
+	configuration.push_back(std::move(type_9_provider_p));
+
+	auto i = injector_core{std::move(configuration)};
+	QVERIFY(type_7_provider->object() == nullptr);
+	QVERIFY(type_8_provider->object() == nullptr);
+	QVERIFY(type_9_provider->object() == nullptr);
+
+	auto o9 = get<type_9>(i);
+	auto o7 = type_7_provider->object();
+	auto o8 = type_8_provider->object();
+	QVERIFY(o9 != nullptr);
+	QVERIFY(o7 != nullptr);
+	QVERIFY(o8 != nullptr);
+	QVERIFY(o7 == get<type_7>(i));
+	QVERIFY(o8 == get<type_8>(i));
 }
 
 // TODO: https://github.com/vogel/injeqt/issues/3
