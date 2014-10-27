@@ -70,6 +70,11 @@ public slots:
 
 };
 
+class valid_factory_subtype : public valid_factory
+{
+	Q_OBJECT
+};
+
 class valid_multi_factory : public QObject
 {
 	Q_OBJECT
@@ -109,6 +114,7 @@ private slots:
 	void should_return_empty_when_created_with_invalid_factory_method();
 	void should_create_empty();
 	void should_create_valid_with_invokable_factory_method();
+	void should_create_valid_subtype_with_invokable_factory_method();
 	void should_create_valid_with_invokable_factory_with_default_parameter_method();
 	void should_create_object_with_factory_method();
 	void should_properly_compare();
@@ -155,6 +161,21 @@ void factory_method_test::should_create_valid_with_invokable_factory_method()
 	auto f2 = make_factory_method(make_type<result_object>(), make_type<valid_factory>());
 	QVERIFY(!f2.is_empty());
 	QCOMPARE(f2.object_type(), make_type<valid_factory>());
+	QCOMPARE(f2.result_type(), make_type<result_object>());
+
+	QCOMPARE(f1, f2);
+}
+
+void factory_method_test::should_create_valid_subtype_with_invokable_factory_method()
+{
+	auto f1 = factory_method{make_method<valid_factory_subtype>("create_result_object()")};
+	QVERIFY(!f1.is_empty());
+	QCOMPARE(f1.object_type(), make_type<valid_factory_subtype>());
+	QCOMPARE(f1.result_type(), make_type<result_object>());
+
+	auto f2 = make_factory_method(make_type<result_object>(), make_type<valid_factory_subtype>());
+	QVERIFY(!f2.is_empty());
+	QCOMPARE(f2.object_type(), make_type<valid_factory_subtype>());
 	QCOMPARE(f2.result_type(), make_type<result_object>());
 
 	QCOMPARE(f1, f2);
