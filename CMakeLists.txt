@@ -21,6 +21,9 @@
 project (injeqt)
 cmake_minimum_required (VERSION 2.8)
 
+option (DISABLE_TESTS "Do not build tests" OFF)
+option (DISABLE_EXAMPLES "Do not build examples" OFF)
+
 find_package (Qt5Core 5.2 REQUIRED)
 set (CMAKE_AUTOMOC TRUE)
 set (CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -81,16 +84,20 @@ set (INJEQT_SRCS
 	src/internal/types-model.cpp
 )
 
-add_subdirectory (examples)
-
-enable_testing ()
-add_subdirectory (test)
-
 add_library (
 	injeqt
 	SHARED
 	${INJEQT_SRCS}
 )
+
+if (NOT DISABLE_EXAMPLES)
+	add_subdirectory (examples)
+endif (NOT DISABLE_EXAMPLES)
+
+if (NOT DISABLE_TESTS)
+	enable_testing ()
+	add_subdirectory (test)
+endif (NOT DISABLE_TESTS)
 
 if (NOT DEFINED CMAKE_INSTALL_LIBDIR)
 	set (CMAKE_INSTALL_LIBDIR lib)

@@ -20,13 +20,21 @@
 
 find_package (Qt5Test 5.2 REQUIRED)
 
+option (DISABLE_COVERAGE "Do not gather coverage data" OFF)
+
 include_directories (
 	${CMAKE_SOURCE_DIR}/src
 )
 
-set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fprofile-arcs -ftest-coverage -O0")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage -O0")
-set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage -O0")
+if (NOT DISABLE_COVERAGE)
+	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fprofile-arcs -ftest-coverage -O0")
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage -O0")
+	set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage -O0")
+
+	add_custom_target (coverage
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/coverage.sh
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endif (NOT DISABLE_COVERAGE)
 
 function (injeqt_add_test name_)
 	file (RELATIVE_PATH sourcePath "${CMAKE_SOURCE_DIR}/test" "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -35,16 +43,15 @@ function (injeqt_add_test name_)
 	file (MAKE_DIRECTORY "${exeDir}")
 
 	add_executable (${name_} ${ARGN})
-	target_link_libraries (${name_} gcov)
 	set_property (TARGET ${name_} APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-error")
 	qt5_use_modules (${name_} Core Test)
 
+	if (NOT DISABLE_COVERAGE)
+		target_link_libraries (${name_} gcov)
+	endif (NOT DISABLE_COVERAGE)
+
 	add_test ("${sourcePath}/${name_}" ${name_})
 endfunction ()
-
-add_custom_target (coverage
-	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/coverage.sh
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
 injeqt_add_test (default-constructor-method-test unit/default-constructor-method-test.cpp)
 injeqt_add_test (dependencies-test unit/dependencies-test.cpp)
