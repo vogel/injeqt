@@ -18,9 +18,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-find_package(Qt5Test 5.2 REQUIRED)
+find_package (Qt5Test 5.2 REQUIRED)
 
-include_directories(
+include_directories (
 	${CMAKE_SOURCE_DIR}/src
 )
 
@@ -46,26 +46,26 @@ add_custom_target (coverage
 	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/coverage.sh
 	WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
-injeqt_add_test(default-constructor-method-test unit/default-constructor-method-test.cpp)
-injeqt_add_test(dependencies-test unit/dependencies-test.cpp)
-injeqt_add_test(dependency-test unit/dependency-test.cpp)
-injeqt_add_test(factory-method-test unit/factory-method-test.cpp)
-injeqt_add_test(implementation-test unit/implementation-test.cpp)
-injeqt_add_test(implemented-by-test unit/implemented-by-test.cpp)
-injeqt_add_test(injector-core-test unit/injector-core-test.cpp)
-injeqt_add_test(injector-test unit/injector-test.cpp)
-injeqt_add_test(interfaces-utils-test unit/interfaces-utils-test.cpp)
-injeqt_add_test(module-impl-test unit/module-impl-test.cpp)
-injeqt_add_test(module-test unit/module-test.cpp)
-injeqt_add_test(provider-by-default-constructor-test unit/provider-by-default-constructor-test.cpp)
-injeqt_add_test(provider-by-factory-test unit/provider-by-factory-test.cpp)
-injeqt_add_test(provider-ready-test unit/provider-ready-test.cpp)
-injeqt_add_test(required-to-instantiate-test unit/required-to-instantiate-test.cpp)
-injeqt_add_test(resolved-dependency-test unit/resolved-dependency-test.cpp)
-injeqt_add_test(resolve-dependencies-test unit/resolve-dependencies-test.cpp)
-injeqt_add_test(setter-method-test unit/setter-method-test.cpp)
-injeqt_add_test(sorted-unique-vector-test unit/sorted-unique-vector-test.cpp)
-injeqt_add_test(type-dependencies-test unit/type-dependencies-test.cpp)
-injeqt_add_test(type-test unit/type-test.cpp)
-injeqt_add_test(type-relations-test unit/type-relations-test.cpp)
-injeqt_add_test(types-model-test unit/types-model-test.cpp)
+injeqt_add_test (default-constructor-method-test unit/default-constructor-method-test.cpp)
+injeqt_add_test (dependencies-test unit/dependencies-test.cpp)
+injeqt_add_test (dependency-test unit/dependency-test.cpp)
+injeqt_add_test (factory-method-test unit/factory-method-test.cpp)
+injeqt_add_test (implementation-test unit/implementation-test.cpp)
+injeqt_add_test (implemented-by-test unit/implemented-by-test.cpp)
+injeqt_add_test (injector-core-test unit/injector-core-test.cpp)
+injeqt_add_test (injector-test unit/injector-test.cpp)
+injeqt_add_test (interfaces-utils-test unit/interfaces-utils-test.cpp)
+injeqt_add_test (module-impl-test unit/module-impl-test.cpp)
+injeqt_add_test (module-test unit/module-test.cpp)
+injeqt_add_test (provider-by-default-constructor-test unit/provider-by-default-constructor-test.cpp)
+injeqt_add_test (provider-by-factory-test unit/provider-by-factory-test.cpp)
+injeqt_add_test (provider-ready-test unit/provider-ready-test.cpp)
+injeqt_add_test (required-to-instantiate-test unit/required-to-instantiate-test.cpp)
+injeqt_add_test (resolved-dependency-test unit/resolved-dependency-test.cpp)
+injeqt_add_test (resolve-dependencies-test unit/resolve-dependencies-test.cpp)
+injeqt_add_test (setter-method-test unit/setter-method-test.cpp)
+injeqt_add_test (sorted-unique-vector-test unit/sorted-unique-vector-test.cpp)
+injeqt_add_test (type-dependencies-test unit/type-dependencies-test.cpp)
+injeqt_add_test (type-test unit/type-test.cpp)
+injeqt_add_test (type-relations-test unit/type-relations-test.cpp)
+injeqt_add_test (types-model-test unit/types-model-test.cpp)

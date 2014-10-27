@@ -18,24 +18,24 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-project(injeqt)
-cmake_minimum_required(VERSION 2.8)
+project (injeqt)
+cmake_minimum_required (VERSION 2.8)
 
-find_package(Qt5Core 5.2 REQUIRED)
-set(CMAKE_AUTOMOC TRUE)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+find_package (Qt5Core 5.2 REQUIRED)
+set (CMAKE_AUTOMOC TRUE)
+set (CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(
+include_directories (
 	${Qt5Core_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/src/internal
 )
 
-set(WARNINGS "-Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
-set(VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
-set(CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
+set (WARNINGS "-Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
+set (VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
+set (CMAKE_CXX_FLAGS "-std=c++11 ${VISIBILITY}")
 
-set(INJEQT_SRCS
+set (INJEQT_SRCS
 	src/injector.cpp
 	src/module.cpp
 	src/type.cpp
@@ -81,41 +81,43 @@ set(INJEQT_SRCS
 	src/internal/types-model.cpp
 )
 
-add_subdirectory(examples)
+add_subdirectory (examples)
 
-enable_testing()
-add_subdirectory(test)
+enable_testing ()
+add_subdirectory (test)
 
-add_library(
+add_library (
 	injeqt
 	SHARED
 	${INJEQT_SRCS}
 )
 
-if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
-	set(CMAKE_INSTALL_LIBDIR lib)
-endif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+if (NOT DEFINED CMAKE_INSTALL_LIBDIR)
+	set (CMAKE_INSTALL_LIBDIR lib)
+endif (NOT DEFINED CMAKE_INSTALL_LIBDIR)
 
-install(TARGETS
+install (TARGETS
 	injeqt
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-install(DIRECTORY
+install (DIRECTORY
 	include/injeqt DESTINATION include/injeqt
 )
 
-set(prefix ${CMAKE_INSTALL_PREFIX})
-set(exec_prefix ${CMAKE_INSTALL_PREFIX})
-set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-set(includedir ${CMAKE_INSTALL_PREFIX}/include)
-set(LIBS "-lQt5Core")
-configure_file(
+set (prefix ${CMAKE_INSTALL_PREFIX})
+set (exec_prefix ${CMAKE_INSTALL_PREFIX})
+set (libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+set (includedir ${CMAKE_INSTALL_PREFIX}/include)
+set (LIBS "-lQt5Core")
+
+configure_file (
 	${CMAKE_CURRENT_SOURCE_DIR}/injeqt.pc.in
 	${CMAKE_CURRENT_BINARY_DIR}/injeqt.pc
 	@ONLY
 )
-install(FILES
+
+install (FILES
 	${CMAKE_CURRENT_BINARY_DIR}/injeqt.pc
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
