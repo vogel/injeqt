@@ -90,6 +90,11 @@ add_library (
 	${INJEQT_SRCS}
 )
 
+set_target_properties (injeqt PROPERTIES
+	SOVERSION 0
+	VERSION "0.9.0"
+)
+
 if (NOT DISABLE_EXAMPLES)
 	add_subdirectory (examples)
 endif (NOT DISABLE_EXAMPLES)
