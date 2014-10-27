@@ -71,8 +71,8 @@ add_library (
 )
 
 set_target_properties (injeqt PROPERTIES
-	SOVERSION 0
-	VERSION "0.9.0"
+	SOVERSION "${INJEQT_SOVERSION}"
+	VERSION "${INJEQT_VERSION}"
 )
 
 message ("aa ${CMAKE_INSTALL_LIBDIR}")
