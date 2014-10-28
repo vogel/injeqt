@@ -175,7 +175,7 @@ class invalid_setter_empty_type : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter(int) {};
+	INJEQT_SETTER void setter_int(int) {};
 
 };
 
@@ -184,7 +184,7 @@ class invalid_setter_qobject_type : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter(QObject *) {};
+	INJEQT_SETTER void setter_qobject(QObject *) {};
 
 };
 
@@ -193,7 +193,7 @@ class invalid_setter_no_paremters : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter() {};
+	INJEQT_SETTER void setter_no_paremters() {};
 
 };
 
@@ -202,7 +202,7 @@ class invalid_setter_two_paremters : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter() {};
+	INJEQT_SETTER void setter_two_parameters(injectable_type1 *, injectable_type2 *) {};
 
 };
 
@@ -313,28 +313,28 @@ void dependencies_test::should_fail_when_depends_on_supertype()
 
 void dependencies_test::should_throw_when_setter_with_empty_type()
 {
-	expect<exception::invalid_setter>({"setter"}, [&]{
+	expect<exception::invalid_setter>({"setter_int"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_empty_type>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_qobject_type()
 {
-	expect<exception::invalid_setter>({"setter"}, [&]{
+	expect<exception::invalid_setter>({"setter_qobject"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_qobject_type>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_no_parameters()
 {
-	expect<exception::invalid_setter>({"setter"}, [&]{
+	expect<exception::invalid_setter>({"setter_no_parameters"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_no_paremters>());
 	});
 }
 
 void dependencies_test::should_throw_when_setter_with_two_parameters()
 {
-	expect<exception::invalid_setter>({"setter"}, [&]{
+	expect<exception::invalid_setter>({"setter_two_parameters"}, [&]{
 		auto dependencies = extract_dependencies(make_type<invalid_setter_two_paremters>());
 	});
 }

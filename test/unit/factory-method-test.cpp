@@ -170,12 +170,12 @@ void factory_method_test::should_create_valid_subtype_with_invokable_factory_met
 {
 	auto f1 = factory_method{make_method<valid_factory_subtype>("create_result_object()")};
 	QVERIFY(!f1.is_empty());
-	QCOMPARE(f1.object_type(), make_type<valid_factory_subtype>());
+	QCOMPARE(f1.object_type(), make_type<valid_factory>());
 	QCOMPARE(f1.result_type(), make_type<result_object>());
 
 	auto f2 = make_factory_method(make_type<result_object>(), make_type<valid_factory_subtype>());
 	QVERIFY(!f2.is_empty());
-	QCOMPARE(f2.object_type(), make_type<valid_factory_subtype>());
+	QCOMPARE(f2.object_type(), make_type<valid_factory>());
 	QCOMPARE(f2.result_type(), make_type<result_object>());
 
 	QCOMPARE(f1, f2);
