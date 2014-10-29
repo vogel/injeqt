@@ -67,10 +67,10 @@ std::vector<setter_method> extract_setters(const type &for_type)
 		if (probably_setter.methodType() != QMetaMethod::Slot)
 			continue;
 		if (probably_setter.parameterCount() != 1)
-			throw exception::invalid_setter{probably_setter.methodSignature().data()};
+			throw exception::invalid_setter{std::string{"invalid parameter count: "} + probably_setter.methodSignature().data()};
 		auto parameter_type = type{QMetaType::metaObjectForType(probably_setter.parameterType(0))};
 		if (parameter_type.is_empty() || parameter_type.is_qobject())
-			throw exception::invalid_setter{probably_setter.methodSignature().data()};
+			throw exception::invalid_setter{std::string{"invalid parameter: "} + probably_setter.methodSignature().data()};
 
 		result.emplace_back(setter_method{probably_setter});
 	}
