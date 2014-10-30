@@ -87,7 +87,7 @@ bool operator != (const factory_method &x, const factory_method &y)
 	return !(x == y);
 }
 
-factory_method make_factory_method(const type &t, const type &f)
+factory_method make_factory_method(const types_by_name &known_types, const type &t, const type &f)
 {
 	assert(!t.is_empty());
 	assert(!t.is_qobject());
@@ -103,10 +103,9 @@ factory_method make_factory_method(const type &t, const type &f)
 		auto method = meta_object->method(i);
 		if (method.parameterCount() != 0)
 			continue;
-		auto return_type_meta_object = QMetaType::metaObjectForType(method.returnType());
-		if (!return_type_meta_object)
+		auto return_type = type_by_pointer(known_types, method.typeName());
+		if (return_type.is_empty())
 			continue;
-		auto return_type = type{return_type_meta_object};
 		auto interfaces = extract_interfaces(return_type);
 		if (interfaces.contains(t))
 			factory_methods.emplace_back(method);

@@ -18,22 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
-
-#include <injeqt/injeqt.h>
-#include <injeqt/type.h>
-
-#include "sorted-unique-vector.h"
+#include "types-by-name.h"
 
 namespace injeqt { namespace internal {
 
-inline std::string name_from_type(const type &t)
+type type_by_pointer(const types_by_name &known_types, const std::string &pointer_name)
 {
-	return t.name();
+	if (pointer_name.length() < 2)
+		return type{};
+	if (pointer_name[pointer_name.length() - 1] != '*')
+		return type{};
+	auto name = pointer_name.substr(0, pointer_name.length() - 1);
+	auto item = known_types.get(name);
+	if (item == std::end(known_types))
+		return type{};
+	else
+		return *item;
 }
-
-using types_by_name = sorted_unique_vector<std::string, type, name_from_type>;
-
-type type_by_pointer(const types_by_name &known_types, const std::string &pointer_name);
 
 }}

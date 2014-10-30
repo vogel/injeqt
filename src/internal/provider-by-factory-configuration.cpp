@@ -47,14 +47,14 @@ std::vector<type> provider_by_factory_configuration::types() const
 	return {_object_type, _factory_type};
 }
 
-std::unique_ptr<provider> provider_by_factory_configuration::create_provider(const types_by_name &) const
+std::unique_ptr<provider> provider_by_factory_configuration::create_provider(const types_by_name &known_types) const
 {
 	if (_object_type.is_qobject())
 		throw exception::qobject_type();
 	if (_factory_type.is_qobject())
 		throw exception::qobject_type();
 
-	auto fm = internal::make_factory_method(_object_type, _factory_type);
+	auto fm = internal::make_factory_method(known_types, _object_type, _factory_type);
 	if (fm.is_empty())
 		throw exception::unique_factory_method_not_found{_object_type.name() + " in " + _factory_type.name()};
 

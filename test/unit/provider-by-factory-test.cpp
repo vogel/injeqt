@@ -54,6 +54,7 @@
 #include "type.cpp"
 #include "type-dependencies.cpp"
 #include "type-relations.cpp"
+#include "types-by-name.cpp"
 #include "types-model.cpp"
 
 #include "expect.h"
@@ -106,15 +107,30 @@ class provider_by_factory_test : public QObject
 {
 	Q_OBJECT
 
+public:
+	provider_by_factory_test();
+
 private slots:
 	void should_return_always_the_same_object();
 	void should_throw_instantiation_failed_when_invalid_factory();
 
+private:
+	types_by_name known_types;
+
 };
+
+provider_by_factory_test::provider_by_factory_test()
+{
+	known_types = types_by_name{std::vector<type>{
+		make_type<by_factory_type>(),
+		make_type<factory_type>(),
+		make_type<invalid_factory_type>()
+	}};
+}
 
 void provider_by_factory_test::should_return_always_the_same_object()
 {
-	auto fm = make_factory_method(make_type<by_factory_type>(), make_type<factory_type>());
+	auto fm = make_factory_method(known_types, make_type<by_factory_type>(), make_type<factory_type>());
 	auto fp = std::unique_ptr<provider_by_factory>{new provider_by_factory{fm}};
 	auto p = fp.get();
 
@@ -135,7 +151,7 @@ void provider_by_factory_test::should_return_always_the_same_object()
 
 void provider_by_factory_test::should_throw_instantiation_failed_when_invalid_factory()
 {
-	auto fm = make_factory_method(make_type<by_factory_type>(), make_type<invalid_factory_type>());
+	auto fm = make_factory_method(known_types, make_type<by_factory_type>(), make_type<invalid_factory_type>());
 	auto fp = std::unique_ptr<provider_by_factory>{new provider_by_factory{fm}};
 	auto p = fp.get();
 

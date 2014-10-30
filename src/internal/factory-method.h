@@ -24,6 +24,8 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "types-by-name.h"
+
 #include <memory>
 #include <QtCore/QMetaMethod>
 
@@ -144,6 +146,6 @@ bool operator != (const factory_method &x, const factory_method &y);
  * is found it is wrapped in factory_method type and returned. In other cases an empty
  * factory_method is returned.
  */
-factory_method make_factory_method(const type &t, const type &f);
+factory_method make_factory_method(const types_by_name &known_types, const type &t, const type &f);
 
 }}

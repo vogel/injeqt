@@ -64,6 +64,7 @@ set (INJEQT_SRCS
 	internal/setter-method.cpp
 	internal/type-dependencies.cpp
 	internal/type-relations.cpp
+	internal/types-by-name.cpp
 	internal/types-model.cpp
 )
 
