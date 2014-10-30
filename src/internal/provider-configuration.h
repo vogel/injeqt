@@ -23,6 +23,8 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "types-by-name.h"
+
 #include <memory>
 
 namespace injeqt { namespace internal {
@@ -37,7 +39,7 @@ public:
 	virtual ~provider_configuration() {}
 
 	virtual std::vector<type> types() const = 0;
-	virtual std::unique_ptr<provider> create_provider() const = 0;
+	virtual std::unique_ptr<provider> create_provider(const types_by_name &known_types) const = 0;
 
 };
 

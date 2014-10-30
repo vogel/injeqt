@@ -31,7 +31,7 @@ include (GNUInstallDirs)
 
 find_package (Qt5Core 5.2 REQUIRED)
 
-set (WARNINGS "-W -Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
+set (WARNINGS "-Werror -W -Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
 set (VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
 set (CMAKE_CXX_FLAGS "-std=c++11 ${WARNINGS} ${VISIBILITY}")
 

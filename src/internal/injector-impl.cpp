@@ -41,9 +41,11 @@ injector_impl::injector_impl()
 
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	// modules are only stored because these can own objects used by injector
-	_modules{std::move(modules)},
-	_core{extract_types(), create_providers()}
+	_modules{std::move(modules)}
 {
+	auto known_types = extract_types();
+	auto providers = create_providers(known_types);
+	_core = injector_core{known_types, std::move(providers)};
 }
 
 types_by_name injector_impl::extract_types() const
@@ -56,11 +58,11 @@ types_by_name injector_impl::extract_types() const
 	return types_by_name{result};
 }
 
-std::vector<std::unique_ptr<provider>> injector_impl::create_providers() const
+std::vector<std::unique_ptr<provider>> injector_impl::create_providers(const types_by_name &known_types) const
 {
 	auto result = std::vector<std::unique_ptr<provider>>{};
-	auto create_provider = [](const std::unique_ptr<provider_configuration> &p){
-		return p->create_provider();
+	auto create_provider = [&](const std::unique_ptr<provider_configuration> &p){
+		return p->create_provider(known_types);
 	};
 	for (auto &&module : _modules)
 	{

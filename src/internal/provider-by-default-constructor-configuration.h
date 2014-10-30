@@ -35,7 +35,7 @@ public:
 	virtual ~provider_by_default_constructor_configuration();
 
 	virtual std::vector<type> types() const override;
-	virtual std::unique_ptr<provider> create_provider() const override;
+	virtual std::unique_ptr<provider> create_provider(const types_by_name &known_types) const override;
 
 private:
 	type _object_type;

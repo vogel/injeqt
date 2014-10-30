@@ -42,7 +42,7 @@ std::vector<type> provider_ready_configuration::types() const
 	return {_object_type};
 }
 
-std::unique_ptr<provider> provider_ready_configuration::create_provider() const
+std::unique_ptr<provider> provider_ready_configuration::create_provider(const types_by_name &) const
 {
 	auto i = internal::make_implementation(_object_type, _object);
 	return std::unique_ptr<provider>{new provider_ready{i}};
