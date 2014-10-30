@@ -53,8 +53,11 @@ set (INJEQT_SRCS
 	internal/interfaces-utils.cpp
 	internal/module-impl.cpp
 	internal/provider-by-default-constructor.cpp
+	internal/provider-by-default-constructor-configuration.cpp
 	internal/provider-by-factory.cpp
+	internal/provider-by-factory-configuration.cpp
 	internal/provider-ready.cpp
+	internal/provider-ready-configuration.cpp
 	internal/required-to-instantiate.cpp
 	internal/resolved-dependency.cpp
 	internal/resolve-dependencies.cpp
