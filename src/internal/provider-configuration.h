@@ -21,6 +21,7 @@
 #pragma once
 
 #include <injeqt/injeqt.h>
+#include <injeqt/type.h>
 
 #include <memory>
 
@@ -35,6 +36,7 @@ public:
 	explicit provider_configuration() {}
 	virtual ~provider_configuration() {}
 
+	virtual std::vector<type> types() const = 0;
 	virtual std::unique_ptr<provider> create_provider() const = 0;
 
 };

@@ -39,6 +39,11 @@ provider_by_default_constructor_configuration::~provider_by_default_constructor_
 {
 }
 
+std::vector<type> provider_by_default_constructor_configuration::types() const
+{
+	return {_object_type};
+}
+
 std::unique_ptr<provider> provider_by_default_constructor_configuration::create_provider() const
 {
 	auto c = make_default_constructor_method(_object_type);

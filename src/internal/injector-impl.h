@@ -26,6 +26,7 @@
 #include "implementations.h"
 #include "injector-core.h"
 #include "providers.h"
+#include "types-by-name.h"
 
 #include <vector>
 #include <QtCore/QObject>
@@ -94,6 +95,8 @@ public:
 private:
 	std::vector<std::unique_ptr<module>> _modules;
 	injector_core _core;
+
+	types_by_name extract_types() const;
 
 	/**
 	 * @brief Extract set of providers from all modules

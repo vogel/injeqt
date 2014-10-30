@@ -25,6 +25,7 @@
 
 #include "implementations.h"
 #include "providers.h"
+#include "types-by-name.h"
 #include "types-model.h"
 
 #include <vector>
@@ -80,7 +81,7 @@ public:
 	 * This constructor creates types_model object to get all required information from providers. This object
 	 * takes ownership of passed providers.
 	 */
-	explicit injector_core(std::vector<std::unique_ptr<provider>> &&all_providers);
+	explicit injector_core(types_by_name known_types, std::vector<std::unique_ptr<provider>> &&all_providers);
 
 	/**
 	 * @brief Returns pointer to object of given type interface_type
@@ -94,6 +95,7 @@ public:
 	QObject * get(const type &interface_type);
 
 private:
+	types_by_name _known_types;
 	providers _available_providers;
 	implementations _objects;
 	types_model _types_model;

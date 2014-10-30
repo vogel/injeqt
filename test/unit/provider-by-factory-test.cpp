@@ -121,7 +121,7 @@ void provider_by_factory_test::should_return_always_the_same_object()
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.emplace_back(std::move(fp));
 	configuration.emplace_back(std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(make_type<factory_type>())}});
-	auto injector = injector_core{std::move(configuration)};
+	auto injector = injector_core{types_by_name{}, std::move(configuration)};
 
 	QCOMPARE(p->provided_type(), make_type<by_factory_type>());
 	QCOMPARE(p->required_types(), types{make_type<factory_type>()});
@@ -142,7 +142,7 @@ void provider_by_factory_test::should_throw_instantiation_failed_when_invalid_fa
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.emplace_back(std::move(fp));
 	configuration.emplace_back(std::unique_ptr<provider_by_default_constructor>{new provider_by_default_constructor{make_default_constructor_method(make_type<invalid_factory_type>())}});
-	auto injector = injector_core{std::move(configuration)};
+	auto injector = injector_core{types_by_name{}, std::move(configuration)};
 
 	QCOMPARE(p->provided_type(), make_type<by_factory_type>());
 	QCOMPARE(p->required_types(), types{make_type<invalid_factory_type>()});

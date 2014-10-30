@@ -42,7 +42,8 @@ injector_core::injector_core()
 {
 }
 
-injector_core::injector_core(std::vector<std::unique_ptr<provider>> &&all_providers)
+injector_core::injector_core(types_by_name known_types, std::vector<std::unique_ptr<provider>> &&all_providers) :
+	_known_types{std::move(known_types)}
 {
 	auto all_providers_size = all_providers.size();
 	_available_providers = providers{std::move(all_providers)};

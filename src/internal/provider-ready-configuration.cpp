@@ -37,6 +37,11 @@ provider_ready_configuration::~provider_ready_configuration()
 {
 }
 
+std::vector<type> provider_ready_configuration::types() const
+{
+	return {_object_type};
+}
+
 std::unique_ptr<provider> provider_ready_configuration::create_provider() const
 {
 	auto i = internal::make_implementation(_object_type, _object);

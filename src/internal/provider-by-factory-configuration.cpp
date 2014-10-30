@@ -42,6 +42,11 @@ provider_by_factory_configuration::~provider_by_factory_configuration()
 {
 }
 
+std::vector<type> provider_by_factory_configuration::types() const
+{
+	return {_object_type, _factory_type};
+}
+
 std::unique_ptr<provider> provider_by_factory_configuration::create_provider() const
 {
 	if (_object_type.is_qobject())

@@ -34,6 +34,7 @@ public:
 	mocked_provider_configuration() {}
 	virtual ~mocked_provider_configuration() {}
 
+    virtual std::vector<type> types() const override { return {}; }
 	virtual std::unique_ptr<provider> create_provider() const override { return nullptr; }
 
 };

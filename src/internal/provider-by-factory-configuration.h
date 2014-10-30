@@ -34,6 +34,7 @@ public:
 	explicit provider_by_factory_configuration(type object_type, type factory_type);
 	virtual ~provider_by_factory_configuration();
 
+	virtual std::vector<type> types() const override;
 	virtual std::unique_ptr<provider> create_provider() const override;
 
 private:

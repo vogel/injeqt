@@ -34,6 +34,7 @@ public:
 	explicit provider_ready_configuration(type object_type, QObject *object);
 	virtual ~provider_ready_configuration();
 
+	virtual std::vector<type> types() const override;
 	virtual std::unique_ptr<provider> create_provider() const override;
 
 private:
