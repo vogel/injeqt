@@ -18,20 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module-impl.h"
+#pragma once
 
-#include <QtCore/QMetaObject>
+#include "provider.h"
 
-namespace injeqt { namespace internal {
+#include "provider-configuration.h"
 
-void module_impl::add_provider_configuration(std::unique_ptr<provider_configuration> p)
+using namespace injeqt::internal;
+using namespace injeqt::v1;
+
+class mocked_provider_configuration : public provider_configuration
 {
-	_provider_configurations.push_back(std::move(p));
-}
 
-const std::vector<std::unique_ptr<provider_configuration>> & module_impl::provider_configurations()
-{
-	return _provider_configurations;
-}
+public:
+	mocked_provider_configuration() {}
+	virtual ~mocked_provider_configuration() {}
 
-}}
+	virtual std::unique_ptr<provider> create_provider() const override { return nullptr; }
+
+};

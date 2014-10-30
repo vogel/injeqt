@@ -19,9 +19,8 @@
  */
 
 #include "module-impl.cpp"
-#include "type.cpp"
 
-#include "../mocks/mocked-provider.h"
+#include "../mocks/mocked-provider-configuration.h"
 #include "expect.h"
 #include "utils.h"
 
@@ -54,35 +53,35 @@ class module_impl_test : public QObject
 	Q_OBJECT
 
 private slots:
-	void should_properly_add_providers();
+	void should_properly_add_provider_configurations();
 
 };
 
-void module_impl_test::should_properly_add_providers()
+void module_impl_test::should_properly_add_provider_configurations()
 {
 	auto m = module_impl{};
-	QCOMPARE(m.providers().size(), 0UL);
+	QCOMPARE(m.provider_configurations().size(), 0UL);
 
-	auto p1 = std::unique_ptr<mocked_provider>(new mocked_provider{type{}, types{}});
+	auto p1 = std::unique_ptr<mocked_provider_configuration>(new mocked_provider_configuration{});
 	auto p1_ptr = p1.get();
-	m.add_provider(std::move(p1));
-	QCOMPARE(m.providers().size(), 1UL);
-	QCOMPARE(m.providers()[0].get(), p1_ptr);
+	m.add_provider_configuration(std::move(p1));
+	QCOMPARE(m.provider_configurations().size(), 1UL);
+	QCOMPARE(m.provider_configurations()[0].get(), p1_ptr);
 
-	auto p2 = std::unique_ptr<mocked_provider>(new mocked_provider{type{}, types{}});
+	auto p2 = std::unique_ptr<mocked_provider_configuration>(new mocked_provider_configuration{});
 	auto p2_ptr = p2.get();
-	m.add_provider(std::move(p2));
-	QCOMPARE(m.providers().size(), 2UL);
-	QCOMPARE(m.providers()[0].get(), p1_ptr);
-	QCOMPARE(m.providers()[1].get(), p2_ptr);
+	m.add_provider_configuration(std::move(p2));
+	QCOMPARE(m.provider_configurations().size(), 2UL);
+	QCOMPARE(m.provider_configurations()[0].get(), p1_ptr);
+	QCOMPARE(m.provider_configurations()[1].get(), p2_ptr);
 
-	auto p3 = std::unique_ptr<mocked_provider>(new mocked_provider{type{}, types{}});
+	auto p3 = std::unique_ptr<mocked_provider_configuration>(new mocked_provider_configuration{});
 	auto p3_ptr = p3.get();
-	m.add_provider(std::move(p3));
-	QCOMPARE(m.providers().size(), 3UL);
-	QCOMPARE(m.providers()[0].get(), p1_ptr);
-	QCOMPARE(m.providers()[1].get(), p2_ptr);
-	QCOMPARE(m.providers()[2].get(), p3_ptr);
+	m.add_provider_configuration(std::move(p3));
+	QCOMPARE(m.provider_configurations().size(), 3UL);
+	QCOMPARE(m.provider_configurations()[0].get(), p1_ptr);
+	QCOMPARE(m.provider_configurations()[1].get(), p2_ptr);
+	QCOMPARE(m.provider_configurations()[2].get(), p3_ptr);
 }
 
 QTEST_APPLESS_MAIN(module_impl_test)

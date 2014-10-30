@@ -23,7 +23,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
-#include "provider.h"
+#include "provider-configuration.h"
 
 #include <memory>
 
@@ -48,17 +48,17 @@ class INJEQT_API module_impl final
 {
 
 public:
-	std::vector<std::unique_ptr<provider>> & providers();
+	const std::vector<std::unique_ptr<provider_configuration>> & provider_configurations();
 
 	/**
 	 * @brief Add provider to list
 	 * @param p provider to add
 	 * @pre p must be valid
 	 */
-	void add_provider(std::unique_ptr<provider> p);
+	void add_provider_configuration(std::unique_ptr<provider_configuration> p);
 
 private:
-	std::vector<std::unique_ptr<provider>> _providers;
+	std::vector<std::unique_ptr<provider_configuration>> _provider_configurations;
 
 };
 

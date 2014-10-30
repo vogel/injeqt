@@ -99,7 +99,7 @@ private:
 	 * @brief Extract set of providers from all modules
 	 * @todo move outside
 	 */
-	std::vector<std::unique_ptr<provider>> extract_providers() const;
+	std::vector<std::unique_ptr<provider>> create_providers() const;
 
 };
 

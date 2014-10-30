@@ -20,20 +20,10 @@
 
 #include <injeqt/module.h>
 
-#include <injeqt/exception/default-constructor-not-found.h>
-#include <injeqt/exception/empty-type.h>
-#include <injeqt/exception/interface-not-implemented.h>
-#include <injeqt/exception/invalid-qobject.h>
-#include <injeqt/exception/qobject-type.h>
-#include <injeqt/exception/unique-factory-method-not-found.h>
-
-#include "default-constructor-method.h"
-#include "implementation.h"
-#include "interfaces-utils.h"
 #include "module-impl.h"
-#include "provider-by-default-constructor.h"
-#include "provider-by-factory.h"
-#include "provider-ready.h"
+#include "provider-by-default-constructor-configuration.h"
+#include "provider-by-factory-configuration.h"
+#include "provider-ready-configuration.h"
 
 #include <QtCore/QMetaObject>
 #include <cassert>
@@ -53,24 +43,18 @@ void module::add_ready_object(type t, QObject *object)
 {
 	assert(!t.is_empty());
 
-	auto i = internal::make_implementation(std::move(t), object);
-	auto p = std::unique_ptr<internal::provider_ready>{new internal::provider_ready{std::move(i)}};
-	_pimpl->add_provider(std::move(p));
+	auto p = std::unique_ptr<internal::provider_ready_configuration>{
+		new internal::provider_ready_configuration{std::move(t), object}};
+	_pimpl->add_provider_configuration(std::move(p));
 }
 
 void module::add_type(type t)
 {
 	assert(!t.is_empty());
 
-	if (t.is_qobject())
-		throw exception::qobject_type();
-
-	auto c = internal::make_default_constructor_method(t);
-	if (c.is_empty())
-		throw exception::default_constructor_not_found{t.name()};
-
-	auto p = std::unique_ptr<internal::provider_by_default_constructor>{new internal::provider_by_default_constructor{std::move(c)}};
-	_pimpl->add_provider(std::move(p));
+	auto p = std::unique_ptr<internal::provider_by_default_constructor_configuration>{
+		new internal::provider_by_default_constructor_configuration{std::move(t)}};
+	_pimpl->add_provider_configuration(std::move(p));
 }
 
 void module::add_factory(type t, type f)
@@ -78,17 +62,9 @@ void module::add_factory(type t, type f)
 	assert(!t.is_empty());
 	assert(!f.is_empty());
 
-	if (t.is_qobject())
-		throw exception::qobject_type();
-	if (f.is_qobject())
-		throw exception::qobject_type();
-
-	auto fm = internal::make_factory_method(t, f);
-	if (fm.is_empty())
-		throw exception::unique_factory_method_not_found{t.name() + " in " + f.name()};
-
-	auto p = std::unique_ptr<internal::provider_by_factory>{new internal::provider_by_factory{std::move(fm)}};
-	_pimpl->add_provider(std::move(p));
+	auto p = std::unique_ptr<internal::provider_by_factory_configuration>{
+		new internal::provider_by_factory_configuration{std::move(t), std::move(f)}};
+	_pimpl->add_provider_configuration(std::move(p));
 }
 
 }}

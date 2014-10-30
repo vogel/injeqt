@@ -42,15 +42,21 @@ injector_impl::injector_impl()
 injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	// modules are only stored because these can own objects used by injector
 	_modules{std::move(modules)},
-	_core{extract_providers()}
+	_core{create_providers()}
 {
 }
 
-std::vector<std::unique_ptr<provider>> injector_impl::extract_providers() const
+std::vector<std::unique_ptr<provider>> injector_impl::create_providers() const
 {
 	auto result = std::vector<std::unique_ptr<provider>>{};
+	auto create_provider = [](const std::unique_ptr<provider_configuration> &p){
+		return p->create_provider();
+	};
 	for (auto &&module : _modules)
-		std::move(std::begin(module->_pimpl->providers()), std::end(module->_pimpl->providers()), std::back_inserter(result));
+	{
+		auto &&configurations = module->_pimpl->provider_configurations();
+		std::transform(std::begin(configurations), std::end(configurations), std::back_inserter(result), create_provider);
+	}
 	return result;
 }
 
