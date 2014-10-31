@@ -22,10 +22,10 @@
 
 namespace injeqt { namespace internal {
 
-template<typename T>
+template<typename T, typename P>
 inline setter_method make_setter_method(const std::string &signature)
 {
-	return setter_method{T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()))};
+	return setter_method{make_type<P>(), T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()))};
 }
 
 }}

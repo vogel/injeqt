@@ -75,7 +75,7 @@ void setter_method_test::should_create_empty()
 
 void setter_method_test::should_create_valid_from_tagged_setter()
 {
-	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
+	auto setter = make_setter_method<test_type, injectable_type1>("tagged_setter_1(injectable_type1*)");
 	QVERIFY(!setter.is_empty());
 	QCOMPARE(setter.object_type(), make_type<test_type>());
 	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
@@ -83,7 +83,7 @@ void setter_method_test::should_create_valid_from_tagged_setter()
 
 void setter_method_test::should_create_valid_from_untagged_setter()
 {
-	auto setter = make_setter_method<test_type>("untagged_setter_1(injectable_type1*)");
+	auto setter = make_setter_method<test_type, injectable_type1>("untagged_setter_1(injectable_type1*)");
 	QVERIFY(!setter.is_empty());
 	QCOMPARE(setter.object_type(), make_type<test_type>());
 	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
@@ -91,7 +91,7 @@ void setter_method_test::should_create_valid_from_untagged_setter()
 
 void setter_method_test::should_invoke_have_results()
 {
-	auto setter = make_setter_method<test_type>("tagged_setter_1(injectable_type1*)");
+	auto setter = make_setter_method<test_type, injectable_type1>("tagged_setter_1(injectable_type1*)");
 	auto on = make_object<test_type>();
 	auto with = make_object<injectable_type1>();
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<test_type *>(on.get())->_1);

@@ -35,7 +35,6 @@
 #include "type-relations.h"
 
 #include <QtCore/QMetaMethod>
-#include <QtCore/QMetaType>
 #include <algorithm>
 #include <cassert>
 #include <set>
@@ -72,7 +71,7 @@ std::vector<setter_method> extract_setters(const types_by_name &known_types, con
 		if (parameter_type.is_empty() || parameter_type.is_qobject())
 			throw exception::invalid_setter{std::string{"invalid parameter: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
 
-		result.emplace_back(setter_method{probably_setter});
+		result.emplace_back(setter_method{parameter_type, probably_setter});
 	}
 
 	return result;

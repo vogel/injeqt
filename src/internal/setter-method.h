@@ -70,13 +70,16 @@ public:
 
 	/**
 	 * @brief Create object from QMetaMethod definition.
+	 * @param parameter_type Type of parameter of setter @p meta_method
 	 * @param meta_method Qt meta method that should be a setter method
+	 * @note Qt QMetaType system limitations with plugins disallow use of QMetaType to retreive parameter type.
 	 * @pre meta_method.methodType() == QMetaMethod::Slot
 	 * @pre meta_method.parameterCount() == 1
 	 * @pre meta_method.enclosingMetaObject() != nullptr
-	 * @pre !type{QMetaType::metaObjectForType(meta_method.parameterType(0))}.is_empty()
+	 * @pre !parameter_type.is_empty()
+	 * @pre parameter_type.name() + "*" == std::string{meta_method.parameterTypes()[0].data()}
 	 */
-	explicit setter_method(QMetaMethod meta_method);
+	explicit setter_method(type parameter_type, QMetaMethod meta_method);
 
 	/**
 	 * @return true if setter_method is empty and does not represent valie setter method
@@ -85,7 +88,6 @@ public:
 
 	/**
 	 * @return Type of objects that owns this setter method.
-	 * @pre !is_empty()
 	 *
 	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */
@@ -93,7 +95,6 @@ public:
 
 	/**
 	 * @return Type of objects parameter accepted by setter method.
-	 * @pre !is_empty()
 	 *
 	 * May return invalid type if QMetaMethod passed in constructor was invalid.
 	 */

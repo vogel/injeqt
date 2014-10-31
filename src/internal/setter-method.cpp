@@ -32,15 +32,16 @@ setter_method::setter_method()
 {
 }
 
-setter_method::setter_method(QMetaMethod meta_method) :
+setter_method::setter_method(type parameter_type, QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
-	_parameter_type{QMetaType::metaObjectForType(meta_method.parameterType(0))},
+	_parameter_type{std::move(parameter_type)},
 	_meta_method{std::move(meta_method)}
 {
 	assert(meta_method.methodType() == QMetaMethod::Slot);
 	assert(meta_method.parameterCount() == 1);
 	assert(meta_method.enclosingMetaObject() != nullptr);
 	assert(!_parameter_type.is_empty());
+	assert(_parameter_type.name() + "*" == std::string{meta_method.parameterTypes()[0].data()});
 }
 
 bool setter_method::is_empty() const
@@ -50,15 +51,11 @@ bool setter_method::is_empty() const
 
 const type & setter_method::object_type() const
 {
-	assert(!is_empty());
-
 	return _object_type;
 }
 
 const type & setter_method::parameter_type() const
 {
-	assert(!is_empty());
-
 	return _parameter_type;
 }
 

@@ -84,8 +84,8 @@ void resolved_dependency_test::should_properly_apply_on_valid_object()
 	auto object_1 = make_object<type_1>();
 	auto object_2 = make_object<type_2>();
 	auto apply_on_object = make_object<injected_type>();
-	auto resolved_1 = resolved_dependency{implementation{make_type<type_1>(), object_1.get()}, make_setter_method<injected_type>("setter_1(type_1*)")};
-	auto resolved_2 = resolved_dependency{implementation{make_type<type_2>(), object_2.get()}, make_setter_method<injected_type>("setter_2(type_2*)")};
+	auto resolved_1 = resolved_dependency{implementation{make_type<type_1>(), object_1.get()}, make_setter_method<injected_type, type_1>("setter_1(type_1*)")};
+	auto resolved_2 = resolved_dependency{implementation{make_type<type_2>(), object_2.get()}, make_setter_method<injected_type, type_2>("setter_2(type_2*)")};
 
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<injected_type *>(apply_on_object.get())->_1);
 	QCOMPARE(static_cast<QObject *>(nullptr), static_cast<injected_type *>(apply_on_object.get())->_2);
@@ -109,12 +109,12 @@ void resolved_dependency_test::should_properly_compare()
 	auto i1a = implementation{make_type<type_1>(), object_1a.get()};
 	auto i1b = implementation{make_type<type_1>(), object_1b.get()};
 
-	auto rd1a = resolved_dependency{i1a, make_setter_method<injected_type>("setter_1(type_1*)")};
-	auto rd1b = resolved_dependency{i1a, make_setter_method<injected_type>("setter_1(type_1*)")};
-	auto rd2a = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1(type_1*)")};
-	auto rd2b = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1(type_1*)")};
-	auto rd3a = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1b(type_1*)")};
-	auto rd3b = resolved_dependency{i1b, make_setter_method<injected_type>("setter_1b(type_1*)")};
+	auto rd1a = resolved_dependency{i1a, make_setter_method<injected_type, type_1>("setter_1(type_1*)")};
+	auto rd1b = resolved_dependency{i1a, make_setter_method<injected_type, type_1>("setter_1(type_1*)")};
+	auto rd2a = resolved_dependency{i1b, make_setter_method<injected_type, type_1>("setter_1(type_1*)")};
+	auto rd2b = resolved_dependency{i1b, make_setter_method<injected_type, type_1>("setter_1(type_1*)")};
+	auto rd3a = resolved_dependency{i1b, make_setter_method<injected_type, type_1>("setter_1b(type_1*)")};
+	auto rd3b = resolved_dependency{i1b, make_setter_method<injected_type, type_1>("setter_1b(type_1*)")};
 
 	test_compare<resolved_dependency>({{rd1a, rd1b}, {rd2a, rd2b}, {rd3a, rd3b}});
 }

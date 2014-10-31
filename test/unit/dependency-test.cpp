@@ -69,7 +69,7 @@ private slots:
 
 void dependency_test::should_create_valid_dependency()
 {
-	auto s = make_setter_method<type_with_dependency>("setter_1(type_1*)");
+	auto s = make_setter_method<type_with_dependency, type_1>("setter_1(type_1*)");
 	auto d = dependency{s};
 	QCOMPARE(d.required_type(), make_type<type_1>());
 	QCOMPARE(d.setter(), s);
@@ -77,12 +77,12 @@ void dependency_test::should_create_valid_dependency()
 
 void dependency_test::should_properly_compare()
 {
-	auto s1a = dependency{make_setter_method<type_with_dependency>("setter_1(type_1*)")};
-	auto s1b = dependency{make_setter_method<type_with_dependency>("setter_1(type_1*)")};
-	auto s2a = dependency{make_setter_method<type_with_dependency>("setter_1b(type_1*)")};
-	auto s2b = dependency{make_setter_method<type_with_dependency>("setter_1b(type_1*)")};
-	auto s3a = dependency{make_setter_method<type_with_dependency>("setter_2(type_2*)")};
-	auto s3b = dependency{make_setter_method<type_with_dependency>("setter_2(type_2*)")};
+	auto s1a = dependency{make_setter_method<type_with_dependency, type_1>("setter_1(type_1*)")};
+	auto s1b = dependency{make_setter_method<type_with_dependency, type_1>("setter_1(type_1*)")};
+	auto s2a = dependency{make_setter_method<type_with_dependency, type_1>("setter_1b(type_1*)")};
+	auto s2b = dependency{make_setter_method<type_with_dependency, type_1>("setter_1b(type_1*)")};
+	auto s3a = dependency{make_setter_method<type_with_dependency, type_2>("setter_2(type_2*)")};
+	auto s3b = dependency{make_setter_method<type_with_dependency, type_2>("setter_2(type_2*)")};
 	
 	test_compare<dependency>({{s1a, s1b}, {s2a, s2b}, {s3a, s3b}});
 }
