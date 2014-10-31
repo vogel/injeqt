@@ -24,6 +24,7 @@
 #include <injeqt/type.h>
 
 #include "implemented-by-mapping.h"
+#include "types-by-name.h"
 #include "types-dependencies.h"
 
 /**
@@ -112,6 +113,6 @@ private:
  * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
  * @throw invalid_setter if any tagged setter has other number of parameters than one
  */
-types_model make_types_model(const std::vector<type> &all_types);
+types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types);
 
 }}

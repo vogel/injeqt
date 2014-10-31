@@ -24,7 +24,7 @@
 #include <injeqt/type.h>
 
 #include "dependency.h"
-#include "sorted-unique-vector.h"
+#include "types-by-name.h"
 
 /**
  * @file
@@ -70,6 +70,6 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
  * and type does not depends on self, subtype or supertype, a result is returned. Otherwise one of many
  * exceptions can be thrown.
  */
-dependencies extract_dependencies(const type &for_type);
+dependencies extract_dependencies(const types_by_name &known_types, const type &for_type);
 
 }}

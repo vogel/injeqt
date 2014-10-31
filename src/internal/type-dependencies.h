@@ -84,11 +84,11 @@ bool operator != (const type_dependencies &x, const type_dependencies &y);
  * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
  * @throw invalid_setter if any tagged setter has other number of parameters than one
  */
-inline type_dependencies make_type_dependencies(type dependent_type)
+inline type_dependencies make_type_dependencies(const types_by_name &known_types, type dependent_type)
 {
 	assert(!dependent_type.is_empty());
 
-	return type_dependencies{dependent_type, extract_dependencies(dependent_type)};
+	return type_dependencies{dependent_type, extract_dependencies(known_types, dependent_type)};
 }
 
 }}

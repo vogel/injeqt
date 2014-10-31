@@ -38,10 +38,11 @@
 #include "interfaces-utils.cpp"
 #include "required-to-instantiate.cpp"
 #include "setter-method.cpp"
-#include "types-model.cpp"
 #include "type-dependencies.cpp"
 #include "type-relations.cpp"
 #include "type.cpp"
+#include "types-by-name.cpp"
+#include "types-model.cpp"
 
 #include "expect.h"
 #include "utils.h"
@@ -152,6 +153,7 @@ private slots:
 	void should_return_type_when_supertype_is_already_available();
 
 private:
+	types_by_name known_types;
 	type type_1_type;
 	type type_1_subtype_1_type;
 	type type_2_type;
@@ -171,6 +173,20 @@ private:
 };
 
 required_to_instantiate_test::required_to_instantiate_test() :
+	known_types{types_by_name{std::vector<type>{
+		make_type<type_1>(),
+		make_type<type_1_subtype_1>(),
+		make_type<type_2>(), 
+		make_type<type_2_subtype_1>(),
+		make_type<type_3>(),
+		make_type<type_3_subtype_1>(),
+		make_type<cyclic_type_1>(),
+		make_type<cyclic_type_1_subtype_1>(),
+		make_type<cyclic_type_2>(),
+		make_type<cyclic_type_2_subtype_1>(),
+		make_type<cyclic_type_3>(),
+		make_type<cyclic_type_3_subtype_1>()
+	}}},
 	type_1_type{make_type<type_1>()},
 	type_1_subtype_1_type{make_type<type_1_subtype_1>()},
 	type_2_type{make_type<type_2>()},
@@ -183,7 +199,7 @@ required_to_instantiate_test::required_to_instantiate_test() :
 	cyclic_type_2_subtype_1_type{make_type<cyclic_type_2_subtype_1>()},
 	cyclic_type_3_type{make_type<cyclic_type_3>()},
 	cyclic_type_3_subtype_1_type{make_type<cyclic_type_3_subtype_1>()},
-	simple_types_model{make_types_model(std::vector<type>
+	simple_types_model{make_types_model(known_types, std::vector<type>
 	{
 		type_1_type,
 		type_2_type,
@@ -192,7 +208,7 @@ required_to_instantiate_test::required_to_instantiate_test() :
 		cyclic_type_2_type,
 		cyclic_type_3_type
 	})},
-	inheriting_types_model{make_types_model(std::vector<type>
+	inheriting_types_model{make_types_model(known_types, std::vector<type>
 	{
 		type_1_subtype_1_type,
 		type_2_subtype_1_type,

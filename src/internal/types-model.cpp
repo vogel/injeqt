@@ -70,7 +70,7 @@ std::vector<dependency> types_model::get_unresolvable_dependencies() const
 	return result;
 }
 
-types_model make_types_model(const std::vector<type> &all_types)
+types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types)
 {
 	auto relations = make_type_relations(all_types);
 
@@ -89,7 +89,7 @@ types_model make_types_model(const std::vector<type> &all_types)
 
 	auto all_dependencies = std::vector<type_dependencies>{};
 	std::transform(std::begin(relations.unique()), std::end(relations.unique()), std::back_inserter(all_dependencies),
-		[](const implemented_by &ib){ return make_type_dependencies(ib.implementation_type()); });
+		[&](const implemented_by &ib){ return make_type_dependencies(known_types, ib.implementation_type()); });
 
 	auto available_types = relations.unique();
 	auto mapped_dependencies = types_dependencies{all_dependencies};

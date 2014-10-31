@@ -49,7 +49,7 @@ std::string exception_message(const QMetaObject *meta_object, const QMetaObject 
 	return std::string{meta_object->className()} + "::" + dependency_meta_object->className();
 }
 
-std::vector<setter_method> extract_setters(const type &for_type)
+std::vector<setter_method> extract_setters(const types_by_name &known_types, const type &for_type)
 {
 	assert(!for_type.is_empty());
 
@@ -68,7 +68,7 @@ std::vector<setter_method> extract_setters(const type &for_type)
 			continue;
 		if (probably_setter.parameterCount() != 1)
 			throw exception::invalid_setter{std::string{"invalid parameter count: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
-		auto parameter_type = type{QMetaType::metaObjectForType(probably_setter.parameterType(0))};
+		auto parameter_type = type_by_pointer(known_types, probably_setter.parameterTypes()[0].data());
 		if (parameter_type.is_empty() || parameter_type.is_qobject())
 			throw exception::invalid_setter{std::string{"invalid parameter: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
 
@@ -91,12 +91,12 @@ std::vector<type> extract_parameter_types(const std::vector<setter_method> &sett
 
 }
 
-dependencies extract_dependencies(const type &for_type)
+dependencies extract_dependencies(const types_by_name &known_types, const type &for_type)
 {
 	assert(!for_type.is_empty());
 
 	auto interfaces = extract_interfaces(for_type);
-	auto setters = extract_setters(for_type);
+	auto setters = extract_setters(known_types, for_type);
 	for (auto &&setter : setters)
 	{
 		auto parameter_type = setter.parameter_type();

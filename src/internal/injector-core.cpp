@@ -77,7 +77,7 @@ types_model injector_core::create_types_model() const
 	auto result = std::vector<type>{};
 	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
 		[](const std::unique_ptr<provider> &c){ return c->provided_type(); });
-	return make_types_model(result);
+	return make_types_model(_known_types, result);
 }
 
 QObject * injector_core::get(const type &interface_type)

@@ -49,6 +49,7 @@
 #include "type.cpp"
 #include "type-dependencies.cpp"
 #include "type-relations.cpp"
+#include "types-by-name.cpp"
 #include "types-model.cpp"
 
 #include "../mocks/mocked-provider.h"
@@ -267,7 +268,7 @@ void injector_core_test::should_not_accept_unresolvable_dependency()
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.push_back(make_mocked_provider<type_2>());
 
-	expect<exception::unresolvable_dependencies>({"set_type_1"}, [&](){
+	expect<exception::invalid_setter>({"set_type_1"}, [&](){ // TODO: figure out better exception name
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }
@@ -283,7 +284,7 @@ void injector_core_test::should_accept_resolvable_dependency()
 	configuration.push_back(std::move(type_1_provider_p));
 	configuration.push_back(std::move(type_2_provider_p));
 
-	auto i = injector_core{types_by_name{}, std::move(configuration)};
+	auto i = injector_core{types_by_name{make_type<type_1>(), make_type<type_2>()}, std::move(configuration)};
 	QVERIFY(type_1_provider->object() == nullptr);
 	QVERIFY(type_2_provider->object() == nullptr);
 
@@ -306,7 +307,7 @@ void injector_core_test::should_accept_resolvable_supertype_dependency()
 	configuration.push_back(std::move(type_1_provider_p));
 	configuration.push_back(std::move(type_2_provider_p));
 
-	auto i = injector_core{types_by_name{}, std::move(configuration)};
+	auto i = injector_core{types_by_name{make_type<type_1>(), make_type<type_1_subtype_1>(), make_type<type_2>()}, std::move(configuration)};
 	QVERIFY(type_1_provider->object() == nullptr);
 	QVERIFY(type_2_provider->object() == nullptr);
 
@@ -326,7 +327,7 @@ void injector_core_test::should_not_accept_ambiguous_supertype_dependency()
 	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
 	configuration.push_back(make_mocked_provider<type_2>());
 
-	expect<exception::unresolvable_dependencies>({"set_type_1"}, [&](){
+	expect<exception::invalid_setter>({"set_type_1"}, [&](){ // better exception name
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }
@@ -412,7 +413,7 @@ void injector_core_test::should_accept_cyclic_dependencies()
 	configuration.push_back(std::move(type_5_provider_p));
 	configuration.push_back(std::move(type_6_provider_p));
 
-	auto i = injector_core{types_by_name{}, std::move(configuration)};
+	auto i = injector_core{types_by_name{make_type<type_4>(), make_type<type_5>(), make_type<type_6>()}, std::move(configuration)};
 	QVERIFY(type_4_provider->object() == nullptr);
 	QVERIFY(type_5_provider->object() == nullptr);
 	QVERIFY(type_6_provider->object() == nullptr);
@@ -444,7 +445,7 @@ void injector_core_test::should_accept_dependencies_that_are_required()
 	configuration.push_back(std::move(type_8_provider_p));
 	configuration.push_back(std::move(type_9_provider_p));
 
-	auto i = injector_core{types_by_name{}, std::move(configuration)};
+	auto i = injector_core{types_by_name{make_type<type_7>(), make_type<type_8>(), make_type<type_9>()}, std::move(configuration)};
 	QVERIFY(type_7_provider->object() == nullptr);
 	QVERIFY(type_8_provider->object() == nullptr);
 	QVERIFY(type_9_provider->object() == nullptr);

@@ -48,6 +48,7 @@
 #include "type.cpp"
 #include "type-dependencies.cpp"
 #include "type-relations.cpp"
+#include "types-by-name.cpp"
 #include "types-model.cpp"
 
 #include "expect.h"
