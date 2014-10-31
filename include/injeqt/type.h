@@ -23,12 +23,13 @@
 #include <injeqt/exception/exception.h>
 #include <injeqt/injeqt.h>
 
-#include <QtCore/QMetaType>
-
 /**
  * @file
  * @brief Contains classes and functions for abstractions of C++ types.
  */
+
+class QMetaObject;
+class QObject;
 
 /**
  * @brief
@@ -136,7 +137,6 @@ INJEQT_API bool operator >= (const type &x, const type &y);
 template<typename T>
 inline type make_type()
 {
-	qRegisterMetaType<T *>();
 	return type{&T::staticMetaObject};
 }
 
