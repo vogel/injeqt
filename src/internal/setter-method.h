@@ -72,7 +72,7 @@ public:
 	 * @brief Create object from QMetaMethod definition.
 	 * @param parameter_type Type of parameter of setter @p meta_method
 	 * @param meta_method Qt meta method that should be a setter method
-	 * @note Qt QMetaType system limitations with plugins disallow use of QMetaType to retreive parameter type.
+	 * @note Qt QMetaType system limitations with plugins disallow use of QMetaType to retreive parameter type from QMetaMethod.
 	 * @pre meta_method.methodType() == QMetaMethod::Slot
 	 * @pre meta_method.parameterCount() == 1
 	 * @pre meta_method.enclosingMetaObject() != nullptr

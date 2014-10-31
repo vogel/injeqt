@@ -67,7 +67,7 @@ protected:
 	 * @tparam T type of added object (must be inherited from QObject).
 	 * @param object added object
 	 * @throw qobject_type when passed type @p T represents QObject
-	 * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaType
+	 * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaObject
 	 * @throw interface_not_implemented when passed @p object does not implements type @p T
 	 *
 	 * It has to be fully constructed and must not expect any injection to take place on it

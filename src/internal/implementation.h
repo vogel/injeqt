@@ -76,7 +76,7 @@ bool operator != (const implementation &x, const implementation &y);
  * @param object object that should implement interface_type
  * @throw empty_type when passed type @p interface_type is an empty type
  * @throw qobject_type when passed type @p interface_type represents QObject
- * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaType
+ * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaObject
  * @throw interface_not_implemented when passed @p object does not implements type @p interface_type
  */
 implementation make_implementation(type interface_type, QObject *object);
