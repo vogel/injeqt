@@ -30,14 +30,16 @@ factory_method::factory_method()
 {
 }
 
-factory_method::factory_method(QMetaMethod meta_method) :
+factory_method::factory_method(type result_type, QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
-	_result_type{QMetaType::metaObjectForType(meta_method.returnType())},
+	_result_type{std::move(result_type)},
 	_meta_method{std::move(meta_method)}
 {
 	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
 	assert(meta_method.parameterCount() == 0);
 	assert(meta_method.enclosingMetaObject() != nullptr);
+	assert(!_result_type.is_empty());
+	assert(_result_type.name() + "*" == std::string{meta_method.typeName()});
 }
 
 bool factory_method::is_empty() const
@@ -108,7 +110,7 @@ factory_method make_factory_method(const types_by_name &known_types, const type 
 			continue;
 		auto interfaces = extract_interfaces(return_type);
 		if (interfaces.contains(t))
-			factory_methods.emplace_back(method);
+			factory_methods.emplace_back(return_type, method);
 	}
 
 	if (factory_methods.size() == 1)

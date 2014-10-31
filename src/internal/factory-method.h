@@ -82,12 +82,16 @@ public:
 
 	/**
 	 * @brief Create object from QMetaMethod definition.
+	 * @param parameter_type Type of retrun value of @p meta_method
 	 * @param meta_method Qt meta method that should be a factory method
+	 * @note Qt QMetaType system limitations with plugins disallow use of QMetaType to retreive return type from QMetaMethod
 	 * @pre meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot
 	 * @pre meta_method.parameterCount() == 0
 	 * @pre meta_method.enclosingMetaObject() != nullptr
+	 * @pre !result_type.is_empty()
+	 * @pre result_type.name() + "*" == std::string{result_type.typeName()}
 	 */
-	explicit factory_method(QMetaMethod meta_method);
+	explicit factory_method(type result_type, QMetaMethod meta_method);
 
 	/**
 	 * @return true if factory_method is empty and does not represent method
