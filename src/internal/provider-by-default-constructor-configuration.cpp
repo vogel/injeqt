@@ -21,6 +21,7 @@
 #include "provider-by-default-constructor-configuration.h"
 
 #include <injeqt/exception/default-constructor-not-found.h>
+#include <injeqt/exception/qobject-type.h>
 
 #include "default-constructor-method.h"
 #include "provider-by-default-constructor.h"
@@ -46,6 +47,9 @@ std::vector<type> provider_by_default_constructor_configuration::types() const
 
 std::unique_ptr<provider> provider_by_default_constructor_configuration::create_provider(const types_by_name &) const
 {
+	if (_object_type.is_qobject())
+		throw exception::qobject_type();
+
 	auto c = make_default_constructor_method(_object_type);
 	if (c.is_empty())
 		throw exception::default_constructor_not_found{_object_type.name()};
