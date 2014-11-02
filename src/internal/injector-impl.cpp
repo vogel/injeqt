@@ -61,7 +61,7 @@ types_by_name injector_impl::extract_types() const
 std::vector<std::unique_ptr<provider>> injector_impl::create_providers(const types_by_name &known_types) const
 {
 	auto result = std::vector<std::unique_ptr<provider>>{};
-	auto create_provider = [&](const std::unique_ptr<provider_configuration> &p){
+	auto create_provider = [&](const std::shared_ptr<provider_configuration> &p){
 		return p->create_provider(known_types);
 	};
 	for (auto &&module : _modules)

@@ -43,18 +43,14 @@ void module::add_ready_object(type t, QObject *object)
 {
 	assert(!t.is_empty());
 
-	auto p = std::unique_ptr<internal::provider_ready_configuration>{
-		new internal::provider_ready_configuration{std::move(t), object}};
-	_pimpl->add_provider_configuration(std::move(p));
+	_pimpl->add_provider_configuration(std::make_shared<internal::provider_ready_configuration>(std::move(t), object));
 }
 
 void module::add_type(type t)
 {
 	assert(!t.is_empty());
 
-	auto p = std::unique_ptr<internal::provider_by_default_constructor_configuration>{
-		new internal::provider_by_default_constructor_configuration{std::move(t)}};
-	_pimpl->add_provider_configuration(std::move(p));
+	_pimpl->add_provider_configuration(std::make_shared<internal::provider_by_default_constructor_configuration>(std::move(t)));
 }
 
 void module::add_factory(type t, type f)
@@ -62,9 +58,7 @@ void module::add_factory(type t, type f)
 	assert(!t.is_empty());
 	assert(!f.is_empty());
 
-	auto p = std::unique_ptr<internal::provider_by_factory_configuration>{
-		new internal::provider_by_factory_configuration{std::move(t), std::move(f)}};
-	_pimpl->add_provider_configuration(std::move(p));
+	_pimpl->add_provider_configuration(std::make_shared<internal::provider_by_factory_configuration>(std::move(t), std::move(f)));
 }
 
 }}

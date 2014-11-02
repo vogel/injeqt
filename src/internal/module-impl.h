@@ -48,17 +48,17 @@ class INJEQT_API module_impl final
 {
 
 public:
-	const std::vector<std::unique_ptr<provider_configuration>> & provider_configurations();
+	const std::vector<std::shared_ptr<provider_configuration>> & provider_configurations();
 
 	/**
 	 * @brief Add provider to list
 	 * @param p provider to add
 	 * @pre p must be valid
 	 */
-	void add_provider_configuration(std::unique_ptr<provider_configuration> p);
+	void add_provider_configuration(std::shared_ptr<provider_configuration> p);
 
 private:
-	std::vector<std::unique_ptr<provider_configuration>> _provider_configurations;
+	std::vector<std::shared_ptr<provider_configuration>> _provider_configurations;
 
 };
 

@@ -24,12 +24,12 @@
 
 namespace injeqt { namespace internal {
 
-void module_impl::add_provider_configuration(std::unique_ptr<provider_configuration> p)
+void module_impl::add_provider_configuration(std::shared_ptr<provider_configuration> p)
 {
-	_provider_configurations.push_back(std::move(p));
+	_provider_configurations.push_back(p);
 }
 
-const std::vector<std::unique_ptr<provider_configuration>> & module_impl::provider_configurations()
+const std::vector<std::shared_ptr<provider_configuration>> & module_impl::provider_configurations()
 {
 	return _provider_configurations;
 }
