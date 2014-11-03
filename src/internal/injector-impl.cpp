@@ -23,6 +23,7 @@
 #include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
+#include "containers.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
@@ -34,7 +35,7 @@
 #include <cassert>
 
 namespace injeqt { namespace internal {
-// TODO: tests!!
+
 injector_impl::injector_impl()
 {
 }
@@ -43,33 +44,19 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	// modules are only stored because these can own objects used by injector
 	_modules{std::move(modules)}
 {
-	auto known_types = extract_types();
-	auto providers = create_providers(known_types);
+	auto extract_provider_configurations_lambda = [](const std::unique_ptr<module> &m){ return m->_pimpl->provider_configurations(); };
+	auto extract_provider_configurations = std::function<std::vector<std::shared_ptr<provider_configuration>>(const std::unique_ptr<module> &)>{extract_provider_configurations_lambda};
+	auto provider_configurations = extract(_modules, extract_provider_configurations);
+
+	auto extract_types_lamdba = [](const std::shared_ptr<provider_configuration> &pc){ return pc->types(); };
+	auto extract_types = std::function<std::vector<type>(const std::shared_ptr<provider_configuration> &)>{extract_types_lamdba};
+	auto known_types = types_by_name{extract(provider_configurations, extract_types)};
+
+	auto create_provider_lambda = [&known_types](const std::shared_ptr<provider_configuration> &pc){ return pc->create_provider(known_types); };
+	auto create_provider = std::function<std::unique_ptr<provider>(std::shared_ptr<provider_configuration>)>{create_provider_lambda};
+	auto providers = transform(provider_configurations, create_provider);
+
 	_core = injector_core{known_types, std::move(providers)};
-}
-
-types_by_name injector_impl::extract_types() const
-{
-	auto result = std::vector<type>{};
-	for (auto &&module : _modules)
-		for (auto &&configuration : module->_pimpl->provider_configurations())
-			for (auto &&type : configuration->types())
-				result.push_back(type);
-	return types_by_name{result};
-}
-
-std::vector<std::unique_ptr<provider>> injector_impl::create_providers(const types_by_name &known_types) const
-{
-	auto result = std::vector<std::unique_ptr<provider>>{};
-	auto create_provider = [&](const std::shared_ptr<provider_configuration> &p){
-		return p->create_provider(known_types);
-	};
-	for (auto &&module : _modules)
-	{
-		auto &&configurations = module->_pimpl->provider_configurations();
-		std::transform(std::begin(configurations), std::end(configurations), std::back_inserter(result), create_provider);
-	}
-	return result;
 }
 
 QObject * injector_impl::get(const type &interface_type)

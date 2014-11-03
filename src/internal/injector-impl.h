@@ -98,12 +98,6 @@ private:
 
 	types_by_name extract_types() const;
 
-	/**
-	 * @brief Extract set of providers from all modules
-	 * @todo move outside
-	 */
-	std::vector<std::unique_ptr<provider>> create_providers(const types_by_name &known_types) const;
-
 };
 
 }}
