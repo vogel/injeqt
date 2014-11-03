@@ -96,8 +96,6 @@ private:
 	std::vector<std::unique_ptr<module>> _modules;
 	injector_core _core;
 
-	types_by_name extract_types() const;
-
 };
 
 }}
