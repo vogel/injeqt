@@ -23,6 +23,15 @@
 
 #include <QtTest/QtTest>
 
+class default_constructible : public QObject
+{
+	Q_OBJECT
+
+public:
+	Q_INVOKABLE default_constructible() {}
+
+};
+
 class int_container : public QObject
 {
 	Q_OBJECT
@@ -48,6 +57,28 @@ private:
 
 };
 
+class int_container_with_ignored_setter : public int_container
+{
+	Q_OBJECT
+
+public:
+	int_container_with_ignored_setter(int value) : _value{value} {}
+	virtual ~int_container_with_ignored_setter() {}
+	virtual int value() const override { return _value; }
+	default_constructible * object() const { return _object; }
+
+private slots:
+	INJEQT_SETTER void set_default_constructible(default_constructible *object)
+	{
+		_object = object;
+	}
+
+private:
+	int _value;
+	QPointer<default_constructible> _object;
+
+};
+
 class int_service : public QObject
 {
 	Q_OBJECT
@@ -67,38 +98,61 @@ private:
 
 };
 
-class module_1 : public injeqt::module
-{
-public:
-	module_1(int value)
-	{
-		_container = std::unique_ptr<simple_int_container>(new simple_int_container{value});
-
-		add_type<int_service>();
-		add_ready_object<simple_int_container>(_container.get());
-	}
-
-	virtual ~module_1() {}
-
-private:
-	std::unique_ptr<simple_int_container> _container;
-};
-
 class ready_object_behavior_test : public QObject
 {
 	Q_OBJECT
 
 private slots:
-	void should_create_proper_object_structure()
-	{
-		auto modules = std::vector<std::unique_ptr<injeqt::module>>{};
-		modules.emplace_back(std::unique_ptr<module_1>{new module_1{9}});
-		auto injector = injeqt::injector{std::move(modules)};
-		auto service = injector.get<int_service>();
-		QCOMPARE(9, service->value());
-	}
+	void should_create_proper_object_structure();
+	void should_ignore_setters_in_ready_object();
 
 };
+
+void ready_object_behavior_test::should_create_proper_object_structure()
+{
+	class m : public injeqt::module
+	{
+	public:
+		m(int value)
+		{
+			_container = std::unique_ptr<simple_int_container>(new simple_int_container{value});
+			add_type<int_service>();
+			add_ready_object<simple_int_container>(_container.get());
+		}
+		virtual ~m() {}
+	private:
+		std::unique_ptr<simple_int_container> _container;
+	};
+
+	auto modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	modules.emplace_back(std::unique_ptr<m>{new m{9}});
+	auto injector = injeqt::injector{std::move(modules)};
+	auto service = injector.get<int_service>();
+	QCOMPARE(9, service->value());
+}
+
+void ready_object_behavior_test::should_ignore_setters_in_ready_object()
+{
+	class m : public injeqt::module
+	{
+	public:
+		m(int value)
+		{
+			_container = std::unique_ptr<int_container_with_ignored_setter>(new int_container_with_ignored_setter{value});
+			add_type<int_service>();
+			add_ready_object<int_container_with_ignored_setter>(_container.get());
+		}
+		virtual ~m() {}
+	private:
+		std::unique_ptr<int_container_with_ignored_setter> _container;
+	};
+
+	auto modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	modules.emplace_back(std::unique_ptr<m>{new m{9}});
+	auto injector = injeqt::injector{std::move(modules)};
+	auto service = injector.get<int_service>();
+	QCOMPARE(9, service->value());
+}
 
 QTEST_APPLESS_MAIN(ready_object_behavior_test)
 #include "ready-object-behavior-test.moc"
