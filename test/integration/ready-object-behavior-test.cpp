@@ -28,8 +28,20 @@ class int_container : public QObject
 	Q_OBJECT
 
 public:
-	int_container(int value) : _value{value} {}
-	int value() const { return _value; }
+	int_container() {}
+	virtual ~int_container() {}
+	virtual int value() const = 0;
+
+};
+
+class simple_int_container : public int_container
+{
+	Q_OBJECT
+
+public:
+	simple_int_container(int value) : _value{value} {}
+	virtual ~simple_int_container() {}
+	virtual int value() const override { return _value; }
 
 private:
 	int _value;
@@ -60,16 +72,16 @@ class module_1 : public injeqt::module
 public:
 	module_1(int value)
 	{
-		_container = std::unique_ptr<int_container>(new int_container{value});
+		_container = std::unique_ptr<simple_int_container>(new simple_int_container{value});
 
 		add_type<int_service>();
-		add_ready_object<int_container>(_container.get());
+		add_ready_object<simple_int_container>(_container.get());
 	}
 
 	virtual ~module_1() {}
 
 private:
-	std::unique_ptr<int_container> _container;
+	std::unique_ptr<simple_int_container> _container;
 };
 
 class ready_object_behavior_test : public QObject

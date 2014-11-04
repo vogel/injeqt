@@ -24,6 +24,7 @@
 #include <injeqt/module.h>
 
 #include "containers.h"
+#include "interfaces-utils.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
@@ -48,7 +49,15 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	auto extract_provider_configurations = std::function<std::vector<std::shared_ptr<provider_configuration>>(const std::unique_ptr<module> &)>{extract_provider_configurations_lambda};
 	auto provider_configurations = extract(_modules, extract_provider_configurations);
 
-	auto extract_types_lamdba = [](const std::shared_ptr<provider_configuration> &pc){ return pc->types(); };
+	auto extract_types_lamdba = [](const std::shared_ptr<provider_configuration> &pc){
+		auto result = std::vector<type>{};
+		for (auto &&t : pc->types())
+		{
+			auto interfaces = extract_interfaces(t);
+			std::copy(std::begin(interfaces), std::end(interfaces), std::back_inserter(result));
+		}
+		return result;
+	};
 	auto extract_types = std::function<std::vector<type>(const std::shared_ptr<provider_configuration> &)>{extract_types_lamdba};
 	auto known_types = types_by_name{extract(provider_configurations, extract_types)};
 
