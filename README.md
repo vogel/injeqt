@@ -41,34 +41,36 @@ objects from outside.
 Injeqt exposes only very limited interface to allow internals to change freely while maintaining
 ABI and API.
 
-Problems
---------
+Qt relationshipt
+----------------
 
-*Only QObjects*
+Injeqt requires Qt for its reflection capabilities.
 
-For now only QObject are accepted. That will change when reflection get accepted into one
+*QObject*
+
+Injeqt only recognizes QObject-derived types. That may change when reflection get accepted into one
 of the next C++ standards.
-
-*Only setters*
-
-Current version does not support injecting dependencies in costructor.
 
 Plans
 -----
 
-*0.1*
+*1.0*
 
-* working version with proper build system for Linux
-* support for `initialized()` method (to be bikeshed)
+* first usable release
 
-*0.2*
+*1.1*
 
-* working with loaded/unloaded plugins
-* finding factory-dependency-infinite loops at configuration time
+* support for `initialized()` methods (to be bikeshed)
+* (if needes) support for `finalize()` methods (to be bikeshed)
 
-*0.3*
+*1.2*
 
-* ?
+* more initialization checking (searching factory loops)
+
+*1.3*
+
+* (maybe) contructor injection
+* (maybe) more dynamic type and dependencies resolutions
 
 Example
 -------
