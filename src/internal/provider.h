@@ -46,6 +46,9 @@ class injector_core;
  * using required_types() and then provide an object with its provide() object.
  * Provider may or may no take ownership of a provided object - look for concrete
  * types for more information.
+ * 
+ * Provider return objects that may or may not require dependency resolving.
+ * It can be checked with require_resolving() method.
  */
 class provider
 {
@@ -78,6 +81,11 @@ public:
 	 * Return value of this method must be the same for whole lifetime of this object.
 	 */
 	virtual types required_types() const = 0;
+
+	/**
+	 * @return true, if provided object require resolving of dependencies
+	 */
+	virtual bool require_resolving() const = 0;
 
 };
 

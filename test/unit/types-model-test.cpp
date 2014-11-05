@@ -121,7 +121,7 @@ types_model_test::types_model_test() :
 void types_model_test::should_create_empty_types_model()
 {
 	auto empty_1 = types_model{};
-	auto empty_2 = make_types_model(known_types, std::vector<type>{});
+	auto empty_2 = make_types_model(known_types, std::vector<type>{}, std::vector<type>{});
 
 	QCOMPARE(empty_1.available_types(), implemented_by_mapping{});
 	QCOMPARE(empty_1.mapped_dependencies(), types_dependencies{});
@@ -129,7 +129,7 @@ void types_model_test::should_create_empty_types_model()
 
 void types_model_test::should_create_one_type_types_model()
 {
-	auto m1 = make_types_model(known_types, {type_1_type});
+	auto m1 = make_types_model(known_types, {type_1_type}, {type_1_type});
 
 	QCOMPARE(m1.available_types(), (implemented_by_mapping
 	{
@@ -140,7 +140,7 @@ void types_model_test::should_create_one_type_types_model()
 		make_type_dependencies(known_types, type_1_type)
 	}));
 
-	auto m2 = make_types_model(known_types, {type_1_subtype_1_type});
+	auto m2 = make_types_model(known_types, {type_1_subtype_1_type}, {type_1_subtype_1_type});
 
 	QCOMPARE(m2.available_types(), (implemented_by_mapping
 	{
@@ -156,24 +156,24 @@ void types_model_test::should_create_one_type_types_model()
 void types_model_test::should_throw_when_one_type_duplicated()
 {
 	expect<exception::ambiguous_types>({"type_1_type"}, [&]{
-		make_types_model(known_types, {type_1_type, type_1_type});
+		make_types_model(known_types, {type_1_type, type_1_type}, {type_1_type, type_1_type});
 	});
 }
 
 void types_model_test::should_throw_when_type_and_subtype_passed()
 {
 	expect<exception::ambiguous_types>({"type_1_type", "type_1_subtype_1_type"}, [&]{
-		make_types_model(known_types, {type_1_type, type_1_subtype_1_type});
+		make_types_model(known_types, {type_1_type, type_1_subtype_1_type}, {type_1_type, type_1_subtype_1_type});
 	});
 
 	expect<exception::ambiguous_types>({"type_1_type", "type_1_subtype_1_type"}, [&]{
-		make_types_model(known_types, {type_1_subtype_1_type, type_1_type});
+		make_types_model(known_types, {type_1_subtype_1_type, type_1_type}, {type_1_subtype_1_type, type_1_type});
 	});
 }
 
 void types_model_test::should_create_with_common_supertype()
 {
-	auto m = make_types_model(known_types, {type_1_subtype_1_type, type_1_subtype_2_type});
+	auto m = make_types_model(known_types, {type_1_subtype_1_type, type_1_subtype_2_type}, {type_1_subtype_1_type, type_1_subtype_2_type});
 
 	QCOMPARE(m.available_types(), (implemented_by_mapping
 	{
@@ -189,7 +189,9 @@ void types_model_test::should_create_with_common_supertype()
 
 void types_model_test::should_create_with_dependencies()
 {
-	auto m1 = make_types_model(known_types, {type_1_subtype_1_type, type_1_subtype_2_type, type_1_subtype_3_type});
+	auto m1 = make_types_model(known_types,
+		{type_1_subtype_1_type, type_1_subtype_2_type, type_1_subtype_3_type},
+		{type_1_subtype_1_type, type_1_subtype_2_type, type_1_subtype_3_type});
 
 	QCOMPARE(m1.available_types(), (implemented_by_mapping
 	{
@@ -204,7 +206,9 @@ void types_model_test::should_create_with_dependencies()
 		make_type_dependencies(known_types, type_1_subtype_3_type)
 	}));
 
-	auto m2 = make_types_model(known_types, {type_1_subtype_1_type, type_1_subtype_2_subtype_1_type, type_1_subtype_3_type});
+	auto m2 = make_types_model(known_types,
+		{type_1_subtype_1_type, type_1_subtype_2_subtype_1_type, type_1_subtype_3_type},
+		{type_1_subtype_1_type, type_1_subtype_2_subtype_1_type, type_1_subtype_3_type});
 
 	QCOMPARE(m2.available_types(), (implemented_by_mapping
 	{
@@ -224,7 +228,7 @@ void types_model_test::should_create_with_dependencies()
 void types_model_test::should_throw_when_unresolvable_dependency()
 {
 	expect<exception::unresolvable_dependencies>({"set_type_1_subtype_1", "set_type_1_subtype_2"}, [&]{
-		make_types_model(known_types, {type_1_subtype_3_type});
+		make_types_model(known_types, {type_1_subtype_3_type}, {type_1_subtype_3_type});
 	});
 }
 

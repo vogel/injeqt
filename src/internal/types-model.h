@@ -101,7 +101,9 @@ private:
 
 /**
  * @brief Create types_model from given set of types.
+ * @param known_types list of all known types
  * @param all_types set of types to make model from, all types must be valid.
+ * @param need_dependencies list of types that will have dependencies extracted
  * @post result.get_unresolvable_dependencies().empty()
  * @throw ambiguous_types if one or more types is ambiguous (@see make_type_relations)
  * @throw unresolvable_dependencies if a type has a dependency type not in @p all_types set
@@ -113,6 +115,6 @@ private:
  * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
  * @throw invalid_setter if any tagged setter has other number of parameters than one
  */
-types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types);
+types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types, const std::vector<type> &need_dependencies);
 
 }}

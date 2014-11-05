@@ -63,4 +63,9 @@ types provider_by_factory::required_types() const
 	return types{_factory.object_type()};
 }
 
+bool provider_by_factory::require_resolving() const
+{
+	return false;
+}
+
 }}

@@ -68,6 +68,13 @@ public:
 	virtual types required_types() const override { return types{}; }
 
 	/**
+	 * @return false
+	 *
+	 * Object should be ready to use and do not require dependency resolving.
+	 */
+	virtual bool require_resolving() const override;
+
+	/**
 	 * @return implementation object passed in constructor
 	 */
 	const implementation & ready_implementation() const;

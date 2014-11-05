@@ -79,7 +79,14 @@ public:
 	 *
 	 * Factory object must be present before factory method can be invoked.
 	 */
-	virtual types required_types() const;
+	virtual types required_types() const override;
+	
+	/**
+	 * @return false
+	 *
+	 * Objects creaded by factory should be ready to use and do not require dependency resolving.
+	 */
+	virtual bool require_resolving() const override;
 
 	/**
 	 * @return factory method object passed in constructor

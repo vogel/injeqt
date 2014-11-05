@@ -198,26 +198,26 @@ required_to_instantiate_test::required_to_instantiate_test() :
 	cyclic_type_2_type{make_type<cyclic_type_2>()},
 	cyclic_type_2_subtype_1_type{make_type<cyclic_type_2_subtype_1>()},
 	cyclic_type_3_type{make_type<cyclic_type_3>()},
-	cyclic_type_3_subtype_1_type{make_type<cyclic_type_3_subtype_1>()},
-	simple_types_model{make_types_model(known_types, std::vector<type>
-	{
+	cyclic_type_3_subtype_1_type{make_type<cyclic_type_3_subtype_1>()}
+{
+	auto simple_types = std::vector<type>{
 		type_1_type,
 		type_2_type,
 		type_3_type,
 		cyclic_type_1_type,
 		cyclic_type_2_type,
 		cyclic_type_3_type
-	})},
-	inheriting_types_model{make_types_model(known_types, std::vector<type>
-	{
+	};
+	auto inheriting_types = std::vector<type>{
 		type_1_subtype_1_type,
 		type_2_subtype_1_type,
 		type_3_subtype_1_type,
 		cyclic_type_1_subtype_1_type,
 		cyclic_type_2_subtype_1_type,
 		cyclic_type_3_subtype_1_type
-	})}
-{
+	};
+	simple_types_model = make_types_model(known_types, simple_types, simple_types);
+	inheriting_types_model = make_types_model(known_types, inheriting_types, inheriting_types);
 }
 
 void required_to_instantiate_test::should_return_type_when_simple_types_and_empty_implementation()

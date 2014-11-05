@@ -57,4 +57,9 @@ QObject * provider_by_default_constructor::provide(injector_core &)
 	return _object.get();
 }
 
+bool provider_by_default_constructor::require_resolving() const
+{
+	return true;
+}
+
 }}

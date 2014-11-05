@@ -45,17 +45,22 @@ types required_to_instantiate(const type &type_to_instantiate, const types_model
 		auto current_interface_type = interfaces_to_check.back();
 		interfaces_to_check.pop_back();
 
-		auto dependencies = model.get_dependencies(current_interface_type);
-		auto current_implementation_type = dependencies.dependent_type();
+		auto current_implementation_type_it = model.available_types().get(current_interface_type);
+		if (current_implementation_type_it == std::end(model.available_types()))
+			continue;
 
+		auto current_implementation_type = current_implementation_type_it->implementation_type();
 		if (ready.find(current_implementation_type) != std::end(ready))
 			continue;
 		ready.insert(current_implementation_type);
-
 		result.push_back(current_implementation_type);
 
-		for (auto &&dependency : dependencies.dependency_list())
-			interfaces_to_check.push_back(dependency.required_type());
+		if (model.mapped_dependencies().contains_key(current_implementation_type))
+		{
+			auto dependencies = model.mapped_dependencies().get(current_implementation_type);
+			for (auto &&dependency : dependencies->dependency_list())
+				interfaces_to_check.push_back(dependency.required_type());
+		}
 	}
 
 	return types{result};

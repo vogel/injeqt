@@ -74,10 +74,18 @@ injector_core::injector_core(types_by_name known_types, std::vector<std::unique_
 
 types_model injector_core::create_types_model() const
 {
-	auto result = std::vector<type>{};
-	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result),
-		[](const std::unique_ptr<provider> &c){ return c->provided_type(); });
-	return make_types_model(_known_types, result);
+	auto all_types = std::vector<type>{};
+	auto need_dependencies = std::vector<type>{};
+	for (auto &&p : _available_providers)
+	{
+		all_types.push_back(p->provided_type());
+		if (p->require_resolving())
+		{
+			auto interfaces = extract_interfaces(p->provided_type());
+			std::copy(std::begin(interfaces), std::end(interfaces), std::back_inserter(need_dependencies));
+		}
+	}
+	return make_types_model(_known_types, all_types, need_dependencies);
 }
 
 QObject * injector_core::get(const type &interface_type)
@@ -126,7 +134,8 @@ implementations injector_core::objects_with(implementations objects, const types
 		auto instance = provider_it->get()->provide(*this);
 
 		auto i = make_implementation(type_to_instantiate, instance);
-		objects_to_resolve.emplace_back(i);
+		if (provider_it->get()->require_resolving())
+			objects_to_resolve.emplace_back(i);
 
 		auto interfaces = extract_interfaces(type_to_instantiate);
 		auto matched = match(interfaces, _types_model.available_types()).matched;

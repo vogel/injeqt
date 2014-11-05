@@ -42,4 +42,9 @@ QObject * provider_ready::provide(injector_core &)
 	return _ready_implementation.object();
 }
 
+bool provider_ready::require_resolving() const
+{
+	return false;
+}
+
 }}

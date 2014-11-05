@@ -79,6 +79,13 @@ public:
 	virtual types required_types() const { return types{}; }
 
 	/**
+	 * @return true
+	 *
+	 * Objects created by injector will have its dependencies resolved.
+	 */
+	virtual bool require_resolving() const;
+
+	/**
 	 * @return constructor object passed in constructor
 	 */
 	const default_constructor_method & constructor() const;

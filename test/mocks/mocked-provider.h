@@ -50,7 +50,9 @@ public:
 	};
 
 	virtual types required_types() const override { return _required_types; };
-	
+
+	virtual bool require_resolving() const override { return true; }
+
 	QObject * object() const { return _object; }
 
 private:
