@@ -104,7 +104,8 @@ class ready_object_behavior_test : public QObject
 
 private slots:
 	void should_create_proper_object_structure();
-	void should_ignore_setters_in_ready_object();
+	void should_ignore_invalid_setters_in_ready_object();
+	void should_ignore_valid_setters_in_ready_object();
 
 };
 
@@ -131,7 +132,7 @@ void ready_object_behavior_test::should_create_proper_object_structure()
 	QCOMPARE(9, service->value());
 }
 
-void ready_object_behavior_test::should_ignore_setters_in_ready_object()
+void ready_object_behavior_test::should_ignore_invalid_setters_in_ready_object()
 {
 	class m : public injeqt::module
 	{
@@ -151,7 +152,35 @@ void ready_object_behavior_test::should_ignore_setters_in_ready_object()
 	modules.emplace_back(std::unique_ptr<m>{new m{9}});
 	auto injector = injeqt::injector{std::move(modules)};
 	auto service = injector.get<int_service>();
+	auto container = injector.get<int_container_with_ignored_setter>();
 	QCOMPARE(9, service->value());
+	QCOMPARE(static_cast<QObject *>(nullptr), container->object());
+}
+
+void ready_object_behavior_test::should_ignore_valid_setters_in_ready_object()
+{
+	class m : public injeqt::module
+	{
+	public:
+		m(int value)
+		{
+			_container = std::unique_ptr<int_container_with_ignored_setter>(new int_container_with_ignored_setter{value});
+			add_type<int_service>();
+			add_type<default_constructible>();
+			add_ready_object<int_container_with_ignored_setter>(_container.get());
+		}
+		virtual ~m() {}
+	private:
+		std::unique_ptr<int_container_with_ignored_setter> _container;
+	};
+
+	auto modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	modules.emplace_back(std::unique_ptr<m>{new m{9}});
+	auto injector = injeqt::injector{std::move(modules)};
+	auto service = injector.get<int_service>();
+	auto container = injector.get<int_container_with_ignored_setter>();
+	QCOMPARE(9, service->value());
+	QCOMPARE(static_cast<QObject *>(nullptr), container->object());
 }
 
 QTEST_APPLESS_MAIN(ready_object_behavior_test)
