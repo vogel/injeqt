@@ -90,4 +90,5 @@ injeqt_add_unit_test (type-relations-test unit/type-relations-test.cpp)
 injeqt_add_unit_test (types-by-name-test unit/types-by-name-test.cpp)
 injeqt_add_unit_test (types-model-test unit/types-model-test.cpp)
 
+injeqt_add_integration_test (factory-behavior-test integration/factory-behavior-test.cpp)
 injeqt_add_integration_test (ready-object-behavior-test integration/ready-object-behavior-test.cpp)
