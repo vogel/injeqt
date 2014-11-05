@@ -54,12 +54,6 @@ bool types_model::contains(const type &interface_type) const
 	return _available_types.get(interface_type) != end(_available_types);
 }
 
-type_dependencies types_model::get_dependencies(const type &interface_type) const
-{
-	assert(contains(interface_type));
-	return *_mapped_dependencies.get(_available_types.get(interface_type)->implementation_type());
-}
-
 std::vector<dependency> types_model::get_unresolvable_dependencies() const
 {
 	auto result = std::vector<dependency>{};

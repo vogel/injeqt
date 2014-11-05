@@ -79,16 +79,6 @@ public:
 	bool contains(const type &interface_type) const;
 
 	/**
-	 * @brief Get list of dependencies for given type.
-	 * @param interface_type type to get dependencies from
-	 * @pre contains(interface_type)
-	 *
-	 * Return list of dependencies for given @p interface_type. First it looks for implementation
-	 * type of given interface type, then returns its list of dependencies.
-	 */
-	type_dependencies get_dependencies(const type &interface_type) const;
-
-	/**
 	 * @brief Return all unresolvable dependencies
 	 */
 	std::vector<dependency> get_unresolvable_dependencies() const;
