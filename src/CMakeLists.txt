@@ -68,10 +68,18 @@ set (INJEQT_SRCS
 	internal/types-model.cpp
 )
 
+add_definitions (
+	-Dinjeqt_EXPORTS
+)
+
 add_library (
 	injeqt
 	SHARED
 	${INJEQT_SRCS}
+)
+
+qt5_use_modules (injeqt
+	LINK_PUBLIC Core
 )
 
 set_target_properties (injeqt PROPERTIES
@@ -79,8 +87,9 @@ set_target_properties (injeqt PROPERTIES
 	VERSION "${INJEQT_VERSION}"
 )
 
-message ("aa ${CMAKE_INSTALL_LIBDIR}")
 install (TARGETS
 	injeqt
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )

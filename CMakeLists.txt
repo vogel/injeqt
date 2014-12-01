@@ -27,9 +27,15 @@ set (INJEQT_VERSION "0.9.1")
 option (DISABLE_TESTS "Do not build tests" OFF)
 option (DISABLE_EXAMPLES "Do not build examples" OFF)
 
-include (GNUInstallDirs)
-
 find_package (Qt5Core 5.2 REQUIRED)
+
+# do not link with qtmain on windows
+if (POLICY CMP0020)
+	cmake_policy (SET CMP0020 OLD)
+endif ()
+if (POLICY CMP0043)
+	cmake_policy (SET CMP0043 NEW)
+endif ()
 
 set (WARNINGS "-Werror -W -Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
 set (VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
@@ -43,7 +49,6 @@ set (CMAKE_AUTOMOC TRUE)
 set (CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories (
-	${Qt5Core_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/src/internal
 )
@@ -80,6 +85,5 @@ install (DIRECTORY
 )
 
 install (FILES
-	${CMAKE_CURRENT_BINARY_DIR}/injeqt.pc
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+	${CMAKE_CURRENT_BINARY_DIR}/injeqt.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )

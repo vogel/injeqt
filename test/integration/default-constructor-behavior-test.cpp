@@ -78,7 +78,7 @@ void default_constructor_behavior_test::should_create_proper_object_structure()
 	class m : public injeqt::module
 	{
 	public:
-		m(int value)
+		m()
 		{
 			add_type<int_service>();
 			add_type<nine_container>();
@@ -87,7 +87,7 @@ void default_constructor_behavior_test::should_create_proper_object_structure()
 	};
 
 	auto modules = std::vector<std::unique_ptr<injeqt::module>>{};
-	modules.emplace_back(std::unique_ptr<m>{new m{9}});
+	modules.emplace_back(std::unique_ptr<m>{new m{}});
 	auto injector = injeqt::injector{std::move(modules)};
 	auto service = injector.get<int_service>();
 	QCOMPARE(9, service->value());
