@@ -81,7 +81,7 @@ configure_file (
 )
 
 install (DIRECTORY
-	include/injeqt DESTINATION include/injeqt
+	include/injeqt DESTINATION include
 )
 
 install (FILES
