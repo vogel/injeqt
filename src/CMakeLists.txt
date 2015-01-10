@@ -87,6 +87,10 @@ set_target_properties (injeqt PROPERTIES
 	VERSION "${INJEQT_VERSION}"
 )
 
+if (NOT WIN32)
+	include (GNUInstallDirs)
+endif ()
+
 install (TARGETS
 	injeqt
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
