@@ -102,13 +102,32 @@ QObject * injector_core::get(const type &interface_type)
 	if (object_it != end(_objects))
 		return object_it->object();
 
-	_objects = objects_with(_objects, implementation_type);
+	_objects = objects_with_implementation_type(_objects, implementation_type);
 	return _objects.get(implementation_type)->object();
 }
 
-implementations injector_core::objects_with(implementations objects, const type &implementation_type)
+implementations injector_core::objects_with_interface_type(implementations objects, const type &interface_type)
 {
-	auto types_to_instantiate = required_to_satisfy(implementation_type, _types_model, objects);
+	auto implementation_type_it = _types_model.available_types().get(interface_type);
+	if (implementation_type_it == end(_types_model.available_types()))
+		throw exception::unknown_type{interface_type.name()};
+
+	return objects_with_implementation_type(objects, implementation_type_it->implementation_type());
+}
+
+implementations injector_core::objects_with_implementation_type(implementations objects, const type &interface_type)
+{
+	auto implementation_type_it = _types_model.available_types().get(interface_type);
+	if (implementation_type_it == end(_types_model.available_types()))
+		throw exception::unknown_type{interface_type.name()};
+
+	auto implementation_type = implementation_type_it->implementation_type();
+	auto implementation_type_dependencies = _types_model.mapped_dependencies().contains_key(implementation_type)
+			? _types_model.mapped_dependencies().get(implementation_type)->dependency_list()
+			: dependencies{};
+
+	auto types_to_instantiate = required_to_satisfy(implementation_type_dependencies, _types_model, objects);
+	types_to_instantiate.add(implementation_type);
 	return objects_with(objects, types_to_instantiate);
 }
 
@@ -118,11 +137,12 @@ implementations injector_core::objects_with(implementations objects, const types
 	auto objects_to_store = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
+		printf("[%p] looking for provider for [%ld]: %s\n", this, _available_providers.size(), type_to_instantiate.name().c_str());
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		assert(provider_it != end(_available_providers));
 
 		for (auto &&required_type : provider_it->get()->required_types())
-			objects = objects_with(objects, required_type);
+			objects = objects_with_interface_type(objects, required_type);
 	}
 
 	for (auto &&type_to_instantiate : types_to_instantiate)

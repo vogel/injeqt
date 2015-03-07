@@ -28,24 +28,22 @@
 
 /**
  * @file
- * @brief Contains functions for computing list of types required to properly instantiate given type.
+ * @brief Contains functions for computing list of types required to properly satisfy provided dependnecies.
  */
 
 namespace injeqt { namespace internal {
 
 /**
- * @brief Return list of types required to properly instantiate given type.
- * @param type_to_instantiate type to compute data for, must be valid
+ * @brief Return list of types required to properly satisfy provided dependnecies.
+ * @param dependencies_to_satisfy list of dependencies to satisfy
  * @param model model of all types in system, must be valid
  * @param objects list of available interfaces, must be valid
- * @pre model.contains(type_to_instantiate)
  * @pre model.get_unresolvable_dependencies().empty()
  *
- * This function computes list of all types that must be instantiated in order to properly instantiate
- * type_to_instantiate and resolve its dependencies. It starts with getting list of all dependencies of
- * type_to_instantiate. If any of these types is not available in @p objects set then it is added to result
- * set and recursively processed - so full set of required types can be computed.
+ * This function computes list of all types that must be instantiated in order to properly resolve all
+ * provided dependencies. It means it recursively traverses dependency tree and returns all nodes that
+ * are not found in @p objects set.
  */
-types required_to_satisfy(const type &type_to_instantiate, const types_model &model, const implementations &objects);
+types required_to_satisfy(const dependencies &dependencies_to_satisfy, const types_model &model, const implementations &objects);
 
 }}

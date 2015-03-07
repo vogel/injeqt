@@ -116,6 +116,18 @@ private:
 	types_model create_types_model() const;
 
 	/**
+	 * @brief Create new list of implementation objects with object of type interface_type
+	 * @param objects list of already created objects
+	 * @param interface_type type of interface of object to create
+	 * @throw instantiation_failed if instantiation of one of required types failed
+	 * @throw unknown_type if interface_type does not have corresponding implementation
+	 *
+	 * This method first finds implementation_type valid for given interface_type. Then
+	 * objects_with_implementation_type(implementations, const type &) is called.
+	 */
+	implementations objects_with_interface_type(implementations objects, const type &interface_type);
+
+	/**
 	 * @brief Create new list of implementation objects with object of type implementation_type
 	 * @param objects list of already created objects
 	 * @param implementation_type type of object to create
@@ -125,7 +137,7 @@ private:
 	 * using required_to_satisfy(const type &, const types_model &, const implementations &) and then uses
 	 * objects_with(implementations, const types &) to create all these objects.
 	 */
-	implementations objects_with(implementations objects, const type &implementation_type);
+	implementations objects_with_implementation_type(implementations objects, const type &implementation_type);
 
 	/**
 	 * @brief Create new list of implementation objects with objects of types implementation_types

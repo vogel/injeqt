@@ -137,19 +137,16 @@ public:
 	required_to_satisfy_test();
 
 private slots:
-	void should_return_type_when_simple_types_and_empty_implementation();
-	void should_return_subtype_when_inheriting_types_and_empty_implementation();
-	void should_return_nothing_when_simple_types_and_implementation();
-	void should_return_nothing_when_inheriting_types_and_only_subtype_implementation();
-	void should_return_type_with_dependencies_when_simple_types_and_empty_implementation();
-	void should_return_type_when_simple_types_and_dependencies_implementation();
-	void should_return_nothing_when_simple_types_and_self_implementation();
-	void should_return_subtype_with_dependencies_when_inheriting_types_and_empty_implementation();
-	void should_return_type_with_all_dependencies_when_simple_types_and_empty_implementation();
-	void should_return_type_with_partial_dependencies_when_simple_types_and_partial_implementation();
-	void should_return_type_when_simple_types_and_almost_full_implementation();
-	void should_return_all_types_with_cyclic_dependnecies_when_simple_types_and_empty_implementation();
-	void should_return_all_subtypes_with_cyclic_dependnecies_when_inheriting_types_and_empty_implementation();
+	void should_return_nothing_when_empty_dependencies();
+	void should_return_dependencies_for_simple_model_with_empty_implementations();
+	void should_return_nothing_for_simple_model_with_full_implementations();
+	void should_return_subtype_dependencies_for_inheriting_model_with_empty_implementations();
+	void should_return_nothing_for_inheriting_model_with_full_implementations();
+	void should_return_dependencies_for_inheriting_model_with_supertype_implementations();
+	void should_return_all_dependencies_for_simple_model_with_empty_implementations();
+	void should_return_partial_dependencies_for_simple_model_with_partial_implementations();
+	void should_return_all_types_with_cyclic_dependnecies_for_simple_model_with_partial_implementations();
+	void should_return_all_subtypes_with_cyclic_dependnecies_for_inheriting_model_with_partial_implementations();
 	void should_return_type_when_supertype_is_already_available();
 
 private:
@@ -169,6 +166,13 @@ private:
 	types_model empty_types_model;
 	types_model simple_types_model;
 	types_model inheriting_types_model;
+	dependencies type_1_dependencies;
+	dependencies type_1_subtype_1_dependencies;
+	dependencies type_2_dependencies;
+	dependencies type_3_dependencies;
+	dependencies cyclic_type_1_dependencies;
+	dependencies cyclic_type_2_dependencies;
+	dependencies cyclic_type_3_dependencies;
 
 };
 
@@ -218,87 +222,73 @@ required_to_satisfy_test::required_to_satisfy_test() :
 	};
 	simple_types_model = make_types_model(known_types, simple_types, simple_types);
 	inheriting_types_model = make_types_model(known_types, inheriting_types, inheriting_types);
+	type_1_dependencies = simple_types_model.mapped_dependencies().get(type_1_type)->dependency_list();
+	type_1_subtype_1_dependencies = inheriting_types_model.mapped_dependencies().get(type_1_subtype_1_type)->dependency_list();
+	type_2_dependencies = simple_types_model.mapped_dependencies().get(type_2_type)->dependency_list();
+	type_3_dependencies = simple_types_model.mapped_dependencies().get(type_3_type)->dependency_list();
+	cyclic_type_1_dependencies = simple_types_model.mapped_dependencies().get(cyclic_type_1_type)->dependency_list();
+	cyclic_type_2_dependencies = simple_types_model.mapped_dependencies().get(cyclic_type_2_type)->dependency_list();
+	cyclic_type_3_dependencies = simple_types_model.mapped_dependencies().get(cyclic_type_3_type)->dependency_list();
 }
 
-void required_to_satisfy_test::should_return_type_when_simple_types_and_empty_implementation()
+void required_to_satisfy_test::should_return_nothing_when_empty_dependencies()
 {
-	auto result = required_to_satisfy(type_1_type, simple_types_model, {});
-	QCOMPARE(result, types{type_1_type});
+	auto result = required_to_satisfy(dependencies{}, simple_types_model, {});
+	QCOMPARE(result, types{});
 }
 
-void required_to_satisfy_test::should_return_subtype_when_inheriting_types_and_empty_implementation()
+void required_to_satisfy_test::should_return_dependencies_for_simple_model_with_empty_implementations()
 {
-	auto result = required_to_satisfy(type_1_type, inheriting_types_model, {});
-	QCOMPARE(result, types{type_1_subtype_1_type});
+	auto result = required_to_satisfy(type_2_dependencies, simple_types_model, {});
+	QCOMPARE(result, (types{type_1_type}));
 }
 
-void required_to_satisfy_test::should_return_nothing_when_simple_types_and_implementation()
+void required_to_satisfy_test::should_return_nothing_for_simple_model_with_full_implementations()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
 	{
 		implementation{type_1_type, type_1_object.get()}
 	};
-
-	auto result = required_to_satisfy(type_1_type, simple_types_model, available_implementations);
-	QCOMPARE(result, types{});
+	auto result = required_to_satisfy(type_2_dependencies, simple_types_model, available_implementations);
+	QCOMPARE(result, (types{}));
 }
 
-void required_to_satisfy_test::should_return_nothing_when_inheriting_types_and_only_subtype_implementation()
+void required_to_satisfy_test::should_return_subtype_dependencies_for_inheriting_model_with_empty_implementations()
+{
+	auto result = required_to_satisfy(type_2_dependencies, inheriting_types_model, {});
+	QCOMPARE(result, (types{type_1_subtype_1_type}));
+}
+
+void required_to_satisfy_test::should_return_nothing_for_inheriting_model_with_full_implementations()
 {
 	auto type_1_subtype_1_object = make_object<type_1_subtype_1>();
 	auto available_implementations = implementations
 	{
 		implementation{type_1_subtype_1_type, type_1_subtype_1_object.get()}
 	};
-
-	auto result = required_to_satisfy(type_1_type, inheriting_types_model, available_implementations);
-	QCOMPARE(result, types{});
-}
-
-void required_to_satisfy_test::should_return_type_with_dependencies_when_simple_types_and_empty_implementation()
-{
-	auto result = required_to_satisfy(type_2_type, simple_types_model, {});
-	QCOMPARE(result, (types{type_1_type, type_2_type}));
-}
-
-void required_to_satisfy_test::should_return_type_when_simple_types_and_dependencies_implementation()
-{
-	auto type_1_object = make_object<type_1>();
-	auto available_implementations = implementations
-	{
-		implementation{type_1_type, type_1_object.get()}
-	};
-
-	auto result = required_to_satisfy(type_2_type, simple_types_model, available_implementations);
-	QCOMPARE(result, (types{type_2_type}));
-}
-
-void required_to_satisfy_test::should_return_nothing_when_simple_types_and_self_implementation()
-{
-	auto type_2_object = make_object<type_2>();
-	auto available_implementations = implementations
-	{
-		implementation{type_2_type, type_2_object.get()}
-	};
-
-	auto result = required_to_satisfy(type_2_type, simple_types_model, available_implementations);
+	auto result = required_to_satisfy(type_2_dependencies, inheriting_types_model, available_implementations);
 	QCOMPARE(result, (types{}));
 }
 
-void required_to_satisfy_test::should_return_subtype_with_dependencies_when_inheriting_types_and_empty_implementation()
+void required_to_satisfy_test::should_return_dependencies_for_inheriting_model_with_supertype_implementations()
 {
-	auto result = required_to_satisfy(type_2_type, inheriting_types_model, {});
-	QCOMPARE(result, (types{type_1_subtype_1_type, type_2_subtype_1_type}));
+	auto type_1_object = make_object<type_1>();
+	auto available_implementations = implementations
+	{
+		implementation{type_1_type, type_1_object.get()}
+	};
+	auto result = required_to_satisfy(type_2_dependencies, inheriting_types_model, available_implementations);
+	QCOMPARE(result, (types{type_1_subtype_1_type}));
 }
 
-void required_to_satisfy_test::should_return_type_with_all_dependencies_when_simple_types_and_empty_implementation()
+void required_to_satisfy_test::should_return_all_dependencies_for_simple_model_with_empty_implementations()
 {
-	auto result = required_to_satisfy(type_3_type, simple_types_model, {});
-	QCOMPARE(result, (types{type_1_type, type_2_type, type_3_type}));
+	auto result = required_to_satisfy(type_3_dependencies, simple_types_model, {});
+	QCOMPARE(result, (types{type_1_type, type_2_type}));
 }
 
-void required_to_satisfy_test::should_return_type_with_partial_dependencies_when_simple_types_and_partial_implementation()
+void required_to_satisfy_test::should_return_partial_dependencies_for_simple_model_with_partial_implementations()
 {
 	auto type_1_object = make_object<type_1>();
 	auto available_implementations = implementations
@@ -306,45 +296,31 @@ void required_to_satisfy_test::should_return_type_with_partial_dependencies_when
 		implementation{type_1_type, type_1_object.get()}
 	};
 
-	auto result = required_to_satisfy(type_3_type, simple_types_model, available_implementations);
-	QCOMPARE(result, (types{type_2_type, type_3_type}));
+	auto result = required_to_satisfy(type_3_dependencies, simple_types_model, available_implementations);
+	QCOMPARE(result, (types{type_2_type}));
 }
 
-void required_to_satisfy_test::should_return_type_when_simple_types_and_almost_full_implementation()
+void required_to_satisfy_test::should_return_all_types_with_cyclic_dependnecies_for_simple_model_with_partial_implementations()
 {
-	auto type_1_object = make_object<type_1>();
-	auto type_2_object = make_object<type_2>();
-	auto available_implementations = implementations
-	{
-		implementation{type_1_type, type_1_object.get()},
-		implementation{type_2_type, type_2_object.get()}
-	};
-
-	auto result = required_to_satisfy(type_3_type, simple_types_model, available_implementations);
-	QCOMPARE(result, (types{type_3_type}));
-}
-
-void required_to_satisfy_test::should_return_all_types_with_cyclic_dependnecies_when_simple_types_and_empty_implementation()
-{
-	auto result1 = required_to_satisfy(cyclic_type_1_type, simple_types_model, {});
+	auto result1 = required_to_satisfy(cyclic_type_1_dependencies, simple_types_model, {});
 	QCOMPARE(result1, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 
-	auto result2 = required_to_satisfy(cyclic_type_2_type, simple_types_model, {});
+	auto result2 = required_to_satisfy(cyclic_type_2_dependencies, simple_types_model, {});
 	QCOMPARE(result2, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 
-	auto result3 = required_to_satisfy(cyclic_type_3_type, simple_types_model, {});
+	auto result3 = required_to_satisfy(cyclic_type_3_dependencies, simple_types_model, {});
 	QCOMPARE(result3, (types{cyclic_type_1_type, cyclic_type_2_type, cyclic_type_3_type}));
 }
 
-void required_to_satisfy_test::should_return_all_subtypes_with_cyclic_dependnecies_when_inheriting_types_and_empty_implementation()
+void required_to_satisfy_test::should_return_all_subtypes_with_cyclic_dependnecies_for_inheriting_model_with_partial_implementations()
 {
-	auto result1 = required_to_satisfy(cyclic_type_1_type, inheriting_types_model, {});
+	auto result1 = required_to_satisfy(cyclic_type_1_dependencies, inheriting_types_model, {});
 	QCOMPARE(result1, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 
-	auto result2 = required_to_satisfy(cyclic_type_2_type, inheriting_types_model, {});
+	auto result2 = required_to_satisfy(cyclic_type_2_dependencies, inheriting_types_model, {});
 	QCOMPARE(result2, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 
-	auto result3 = required_to_satisfy(cyclic_type_3_type, inheriting_types_model, {});
+	auto result3 = required_to_satisfy(cyclic_type_3_dependencies, inheriting_types_model, {});
 	QCOMPARE(result3, (types{cyclic_type_1_subtype_1_type, cyclic_type_2_subtype_1_type, cyclic_type_3_subtype_1_type}));
 }
 
@@ -356,8 +332,8 @@ void required_to_satisfy_test::should_return_type_when_supertype_is_already_avai
 		implementation{type_1_type, type_1_object.get()},
 	};
 
-	auto result = required_to_satisfy(type_1_subtype_1_type, inheriting_types_model, available_implementations);
-	QCOMPARE(result, (types{type_1_subtype_1_type}));
+	auto result = required_to_satisfy(type_1_subtype_1_dependencies, inheriting_types_model, available_implementations);
+	QCOMPARE(result, (types{}));
 }
 
 QTEST_APPLESS_MAIN(required_to_satisfy_test);

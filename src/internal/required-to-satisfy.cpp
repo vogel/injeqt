@@ -29,9 +29,8 @@
 
 namespace injeqt { namespace internal {
 
-types required_to_satisfy(const type &type_to_instantiate, const types_model &model, const implementations &objects)
+types required_to_satisfy(const dependencies &dependencies_to_satisfy, const types_model &model, const implementations &objects)
 {
-	assert(model.contains(type_to_instantiate));
 	assert(model.get_unresolvable_dependencies().empty());
 
 	auto result = std::vector<type>{};
@@ -39,7 +38,10 @@ types required_to_satisfy(const type &type_to_instantiate, const types_model &mo
 	std::transform(std::begin(objects), std::end(objects), std::inserter(ready, std::end(ready)),
 		[](const implementation &i){ return i.interface_type(); });
 
-	auto interfaces_to_check = std::vector<type>{type_to_instantiate};
+	auto interfaces_to_check = std::vector<type>{};
+	std::transform(std::begin(dependencies_to_satisfy), std::end(dependencies_to_satisfy), std::back_inserter(interfaces_to_check),
+		[](const dependency &d){ return d.required_type(); });
+
 	while (!interfaces_to_check.empty())
 	{
 		auto current_interface_type = interfaces_to_check.back();
@@ -57,9 +59,9 @@ types required_to_satisfy(const type &type_to_instantiate, const types_model &mo
 
 		if (model.mapped_dependencies().contains_key(current_implementation_type))
 		{
-			auto dependencies = model.mapped_dependencies().get(current_implementation_type);
-			for (auto &&dependency : dependencies->dependency_list())
-				interfaces_to_check.push_back(dependency.required_type());
+			auto dependencies = model.mapped_dependencies().get(current_implementation_type)->dependency_list();
+			std::transform(std::begin(dependencies), std::end(dependencies), std::back_inserter(interfaces_to_check),
+				[](const dependency &d){ return d.required_type(); });
 		}
 	}
 
