@@ -1,3 +1,8 @@
+2015-03-07  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
+
+	* tests: tests now compile properly on 32bit platforms
+	* 1.0.1: released
+
 2014-12-02  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
 
 	* windows: allow windows mingw build
