@@ -143,7 +143,7 @@ void resolve_dependencies_test::should_resolve_all_dependencies()
 	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), 3ul);
+	QCOMPARE(result.resolved.size(), size_t{3});
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type2_setter}));
 	QCOMPARE(result.resolved.at(2), (resolved_dependency{objects.at(2), injectable_type3_setter}));
@@ -167,10 +167,10 @@ void resolve_dependencies_test::should_resolve_available_dependencies()
 	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), 2ul);
+	QCOMPARE(result.resolved.size(), size_t{2});
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type3_setter}));
-	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.size(), size_t{1});
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 }
 
@@ -195,10 +195,10 @@ void resolve_dependencies_test::should_resolve_available_dependencies_using_exac
 	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), 2ul);
+	QCOMPARE(result.resolved.size(), size_t{2});
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
-	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.size(), size_t{1});
 	QCOMPARE(*result.unresolved.begin(), to_resolve.at(1));
 	QVERIFY(&object1 != &object1b);
 	QVERIFY(&object3 != &object3b);
@@ -225,10 +225,10 @@ void resolve_dependencies_test::should_resolve_available_dependencies_using_exac
 	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), 2ul);
+	QCOMPARE(result.resolved.size(), size_t{2});
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
 	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
-	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.size(), size_t{1});
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 	QVERIFY(&object1 != &subobject1);
 	QVERIFY(&object3 != &object3b);
@@ -250,9 +250,9 @@ void resolve_dependencies_test::should_resolve_available_dependencies_not_using_
 	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), 1ul);
+	QCOMPARE(result.resolved.size(), size_t{1});
 	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(1), injectable_type2_setter}));
-	QCOMPARE(result.unresolved.size(), 1ul);
+	QCOMPARE(result.unresolved.size(), size_t{1});
 	QVERIFY(result.unresolved.contains(to_resolve.at(0)));
 }
 

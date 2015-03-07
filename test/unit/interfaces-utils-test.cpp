@@ -74,7 +74,7 @@ interfaces_utils_test::interfaces_utils_test() :
 void interfaces_utils_test::should_find_nothing_in_qobject()
 {
 	auto interfaces = extract_interfaces(qobject_type);
-	QCOMPARE(interfaces.size(), 0UL);
+	QCOMPARE(interfaces.size(), size_t{0});
 	QVERIFY(!implements(qobject_type, qobject_type));
 }
 

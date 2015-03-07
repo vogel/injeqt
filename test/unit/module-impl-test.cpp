@@ -60,22 +60,22 @@ private slots:
 void module_impl_test::should_properly_add_provider_configurations()
 {
 	auto m = module_impl{};
-	QCOMPARE(m.provider_configurations().size(), 0UL);
+	QCOMPARE(m.provider_configurations().size(), size_t{0});
 
 	auto p1 = std::make_shared<mocked_provider_configuration>();
 	m.add_provider_configuration(p1);
-	QCOMPARE(m.provider_configurations().size(), 1UL);
+	QCOMPARE(m.provider_configurations().size(), size_t{1});
 	QCOMPARE(m.provider_configurations()[0].get(), p1.get());
 
 	auto p2 = std::make_shared<mocked_provider_configuration>();
 	m.add_provider_configuration(p2);
-	QCOMPARE(m.provider_configurations().size(), 2UL);
+	QCOMPARE(m.provider_configurations().size(), size_t{2});
 	QCOMPARE(m.provider_configurations()[0].get(), p1.get());
 	QCOMPARE(m.provider_configurations()[1].get(), p2.get());
 
 	auto p3 = std::make_shared<mocked_provider_configuration>();
 	m.add_provider_configuration(p3);
-	QCOMPARE(m.provider_configurations().size(), 3UL);
+	QCOMPARE(m.provider_configurations().size(), size_t{3});
 	QCOMPARE(m.provider_configurations()[0].get(), p1.get());
 	QCOMPARE(m.provider_configurations()[1].get(), p2.get());
 	QCOMPARE(m.provider_configurations()[2].get(), p3.get());

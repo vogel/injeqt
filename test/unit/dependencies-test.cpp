@@ -272,13 +272,13 @@ void dependencies_test::verify_dependency(dependencies list, const dependency &c
 void dependencies_test::should_find_no_dependnecies_in_qobject()
 {
 	auto dependencies = extract_dependencies(known_types, make_type<QObject>());
-	QCOMPARE(dependencies.size(), 0UL);
+	QCOMPARE(dependencies.size(), size_t{0});
 }
 
 void dependencies_test::should_find_all_valid_dependencies()
 {
 	auto dependencies = extract_dependencies(known_types, make_type<valid_injected_type>());
-	QCOMPARE(dependencies.size(), 2UL);
+	QCOMPARE(dependencies.size(), size_t{2});
 	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type, injectable_type1>("setter_1(injectable_type1*)")});
 	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type, injectable_type2>("setter_2(injectable_type2*)")});
 }
@@ -286,7 +286,7 @@ void dependencies_test::should_find_all_valid_dependencies()
 void dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
 {
 	auto dependencies = extract_dependencies(known_types, make_type<inheriting_valid_injected_type>());
-	QCOMPARE(dependencies.size(), 3UL);
+	QCOMPARE(dependencies.size(), size_t{3});
 	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type, injectable_type1>("setter_1(injectable_type1*)")});
 	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type, injectable_type2>("setter_2(injectable_type2*)")});
 	verify_dependency(dependencies, dependency{make_setter_method<inheriting_valid_injected_type, injectable_type3>("setter_3(injectable_type3*)")});
@@ -296,7 +296,7 @@ void dependencies_test::should_find_dependencies_with_common_superclass()
 {
 	auto dependencies = extract_dependencies(known_types, make_type<valid_injected_type_with_common_superclass>());
 
-	QCOMPARE(dependencies.size(), 2UL);
+	QCOMPARE(dependencies.size(), size_t{2});
 	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type_with_common_superclass, sub_injectable_type1a>("setter_1(sub_injectable_type1a*)")});
 	verify_dependency(dependencies, dependency{make_setter_method<valid_injected_type_with_common_superclass, sub_injectable_type1b>("setter_2(sub_injectable_type1b*)")});
 }

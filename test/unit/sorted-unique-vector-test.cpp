@@ -83,7 +83,7 @@ void sorted_unique_vector_test::should_be_empty_after_default_construction()
 	auto data = suv_int{};
 
 	QVERIFY(data.empty());
-	QCOMPARE(data.size(), 0ul);
+	QCOMPARE(data.size(), size_t{0});
 	QCOMPARE(data.content(), (std::vector<int>{}));
 }
 
@@ -92,12 +92,12 @@ void sorted_unique_vector_test::should_be_empty_after_clear()
 	auto data = suv_int{1, 4, 5, 2};
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 
 	data.clear();
 
 	QVERIFY(data.empty());
-	QCOMPARE(data.size(), 0ul);
+	QCOMPARE(data.size(), size_t{0});
 }
 
 void sorted_unique_vector_test::should_be_valid_after_adding_two_same_items_to_empty()
@@ -107,7 +107,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_two_same_items_to_e
 	data.add(1);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 1ul);
+	QCOMPARE(data.size(), size_t{1});
 }
 
 void sorted_unique_vector_test::should_be_valid_after_adding_two_different_items_to_empty()
@@ -117,7 +117,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_two_different_items
 	data.add(2);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 2ul);
+	QCOMPARE(data.size(), size_t{2});
 }
 
 void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_vector()
@@ -125,7 +125,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_vec
 	auto data = suv_int{1, 4, 5, 2};
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -134,7 +134,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_non_unique
 	auto data = suv_int{1, 4, 5, 2, 1, 4, 5, 2};
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -143,7 +143,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_unique_sor
 	auto data = suv_int{1, 2, 4, 5};
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -152,7 +152,7 @@ void sorted_unique_vector_test::should_be_valid_after_conversion_from_non_unique
 	auto data = suv_int{1, 1, 2, 2, 4, 4, 5, 5};
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -162,7 +162,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_less_than_smallest_
 	data.add(0);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 5ul);
+	QCOMPARE(data.size(), size_t{5});
 	QCOMPARE(data.content(), (std::vector<int>{0, 1, 2, 4, 5}));
 }
 
@@ -172,7 +172,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_smallest_element()
 	data.add(1);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -182,7 +182,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_medium_element()
 	data.add(3);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 5ul);
+	QCOMPARE(data.size(), size_t{5});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 3, 4, 5}));
 }
 
@@ -192,7 +192,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_largest_element()
 	data.add(5);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -202,7 +202,7 @@ void sorted_unique_vector_test::should_be_valid_after_adding_greater_than_larges
 	data.add(6);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 5ul);
+	QCOMPARE(data.size(), size_t{5});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5, 6}));
 }
 
@@ -212,7 +212,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_itself()
 	data.merge(data);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 4ul);
+	QCOMPARE(data.size(), size_t{4});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5}));
 }
 
@@ -223,7 +223,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_lesser_elements()
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 7ul);
+	QCOMPARE(data.size(), size_t{7});
 	QCOMPARE(data.content(), (std::vector<int>{-2, -1, 0, 1, 2, 4, 5}));
 }
 
@@ -234,7 +234,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_lesser_or_equal_el
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 7ul);
+	QCOMPARE(data.size(), size_t{7});
 	QCOMPARE(data.content(), (std::vector<int>{-2, -1, 0, 1, 2, 4, 5}));
 }
 
@@ -245,7 +245,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_misc_elements()
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 9ul);
+	QCOMPARE(data.size(), size_t{9});
 	QCOMPARE(data.content(), (std::vector<int>{-1, 0, 1, 2, 3, 4, 5, 10, 17}));
 }
 
@@ -256,7 +256,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_misc_unique_elemen
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 9ul);
+	QCOMPARE(data.size(), size_t{9});
 	QCOMPARE(data.content(), (std::vector<int>{-1, 0, 1, 2, 3, 4, 5, 10, 17}));
 }
 
@@ -267,7 +267,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_greater_or_equal_e
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 7ul);
+	QCOMPARE(data.size(), size_t{7});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5, 6, 7, 8}));
 }
 
@@ -278,7 +278,7 @@ void sorted_unique_vector_test::should_be_valid_after_merging_greater_elements()
 	data.merge(data_to_add);
 
 	QVERIFY(!data.empty());
-	QCOMPARE(data.size(), 6ul);
+	QCOMPARE(data.size(), size_t{6});
 	QCOMPARE(data.content(), (std::vector<int>{1, 2, 4, 5, 6, 7}));
 }
 
