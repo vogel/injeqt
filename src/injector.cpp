@@ -69,4 +69,11 @@ QObject * injector::get(const type &interface_type)
 	return _pimpl->get(interface_type);
 }
 
+void injector::inject_into(QObject *object)
+{
+	assert(object);
+
+	_pimpl->inject_into(object);
+}
+
 }}

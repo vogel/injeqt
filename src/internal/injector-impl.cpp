@@ -76,4 +76,11 @@ QObject * injector_impl::get(const type &interface_type)
 	return _core.get(interface_type);
 }
 
+void injector_impl::inject_into(QObject *object)
+{
+	assert(object);
+
+	_core.inject_into(object);
+}
+
 }}

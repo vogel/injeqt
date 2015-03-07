@@ -153,6 +153,22 @@ private slots:
 	INJEQT_SETTER void set_type_8(type_8 *x) { o8 = x; }
 };
 
+
+class unregistered_type : public QObject
+{
+	Q_OBJECT
+
+public:
+	type_1 *o1;
+	type_2 *o2;
+
+	unregistered_type() : QObject{}, o1{nullptr}, o2{nullptr} {}
+
+private slots:
+	INJEQT_SETTER void set_type_1(type_1 *x) { o1 = x; }
+	INJEQT_SETTER void set_type_1(type_2 *x) { o2 = x; }
+};
+
 class injector_core_test : public QObject
 {
 	Q_OBJECT
@@ -178,6 +194,8 @@ private slots:
 	void should_not_accept_ambiguous_required_supertype();
 	void should_accept_cyclic_dependencies();
 	void should_accept_dependencies_that_are_required();
+	void should_inject_into_unregistered_type();
+	void should_not_inject_into_when_unknown_dependencies();
 	// TODO: https://github.com/vogel/injeqt/issues/3
 	/*
 		void should_not_accept_cyclic_required_types();
@@ -458,6 +476,40 @@ void injector_core_test::should_accept_dependencies_that_are_required()
 	QVERIFY(o8 != nullptr);
 	QVERIFY(o7 == get<type_7>(i));
 	QVERIFY(o8 == get<type_8>(i));
+}
+
+void injector_core_test::should_inject_into_unregistered_type()
+{
+	auto type_1_provider_p = make_mocked_provider<type_1>();
+	auto type_2_provider_p = make_mocked_provider<type_2>();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_1_provider_p));
+	configuration.push_back(std::move(type_2_provider_p));
+
+	auto i = injector_core{types_by_name{make_type<type_1>(), make_type<type_2>()}, std::move(configuration)};
+	auto unregistered = std::unique_ptr<unregistered_type>(new unregistered_type{});
+	i.inject_into(unregistered.get());
+
+	QVERIFY(unregistered->o1 != nullptr);
+	QVERIFY(unregistered->o2 != nullptr);
+	QCOMPARE(unregistered->o1, get<type_1>(i));
+	QCOMPARE(unregistered->o2, get<type_2>(i));
+}
+
+void injector_core_test::should_not_inject_into_when_unknown_dependencies()
+{
+	auto type_1_provider_p = make_mocked_provider<type_1>();
+
+	auto configuration = std::vector<std::unique_ptr<provider>>{};
+	configuration.push_back(std::move(type_1_provider_p));
+
+	auto i = injector_core{types_by_name{make_type<type_1>()}, std::move(configuration)};
+	auto unregistered = std::unique_ptr<unregistered_type>(new unregistered_type{});
+
+	expect<exception::invalid_setter>({"type_2"}, [&](){
+		i.inject_into(unregistered.get());
+	});
 }
 
 // TODO: https://github.com/vogel/injeqt/issues/3

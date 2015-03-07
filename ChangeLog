@@ -1,5 +1,9 @@
 2015-03-07  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
 
+	* 1.1: added injector::inject_into(QObject *) method
+
+2015-03-07  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
+
 	* tests: tests now compile properly on 32bit platforms
 	* 1.0.1: released
 

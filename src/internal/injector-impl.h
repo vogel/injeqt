@@ -74,6 +74,7 @@ public:
 	 * @throw dependency_on_subtype when type depends on own subtype
 	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
 	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject-derived pointer of not configured type
 	 * @throw invalid_setter if any tagged setter has other number of parameters than one
 	 *
 	 * This constructor extract all providers from all modules and creates injector_core object
@@ -91,6 +92,22 @@ public:
 	 * @see injector::get<T>()
 	 */
 	QObject * get(const type &interface_type);
+
+	/**
+	 * @brief Inject dependencies into @p object.
+	 * @param object object to inject dependencies into.
+	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject-derived pointer of not configured type
+	 * @throw invalid_setter if any tagged setter has other number of parameters than one
+	 * @pre object != nullptr
+	 *
+	 * This method looks for invokable setters tagged with INJEQT_SETTER in @p object. If any of setter is not valid
+	 * dependency injector setter or its parameter is of type not configured in injector an exception is thrown.
+	 * If all setters are valid, they are called with proper objects (which may be already available in injector
+	 * or created on demand).
+	 */
+	void inject_into(QObject *object);
 
 private:
 	std::vector<std::unique_ptr<module>> _modules;

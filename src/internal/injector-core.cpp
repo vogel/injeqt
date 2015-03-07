@@ -137,7 +137,6 @@ implementations injector_core::objects_with(implementations objects, const types
 	auto objects_to_store = std::vector<implementation>{};
 	for (auto &&type_to_instantiate : types_to_instantiate)
 	{
-		printf("[%p] looking for provider for [%ld]: %s\n", this, _available_providers.size(), type_to_instantiate.name().c_str());
 		auto provider_it = _available_providers.get(type_to_instantiate);
 		assert(provider_it != end(_available_providers));
 
@@ -182,6 +181,21 @@ implementations injector_core::objects_with(implementations objects, const types
 	}
 
 	return objects;
+}
+
+void injector_core::inject_into(QObject *object)
+{
+	auto object_type = type{object->metaObject()};
+	auto dependencies = extract_dependencies(_known_types, object_type);
+	auto types_to_instantiate = required_to_satisfy(dependencies, _types_model, _objects);
+	_objects = objects_with(_objects, types_to_instantiate);
+
+	auto resolved_dependencies = resolve_dependencies(dependencies, _objects);
+	for (auto &&resolved : resolved_dependencies.resolved)
+	{
+		assert(object_type == resolved.setter().object_type());
+		resolved.apply_on(object);
+	}
 }
 
 }}
