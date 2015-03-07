@@ -42,7 +42,7 @@
 #include "interfaces-utils.cpp"
 #include "provider-ready.cpp"
 #include "provider-ready-configuration.cpp"
-#include "required-to-instantiate.cpp"
+#include "required-to-satisfy.cpp"
 #include "resolve-dependencies.cpp"
 #include "resolved-dependency.cpp"
 #include "setter-method.cpp"

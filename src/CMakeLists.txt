@@ -58,7 +58,7 @@ set (INJEQT_SRCS
 	internal/provider-by-factory-configuration.cpp
 	internal/provider-ready.cpp
 	internal/provider-ready-configuration.cpp
-	internal/required-to-instantiate.cpp
+	internal/required-to-satisfy.cpp
 	internal/resolved-dependency.cpp
 	internal/resolve-dependencies.cpp
 	internal/setter-method.cpp

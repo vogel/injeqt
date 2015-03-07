@@ -42,7 +42,7 @@
 #include "implemented-by.cpp"
 #include "injector-core.cpp"
 #include "interfaces-utils.cpp"
-#include "required-to-instantiate.cpp"
+#include "required-to-satisfy.cpp"
 #include "resolved-dependency.cpp"
 #include "resolve-dependencies.cpp"
 #include "setter-method.cpp"

@@ -79,7 +79,7 @@ injeqt_add_unit_test (provider-by-factory-test unit/provider-by-factory-test.cpp
 injeqt_add_unit_test (provider-by-factory-configuration-test unit/provider-by-factory-configuration-test.cpp)
 injeqt_add_unit_test (provider-ready-test unit/provider-ready-test.cpp)
 injeqt_add_unit_test (provider-ready-configuration-test unit/provider-ready-configuration-test.cpp)
-injeqt_add_unit_test (required-to-instantiate-test unit/required-to-instantiate-test.cpp)
+injeqt_add_unit_test (required-to-satisfy-test unit/required-to-satisfy-test.cpp)
 injeqt_add_unit_test (resolved-dependency-test unit/resolved-dependency-test.cpp)
 injeqt_add_unit_test (resolve-dependencies-test unit/resolve-dependencies-test.cpp)
 injeqt_add_unit_test (setter-method-test unit/setter-method-test.cpp)

@@ -122,7 +122,7 @@ private:
 	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
 	 * This method get list of all not-already created objects required to properly instantiate implementation_type
-	 * using required_to_instantiate(const type &, const types_model &, const implementations &) and then uses
+	 * using required_to_satisfy(const type &, const types_model &, const implementations &) and then uses
 	 * objects_with(implementations, const types &) to create all these objects.
 	 */
 	implementations objects_with(implementations objects, const type &implementation_type);

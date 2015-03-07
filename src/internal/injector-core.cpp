@@ -30,7 +30,7 @@
 #include "provider-ready.h"
 #include "provider.h"
 #include "module-impl.h"
-#include "required-to-instantiate.h"
+#include "required-to-satisfy.h"
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"
 
@@ -108,7 +108,7 @@ QObject * injector_core::get(const type &interface_type)
 
 implementations injector_core::objects_with(implementations objects, const type &implementation_type)
 {
-	auto types_to_instantiate = required_to_instantiate(implementation_type, _types_model, objects);
+	auto types_to_instantiate = required_to_satisfy(implementation_type, _types_model, objects);
 	return objects_with(objects, types_to_instantiate);
 }
 

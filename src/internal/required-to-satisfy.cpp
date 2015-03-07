@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "required-to-instantiate.h"
+#include "required-to-satisfy.h"
 
 #include "dependencies.h"
 #include "implemented-by.h"
@@ -29,7 +29,7 @@
 
 namespace injeqt { namespace internal {
 
-types required_to_instantiate(const type &type_to_instantiate, const types_model &model, const implementations &objects)
+types required_to_satisfy(const type &type_to_instantiate, const types_model &model, const implementations &objects)
 {
 	assert(model.contains(type_to_instantiate));
 	assert(model.get_unresolvable_dependencies().empty());

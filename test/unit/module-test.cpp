@@ -47,7 +47,7 @@
 #include "module.cpp"
 #include "module-impl.cpp"
 #include "resolve-dependencies.cpp"
-#include "required-to-instantiate.cpp"
+#include "required-to-satisfy.cpp"
 #include "resolved-dependency.cpp"
 #include "provider-by-default-constructor.cpp"
 #include "provider-by-default-constructor-configuration.cpp"

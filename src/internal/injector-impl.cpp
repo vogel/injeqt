@@ -29,7 +29,7 @@
 #include "provider-ready.h"
 #include "provider.h"
 #include "module-impl.h"
-#include "required-to-instantiate.h"
+#include "required-to-satisfy.h"
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"
 

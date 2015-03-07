@@ -46,6 +46,6 @@ namespace injeqt { namespace internal {
  * type_to_instantiate. If any of these types is not available in @p objects set then it is added to result
  * set and recursively processed - so full set of required types can be computed.
  */
-types required_to_instantiate(const type &type_to_instantiate, const types_model &model, const implementations &objects);
+types required_to_satisfy(const type &type_to_instantiate, const types_model &model, const implementations &objects);
 
 }}
