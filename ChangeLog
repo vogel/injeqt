@@ -1,3 +1,7 @@
+2015-04-09  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
+
+	* 1.1: added subinjectors functionality
+
 2015-03-07  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
 
 	* 1.1: added injector::inject_into(QObject *) method

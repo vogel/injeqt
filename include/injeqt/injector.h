@@ -91,6 +91,30 @@ public:
 	 * * a cycle of factories is found (currently does not throw an exception)
 	 */
 	explicit injector(std::vector<std::unique_ptr<module>> modules);
+
+	/**
+	 * @brief Create new injector from provided modules with set of parent injectors.
+	 * @param super_injectors list of injectors providing types for this one to use
+	 * @param modules list of modules
+	 * @throw ambiguous_types if one or more types in @p modules is ambiguous
+	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p modules
+	 * @throw dependency_duplicated when one type occurs twice as a dependency
+	 * @throw dependency_on_self when type depends on self
+	 * @throw dependency_on_subtype when type depends on own supertype
+	 * @throw dependency_on_subtype when type depends on own subtype
+	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+	 * @throw invalid_setter if any tagged setter has other number of parameters than one
+	 *
+	 * Creates injector with all types from modules configured. Also a virtual module consisting of all
+	 * provided types from @p super_injectors is added to module set. If combined configuration
+	 * of all modules is invalid an exception is thrown. Configuration is invalid when:
+	 * * any type is configured in more than one module
+	 * * a dependency exists with type that is non configured in any module
+	 * * a cycle of factories is found (currently does not throw an exception)
+	 */
+	explicit injector(std::vector<injector *> super_injectors, std::vector<std::unique_ptr<module>> modules);
+
 	injector(injector &&x);
 	~injector();
 

@@ -26,6 +26,7 @@
 #include "containers.h"
 #include "interfaces-utils.h"
 #include "provider-by-default-constructor.h"
+#include "provider-by-parent-injector-configuration.h"
 #include "provider-ready.h"
 #include "provider.h"
 #include "module-impl.h"
@@ -45,9 +46,25 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	// modules are only stored because these can own objects used by injector
 	_modules{std::move(modules)}
 {
+	init(std::vector<injector_impl *>{});
+}
+
+injector_impl::injector_impl(std::vector<injector_impl *> super_injectors, std::vector<std::unique_ptr<module>> modules) :
+	// modules are only stored because these can own objects used by injector
+	_modules{std::move(modules)}
+{
+	init(super_injectors);
+}
+
+void injector_impl::init(std::vector<injector_impl *> super_injectors)
+{
 	auto extract_provider_configurations_lambda = [](const std::unique_ptr<module> &m){ return m->_pimpl->provider_configurations(); };
 	auto extract_provider_configurations = std::function<std::vector<std::shared_ptr<provider_configuration>>(const std::unique_ptr<module> &)>{extract_provider_configurations_lambda};
 	auto provider_configurations = extract(_modules, extract_provider_configurations);
+
+	for (auto &&super_injector : super_injectors)
+		for (auto &&provided_type : super_injector->provided_types())
+			provider_configurations.push_back(std::make_shared<provider_by_parent_injector_configuration>(super_injector, provided_type));
 
 	auto extract_types_lamdba = [](const std::shared_ptr<provider_configuration> &pc){
 		auto result = std::vector<type>{};
@@ -66,6 +83,11 @@ injector_impl::injector_impl(std::vector<std::unique_ptr<module>> modules) :
 	auto providers = transform(provider_configurations, create_provider);
 
 	_core = injector_core{known_types, std::move(providers)};
+}
+
+std::vector<type> injector_impl::provided_types() const
+{
+	return _core.provided_types();
 }
 
 QObject * injector_impl::get(const type &interface_type)

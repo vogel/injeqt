@@ -83,6 +83,35 @@ public:
 	explicit injector_impl(std::vector<std::unique_ptr<::injeqt::v1::module>> modules);
 
 	/**
+	 * @brief Create injector configured with set of modules.
+	 * @param super_injectors list of injectors providing types for this one to use
+	 * @param modules set of modules containing configuration of injector
+	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
+	 * @throw ambiguous_types if one or more types in @p modules is ambiguous
+	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p modules
+	 * @throw dependency_duplicated when one type occurs twice as a dependency
+	 * @throw dependency_on_self when type depends on self
+	 * @throw dependency_on_subtype when type depends on own supertype
+	 * @throw dependency_on_subtype when type depends on own subtype
+	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
+	 * @throw invalid_setter if any tagged setter has parameter that is a QObject-derived pointer of not configured type
+	 * @throw invalid_setter if any tagged setter has other number of parameters than one
+	 *
+	 * This constructor extract all providers from all modules and creates injector_core object
+	 * with these providers.
+	 */
+	explicit injector_impl(std::vector<injector_impl *> super_injectors, std::vector<std::unique_ptr<::injeqt::v1::module>> modules);
+
+	/**
+	 * @brief Returns list of all configured types.
+	 *
+	 * Result contians only types explicitely configured in modules, not supertypes of these. It also includes
+	 * results of provided_types() calls from all added parent injectors.
+	 */
+	std::vector<type> provided_types() const;
+
+	/**
 	 * @brief Returns pointer to object of given type interface_type
 	 * @param interface_type type of object to return.
 	 * @throw unknown_type if @p interface_type was not configured in injector
@@ -112,6 +141,8 @@ public:
 private:
 	std::vector<std::unique_ptr<module>> _modules;
 	injector_core _core;
+
+	void init(std::vector<injector_impl *> super_injectors);
 
 };
 

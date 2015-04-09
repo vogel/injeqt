@@ -56,6 +56,8 @@ set (INJEQT_SRCS
 	internal/provider-by-default-constructor-configuration.cpp
 	internal/provider-by-factory.cpp
 	internal/provider-by-factory-configuration.cpp
+	internal/provider-by-parent-injector.cpp
+	internal/provider-by-parent-injector-configuration.cpp
 	internal/provider-ready.cpp
 	internal/provider-ready-configuration.cpp
 	internal/required-to-satisfy.cpp

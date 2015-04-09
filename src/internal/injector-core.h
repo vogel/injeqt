@@ -85,6 +85,14 @@ public:
 	explicit injector_core(types_by_name known_types, std::vector<std::unique_ptr<provider>> &&all_providers);
 
 	/**
+	 * @brief Returns list of all configured types.
+	 *
+	 * Result contians only types explicitely configured in modules, not supertypes of these. It also includes
+	 * results of provided_types() calls from all added parent injectors.
+	 */
+	std::vector<type> provided_types() const;
+
+	/**
 	 * @brief Returns pointer to object of given type interface_type
 	 * @param interface_type type of object to return.
 	 * @throw unknown_type if @p interface_type was not configured in injector

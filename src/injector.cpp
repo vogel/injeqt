@@ -24,6 +24,7 @@
 #include <injeqt/exception/qobject-type.h>
 #include <injeqt/module.h>
 
+#include "containers.h"
 #include "injector-impl.h"
 #include "module-impl.h"
 #include "provider.h"
@@ -42,6 +43,12 @@ injector::injector() :
 injector::injector(std::vector<std::unique_ptr<module>> modules) :
 	_pimpl{new ::injeqt::internal::injector_impl{std::move(modules)}}
 {
+}
+
+injector::injector(std::vector<injector *> super_injectors, std::vector<std::unique_ptr<module>> modules)
+{
+	auto extract_impl = std::function<injector_impl*(injector *)>([](injector *i){ return i->_pimpl.get(); });
+	_pimpl.reset(new ::injeqt::internal::injector_impl{transform(super_injectors, extract_impl), std::move(modules)});
 }
 
 injector::injector(injector &&x) :

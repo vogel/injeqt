@@ -52,6 +52,8 @@
 #include "provider-by-default-constructor-configuration.cpp"
 #include "provider-by-factory.cpp"
 #include "provider-by-factory-configuration.cpp"
+#include "provider-by-parent-injector.cpp"
+#include "provider-by-parent-injector-configuration.cpp"
 #include "provider-ready.cpp"
 #include "provider-ready-configuration.cpp"
 #include "required-to-satisfy.cpp"
@@ -73,6 +75,36 @@
 using namespace injeqt::internal;
 using namespace injeqt::v1;
 
+class type_1 : public QObject
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE type_1() {}
+};
+
+class type_1_subtype_1 : public type_1
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE type_1_subtype_1() {}
+};
+
+class type_1_subtype_2 : public type_1
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE type_1_subtype_2() {}
+};
+
+class require_common_type : public QObject
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE require_common_type() {}
+private slots:
+	INJEQT_SETTER void set_type_1(type_1 *) { }
+};
+
 class created_by_factory : public QObject
 {
 	Q_OBJECT
@@ -93,6 +125,16 @@ class ready_type : public QObject
 	Q_OBJECT
 };
 
+class subinjector_object : public QObject
+{
+	Q_OBJECT
+public:
+	Q_INVOKABLE subinjector_object() {}
+	created_by_factory *_x;
+private slots:
+	INJEQT_SETTER void set_created_by_factory(created_by_factory *x) { _x = x; }
+};
+
 class test_module : public module
 {
 public:
@@ -100,6 +142,7 @@ public:
 	{
 		_ready_object = std::unique_ptr<ready_type>{new ready_type{}};
 
+		add_type<type_1_subtype_1>();
 		add_type<default_constructible_factory>();
 		add_factory<created_by_factory, default_constructible_factory>();
 		add_ready_object<ready_type>(_ready_object.get());
@@ -108,15 +151,37 @@ private:
 	std::unique_ptr<ready_type> _ready_object;
 };
 
+class test_submodule : public module
+{
+public:
+	test_submodule()
+	{
+		add_type<subinjector_object>();
+	}
+};
+
+class disable_common_supertype_submodule : public module
+{
+public:
+	disable_common_supertype_submodule()
+	{
+		add_type<type_1_subtype_2>();
+		add_type<require_common_type>();
+	}
+};
+
 class injector_test : public QObject
 {
 	Q_OBJECT
 
 private slots:
 	void should_create_empty_injector();
-	void should_no_accept_qobject_type();
-	void should_no_accept_unknown_type();
+	void should_not_accept_qobject_type();
+	void should_not_accept_unknown_type();
 	void should_create_valid_injector();
+	void should_handle_subinjector();
+	void should_not_accept_double_superinjector();
+	void should_disable_common_type_in_superinjector();
 	void should_allow_move();
 
 };
@@ -131,7 +196,7 @@ void injector_test::should_create_empty_injector()
 	injector{};
 }
 
-void injector_test::should_no_accept_qobject_type()
+void injector_test::should_not_accept_qobject_type()
 {
 	auto i = injector{};
 
@@ -140,7 +205,7 @@ void injector_test::should_no_accept_qobject_type()
 	});
 }
 
-void injector_test::should_no_accept_unknown_type()
+void injector_test::should_not_accept_unknown_type()
 {
 	auto i = injector{};
 
@@ -161,6 +226,50 @@ void injector_test::should_create_valid_injector()
 
 	expect<exception::unknown_type>({"not_configured_type"}, [&](){
 		i.get<not_configured_type>();
+	});
+}
+
+void injector_test::should_handle_subinjector()
+{
+	auto super_modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	super_modules.emplace_back(std::unique_ptr<test_module>(new test_module{}));
+	auto super_injector = injector{std::move(super_modules)};
+
+	auto super_injectors = std::vector<injector *>{&super_injector};
+	auto sub_modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	sub_modules.emplace_back(std::unique_ptr<test_submodule>(new test_submodule{}));
+	auto sub_injector = injector{super_injectors, std::move(sub_modules)};
+
+	QVERIFY(sub_injector.get<subinjector_object>() != nullptr);
+}
+
+void injector_test::should_not_accept_double_superinjector()
+{
+	auto super_modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	super_modules.emplace_back(std::unique_ptr<test_module>(new test_module{}));
+	auto super_injector = injector{std::move(super_modules)};
+
+	auto super_injectors = std::vector<injector *>{&super_injector, &super_injector};
+	auto sub_modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	sub_modules.emplace_back(std::unique_ptr<test_submodule>(new test_submodule{}));
+
+	expect<exception::ambiguous_types>({"created_by_factory", "default_constructible_factory", "ready_type"}, [&]{
+		injector{super_injectors, std::move(sub_modules)};
+	});
+}
+
+void injector_test::should_disable_common_type_in_superinjector()
+{
+	auto super_modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	super_modules.emplace_back(std::unique_ptr<test_module>(new test_module{}));
+	auto super_injector = injector{std::move(super_modules)};
+
+	auto super_injectors = std::vector<injector *>{&super_injector};
+	auto sub_modules = std::vector<std::unique_ptr<injeqt::module>>{};
+	sub_modules.emplace_back(std::unique_ptr<disable_common_supertype_submodule>(new disable_common_supertype_submodule{}));
+
+	expect<exception::unresolvable_dependencies>({"type_1"}, [&]{
+		injector{super_injectors, std::move(sub_modules)};
 	});
 }
 

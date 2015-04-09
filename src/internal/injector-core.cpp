@@ -25,6 +25,7 @@
 #include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
+#include "containers.h"
 #include "interfaces-utils.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
@@ -86,6 +87,13 @@ types_model injector_core::create_types_model() const
 		}
 	}
 	return make_types_model(_known_types, all_types, need_dependencies);
+}
+
+std::vector<type> injector_core::provided_types() const
+{
+	auto result = std::vector<type>{};
+	std::transform(std::begin(_available_providers), std::end(_available_providers), std::back_inserter(result), type_from_provider);
+	return result;
 }
 
 QObject * injector_core::get(const type &interface_type)
