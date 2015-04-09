@@ -92,4 +92,5 @@ injeqt_add_unit_test (types-model-test unit/types-model-test.cpp)
 
 injeqt_add_integration_test (default-constructor-behavior-test integration/default-constructor-behavior-test.cpp)
 injeqt_add_integration_test (factory-behavior-test integration/factory-behavior-test.cpp)
+injeqt_add_integration_test (inject-into-behavior-test integration/inject-into-behavior-test.cpp)
 injeqt_add_integration_test (ready-object-behavior-test integration/ready-object-behavior-test.cpp)
