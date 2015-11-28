@@ -34,7 +34,7 @@ void expect(const std::vector<std::string> &contents, std::function<void()> call
 	catch (E &e)
 	{
 		for (auto &&content : contents)
-			if (!std::string(e.what()).find(content) == std::string::npos)
+			if (std::string(e.what()).find(content) == std::string::npos)
 				QFAIL(qPrintable(QString{"Expected string '%1' not found in exception message '%2'"}
 					.arg(content.c_str())
 					.arg(e.what())));

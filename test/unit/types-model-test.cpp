@@ -155,18 +155,18 @@ void types_model_test::should_create_one_type_types_model()
 
 void types_model_test::should_throw_when_one_type_duplicated()
 {
-	expect<exception::ambiguous_types>({"type_1_type"}, [&]{
+	expect<exception::ambiguous_types>({}, [&]{
 		make_types_model(known_types, {type_1_type, type_1_type}, {type_1_type, type_1_type});
 	});
 }
 
 void types_model_test::should_throw_when_type_and_subtype_passed()
 {
-	expect<exception::ambiguous_types>({"type_1_type", "type_1_subtype_1_type"}, [&]{
+	expect<exception::ambiguous_types>({}, [&]{
 		make_types_model(known_types, {type_1_type, type_1_subtype_1_type}, {type_1_type, type_1_subtype_1_type});
 	});
 
-	expect<exception::ambiguous_types>({"type_1_type", "type_1_subtype_1_type"}, [&]{
+	expect<exception::ambiguous_types>({}, [&]{
 		make_types_model(known_types, {type_1_subtype_1_type, type_1_type}, {type_1_subtype_1_type, type_1_type});
 	});
 }

@@ -236,7 +236,7 @@ void injector_core_test::should_not_accept_doubled_type()
 	configuration.push_back(make_mocked_provider<type_1>());
 	configuration.push_back(make_mocked_provider<type_1>());
 
-	expect<exception::ambiguous_types>({"type_1"}, [&](){
+	expect<exception::ambiguous_types>({}, [&](){
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }
@@ -247,7 +247,7 @@ void injector_core_test::should_not_accept_type_and_subtype()
 	configuration.push_back(make_mocked_provider<type_1>());
 	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
 
-	expect<exception::ambiguous_types>({"type_1", "type_1_subtype_1"}, [&](){
+	expect<exception::ambiguous_types>({"type_1"}, [&](){
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }
@@ -258,7 +258,7 @@ void injector_core_test::should_not_accept_subtype_and_type()
 	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
 	configuration.push_back(make_mocked_provider<type_1>());
 
-	expect<exception::ambiguous_types>({"type_1", "type_1_subtype_1"}, [&](){
+	expect<exception::ambiguous_types>({"type_1"}, [&](){
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }
@@ -355,7 +355,7 @@ void injector_core_test::should_not_accept_unknown_required_type()
 	auto configuration = std::vector<std::unique_ptr<provider>>{};
 	configuration.push_back(make_mocked_provider<type_3, type_1>());
 
-	expect<exception::unavailable_required_types>({"type_1", "type_3"}, [&](){
+	expect<exception::unavailable_required_types>({"type_1"}, [&](){
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }
@@ -412,7 +412,7 @@ void injector_core_test::should_not_accept_ambiguous_required_supertype()
 	configuration.push_back(make_mocked_provider<type_1_subtype_1>());
 	configuration.push_back(make_mocked_provider<type_1_subtype_2>());
 
-	expect<exception::unavailable_required_types>({"type_1", "type_3"}, [&](){
+	expect<exception::unavailable_required_types>({"type_1"}, [&](){
 		auto i = injector_core{types_by_name{}, std::move(configuration)};
 	});
 }

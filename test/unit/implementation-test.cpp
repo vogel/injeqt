@@ -90,7 +90,7 @@ void implementation_test::should_throw_when_type_is_qobject()
 
 void implementation_test::should_throw_when_object_is_null()
 {
-	expect<exception::invalid_qobject>({"type_1"}, [&]{
+	expect<exception::invalid_qobject>({}, [&]{
 		make_implementation(make_type<type_1>(), nullptr);
 	});
 }

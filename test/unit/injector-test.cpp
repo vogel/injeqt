@@ -253,7 +253,7 @@ void injector_test::should_not_accept_double_superinjector()
 	auto sub_modules = std::vector<std::unique_ptr<injeqt::module>>{};
 	sub_modules.emplace_back(std::unique_ptr<test_submodule>(new test_submodule{}));
 
-	expect<exception::ambiguous_types>({"created_by_factory", "default_constructible_factory", "ready_type"}, [&]{
+	expect<exception::ambiguous_types>({}, [&]{
 		injector{super_injectors, std::move(sub_modules)};
 	});
 }
