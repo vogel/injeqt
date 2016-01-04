@@ -26,6 +26,16 @@
 #include <cassert>
 
 namespace injeqt { namespace internal {
+	
+bool action_method::is_action_init_tag(const std::string& tag)
+{
+	return tag == "INJEQT_INIT";
+}
+
+bool action_method::is_action_done_tag(const std::string& tag)
+{
+	return tag == "INJEQT_DONE";
+}
 
 action_method::action_method()
 {
@@ -35,7 +45,8 @@ action_method::action_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_meta_method{std::move(meta_method)}
 {
-	assert(meta_method.methodType() == QMetaMethod::Slot);
+	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
+	assert(is_action_init_tag(meta_method.tag()) || is_action_done_tag(meta_method.tag()));
 	assert(meta_method.parameterCount() == 0);
 	assert(meta_method.enclosingMetaObject() != nullptr);
 }
@@ -100,8 +111,10 @@ std::vector<action_method> extract_actions(const std::string &action_tag, const 
 		if (action_tag != method_tag)
 			continue;
 
-		if (probably_action.methodType() != QMetaMethod::Slot)
-			throw exception::invalid_action{std::string{"action is not a slot: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
+		if (probably_action.methodType() == QMetaMethod::Signal)
+			throw exception::invalid_action{std::string{"action is signal: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
+		if (probably_action.methodType() == QMetaMethod::Constructor)
+			throw exception::invalid_action{std::string{"action is signal: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
 		if (probably_action.parameterCount() != 0)
 			throw exception::invalid_action{std::string{"invalid parameter count: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
 

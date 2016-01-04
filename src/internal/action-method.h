@@ -64,6 +64,9 @@ class action_method final
 {
 
 public:
+	static bool is_action_init_tag(const std::string &tag);
+	static bool is_action_done_tag(const std::string &tag);
+
 	/**
 	 * @brief Create empty action_method.
 	 */
