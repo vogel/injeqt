@@ -18,23 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include <injeqt/exception/invalid-action.h>
 
-#include <QtCore/QtGlobal>
+namespace injeqt { namespace v1 { namespace exception {
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
-
-#ifndef Q_MOC_RUN
-#  define INJEQT_INIT
-#  define INJEQT_DONE
-#  define INJEQT_SETTER
-#endif
-
-namespace injeqt {
-	namespace v1 { }
-	using namespace v1;
+invalid_action::invalid_action(std::string what) :
+	exception{std::move(what)}
+{
 }
+
+invalid_action::~invalid_action()
+{
+}
+
+}}}

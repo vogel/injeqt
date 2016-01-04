@@ -84,6 +84,19 @@ public:
 	 */
 	explicit injector_core(types_by_name known_types, std::vector<std::unique_ptr<provider>> &&all_providers);
 
+	injector_core(const injector_core &) = delete;
+	injector_core(injector_core &&) = default;
+
+	injector_core & operator = (const injector_core &) = delete;
+	injector_core & operator = (injector_core &&) = default;
+
+	/**
+	 * @brief Destroy injector_core.
+	 *
+	 * TODO: add note about INJEQT_DONE
+	 */
+	~injector_core();
+
 	/**
 	 * @brief Returns list of all configured types.
 	 *
@@ -123,6 +136,7 @@ private:
 	types_by_name _known_types;
 	providers _available_providers;
 	implementations _objects;
+	implementations _resolved_objects;
 	types_model _types_model;
 
 	/**

@@ -33,6 +33,7 @@ set (INJEQT_SRCS
 	exception/exception.cpp
 	exception/instantiation-failed.cpp
 	exception/interface-not-implemented.cpp
+	exception/invalid-action.cpp
 	exception/invalid-dependency.cpp
 	exception/invalid-qobject.cpp
 	exception/invalid-setter.cpp
@@ -42,6 +43,7 @@ set (INJEQT_SRCS
 	exception/unique-factory-method-not-found.cpp
 	exception/unresolvable-dependencies.cpp
 
+	internal/action-method.cpp
 	internal/default-constructor-method.cpp
 	internal/dependencies.cpp
 	internal/dependency.cpp

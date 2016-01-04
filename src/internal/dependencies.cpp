@@ -64,7 +64,7 @@ std::vector<setter_method> extract_setters(const types_by_name &known_types, con
 			continue;
 
 		if (probably_setter.methodType() != QMetaMethod::Slot)
-			continue;
+			throw exception::invalid_setter{std::string{"setter is not a slot: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
 		if (probably_setter.parameterCount() != 1)
 			throw exception::invalid_setter{std::string{"invalid parameter count: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
 		auto parameter_type = type_by_pointer(known_types, probably_setter.parameterTypes()[0].data());

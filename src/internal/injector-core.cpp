@@ -25,6 +25,7 @@
 #include <injeqt/exception/unknown-type.h>
 #include <injeqt/module.h>
 
+#include "action-method.h"
 #include "containers.h"
 #include "interfaces-utils.h"
 #include "provider-by-default-constructor.h"
@@ -71,6 +72,13 @@ injector_core::injector_core(types_by_name known_types, std::vector<std::unique_
 		}
 		throw exception::unavailable_required_types{message};
 	}
+}
+
+injector_core::~injector_core()
+{
+	for (auto &&resolved_object : _resolved_objects)
+		for (auto action : extract_actions("INJEQT_DONE", resolved_object.interface_type()))
+			action.invoke(resolved_object.object());
 }
 
 types_model injector_core::create_types_model() const
@@ -174,6 +182,7 @@ implementations injector_core::objects_with(implementations objects, const types
 	}
 
 	objects.merge(implementations{objects_to_store});
+	_resolved_objects.merge(implementations{objects_to_resolve});
 
 	for (auto &&object_to_resolve : objects_to_resolve)
 	{
@@ -187,6 +196,10 @@ implementations injector_core::objects_with(implementations objects, const types
 			resolved.apply_on(object_to_resolve.object());
 		}
 	}
+
+	for (auto &&resolved_object : objects_to_resolve)
+		for (auto action : extract_actions("INJEQT_INIT", resolved_object.interface_type()))
+			action.invoke(resolved_object.object());
 
 	return objects;
 }

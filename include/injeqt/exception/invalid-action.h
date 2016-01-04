@@ -20,21 +20,20 @@
 
 #pragma once
 
-#include <QtCore/QtGlobal>
+#include <injeqt/exception/exception.h>
 
-#ifdef injeqt_EXPORTS
-#define INJEQT_API Q_DECL_EXPORT
-#else
-#define INJEQT_API Q_DECL_IMPORT
-#endif
+namespace injeqt { namespace v1 { namespace exception {
 
-#ifndef Q_MOC_RUN
-#  define INJEQT_INIT
-#  define INJEQT_DONE
-#  define INJEQT_SETTER
-#endif
+/**
+ * @brief Exception throw when action with bad number of arguments or with bad argument was found with INJEQT_INIT or INJEQT_DONE tag.
+ */
+class INJEQT_API invalid_action : public exception
+{
 
-namespace injeqt {
-	namespace v1 { }
-	using namespace v1;
-}
+public:
+	explicit invalid_action(std::string what = std::string{});
+	virtual ~invalid_action();
+
+};
+
+}}}
