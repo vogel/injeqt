@@ -30,7 +30,7 @@ namespace injeqt { namespace internal {
 
 bool setter_method::is_setter_tag(const std::string &tag)
 {
-	return tag == "INJEQT_SETTER";
+	return tag == "INJEQT_SET" || tag == "INJEQT_SETTER";
 }
 
 setter_method::setter_method()

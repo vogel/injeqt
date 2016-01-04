@@ -72,10 +72,10 @@ class valid_injected_type : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	Q_INVOKABLE INJEQT_SET void setter_1(injectable_type1 *) {}
 
 public slots:
-	INJEQT_SETTER void setter_2(injectable_type2 *) {}
+	INJEQT_SET void setter_2(injectable_type2 *) {}
 	void no_injeqt_setter_1(injectable_type1 *) {}
 	void no_injeqt_setter_2(injectable_type2 *) {}
 	void no_injeqt_setter_3(int) {}
@@ -87,7 +87,7 @@ class inheriting_valid_injected_type : public valid_injected_type
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_3(injectable_type3 *) {}
+	INJEQT_SET void setter_3(injectable_type3 *) {}
 
 };
 
@@ -96,10 +96,10 @@ class valid_injected_type_with_common_superclass : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE INJEQT_SETTER void setter_1(sub_injectable_type1a *) {}
+	Q_INVOKABLE INJEQT_SET void setter_1(sub_injectable_type1a *) {}
 
 public slots:
-	INJEQT_SETTER void setter_2(sub_injectable_type1b *) {}
+	INJEQT_SET void setter_2(sub_injectable_type1b *) {}
 
 };
 
@@ -108,10 +108,10 @@ class duplicate_dependency_invalid_injected_type : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	Q_INVOKABLE INJEQT_SET void setter_1(injectable_type1 *) {}
 
 public slots:
-	INJEQT_SETTER void setter_2(injectable_type1 *) {}
+	INJEQT_SET void setter_2(injectable_type1 *) {}
 
 };
 
@@ -120,10 +120,10 @@ class invalid_injected_type_with_superclass : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	Q_INVOKABLE INJEQT_SET void setter_1(injectable_type1 *) {}
 
 public slots:
-	INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
+	INJEQT_SET void setter_2(sub_injectable_type1a *) {}
 
 };
 
@@ -132,10 +132,10 @@ class invalid_injected_type_with_superclass_inverted : public QObject
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
+	Q_INVOKABLE INJEQT_SET void setter_2(sub_injectable_type1a *) {}
 
 public slots:
-	INJEQT_SETTER void setter_1(injectable_type1 *) {}
+	INJEQT_SET void setter_1(injectable_type1 *) {}
 
 };
 
@@ -144,7 +144,7 @@ class invalid_injected_type_depends_on_self : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_1(invalid_injected_type_depends_on_self *) {}
+	INJEQT_SET void setter_1(invalid_injected_type_depends_on_self *) {}
 
 };
 
@@ -155,7 +155,7 @@ class invalid_injected_type_depends_on_subtype : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_1(invalid_injected_type_depends_on_subtype_subtype *) {}
+	INJEQT_SET void setter_1(invalid_injected_type_depends_on_subtype_subtype *) {}
 
 };
 
@@ -174,7 +174,7 @@ class invalid_injected_type_depends_on_supertype : public invalid_injected_type_
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_1(invalid_injected_type_depends_on_supertype_supertype *) {}
+	INJEQT_SET void setter_1(invalid_injected_type_depends_on_supertype_supertype *) {}
 
 };
 
@@ -183,7 +183,7 @@ class invalid_setter_empty_type : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_int(int) {};
+	INJEQT_SET void setter_int(int) {};
 
 };
 
@@ -192,7 +192,7 @@ class invalid_setter_qobject_type : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_qobject(QObject *) {};
+	INJEQT_SET void setter_qobject(QObject *) {};
 
 };
 
@@ -201,7 +201,7 @@ class invalid_setter_no_paremeters : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_no_paremeters() {};
+	INJEQT_SET void setter_no_paremeters() {};
 
 };
 
@@ -210,7 +210,7 @@ class invalid_setter_two_paremters : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_two_parameters(injectable_type1 *, injectable_type2 *) {};
+	INJEQT_SET void setter_two_parameters(injectable_type1 *, injectable_type2 *) {};
 
 };
 
@@ -219,7 +219,7 @@ class invalid_setter_is_signal: public QObject
 	Q_OBJECT
 
 signals:
-	INJEQT_SETTER void setter_two_parameters(injectable_type1 *);
+	INJEQT_SET void setter_two_parameters(injectable_type1 *);
 
 };
 

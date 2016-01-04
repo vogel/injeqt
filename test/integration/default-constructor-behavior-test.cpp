@@ -54,7 +54,7 @@ public:
 	int value() const { return _int_container->value(); }
 
 private slots:
-	INJEQT_SETTER void set_int_container(int_container *container)
+	INJEQT_SET void set_int_container(int_container *container)
 	{
 		_int_container = container;
 	}

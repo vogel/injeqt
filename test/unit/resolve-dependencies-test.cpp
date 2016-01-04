@@ -64,10 +64,10 @@ class valid_type : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type1(injectable_type1 *) {}
-	INJEQT_SETTER void set_type2(injectable_type2 *) {}
-	INJEQT_SETTER void set_type3(injectable_type3 *) {}
-	INJEQT_SETTER void set_sub_type1(sublcass_injectable_type1 *) {}
+	INJEQT_SET void set_type1(injectable_type1 *) {}
+	INJEQT_SET void set_type2(injectable_type2 *) {}
+	INJEQT_SET void set_type3(injectable_type3 *) {}
+	INJEQT_SET void set_sub_type1(sublcass_injectable_type1 *) {}
 
 };
 

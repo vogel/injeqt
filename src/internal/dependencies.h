@@ -66,7 +66,7 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
  * @throw invalid_setter if any tagged setter has other number of parameters than one
  *
  * This function computes and returns set of all dependencies of a given type. All slots methods tagged
- * with INJEQT_SETTER are describing dependnecies. If all dependnecies are valid, there is no duplication,
+ * with INJEQT_SET are describing dependnecies. If all dependnecies are valid, there is no duplication,
  * and type does not depends on self, subtype or supertype, a result is returned. Otherwise one of many
  * exceptions can be thrown.
  */

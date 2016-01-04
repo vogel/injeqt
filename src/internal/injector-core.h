@@ -125,7 +125,7 @@ public:
 	 * @throw invalid_setter if any tagged setter has other number of parameters than one
 	 * @pre object != nullptr
 	 *
-	 * This method looks for invokable setters tagged with INJEQT_SETTER in @p object. If any of setter is not valid
+	 * This method looks for invokable setters tagged with INJEQT_SET in @p object. If any of setter is not valid
 	 * dependency injector setter or its parameter is of type not configured in injector an exception is thrown.
 	 * If all setters are valid, they are called with proper objects (which may be already available in injector
 	 * or created on demand).

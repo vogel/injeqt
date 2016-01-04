@@ -25,7 +25,7 @@
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when setter with bad number of arguments or with bad argument was found with INJEQT_SETTER tag.
+ * @brief Exception throw when setter with bad number of arguments or with bad argument was found with INJEQT_SET tag.
  */
 class INJEQT_API invalid_setter : public exception
 {

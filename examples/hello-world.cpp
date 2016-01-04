@@ -81,12 +81,12 @@ public:
 	}
 
 private slots:
-	INJEQT_SETTER void set_hello_service(hello_service *s)
+	INJEQT_SET void set_hello_service(hello_service *s)
 	{
 		_s = s;
 	}
 
-	INJEQT_SETTER void set_world_service(world_service *w)
+	INJEQT_SET void set_world_service(world_service *w)
 	{
 		_w = w;
 	}

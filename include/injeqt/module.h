@@ -71,7 +71,7 @@ protected:
 	 * @throw interface_not_implemented when passed @p object does not implements type @p T
 	 *
 	 * It has to be fully constructed and must not expect any injection to take place on it
-	 * (even if it has INJEQT_SETTER methods). However this object could be injected into other
+	 * (even if it has INJEQT_SET methods). However this object could be injected into other
 	 * ones as it if is of type T.
 	 *
 	 * Real type of object must be same as T or descend from it. In other cases an exception

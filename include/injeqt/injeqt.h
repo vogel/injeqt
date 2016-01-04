@@ -31,6 +31,8 @@
 #ifndef Q_MOC_RUN
 #  define INJEQT_INIT
 #  define INJEQT_DONE
+#  define INJEQT_SET
+// depreceated, use INJEQT_SET instead
 #  define INJEQT_SETTER
 #endif
 

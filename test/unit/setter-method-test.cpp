@@ -49,10 +49,12 @@ class test_type : public QObject
 public:
 	injectable_type1 *_1 = nullptr;
 
-	Q_INVOKABLE INJEQT_SETTER void tagged_setter_method_1(injectable_type1 *a) { _1 = a; }
+	Q_INVOKABLE INJEQT_SET void tagged_setter_method_1(injectable_type1 *a) { _1 = a; }
+	Q_INVOKABLE INJEQT_SETTER void tagged_setter_method_2(injectable_type1 *a) { _1 = a; }
 
 public slots:
-	INJEQT_SETTER void tagged_setter_slot_1(injectable_type1 *a) { _1 = a; }
+	INJEQT_SET void tagged_setter_slot_1(injectable_type1 *a) { _1 = a; }
+	INJEQT_SETTER void tagged_setter_slot_2(injectable_type1 *a) { _1 = a; }
 
 };
 
@@ -80,11 +82,21 @@ void setter_method_test::should_create_valid_from_tagged_setter_method()
 	QVERIFY(!setter.is_empty());
 	QCOMPARE(setter.object_type(), make_type<test_type>());
 	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
+
+	setter = make_setter_method<test_type, injectable_type1>("tagged_setter_method_2(injectable_type1*)");
+	QVERIFY(!setter.is_empty());
+	QCOMPARE(setter.object_type(), make_type<test_type>());
+	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
 }
 
 void setter_method_test::should_create_valid_from_tagged_setter_slot()
 {
 	auto setter = make_setter_method<test_type, injectable_type1>("tagged_setter_slot_1(injectable_type1*)");
+	QVERIFY(!setter.is_empty());
+	QCOMPARE(setter.object_type(), make_type<test_type>());
+	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());
+
+	setter = make_setter_method<test_type, injectable_type1>("tagged_setter_slot_2(injectable_type1*)");
 	QVERIFY(!setter.is_empty());
 	QCOMPARE(setter.object_type(), make_type<test_type>());
 	QCOMPARE(setter.parameter_type(), make_type<injectable_type1>());

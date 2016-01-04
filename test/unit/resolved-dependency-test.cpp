@@ -62,10 +62,10 @@ public:
 	type_2 *_2 = nullptr;
 
 public slots:
-	INJEQT_SETTER void setter_1(type_1 *a) { _1 = a; }
-	INJEQT_SETTER void setter_1b(type_1 *a) { _1 = a; }
-	INJEQT_SETTER void setter_1_subtype_1(type_1_subtype_1 *) {}
-	INJEQT_SETTER void setter_2(type_2 *a) { _2 = a; }
+	INJEQT_SET void setter_1(type_1 *a) { _1 = a; }
+	INJEQT_SET void setter_1b(type_1 *a) { _1 = a; }
+	INJEQT_SET void setter_1_subtype_1(type_1_subtype_1 *) {}
+	INJEQT_SET void setter_2(type_2 *a) { _2 = a; }
 
 };
 

@@ -50,8 +50,8 @@ class type_with_dependency_1 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_1(type_1 *) { }
-	INJEQT_SETTER void setter_2(type_2 *) { }
+	INJEQT_SET void setter_1(type_1 *) { }
+	INJEQT_SET void setter_2(type_2 *) { }
 
 };
 
@@ -60,8 +60,8 @@ class type_with_dependency_2 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void setter_1(type_1 *) { }
-	INJEQT_SETTER void setter_2(type_2 *) { }
+	INJEQT_SET void setter_1(type_1 *) { }
+	INJEQT_SET void setter_2(type_2 *) { }
 
 };
 

@@ -87,7 +87,7 @@ public:
 	type_1 *o = nullptr;
 
 private slots:
-	INJEQT_SETTER void set_type_1(type_1 *x) { o = x; }
+	INJEQT_SET void set_type_1(type_1 *x) { o = x; }
 };
 
 class type_3 : public QObject
@@ -107,7 +107,7 @@ public:
 	type_5 *o = nullptr;
 
 private slots:
-	INJEQT_SETTER void set_type_5(type_5 *x) { o = x; }
+	INJEQT_SET void set_type_5(type_5 *x) { o = x; }
 };
 
 class type_5 : public QObject
@@ -118,7 +118,7 @@ public:
 	type_6 *o = nullptr;
 
 private slots:
-	INJEQT_SETTER void set_type_6(type_6 *x) { o = x; }
+	INJEQT_SET void set_type_6(type_6 *x) { o = x; }
 };
 
 class type_6 : public QObject
@@ -129,7 +129,7 @@ public:
 	type_4 *o = nullptr;
 
 private slots:
-	INJEQT_SETTER void set_type_4(type_4 *x) { o = x; }
+	INJEQT_SET void set_type_4(type_4 *x) { o = x; }
 };
 
 class type_7 : public QObject
@@ -151,8 +151,8 @@ public:
 	type_8 *o8 = nullptr;
 
 private slots:
-	INJEQT_SETTER void set_type_7(type_7 *x) { o7 = x; }
-	INJEQT_SETTER void set_type_8(type_8 *x) { o8 = x; }
+	INJEQT_SET void set_type_7(type_7 *x) { o7 = x; }
+	INJEQT_SET void set_type_8(type_8 *x) { o8 = x; }
 };
 
 
@@ -167,8 +167,8 @@ public:
 	unregistered_type() : QObject{}, o1{nullptr}, o2{nullptr} {}
 
 private slots:
-	INJEQT_SETTER void set_type_1(type_1 *x) { o1 = x; }
-	INJEQT_SETTER void set_type_1(type_2 *x) { o2 = x; }
+	INJEQT_SET void set_type_1(type_1 *x) { o1 = x; }
+	INJEQT_SET void set_type_1(type_2 *x) { o2 = x; }
 };
 
 class injector_core_test : public QObject

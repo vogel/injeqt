@@ -39,7 +39,7 @@ namespace injeqt { namespace internal {
  * This class is used for defining setter based dependencies and for invoking these setter methods
  * to resolve dependencies. Setter method is crated from Qt type QMetaMethod. As Qt only creates QMetaMethod
  * objects for slots, signals and all methods marked with Q_INVOKABLE tag and Injeqt requires
- * all its setter methods to be tagged with INJEQT_SETTER - setter method must be a slot. This method should return
+ * all its setter methods to be tagged with INJEQT_SET - setter method must be a slot. This method should return
  * void is allowed to have only one parameter of pointer to type inherited from QObject. This type must
  * be also configured in one of module to be able to be resolved.
  *
@@ -54,7 +54,7 @@ namespace injeqt { namespace internal {
  *     {
  *         Q_OBJECT
  *     public slots:
- *         INJEQT_SETTER void setter(set_object *obj) { ... }
+ *         INJEQT_SET void setter(set_object *obj) { ... }
  *     };
  *
  * Object with setter method must not take ownership of passed object.

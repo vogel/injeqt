@@ -71,8 +71,8 @@ class type_1_subtype_3 : public type_1
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type_1_subtype_1(type_1_subtype_1 *) {}
-	INJEQT_SETTER void set_type_1_subtype_2(type_1_subtype_2 *) {}
+	INJEQT_SET void set_type_1_subtype_1(type_1_subtype_1 *) {}
+	INJEQT_SET void set_type_1_subtype_2(type_1_subtype_2 *) {}
 
 };
 

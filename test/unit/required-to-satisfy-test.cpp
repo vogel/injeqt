@@ -67,7 +67,7 @@ class type_2 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type_1(type_1 *) {}
+	INJEQT_SET void set_type_1(type_1 *) {}
 };
 
 class type_2_subtype_1 : public type_2
@@ -80,7 +80,7 @@ class type_3 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type_2(type_2 *) {}
+	INJEQT_SET void set_type_2(type_2 *) {}
 };
 
 class type_3_subtype_1 : public type_3
@@ -95,7 +95,7 @@ class cyclic_type_1 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type_3(cyclic_type_3 *) {}
+	INJEQT_SET void set_type_3(cyclic_type_3 *) {}
 };
 
 class cyclic_type_1_subtype_1 : public cyclic_type_1
@@ -108,7 +108,7 @@ class cyclic_type_2 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type_1(cyclic_type_1 *) {}
+	INJEQT_SET void set_type_1(cyclic_type_1 *) {}
 };
 
 class cyclic_type_2_subtype_1 : public cyclic_type_2
@@ -121,7 +121,7 @@ class cyclic_type_3 : public QObject
 	Q_OBJECT
 
 public slots:
-	INJEQT_SETTER void set_type_2(cyclic_type_2 *) {}
+	INJEQT_SET void set_type_2(cyclic_type_2 *) {}
 };
 
 class cyclic_type_3_subtype_1 : public cyclic_type_3

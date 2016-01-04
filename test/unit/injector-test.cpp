@@ -104,7 +104,7 @@ class require_common_type : public QObject
 public:
 	Q_INVOKABLE require_common_type() {}
 private slots:
-	INJEQT_SETTER void set_type_1(type_1 *) { }
+	INJEQT_SET void set_type_1(type_1 *) { }
 };
 
 class created_by_factory : public QObject
@@ -134,7 +134,7 @@ public:
 	Q_INVOKABLE subinjector_object() {}
 	created_by_factory *_x;
 private slots:
-	INJEQT_SETTER void set_created_by_factory(created_by_factory *x) { _x = x; }
+	INJEQT_SET void set_created_by_factory(created_by_factory *x) { _x = x; }
 };
 
 class test_module : public module
