@@ -19,6 +19,8 @@
  */
 
 #include "exception/exception.cpp"
+#include "exception/invalid-setter.cpp"
+#include "internal/types-by-name.cpp"
 #include "dependency.cpp"
 #include "interfaces-utils.cpp"
 #include "setter-method.cpp"

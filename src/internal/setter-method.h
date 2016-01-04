@@ -24,6 +24,8 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "types-by-name.h"
+
 #include <QtCore/QMetaMethod>
 
 /**
@@ -64,6 +66,8 @@ class setter_method final
 
 public:
 	static bool is_setter_tag(const std::string &tag);
+
+	static bool validate_setter_method(type parameter_type, const QMetaMethod &meta_method);
 
 	/**
 	 * @brief Create empty setter_method.
@@ -143,5 +147,7 @@ private:
 
 bool operator == (const setter_method &x, const setter_method &y);
 bool operator != (const setter_method &x, const setter_method &y);
+
+setter_method make_setter_method(const types_by_name &known_types, const QMetaMethod &meta_method);
 
 }}

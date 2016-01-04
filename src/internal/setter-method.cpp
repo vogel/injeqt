@@ -20,6 +20,7 @@
 
 #include "setter-method.h"
 
+#include <injeqt/exception/invalid-setter.h>
 #include <injeqt/type.h>
 
 #include "interfaces-utils.h"
@@ -33,6 +34,24 @@ bool setter_method::is_setter_tag(const std::string &tag)
 	return tag == "INJEQT_SET" || tag == "INJEQT_SETTER";
 }
 
+bool setter_method::validate_setter_method(type parameter_type, const QMetaMethod &meta_method)
+{
+	auto meta_object = meta_method.enclosingMetaObject();
+	if (!meta_object)
+		throw exception::invalid_setter{std::string{"setter does not have enclosing meta object: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (meta_method.methodType() == QMetaMethod::Signal)
+		throw exception::invalid_setter{std::string{"setter is signal: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (meta_method.methodType() == QMetaMethod::Constructor)
+		throw exception::invalid_setter{std::string{"setter is constructor: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (meta_method.parameterCount() != 1)
+		throw exception::invalid_setter{std::string{"invalid parameter count: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (parameter_type.is_empty() || parameter_type.is_qobject())
+		throw exception::invalid_setter{std::string{"invalid parameter: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (parameter_type.name() + "*" != std::string{meta_method.parameterTypes()[0].data()})
+		throw exception::invalid_setter{std::string{"invalid parameter: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	return true;
+}
+
 setter_method::setter_method()
 {
 }
@@ -42,12 +61,7 @@ setter_method::setter_method(type parameter_type, QMetaMethod meta_method) :
 	_parameter_type{std::move(parameter_type)},
 	_meta_method{std::move(meta_method)}
 {
-	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
-	assert(is_setter_tag(meta_method.tag()));
-	assert(meta_method.parameterCount() == 1);
-	assert(meta_method.enclosingMetaObject() != nullptr);
-	assert(!_parameter_type.is_empty());
-	assert(_parameter_type.name() + "*" == std::string{meta_method.parameterTypes()[0].data()});
+	assert(validate_setter_method(parameter_type, meta_method));
 }
 
 bool setter_method::is_empty() const
@@ -104,6 +118,16 @@ bool operator == (const setter_method &x, const setter_method &y)
 bool operator != (const setter_method &x, const setter_method &y)
 {
 	return !(x == y);
+}
+
+setter_method make_setter_method(const types_by_name &known_types, const QMetaMethod &meta_method)
+{
+	auto parameter_type = meta_method.parameterCount() == 1
+		? type_by_pointer(known_types, meta_method.parameterTypes()[0].data())
+		: type{nullptr};
+	setter_method::validate_setter_method(parameter_type, meta_method);
+
+	return setter_method{parameter_type, meta_method};
 }
 
 }}
