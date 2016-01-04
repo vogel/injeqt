@@ -28,6 +28,11 @@
 
 namespace injeqt { namespace internal {
 
+bool setter_method::is_setter_tag(const std::string &tag)
+{
+	return tag == "INJEQT_SETTER";
+}
+
 setter_method::setter_method()
 {
 }
@@ -37,7 +42,8 @@ setter_method::setter_method(type parameter_type, QMetaMethod meta_method) :
 	_parameter_type{std::move(parameter_type)},
 	_meta_method{std::move(meta_method)}
 {
-	assert(meta_method.methodType() == QMetaMethod::Slot);
+	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
+	assert(is_setter_tag(meta_method.tag()));
 	assert(meta_method.parameterCount() == 1);
 	assert(meta_method.enclosingMetaObject() != nullptr);
 	assert(!_parameter_type.is_empty());

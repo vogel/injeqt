@@ -59,12 +59,13 @@ std::vector<setter_method> extract_setters(const types_by_name &known_types, con
 	for (decltype(method_count) i = 0; i < method_count; i++)
 	{
 		auto probably_setter = meta_object->method(i);
-		auto tag = std::string{probably_setter.tag()};
-		if (tag != "INJEQT_SETTER")
+		if (!setter_method::is_setter_tag(probably_setter.tag()))
 			continue;
 
-		if (probably_setter.methodType() != QMetaMethod::Slot)
-			throw exception::invalid_setter{std::string{"setter is not a slot: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
+		if (probably_setter.methodType() == QMetaMethod::Signal)
+			throw exception::invalid_setter{std::string{"setter is signal: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
+		if (probably_setter.methodType() == QMetaMethod::Constructor)
+			throw exception::invalid_setter{std::string{"setter is signal: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
 		if (probably_setter.parameterCount() != 1)
 			throw exception::invalid_setter{std::string{"invalid parameter count: "} + meta_object->className() + "::" + probably_setter.methodSignature().data()};
 		auto parameter_type = type_by_pointer(known_types, probably_setter.parameterTypes()[0].data());

@@ -63,6 +63,8 @@ class setter_method final
 {
 
 public:
+	static bool is_setter_tag(const std::string &tag);
+
 	/**
 	 * @brief Create empty setter_method.
 	 */

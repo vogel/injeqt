@@ -71,15 +71,14 @@ class valid_injected_type : public QObject
 {
 	Q_OBJECT
 
+public:
+	Q_INVOKABLE INJEQT_SETTER void setter_1(injectable_type1 *) {}
+
 public slots:
-	INJEQT_SETTER void setter_1(injectable_type1 *) {}
 	INJEQT_SETTER void setter_2(injectable_type2 *) {}
 	void no_injeqt_setter_1(injectable_type1 *) {}
 	void no_injeqt_setter_2(injectable_type2 *) {}
 	void no_injeqt_setter_3(int) {}
-
-signals:
-	INJEQT_SETTER void ignored_signal(injectable_type3 *);
 
 };
 
@@ -96,8 +95,10 @@ class valid_injected_type_with_common_superclass : public QObject
 {
 	Q_OBJECT
 
+public:
+	Q_INVOKABLE INJEQT_SETTER void setter_1(sub_injectable_type1a *) {}
+
 public slots:
-	INJEQT_SETTER void setter_1(sub_injectable_type1a *) {}
 	INJEQT_SETTER void setter_2(sub_injectable_type1b *) {}
 
 };
@@ -106,8 +107,10 @@ class duplicate_dependency_invalid_injected_type : public QObject
 {
 	Q_OBJECT
 
+public:
+	Q_INVOKABLE INJEQT_SETTER void setter_1(injectable_type1 *) {}
+
 public slots:
-	INJEQT_SETTER void setter_1(injectable_type1 *) {}
 	INJEQT_SETTER void setter_2(injectable_type1 *) {}
 
 };
@@ -116,8 +119,10 @@ class invalid_injected_type_with_superclass : public QObject
 {
 	Q_OBJECT
 
+public:
+	Q_INVOKABLE INJEQT_SETTER void setter_1(injectable_type1 *) {}
+
 public slots:
-	INJEQT_SETTER void setter_1(injectable_type1 *) {}
 	INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
 
 };
@@ -126,8 +131,10 @@ class invalid_injected_type_with_superclass_inverted : public QObject
 {
 	Q_OBJECT
 
+public:
+	Q_INVOKABLE INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
+
 public slots:
-	INJEQT_SETTER void setter_2(sub_injectable_type1a *) {}
 	INJEQT_SETTER void setter_1(injectable_type1 *) {}
 
 };
@@ -207,6 +214,15 @@ public slots:
 
 };
 
+class invalid_setter_is_signal: public QObject
+{
+	Q_OBJECT
+
+signals:
+	INJEQT_SETTER void setter_two_parameters(injectable_type1 *);
+
+};
+
 class dependencies_test : public QObject
 {
 	Q_OBJECT
@@ -229,6 +245,7 @@ private slots:
 	void should_throw_when_setter_with_qobject_type();
 	void should_throw_when_setter_with_no_parameters();
 	void should_throw_when_setter_with_two_parameters();
+	void should_throw_when_setter_is_signal();
 
 private:
 	types_by_name known_types;
@@ -368,6 +385,13 @@ void dependencies_test::should_throw_when_setter_with_two_parameters()
 {
 	expect<exception::invalid_setter>({"invalid parameter count"}, [&]{
 		auto dependencies = extract_dependencies(known_types, make_type<invalid_setter_two_paremters>());
+	});
+}
+
+void dependencies_test::should_throw_when_setter_is_signal()
+{
+	expect<exception::invalid_setter>({"setter is signal"}, [&]{
+		auto dependencies = extract_dependencies(known_types, make_type<invalid_setter_is_signal>());
 	});
 }
 
