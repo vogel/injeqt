@@ -102,20 +102,6 @@ public:
 	const type & object_type() const;
 
 	/**
-	 * @return Qt representation of setter method.
-	 *
-	 * May return empty value if QMetaMethod passed in constructor was invalid.
-	 */
-	const QMetaMethod & meta_method() const;
-
-	/**
-	 * @return String signature of setter method.
-	 *
-	 * May return empty value if QMetaMethod passed in constructor was invalid.
-	 */
-	std::string signature() const;
-
-	/**
 	 * @param on object to call this method on
 	 * @param parameter parmeter to be passed in invocation
 	 * @return true if invoke was successfull
@@ -138,9 +124,6 @@ private:
 	QMetaMethod _meta_method;
 
 };
-
-bool operator == (const action_method &x, const action_method &y);
-bool operator != (const action_method &x, const action_method &y);
 
 INJEQT_INTERNAL_API action_method make_action_method(const QMetaMethod &meta_method);
 std::vector<action_method> extract_actions(const std::string &action_tag, const type &for_type);

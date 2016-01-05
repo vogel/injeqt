@@ -77,16 +77,6 @@ const type & action_method::object_type() const
 	return _object_type;
 }
 
-const QMetaMethod & action_method::meta_method() const
-{
-	return _meta_method;
-}
-
-std::string action_method::signature() const
-{
-	return _meta_method.methodSignature().data();
-}
-
 bool action_method::invoke(QObject *on) const
 {
 	assert(!is_empty());
@@ -94,22 +84,6 @@ bool action_method::invoke(QObject *on) const
 	assert(implements(type{on->metaObject()}, _object_type));
 
 	return _meta_method.invoke(on);
-}
-
-bool operator == (const action_method &x, const action_method &y)
-{
-	if (x.object_type() != y.object_type())
-		return false;
-
-	if (x.meta_method() != y.meta_method())
-		return false;
-
-	return true;
-}
-
-bool operator != (const action_method &x, const action_method &y)
-{
-	return !(x == y);
 }
 
 action_method make_action_method(const QMetaMethod &meta_method)
