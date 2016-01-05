@@ -41,15 +41,15 @@ bool action_method::validate_action_method(const QMetaMethod &meta_method)
 {
 	auto meta_object = meta_method.enclosingMetaObject();
 	if (!meta_object)
-		throw exception::invalid_action{std::string{"action does not have enclosing meta object: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
-	if (!is_action_init_tag(meta_method.tag()) && !is_action_done_tag(meta_method.tag()))
-		throw exception::invalid_action{std::string{"setter does not have valid tag: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+		throw exception::invalid_action{std::string{"action does not have enclosing meta object: "} + "?::" + meta_method.methodSignature().data()};
 	if (meta_method.methodType() == QMetaMethod::Signal)
 		throw exception::invalid_action{std::string{"action is signal: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (meta_method.methodType() == QMetaMethod::Constructor)
 		throw exception::invalid_action{std::string{"action is constructor: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (!is_action_init_tag(meta_method.tag()) && !is_action_done_tag(meta_method.tag()))
+		throw exception::invalid_action{std::string{"action does not have valid tag: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (meta_method.parameterCount() != 0)
-		throw exception::invalid_action{std::string{"action parameter count: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+		throw exception::invalid_action{std::string{"invalid parameter count: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 
 	return true;
 }

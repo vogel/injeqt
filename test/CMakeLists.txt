@@ -64,6 +64,7 @@ function (injeqt_add_integration_test name)
 endfunction ()
 
 set (UNIT_TESTS
+	action-method-test
 	default-constructor-method-test
 	dependencies-test
 	dependency-test
