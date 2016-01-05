@@ -26,15 +26,31 @@ Features
 All services dependencies in injeqt must be QObject descendents. This is requirement
 of Qt meta object system.
 
-*Setter-based injection of QObject services.*
+*Setter-based injection of QObject services*
 
 All dependencies are injected by setters. Setters are defined in `private slots` part
-of class and must be marked with `INJEQT_SETTER` tag.
+of class and must be marked with `INJEQT_SET` tag (`INJEQT_SETTER` is also available for
+backwards compatibility).
 
-*Several methods of object creation.*
+Additional slots can be marked with `INJEQT_INIT` and `INJEQT_DONE` tags. `INJEQT_INIT`
+methods are called after all injeqt setters are called - this allows for initializing of
+object when all services are available. `INJEQT_DONE` methods are called before injector
+with all its object is destroyed. This allows for gracefull shutdown with all services
+still available (destruction will follow calling all `INJEQT_DONE` methods in system).
+
+*Several methods of object creation*
 
 Injeqt can create object using default contructor or factories. It can also receive ready
-objects from outside.
+objects from outside (called ready-objects). Resolving of dependencies and calling injeqt
+setters, init and done methods is only done for objects created by injeqt itself - with
+default constructor method (added with add_type<T>()). It can change in future versions
+of injeqt.
+
+*Injection into objects*
+
+Injeqt can also call `INJEQT_SET` methods on objects created outside injector infrastructure.
+Call injector.injeqt_into(QObject *) to do that. It will also call `INJEQT_INIT` methods
+after setting all services. No `INJEQT_DONE` methods are called.
 
 *Small interface*
 
@@ -54,14 +70,9 @@ of the next C++ standards.
 Plans
 -----
 
-*1.0*
-
-* first usable release
-
 *1.1*
 
-* support for `initialized()` methods (to be bikeshed)
-* (if needes) support for `finalize()` methods (to be bikeshed)
+* add on-demand and immediate object creation modes
 
 *1.2*
 
@@ -77,13 +88,13 @@ Example
 
 Here is example of what can be done using injeqt:
 
-	#include "injector.h"
-	#include "injeqt.h"
-	#include "module.h"
+	#include <injeqt/injector.h>
+	#include <injeqt/module.h>
 
-	#include <QtCore/QDebug>
 	#include <QtCore/QObject>
+	#include <iostream>
 	#include <memory>
+	#include <string>
 
 	class hello_service : public QObject
 	{
@@ -93,7 +104,7 @@ Here is example of what can be done using injeqt:
 		hello_service() {}
 		virtual ~hello_service() {}
 
-		QString say_hello() const
+		std::string say_hello() const
 		{
 			return {"Hello"};
 		}
@@ -107,7 +118,7 @@ Here is example of what can be done using injeqt:
 		world_service() {}
 		virtual ~world_service() {}
 
-		QString say_world() const
+		std::string say_world() const
 		{
 			return {"World"};
 		}
@@ -135,18 +146,28 @@ Here is example of what can be done using injeqt:
 		Q_INVOKABLE hello_client() : _s{nullptr}, _w{nullptr} {}
 		virtual ~hello_client() {}
 
-		QString say() const
+		std::string say() const
 		{
 			return _s->say_hello() + " " + _w->say_world() + "!";
 		}
 
 	private slots:
-		INJEQT_SETTER void set_hello_service(hello_service *s)
+		INJEQT_INIT void init()
+		{
+			std::cerr << "all services set" << std::endl;
+		}
+
+		INJEQT_DONE void done()
+		{
+			std::cerr << "ready for destruction" << std::endl;
+		}
+
+		INJEQT_SET void set_hello_service(hello_service *s)
 		{
 			_s = s;
 		}
 
-		INJEQT_SETTER void set_world_service(world_service *w)
+		INJEQT_SET void set_world_service(world_service *w)
 		{
 			_w = w;
 		}
@@ -186,7 +207,7 @@ Here is example of what can be done using injeqt:
 		auto client = injector.get<hello_client>();
 		auto hello = client->say();
 
-		qDebug() << hello;
+		std::cout << hello << std::endl;
 	}
 
 	#include "hello-world.moc"
@@ -218,5 +239,7 @@ an `hello_client` instance is required. This is what happens next:
 * injeqt calls `hello_factory::create_service()` methods and ads its result to object pool
 * now all dependencies of `hello_client` are available, so new instance of it is created with
   default constructor and its added to objec tpool
-* all methods of `hello_client` marked with `INJEQT_SETTER` are called with proper objects from pool
+* all methods of `hello_client` marked with `INJEQT_SET` are called with proper objects from pool
+* all methods of `hello_client` marked with `INJEQT_INIT` are called
 * this instance is returned to caller
+* before injector is destructed, all methods of `hello_client` marked with `INJEQT_DONE` are called
