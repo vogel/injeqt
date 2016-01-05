@@ -23,6 +23,8 @@
 #include <injeqt/exception/invalid-action.h>
 #include <injeqt/type.h>
 
+#include "internal/interfaces-utils.h"
+
 #include <cassert>
 
 namespace injeqt { namespace internal {
@@ -89,7 +91,7 @@ bool action_method::invoke(QObject *on) const
 {
 	assert(!is_empty());
 	assert(on != nullptr);
-	assert(type{on->metaObject()} == _object_type);
+	assert(implements(type{on->metaObject()}, _object_type));
 
 	return _meta_method.invoke(on);
 }

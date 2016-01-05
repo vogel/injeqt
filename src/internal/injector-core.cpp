@@ -77,8 +77,11 @@ injector_core::injector_core(types_by_name known_types, std::vector<std::unique_
 injector_core::~injector_core()
 {
 	for (auto &&resolved_object : _resolved_objects)
-		for (auto action : extract_actions("INJEQT_DONE", resolved_object.interface_type()))
-			action.invoke(resolved_object.object());
+	{
+		auto done_actions = extract_actions("INJEQT_DONE", resolved_object.interface_type());
+		for (auto i = done_actions.rbegin(), e = done_actions.rend(); i != e; ++i)
+			i->invoke(resolved_object.object());
+	}
 }
 
 types_model injector_core::create_types_model() const

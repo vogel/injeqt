@@ -47,7 +47,7 @@ function (injeqt_add_test name file)
 	qt5_use_modules (${name} Core Test)
 
 	if (NOT DISABLE_COVERAGE)
-		target_link_libraries (${name_} gcov)
+		target_link_libraries (${name} gcov)
 	endif (NOT DISABLE_COVERAGE)
 
 	add_test ("${sourcePath}/${name}" ${name})
@@ -97,6 +97,7 @@ set (UNIT_TESTS
 set (INTEGRATION_TESTS
 	default-constructor-behavior-test
 	factory-behavior-test
+	init-done-test
 	inject-into-behavior-test
 	ready-object-behavior-test
 )
