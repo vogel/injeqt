@@ -39,6 +39,8 @@ bool setter_method::validate_setter_method(type parameter_type, const QMetaMetho
 	auto meta_object = meta_method.enclosingMetaObject();
 	if (!meta_object)
 		throw exception::invalid_setter{std::string{"setter does not have enclosing meta object: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (!is_setter_tag(meta_method.tag()))
+		throw exception::invalid_setter{std::string{"setter does not have valid tag: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (meta_method.methodType() == QMetaMethod::Signal)
 		throw exception::invalid_setter{std::string{"setter is signal: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (meta_method.methodType() == QMetaMethod::Constructor)
