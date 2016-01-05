@@ -27,6 +27,10 @@
 
 #include <QtTest/QtTest>
 
+#ifndef Q_MOC_RUN
+#  define INVALID_SETTER_TAG
+#endif
+
 using namespace injeqt::internal;
 using namespace injeqt::v1;
 
@@ -58,6 +62,7 @@ public slots:
 	INJEQT_SET void tagged_setter_slot_1(injectable_type1 *a) { _1 = a; }
 	INJEQT_SETTER void tagged_setter_slot_2(injectable_type1 *a) { _1 = a; }
 	INJEQT_SETTER void invalid_setter_multi_arguments(injectable_type1 *, injectable_type2 *) { }
+	INVALID_SETTER_TAG void invalid_setter_invalid_tag(injectable_type1 *) { }
 	void invalid_setter_no_tag(injectable_type1 *) { }
 
 signals:
@@ -82,6 +87,7 @@ private slots:
 	void should_invoke_have_results();
 	void should_throw_when_empty_method();
 	void should_throw_when_multiple_arguments();
+	void should_throw_when_invalid_tag();
 	void should_throw_when_no_tag();
 	void should_throw_when_signal();
 	void should_throw_when_constructor();
@@ -158,6 +164,16 @@ void setter_method_test::should_throw_when_multiple_arguments()
 	});
 	expect<exception::invalid_setter>({"invalid parameter count"}, [&]{
 		make_setter_method(_known_types, get_method<test_type>("invalid_setter_multi_arguments(injectable_type1*,injectable_type2*)"));
+	});
+}
+
+void setter_method_test::should_throw_when_invalid_tag()
+{
+	expect<exception::invalid_setter>({"setter does not have valid tag"}, [&]{
+		setter_method{make_type<injectable_type1>(), get_method<test_type>("invalid_setter_invalid_tag(injectable_type1*)")};
+	});
+	expect<exception::invalid_setter>({"setter does not have valid tag"}, [&]{
+		make_setter_method(_known_types, get_method<test_type>("invalid_setter_invalid_tag(injectable_type1*)"));
 	});
 }
 
