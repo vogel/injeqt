@@ -20,6 +20,8 @@
 
 #include "resolved-dependency.h"
 
+#include "internal/interfaces-utils.h"
+
 #include <cassert>
 
 namespace injeqt { namespace internal {
@@ -45,7 +47,7 @@ const setter_method & resolved_dependency::setter() const
 bool resolved_dependency::apply_on(QObject *on)
 {
 	assert(on != nullptr);
-	assert(type{on->metaObject()} == _setter.object_type());
+	assert(implements(type{on->metaObject()}, _setter.object_type()));
 
 	return _setter.invoke(on, _resolved_with.object());
 }

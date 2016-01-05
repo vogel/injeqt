@@ -64,6 +64,15 @@ private:
 
 };
 
+class int_sub_service : public int_service
+{
+	Q_OBJECT
+
+public:
+	Q_INVOKABLE int_sub_service() {}
+
+};
+
 class inject_into_behavior_test : public QObject
 {
 	Q_OBJECT
@@ -88,10 +97,14 @@ void inject_into_behavior_test::should_properly_inject_into()
 	auto modules = std::vector<std::unique_ptr<injeqt::module>>{};
 	modules.emplace_back(std::unique_ptr<m>{new m{}});
 	auto injector = injeqt::injector{std::move(modules)};
+
 	int_service service{};
 	injector.inject_into(&service);
-
 	QCOMPARE(9, service.value());
+
+	int_sub_service sub_service{};
+	injector.inject_into(&sub_service);
+	QCOMPARE(9, sub_service.value());
 }
 
 QTEST_APPLESS_MAIN(inject_into_behavior_test)

@@ -195,7 +195,7 @@ implementations injector_core::objects_with(implementations objects, const types
 
 		for (auto &&resolved : resolved_dependencies.resolved)
 		{
-			assert(object_to_resolve.interface_type() == resolved.setter().object_type());
+			assert(implements(object_to_resolve.interface_type(), resolved.setter().object_type()));
 			resolved.apply_on(object_to_resolve.object());
 		}
 	}
@@ -217,7 +217,7 @@ void injector_core::inject_into(QObject *object)
 	auto resolved_dependencies = resolve_dependencies(dependencies, _objects);
 	for (auto &&resolved : resolved_dependencies.resolved)
 	{
-		assert(object_type == resolved.setter().object_type());
+		assert(implements(object_type, resolved.setter().object_type()));
 		resolved.apply_on(object);
 	}
 }

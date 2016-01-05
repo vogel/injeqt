@@ -45,12 +45,12 @@ public:
 
 };
 
-class int_service : public QObject
+class base_int_service : public QObject
 {
 	Q_OBJECT
 
 public:
-	Q_INVOKABLE int_service() {}
+	Q_INVOKABLE base_int_service() {}
 	int value() const { return _int_container->value(); }
 
 private slots:
@@ -61,6 +61,15 @@ private slots:
 
 private:
 	QPointer<int_container> _int_container;
+
+};
+
+class int_service : public base_int_service
+{
+	Q_OBJECT
+
+public:
+	Q_INVOKABLE int_service() {}
 
 };
 
