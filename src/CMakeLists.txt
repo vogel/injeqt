@@ -75,6 +75,12 @@ set (INJEQT_SRCS
 add_definitions (-Dinjeqt_EXPORTS)
 if (NOT CMAKE_BUILD_TYPE MATCHES RELEASE AND NOT DISABLE_TESTS)
 	add_definitions (-Dinjeqt_INTERNAL_EXPORTS)
+
+	if (NOT DISABLE_COVERAGE)
+		set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fprofile-arcs -ftest-coverage -O0")
+		set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage -O0")
+		set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage -O0")
+	endif (NOT DISABLE_COVERAGE)
 endif (NOT CMAKE_BUILD_TYPE MATCHES RELEASE AND NOT DISABLE_TESTS)
 
 add_library (
