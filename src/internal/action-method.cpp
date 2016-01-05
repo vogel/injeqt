@@ -37,6 +37,23 @@ bool action_method::is_action_done_tag(const std::string& tag)
 	return tag == "INJEQT_DONE";
 }
 
+bool action_method::validate_action_method(const QMetaMethod &meta_method)
+{
+	auto meta_object = meta_method.enclosingMetaObject();
+	if (!meta_object)
+		throw exception::invalid_action{std::string{"action does not have enclosing meta object: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (!is_action_init_tag(meta_method.tag()) && !is_action_done_tag(meta_method.tag()))
+		throw exception::invalid_action{std::string{"setter does not have valid tag: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (meta_method.methodType() == QMetaMethod::Signal)
+		throw exception::invalid_action{std::string{"action is signal: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (meta_method.methodType() == QMetaMethod::Constructor)
+		throw exception::invalid_action{std::string{"action is constructor: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (meta_method.parameterCount() != 0)
+		throw exception::invalid_action{std::string{"action parameter count: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+
+	return true;
+}
+
 action_method::action_method()
 {
 }
@@ -45,10 +62,7 @@ action_method::action_method(QMetaMethod meta_method) :
 	_object_type{meta_method.enclosingMetaObject()},
 	_meta_method{std::move(meta_method)}
 {
-	assert(meta_method.methodType() == QMetaMethod::Method || meta_method.methodType() == QMetaMethod::Slot);
-	assert(is_action_init_tag(meta_method.tag()) || is_action_done_tag(meta_method.tag()));
-	assert(meta_method.parameterCount() == 0);
-	assert(meta_method.enclosingMetaObject() != nullptr);
+	assert(validate_action_method(meta_method));
 }
 
 bool action_method::is_empty() const
@@ -96,6 +110,13 @@ bool operator != (const action_method &x, const action_method &y)
 	return !(x == y);
 }
 
+action_method make_action_method(const QMetaMethod &meta_method)
+{
+	action_method::validate_action_method(meta_method);
+
+	return action_method{meta_method};
+}
+
 std::vector<action_method> extract_actions(const std::string &action_tag, const type &for_type)
 {
 	assert(!for_type.is_empty());
@@ -108,17 +129,8 @@ std::vector<action_method> extract_actions(const std::string &action_tag, const 
 	{
 		auto probably_action = meta_object->method(i);
 		auto method_tag = std::string{probably_action.tag()};
-		if (action_tag != method_tag)
-			continue;
-
-		if (probably_action.methodType() == QMetaMethod::Signal)
-			throw exception::invalid_action{std::string{"action is signal: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
-		if (probably_action.methodType() == QMetaMethod::Constructor)
-			throw exception::invalid_action{std::string{"action is signal: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
-		if (probably_action.parameterCount() != 0)
-			throw exception::invalid_action{std::string{"invalid parameter count: "} + meta_object->className() + "::" + probably_action.methodSignature().data()};
-
-		result.emplace_back(action_method{probably_action});
+		if (action_tag == method_tag)
+			result.emplace_back(make_action_method(probably_action));
 	}
 
 	return result;

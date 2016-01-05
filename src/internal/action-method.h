@@ -69,6 +69,8 @@ public:
 	static bool is_action_init_tag(const std::string &tag);
 	static bool is_action_done_tag(const std::string &tag);
 
+	static bool validate_action_method(const QMetaMethod &meta_method);
+
 	/**
 	 * @brief Create empty action_method.
 	 */
@@ -140,6 +142,7 @@ private:
 bool operator == (const action_method &x, const action_method &y);
 bool operator != (const action_method &x, const action_method &y);
 
+INJEQT_INTERNAL_API action_method make_action_method(const QMetaMethod &meta_method);
 std::vector<action_method> extract_actions(const std::string &action_tag, const type &for_type);
 
 }}
