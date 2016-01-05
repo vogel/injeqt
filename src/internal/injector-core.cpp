@@ -77,11 +77,7 @@ injector_core::injector_core(types_by_name known_types, std::vector<std::unique_
 injector_core::~injector_core()
 {
 	for (auto &&resolved_object : _resolved_objects)
-	{
-		auto done_actions = extract_actions("INJEQT_DONE", resolved_object.interface_type());
-		for (auto i = done_actions.rbegin(), e = done_actions.rend(); i != e; ++i)
-			i->invoke(resolved_object.object());
-	}
+		call_done_methods(resolved_object.object());
 }
 
 types_model injector_core::create_types_model() const
@@ -201,8 +197,7 @@ implementations injector_core::objects_with(implementations objects, const types
 	}
 
 	for (auto &&resolved_object : objects_to_resolve)
-		for (auto action : extract_actions("INJEQT_INIT", resolved_object.interface_type()))
-			action.invoke(resolved_object.object());
+		call_init_methods(resolved_object.object());
 
 	return objects;
 }
@@ -220,6 +215,21 @@ void injector_core::inject_into(QObject *object)
 		assert(implements(object_type, resolved.setter().object_type()));
 		resolved.apply_on(object);
 	}
+
+	call_init_methods(object);
+}
+
+void injector_core::call_init_methods(QObject *object)
+{
+	for (auto action : extract_actions("INJEQT_INIT", type{object->metaObject()}))
+		action.invoke(object);
+}
+
+void injector_core::call_done_methods(QObject *object)
+{
+	auto done_actions = extract_actions("INJEQT_DONE", type{object->metaObject()});
+	for (auto i = done_actions.rbegin(), e = done_actions.rend(); i != e; ++i)
+		i->invoke(object);
 }
 
 }}

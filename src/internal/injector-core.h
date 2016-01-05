@@ -191,6 +191,16 @@ private:
 	 */
 	implementations objects_with(implementations objects, const types &implementation_types);
 
+	/**
+	 * @brief Call all INJEQT_INIT methods on given object in proper order.
+	 */
+	void call_init_methods(QObject *object);
+
+	/**
+	 * @brief Call all INJEQT_DONE methods on given object in proper order.
+	 */
+	void call_done_methods(QObject *object);
+
 };
 
 }}
