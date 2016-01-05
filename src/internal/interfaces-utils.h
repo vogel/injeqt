@@ -22,6 +22,7 @@
 
 #include <injeqt/injeqt.h>
 
+#include "internal.h"
 #include "types.h"
 
 /**
@@ -40,13 +41,13 @@ namespace injeqt { namespace internal {
  * excluding QObject) and returns it as a types collection. If for_type
  * object is not valid an empty collection is returned.
  */
-types extract_interfaces(const type &for_type);
+INJEQT_INTERNAL_API types extract_interfaces(const type &for_type);
 
 /**
  * @brief Return true if @p implementation implements @p interface
  * @pre !implementation.is_empty()
  * @pre !interface.is_empty()
  */
-bool implements(const type &implementation, const type &interface);
+INJEQT_INTERNAL_API bool implements(const type &implementation, const type &interface);
 
 }}

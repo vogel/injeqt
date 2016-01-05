@@ -22,6 +22,7 @@
 
 #include <injeqt/injeqt.h>
 
+#include "internal.h"
 #include "provider.h"
 #include "default-constructor-method.h"
 
@@ -42,7 +43,7 @@ namespace injeqt { namespace internal {
  * Once created, object will be stored inside and return on subsequents calls to provide(injector_core &).
  * This provider has ownershipd over created object and will destroy it at own destruction.
  */
-class provider_by_default_constructor final : public provider
+class INJEQT_INTERNAL_API provider_by_default_constructor final : public provider
 {
 
 public:

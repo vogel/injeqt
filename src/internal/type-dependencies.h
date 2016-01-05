@@ -24,6 +24,7 @@
 #include <injeqt/type.h>
 
 #include "dependencies.h"
+#include "internal.h"
 
 #include <cassert>
 
@@ -42,7 +43,7 @@ namespace injeqt { namespace internal {
  *
  * Used in model class to store all dependnecies and in injector_core to resolve them.
  */
-class type_dependencies final
+class INJEQT_INTERNAL_API type_dependencies final
 {
 
 public:
@@ -69,8 +70,8 @@ private:
 
 };
 
-bool operator == (const type_dependencies &x, const type_dependencies &y);
-bool operator != (const type_dependencies &x, const type_dependencies &y);
+INJEQT_INTERNAL_API bool operator == (const type_dependencies &x, const type_dependencies &y);
+INJEQT_INTERNAL_API bool operator != (const type_dependencies &x, const type_dependencies &y);
 
 /**
  * @brief Create valid type_dependencies from given type.

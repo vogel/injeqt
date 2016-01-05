@@ -18,24 +18,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/dependency-duplicated.cpp"
-#include "exception/dependency-on-self.cpp"
-#include "exception/dependency-on-subtype.cpp"
-#include "exception/dependency-on-supertype.cpp"
-#include "exception/exception.cpp"
-#include "exception/invalid-dependency.cpp"
-#include "exception/invalid-setter.cpp"
-#include "dependencies.cpp"
-#include "dependency.cpp"
-#include "implemented-by.cpp"
-#include "interfaces-utils.cpp"
-#include "setter-method.cpp"
-#include "type-relations.cpp"
-#include "type.cpp"
-#include "types-by-name.cpp"
-
 #include "expect.h"
 #include "make-setter-method.h"
+
+#include <injeqt/exception/dependency-duplicated.h>
+#include <injeqt/exception/dependency-on-self.h>
+#include <injeqt/exception/dependency-on-subtype.h>
+#include <injeqt/exception/dependency-on-supertype.h>
+#include <injeqt/exception/invalid-setter.h>
+
+#include "internal/dependencies.h"
 
 #include <QtTest/QtTest>
 

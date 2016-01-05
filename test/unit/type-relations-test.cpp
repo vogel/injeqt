@@ -18,13 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/exception.cpp"
-#include "implemented-by.cpp"
-#include "interfaces-utils.cpp"
-#include "type-relations.cpp"
-#include "type.cpp"
-
 #include <QtTest/QtTest>
+
+#include <injeqt/type.h>
+
+#include "internal/type-relations.h"
 
 using namespace injeqt::internal;
 using namespace injeqt::v1;

@@ -24,6 +24,7 @@
 
 #include "dependencies.h"
 #include "implementations.h"
+#include "internal.h"
 
 #include <vector>
 
@@ -66,6 +67,6 @@ struct resolve_dependencies_result
  * This function requires that all items in both sets are valid. In other case its behavior is undefined.
  * This function returns only valid objects.
  */
-resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with);
+INJEQT_INTERNAL_API resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with);
 
 }}

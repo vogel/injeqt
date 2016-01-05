@@ -18,12 +18,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/exception.cpp"
-#include "default-constructor-method.cpp"
-#include "type.cpp"
-
 #include "expect.h"
 #include "utils.h"
+
+#include "internal/default-constructor-method.h"
 
 #include <QtTest/QtTest>
 #include <string>

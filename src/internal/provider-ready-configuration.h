@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
 #include "provider-configuration.h"
 
 /**
@@ -37,7 +38,7 @@ namespace injeqt { namespace internal {
  *
  * This provider configuration object will return provider implementation that will always return the same object.
  */
-class provider_ready_configuration : public provider_configuration
+class INJEQT_INTERNAL_API provider_ready_configuration : public provider_configuration
 {
 
 public:

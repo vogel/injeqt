@@ -24,6 +24,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
 #include "types-by-name.h"
 
 #include <memory>
@@ -71,7 +72,7 @@ namespace injeqt { namespace internal {
  * and immediately wraps returned QObject * in a std::unique_ptr that it later
  * returns.
  */
-class factory_method final
+class INJEQT_INTERNAL_API factory_method final
 {
 
 public:
@@ -135,8 +136,8 @@ private:
 
 };
 
-bool operator == (const factory_method &x, const factory_method &y);
-bool operator != (const factory_method &x, const factory_method &y);
+INJEQT_INTERNAL_API bool operator == (const factory_method &x, const factory_method &y);
+INJEQT_INTERNAL_API bool operator != (const factory_method &x, const factory_method &y);
 
 /**
  * @brief Extract factory method from given type F that returns pointers to T.
@@ -150,6 +151,6 @@ bool operator != (const factory_method &x, const factory_method &y);
  * is found it is wrapped in factory_method type and returned. In other cases an empty
  * factory_method is returned.
  */
-factory_method make_factory_method(const types_by_name &known_types, const type &t, const type &f);
+INJEQT_INTERNAL_API factory_method make_factory_method(const types_by_name &known_types, const type &t, const type &f);
 
 }}

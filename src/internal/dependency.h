@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
 #include "setter-method.h"
 
 /**
@@ -42,7 +43,7 @@ namespace injeqt { namespace internal {
  *
  * Objects of this type are valid only when backing setter_method is valid.
  */
-class dependency final
+class INJEQT_INTERNAL_API dependency final
 {
 
 public:
@@ -74,7 +75,7 @@ private:
 
 };
 
-bool operator == (const dependency &x, const dependency &y);
-bool operator != (const dependency &x, const dependency &y);
+INJEQT_INTERNAL_API bool operator == (const dependency &x, const dependency &y);
+INJEQT_INTERNAL_API bool operator != (const dependency &x, const dependency &y);
 
 }}

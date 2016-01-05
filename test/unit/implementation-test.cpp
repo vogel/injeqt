@@ -18,17 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/empty-type.cpp"
-#include "exception/exception.cpp"
-#include "exception/interface-not-implemented.cpp"
-#include "exception/invalid-qobject.cpp"
-#include "exception/qobject-type.cpp"
-#include "implementation.cpp"
-#include "interfaces-utils.cpp"
-#include "type.cpp"
-
 #include "expect.h"
 #include "utils.h"
+
+#include <injeqt/exception/empty-type.h>
+#include <injeqt/exception/interface-not-implemented.h>
+#include <injeqt/exception/invalid-qobject.h>
+#include <injeqt/exception/qobject-type.h>
+
+#include "internal/implementation.h"
 
 #include <QtTest/QtTest>
 

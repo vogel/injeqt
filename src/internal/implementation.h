@@ -23,6 +23,8 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
+
 /**
  * @file
  * @brief Contains classes and functions for defining implementation of type.
@@ -42,7 +44,7 @@ namespace injeqt { namespace internal {
  * data is module::add_ready_object<T>(QObject *) where a validation is used to ensure
  * that user passed valid data.
  */
-class implementation final
+class INJEQT_INTERNAL_API implementation final
 {
 
 public:
@@ -67,8 +69,8 @@ private:
 
 };
 
-bool operator == (const implementation &x, const implementation &y);
-bool operator != (const implementation &x, const implementation &y);
+INJEQT_INTERNAL_API bool operator == (const implementation &x, const implementation &y);
+INJEQT_INTERNAL_API bool operator != (const implementation &x, const implementation &y);
 
 /**
  * @brief Check if @p interface_type and @p object met implementation preconditions and return new instance if true
@@ -79,6 +81,6 @@ bool operator != (const implementation &x, const implementation &y);
  * @throw invalid_qobject when passed @p object is nullptr or does not have valid QMetaObject
  * @throw interface_not_implemented when passed @p object does not implements type @p interface_type
  */
-implementation make_implementation(type interface_type, QObject *object);
+INJEQT_INTERNAL_API implementation make_implementation(type interface_type, QObject *object);
 
 }}

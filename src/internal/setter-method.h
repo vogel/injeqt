@@ -24,6 +24,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
 #include "types-by-name.h"
 
 #include <QtCore/QMetaMethod>
@@ -61,7 +62,7 @@ namespace injeqt { namespace internal {
  *
  * Object with setter method must not take ownership of passed object.
  */
-class setter_method final
+class INJEQT_INTERNAL_API setter_method final
 {
 
 public:
@@ -145,9 +146,9 @@ private:
 
 };
 
-bool operator == (const setter_method &x, const setter_method &y);
-bool operator != (const setter_method &x, const setter_method &y);
+INJEQT_INTERNAL_API bool operator == (const setter_method &x, const setter_method &y);
+INJEQT_INTERNAL_API bool operator != (const setter_method &x, const setter_method &y);
 
-setter_method make_setter_method(const types_by_name &known_types, const QMetaMethod &meta_method);
+INJEQT_INTERNAL_API setter_method make_setter_method(const types_by_name &known_types, const QMetaMethod &meta_method);
 
 }}

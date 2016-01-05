@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 
 #include "factory-method.h"
+#include "internal.h"
 #include "provider.h"
 
 /**
@@ -43,7 +44,7 @@ namespace injeqt { namespace internal {
  * Once created, object will be stored inside and return on subsequents calls to provide(injector_core &).
  * This provider has ownershipd over created object and will destroy it at own destruction.
  */
-class provider_by_factory final : public provider
+class INJEQT_INTERNAL_API provider_by_factory final : public provider
 {
 
 public:

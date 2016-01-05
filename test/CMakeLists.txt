@@ -53,8 +53,9 @@ function (injeqt_add_test name_)
 	add_test ("${sourcePath}/${name_}" ${name_})
 endfunction ()
 
-function (injeqt_add_unit_test)
+function (injeqt_add_unit_test name_)
 	injeqt_add_test (${ARGV})
+	target_link_libraries (${name_} injeqt)
 endfunction ()
 
 function (injeqt_add_integration_test name_)

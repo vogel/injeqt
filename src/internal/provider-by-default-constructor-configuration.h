@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
 #include "provider-configuration.h"
 
 /**
@@ -38,7 +39,7 @@ namespace injeqt { namespace internal {
  * This provider configuration object will return provider implementation that will
  * use default constructor to create objects.
  */
-class provider_by_default_constructor_configuration : public provider_configuration
+class INJEQT_INTERNAL_API provider_by_default_constructor_configuration : public provider_configuration
 {
 
 public:

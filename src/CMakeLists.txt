@@ -72,9 +72,10 @@ set (INJEQT_SRCS
 	internal/types-model.cpp
 )
 
-add_definitions (
-	-Dinjeqt_EXPORTS
-)
+add_definitions (-Dinjeqt_EXPORTS)
+if (NOT CMAKE_BUILD_TYPE MATCHES RELEASE AND NOT DISABLE_TESTS)
+	add_definitions (-Dinjeqt_INTERNAL_EXPORTS)
+endif (NOT CMAKE_BUILD_TYPE MATCHES RELEASE AND NOT DISABLE_TESTS)
 
 add_library (
 	injeqt

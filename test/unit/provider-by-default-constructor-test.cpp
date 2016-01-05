@@ -18,43 +18,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/ambiguous-types.cpp"
-#include "exception/dependency-duplicated.cpp"
-#include "exception/dependency-on-self.cpp"
-#include "exception/dependency-on-subtype.cpp"
-#include "exception/dependency-on-supertype.cpp"
-#include "exception/empty-type.cpp"
-#include "exception/exception.cpp"
-#include "exception/instantiation-failed.cpp"
-#include "exception/interface-not-implemented.cpp"
-#include "exception/invalid-action.cpp"
-#include "exception/invalid-dependency.cpp"
-#include "exception/invalid-qobject.cpp"
-#include "exception/invalid-setter.cpp"
-#include "exception/qobject-type.cpp"
-#include "exception/unavailable-required-types.cpp"
-#include "exception/unknown-type.cpp"
-#include "exception/unresolvable-dependencies.cpp"
-#include "action-method.cpp"
-#include "dependencies.cpp"
-#include "dependency.cpp"
-#include "default-constructor-method.cpp"
-#include "implementation.cpp"
-#include "implemented-by.cpp"
-#include "injector-core.cpp"
-#include "interfaces-utils.cpp"
-#include "provider-by-default-constructor.cpp"
-#include "required-to-satisfy.cpp"
-#include "resolve-dependencies.cpp"
-#include "resolved-dependency.cpp"
-#include "setter-method.cpp"
-#include "type.cpp"
-#include "type-dependencies.cpp"
-#include "type-relations.cpp"
-#include "types-by-name.cpp"
-#include "types-model.cpp"
-
 #include "expect.h"
+
+#include "internal/injector-core.h"
+#include "internal/provider-by-default-constructor.h"
 
 #include <QtTest/QtTest>
 #include <memory>

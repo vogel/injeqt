@@ -23,6 +23,8 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
+
 /**
  * @file
  * @brief Contains classes and functions for representing "interface is implemented by type" relations.
@@ -39,7 +41,7 @@ namespace injeqt { namespace internal {
  * This class represens such relation. It is mostly used in implemnted_by_mapping set to
  * represents all types that injector knows and can handle.
  */
-class implemented_by final
+class INJEQT_INTERNAL_API implemented_by final
 {
 
 public:
@@ -69,7 +71,7 @@ private:
 
 };
 
-bool operator == (const implemented_by &x, const implemented_by &y);
-bool operator != (const implemented_by &x, const implemented_by &y);
+INJEQT_INTERNAL_API bool operator == (const implemented_by &x, const implemented_by &y);
+INJEQT_INTERNAL_API bool operator != (const implemented_by &x, const implemented_by &y);
 
 }}

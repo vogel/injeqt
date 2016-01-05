@@ -18,9 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/exception.cpp"
-#include "interfaces-utils.cpp"
-#include "type.cpp"
+#include <injeqt/type.h>
+
+#include "internal/interfaces-utils.h"
 
 #include <QtTest/QtTest>
 

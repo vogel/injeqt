@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "internal/setter-method.h"
+
 namespace injeqt { namespace internal {
 
 template<typename T, typename P>

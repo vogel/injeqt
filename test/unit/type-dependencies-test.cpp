@@ -18,18 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/exception.cpp"
-#include "exception/invalid-setter.cpp"
-#include "internal/types-by-name.cpp"
-#include "dependency.cpp"
-#include "interfaces-utils.cpp"
-#include "setter-method.cpp"
-#include "type-dependencies.cpp"
-#include "type.cpp"
-
 #include "expect.h"
 #include "make-setter-method.h"
 #include "utils.h"
+
+#include "internal/dependency.h"
+#include "internal/type-dependencies.h"
 
 #include <QtTest/QtTest>
 #include <string>

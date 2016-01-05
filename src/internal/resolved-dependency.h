@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 
 #include "implementation.h"
+#include "internal.h"
 #include "setter-method.h"
 
 /**
@@ -40,7 +41,7 @@ namespace injeqt { namespace internal {
  * resolve_dependencies(const dependencies &, const implementations &). This class is currently
  * only used in injector_core.
  */
-class resolved_dependency final
+class INJEQT_INTERNAL_API resolved_dependency final
 {
 
 public:
@@ -79,7 +80,7 @@ private:
 
 };
 
-bool operator == (const resolved_dependency &x, const resolved_dependency &y);
-bool operator != (const resolved_dependency &x, const resolved_dependency &y);
+INJEQT_INTERNAL_API bool operator == (const resolved_dependency &x, const resolved_dependency &y);
+INJEQT_INTERNAL_API bool operator != (const resolved_dependency &x, const resolved_dependency &y);
 
 }}

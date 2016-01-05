@@ -24,6 +24,7 @@
 
 #include "provider.h"
 #include "implementation.h"
+#include "internal.h"
 
 /**
  * @file
@@ -39,7 +40,7 @@ namespace injeqt { namespace internal {
  * returns type of object passed to it in constructor. Its required_types() returns
  * empty set of types.
  */
-class provider_ready final : public provider
+class INJEQT_INTERNAL_API provider_ready final : public provider
 {
 
 public:

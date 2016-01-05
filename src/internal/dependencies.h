@@ -24,6 +24,7 @@
 #include <injeqt/type.h>
 
 #include "dependency.h"
+#include "internal.h"
 #include "types-by-name.h"
 
 /**
@@ -36,7 +37,7 @@ namespace injeqt { namespace internal {
 /**
  * @brief Extract type from dependency for storting purposes.
  */
-inline type type_from_dependency(const dependency &d)
+INJEQT_INTERNAL_API inline type type_from_dependency(const dependency &d)
 {
 	return d.required_type();
 }
@@ -70,6 +71,6 @@ using dependencies = sorted_unique_vector<type, dependency, type_from_dependency
  * and type does not depends on self, subtype or supertype, a result is returned. Otherwise one of many
  * exceptions can be thrown.
  */
-dependencies extract_dependencies(const types_by_name &known_types, const type &for_type);
+INJEQT_INTERNAL_API dependencies extract_dependencies(const types_by_name &known_types, const type &for_type);
 
 }}

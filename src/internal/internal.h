@@ -1,6 +1,6 @@
 /*
  * %injeqt copyright begin%
- * Copyright 2014 Rafał Malinowski (rafal.przemyslaw.malinowski@gmail.com)
+ * Copyright 2016 Rafał Malinowski (rafal.przemyslaw.malinowski@gmail.com)
  * %injeqt copyright end%
  *
  * This library is free software; you can redistribute it and/or
@@ -20,22 +20,8 @@
 
 #pragma once
 
-#include <injeqt/injeqt.h>
-#include <injeqt/type.h>
-
-#include "internal.h"
-
-#include "sorted-unique-vector.h"
-
-namespace injeqt { namespace internal {
-
-inline std::string name_from_type(const type &t)
-{
-	return t.name();
-}
-
-using types_by_name = sorted_unique_vector<std::string, type, name_from_type>;
-
-INJEQT_INTERNAL_API type type_by_pointer(const types_by_name &known_types, const std::string &pointer_name);
-
-}}
+#ifdef injeqt_INTERNAL_EXPORTS
+#define INJEQT_INTERNAL_API Q_DECL_EXPORT
+#else
+#define INJEQT_INTERNAL_API Q_DECL_IMPORT
+#endif

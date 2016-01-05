@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "internal.h"
+
 #include <injeqt/exception/exception.h>
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
@@ -60,7 +62,7 @@ namespace injeqt { namespace internal {
  *
  * Object with setter method must not take ownership of passed object.
  */
-class action_method final
+class INJEQT_INTERNAL_API action_method final
 {
 
 public:

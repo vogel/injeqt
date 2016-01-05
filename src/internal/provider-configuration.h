@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
 
+#include "internal.h"
 #include "types-by-name.h"
 
 #include <memory>
@@ -55,7 +56,7 @@ class provider;
  * and uses QMetaMethod::typeName() and QMetaMethod::returnType()::paramterTypes() to get names of
  * types, that are mapped using this @see types_by_name.
  */
-class provider_configuration
+class INJEQT_INTERNAL_API provider_configuration
 {
 
 public:

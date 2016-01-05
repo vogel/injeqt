@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "internal.h"
+
 #include <injeqt/exception/exception.h>
 #include <injeqt/injeqt.h>
 #include <injeqt/type.h>
@@ -56,7 +58,7 @@ namespace injeqt { namespace internal {
  *
  * To extract constructor from a type call make_default_constructor_method<T>().
  */
-class default_constructor_method final
+class INJEQT_INTERNAL_API default_constructor_method final
 {
 
 public:
@@ -103,8 +105,8 @@ private:
 
 };
 
-bool operator == (const default_constructor_method &x, const default_constructor_method &y);
-bool operator != (const default_constructor_method &x, const default_constructor_method &y);
+INJEQT_INTERNAL_API bool operator == (const default_constructor_method &x, const default_constructor_method &y);
+INJEQT_INTERNAL_API bool operator != (const default_constructor_method &x, const default_constructor_method &y);
 
 /**
  * @brief Extract default constructor method from given type T.
@@ -116,6 +118,6 @@ bool operator != (const default_constructor_method &x, const default_constructor
  * with default values. If no such constructor is found - empty default_constructor_method
  * is returned.
  */
-default_constructor_method make_default_constructor_method(const type &t);
+INJEQT_INTERNAL_API default_constructor_method make_default_constructor_method(const type &t);
 
 }}

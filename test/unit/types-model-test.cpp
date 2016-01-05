@@ -18,28 +18,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/ambiguous-types.cpp"
-#include "exception/dependency-duplicated.cpp"
-#include "exception/dependency-on-self.cpp"
-#include "exception/dependency-on-subtype.cpp"
-#include "exception/dependency-on-supertype.cpp"
-#include "exception/exception.cpp"
-#include "exception/invalid-dependency.cpp"
-#include "exception/invalid-setter.cpp"
-#include "exception/unresolvable-dependencies.cpp"
-#include "dependencies.cpp"
-#include "dependency.cpp"
-#include "implemented-by.cpp"
-#include "interfaces-utils.cpp"
-#include "setter-method.cpp"
-#include "type-dependencies.cpp"
-#include "type-relations.cpp"
-#include "type.cpp"
-#include "types-by-name.cpp"
-#include "types-model.cpp"
-
 #include "expect.h"
 #include "utils.h"
+
+#include <injeqt/exception/ambiguous-types.h>
+#include <injeqt/exception/unresolvable-dependencies.h>
+#include <injeqt/type.h>
+
+#include "internal/types-model.h"
 
 #include <QtTest/QtTest>
 

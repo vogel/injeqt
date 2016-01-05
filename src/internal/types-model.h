@@ -24,6 +24,7 @@
 #include <injeqt/type.h>
 
 #include "implemented-by-mapping.h"
+#include "internal.h"
 #include "types-by-name.h"
 #include "types-dependencies.h"
 
@@ -44,7 +45,7 @@ namespace injeqt { namespace internal {
  * Use make_types_model(const std::vector<type> &) to create valid instance of this type
  * and be informed of any errors in form of exceptions.
  */
-class types_model
+class INJEQT_INTERNAL_API types_model
 {
 
 public:
@@ -105,6 +106,6 @@ private:
  * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
  * @throw invalid_setter if any tagged setter has other number of parameters than one
  */
-types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types, const std::vector<type> &need_dependencies);
+INJEQT_INTERNAL_API types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types, const std::vector<type> &need_dependencies);
 
 }}

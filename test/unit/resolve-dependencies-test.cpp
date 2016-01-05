@@ -18,23 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "exception/empty-type.cpp"
-#include "exception/exception.cpp"
-#include "exception/interface-not-implemented.cpp"
-#include "exception/invalid-qobject.cpp"
-#include "exception/invalid-setter.cpp"
-#include "exception/qobject-type.cpp"
-#include "internal/types-by-name.cpp"
-#include "dependency.cpp"
-#include "implementation.cpp"
-#include "interfaces-utils.cpp"
-#include "resolved-dependency.cpp"
-#include "resolve-dependencies.cpp"
-#include "setter-method.cpp"
-#include "type.cpp"
-
 #include "make-setter-method.h"
 #include "utils.h"
+
+#include "internal/dependencies.h"
+#include "internal/dependency.h"
+#include "internal/implementations.h"
+#include "internal/implementation.h"
+#include "internal/resolved-dependency.h"
+#include "internal/resolve-dependencies.h"
 
 #include <QtTest/QtTest>
 

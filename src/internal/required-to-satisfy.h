@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 
 #include "implementations.h"
+#include "internal.h"
 #include "types-model.h"
 #include "types.h"
 
@@ -44,6 +45,6 @@ namespace injeqt { namespace internal {
  * provided dependencies. It means it recursively traverses dependency tree and returns all nodes that
  * are not found in @p objects set.
  */
-types required_to_satisfy(const dependencies &dependencies_to_satisfy, const types_model &model, const implementations &objects);
+INJEQT_INTERNAL_API types required_to_satisfy(const dependencies &dependencies_to_satisfy, const types_model &model, const implementations &objects);
 
 }}

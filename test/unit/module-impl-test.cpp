@@ -18,11 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "module-impl.cpp"
-
 #include "../mocks/mocked-provider-configuration.h"
 #include "expect.h"
 #include "utils.h"
+
+#include "internal/module-impl.h"
 
 #include <QtTest/QtTest>
 #include <string>

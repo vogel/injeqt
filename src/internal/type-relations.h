@@ -23,6 +23,7 @@
 #include <injeqt/injeqt.h>
 
 #include "implemented-by-mapping.h"
+#include "internal.h"
 #include "types.h"
 
 /**
@@ -44,7 +45,7 @@ namespace injeqt { namespace internal {
  * To create object of this type use make_type_relations(const std::vector<type> &) to ensure that
  * it is valid.
  */
-class type_relations final
+class INJEQT_INTERNAL_API type_relations final
 {
 
 public:
@@ -89,6 +90,6 @@ private:
  * to this base type and implementation_type set to T. All non unique types are added to
  * ambiguous() set of result object.
  */
-type_relations make_type_relations(const std::vector<type> &main_types);
+INJEQT_INTERNAL_API type_relations make_type_relations(const std::vector<type> &main_types);
 
 }}
