@@ -19,7 +19,6 @@
  */
 
 #include "expect.h"
-#include "make-setter-method.h"
 #include "utils.h"
 
 #include "internal/dependency.h"
@@ -72,10 +71,10 @@ private slots:
 
 void type_dependencies_test::should_properly_compare()
 {
-	auto d11 = dependency{make_setter_method<type_with_dependency_1, type_1>("setter_1(type_1*)")};
-	auto d12 = dependency{make_setter_method<type_with_dependency_1, type_2>("setter_2(type_2*)")};
-	auto d21 = dependency{make_setter_method<type_with_dependency_2, type_1>("setter_1(type_1*)")};
-	auto d22 = dependency{make_setter_method<type_with_dependency_2, type_2>("setter_2(type_2*)")};
+	auto d11 = dependency{make_test_setter_method<type_with_dependency_1, type_1>("setter_1(type_1*)")};
+	auto d12 = dependency{make_test_setter_method<type_with_dependency_1, type_2>("setter_2(type_2*)")};
+	auto d21 = dependency{make_test_setter_method<type_with_dependency_2, type_1>("setter_1(type_1*)")};
+	auto d22 = dependency{make_test_setter_method<type_with_dependency_2, type_2>("setter_2(type_2*)")};
 	
 	auto td_empty = type_dependencies{type{}, dependencies{}};
 	auto td1a = type_dependencies{make_type<type_1>(), dependencies{d11, d12}};

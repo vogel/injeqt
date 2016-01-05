@@ -38,13 +38,13 @@ bool setter_method::validate_setter_method(type parameter_type, const QMetaMetho
 {
 	auto meta_object = meta_method.enclosingMetaObject();
 	if (!meta_object)
-		throw exception::invalid_setter{std::string{"setter does not have enclosing meta object: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
-	if (!is_setter_tag(meta_method.tag()))
-		throw exception::invalid_setter{std::string{"setter does not have valid tag: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+		throw exception::invalid_setter{std::string{"setter does not have enclosing meta object: "} + "?::" + meta_method.methodSignature().data()};
 	if (meta_method.methodType() == QMetaMethod::Signal)
 		throw exception::invalid_setter{std::string{"setter is signal: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (meta_method.methodType() == QMetaMethod::Constructor)
 		throw exception::invalid_setter{std::string{"setter is constructor: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (!is_setter_tag(meta_method.tag()))
+		throw exception::invalid_setter{std::string{"setter does not have valid tag: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (meta_method.parameterCount() != 1)
 		throw exception::invalid_setter{std::string{"invalid parameter count: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (parameter_type.is_empty() || parameter_type.is_qobject())

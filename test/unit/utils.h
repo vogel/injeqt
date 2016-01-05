@@ -20,7 +20,9 @@
 
 #pragma once
 
-#include "injeqt/exception/exception.h"
+#include <injeqt/exception/exception.h>
+
+#include "internal/setter-method.h"
 
 #include <QtCore/QMetaMethod>
 #include <QtCore/QObject>
@@ -28,6 +30,24 @@
 #include <memory>
 
 namespace injeqt { namespace v1 {
+
+template<typename T>
+inline QMetaMethod get_method(const std::string &signature)
+{
+	return T::staticMetaObject.method(T::staticMetaObject.indexOfMethod(signature.data()));
+}
+
+template<typename T>
+inline QMetaMethod get_constructor(const std::string &signature)
+{
+	return T::staticMetaObject.constructor(T::staticMetaObject.indexOfConstructor(signature.data()));
+}
+
+template<typename T, typename P>
+inline injeqt::internal::setter_method make_test_setter_method(const std::string &signature)
+{
+	return injeqt::internal::setter_method{make_type<P>(), get_method<T>(signature)};
+}
 
 template<typename T>
 std::unique_ptr<QObject> make_object()
