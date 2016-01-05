@@ -21,9 +21,10 @@
 #include <injeqt/injector.h>
 #include <injeqt/module.h>
 
-#include <QtCore/QDebug>
 #include <QtCore/QObject>
+#include <iostream>
 #include <memory>
+#include <string>
 
 class hello_service : public QObject
 {
@@ -33,7 +34,7 @@ public:
 	hello_service() {}
 	virtual ~hello_service() {}
 
-	QString say_hello() const
+	std::string say_hello() const
 	{
 		return {"Hello"};
 	}
@@ -47,7 +48,7 @@ public:
 	world_service() {}
 	virtual ~world_service() {}
 
-	QString say_world() const
+	std::string say_world() const
 	{
 		return {"World"};
 	}
@@ -75,12 +76,22 @@ public:
 	Q_INVOKABLE hello_client() : _s{nullptr}, _w{nullptr} {}
 	virtual ~hello_client() {}
 
-	QString say() const
+	std::string say() const
 	{
 		return _s->say_hello() + " " + _w->say_world() + "!";
 	}
 
 private slots:
+	INJEQT_INIT void init()
+	{
+		std::cerr << "all services set" << std::endl;
+	}
+
+	INJEQT_DONE void done()
+	{
+		std::cerr << "ready for destruction" << std::endl;
+	}
+
 	INJEQT_SET void set_hello_service(hello_service *s)
 	{
 		_s = s;
@@ -126,7 +137,7 @@ int main()
 	auto client = injector.get<hello_client>();
 	auto hello = client->say();
 
-	qDebug() << hello;
+	std::cout << hello << std::endl;
 }
 
 #include "hello-world.moc"
