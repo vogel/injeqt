@@ -192,6 +192,11 @@ private:
 	implementations objects_with(implementations objects, const types &implementation_types);
 
 	/**
+	 * @brief Instantiate all objects with
+	 */
+	void instantiate_all_immediate();
+
+	/**
 	 * @brief Call all INJEQT_INIT methods on given object in proper order.
 	 */
 	void call_init_methods(QObject *object);

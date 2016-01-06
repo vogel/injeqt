@@ -73,6 +73,7 @@ set (UNIT_TESTS
 	implemented-by-test
 	injector-core-test
 	injector-test
+	instantiate-type-test
 	interfaces-utils-test
 	module-impl-test
 	module-test

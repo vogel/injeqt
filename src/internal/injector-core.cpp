@@ -27,6 +27,7 @@
 
 #include "action-method.h"
 #include "containers.h"
+#include "instantiate-type.h"
 #include "interfaces-utils.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
@@ -72,6 +73,8 @@ injector_core::injector_core(types_by_name known_types, std::vector<std::unique_
 		}
 		throw exception::unavailable_required_types{message};
 	}
+
+	instantiate_all_immediate();
 }
 
 injector_core::~injector_core()
@@ -217,6 +220,16 @@ void injector_core::inject_into(QObject *object)
 	}
 
 	call_init_methods(object);
+}
+
+void injector_core::instantiate_all_immediate()
+{
+	for (auto &&provider : _available_providers)
+	{
+		auto type = provider->provided_type();
+		if (get_instantiate_type(type) == instantiate_type::immediate)
+			get(type);
+	}
 }
 
 void injector_core::call_init_methods(QObject *object)
