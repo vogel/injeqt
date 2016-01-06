@@ -20,6 +20,8 @@
 
 #include "type-relations.h"
 
+#include <injeqt/exception/ambiguous-types.h>
+
 #include "interfaces-utils.h"
 
 #include <map>
@@ -70,6 +72,22 @@ type_relations make_type_relations(const std::vector<type> &main_types)
 			ambiguous.push_back(counted_type.first);
 
 	return type_relations{implemented_by_mapping{unique}, types{ambiguous}};
+}
+
+void validate_non_ambiguous(const std::vector<type> &types, const type_relations &relations)
+{
+	for (auto &&t : types)
+	{
+		auto message = std::string{};
+		if (relations.ambiguous().contains(t))
+		{
+			message.append(t.name());
+			message.append("\n");
+		}
+
+		if (!message.empty())
+			throw exception::ambiguous_types{message};
+	}
 }
 
 }}

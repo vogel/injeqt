@@ -92,4 +92,12 @@ private:
  */
 INJEQT_INTERNAL_API type_relations make_type_relations(const std::vector<type> &main_types);
 
+/**
+ * @brief Check if relations do not have ambiguous types for provided types.
+ * @param types types to check
+ * @param relations relations to check
+ * @throw ambiguous_types if @p relations contains ambiguous types from set of @p types
+ */
+INJEQT_INTERNAL_API void validate_non_ambiguous(const std::vector<type> &types, const type_relations &relations);
+
 }}

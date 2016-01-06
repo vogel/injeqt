@@ -108,4 +108,11 @@ private:
  */
 INJEQT_INTERNAL_API types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types, const std::vector<type> &need_dependencies);
 
+/**
+ * @brief Check if types model do not have unresolvable types.
+ * @param model model to check
+ * @throw unresolvable_dependencies if @p model contains unresolvable types
+ */
+INJEQT_INTERNAL_API void validate_non_unresolvable(const types_model &model);
+
 }}

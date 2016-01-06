@@ -67,19 +67,7 @@ std::vector<dependency> types_model::get_unresolvable_dependencies() const
 types_model make_types_model(const types_by_name &known_types, const std::vector<type> &all_types, const std::vector<type> &need_dependencies)
 {
 	auto relations = make_type_relations(all_types);
-
-	for (auto &&t : all_types)
-	{
-		auto message = std::string{};
-		if (relations.ambiguous().contains(t))
-		{
-			message.append(t.name());
-			message.append("\n");
-		}
-
-		if (!message.empty())
-			throw exception::ambiguous_types{message};
-	}
+	validate_non_ambiguous(all_types, relations);
 
 	auto all_dependencies = std::vector<type_dependencies>{};
 	std::transform(std::begin(need_dependencies), std::end(need_dependencies), std::back_inserter(all_dependencies),
@@ -88,7 +76,14 @@ types_model make_types_model(const types_by_name &known_types, const std::vector
 	auto available_types = relations.unique();
 	auto mapped_dependencies = types_dependencies{all_dependencies};
 	auto result = types_model(available_types, mapped_dependencies);
-	auto unresolvable_dependencies = result.get_unresolvable_dependencies();
+	validate_non_unresolvable(result);
+
+	return result;
+}
+
+void validate_non_unresolvable(const types_model &model)
+{
+	auto unresolvable_dependencies = model.get_unresolvable_dependencies();
 
 	if (!unresolvable_dependencies.empty())
 	{
@@ -102,8 +97,6 @@ types_model make_types_model(const types_by_name &known_types, const std::vector
 		}
 		throw exception::unresolvable_dependencies{message};
 	}
-
-	return result;
 }
 
 }}
