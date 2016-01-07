@@ -1,3 +1,11 @@
+2016-01-07  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
+
+	* 1.1: add INJEQT_SET macro as alias to INJEQT_SETTER
+	* 1.1: add INJEQT_INIT methods called after all setters
+	* 1.1: add INJEQT_DONE methods called before injector destruction
+	* 1.1: add INJEQT_INSTANCE_ON_DEMAND macro to mark class as on-demand
+	* 1.1: add INJEQT_INSTANCE_IMMEDIATE macro to mark class as immediate
+
 2015-04-09  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
 
 	* 1.1: added subinjectors functionality
