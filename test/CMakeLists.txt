@@ -100,6 +100,7 @@ set (INTEGRATION_TESTS
 	factory-behavior-test
 	init-done-test
 	inject-into-behavior-test
+	instantiate-type-behavior-test
 	ready-object-behavior-test
 )
 

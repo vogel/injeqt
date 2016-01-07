@@ -48,9 +48,11 @@ bool setter_method::validate_setter_method(type parameter_type, const QMetaMetho
 	if (meta_method.parameterCount() != 1)
 		throw exception::invalid_setter{std::string{"invalid parameter count: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (parameter_type.is_empty() || parameter_type.is_qobject())
-		throw exception::invalid_setter{std::string{"invalid parameter: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+		throw exception::invalid_setter{std::string{"invalid parameter (empty): "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+	if (parameter_type.is_empty())
+		throw exception::invalid_setter{std::string{"invalid parameter (qobject): "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	if (parameter_type.name() + "*" != std::string{meta_method.parameterTypes()[0].data()})
-		throw exception::invalid_setter{std::string{"invalid parameter: "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
+		throw exception::invalid_setter{std::string{"invalid parameter (type): "} + meta_object->className() + "::" + meta_method.methodSignature().data()};
 	return true;
 }
 
