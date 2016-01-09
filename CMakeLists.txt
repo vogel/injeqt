@@ -39,11 +39,7 @@ endif ()
 
 set (WARNINGS "-Werror -W -Wall -Wextra -Wundef -Wunused -Wuninitialized -Wcast-align -Wpointer-arith -Woverloaded-virtual -Wnon-virtual-dtor -fno-common")
 set (VISIBILITY "-fvisibility=hidden -fvisibility-inlines-hidden")
-set (CMAKE_CXX_FLAGS "-std=c++11 ${WARNINGS} ${VISIBILITY}")
-
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set (CMAKE_CXX_FLAGS "-O0 ${CMAKE_CXX_FLAGS}")
-endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${WARNINGS} ${VISIBILITY}")
 
 set (CMAKE_AUTOMOC TRUE)
 set (CMAKE_INCLUDE_CURRENT_DIR ON)
