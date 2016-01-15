@@ -46,20 +46,4 @@ implementation provided_object::object() const
 	return _object;
 }
 
-bool operator == (const provided_object &x, const provided_object &y)
-{
-	if (x.provided_by() != y.provided_by())
-		return false;
-
-	if (x.object() != y.object())
-		return false;
-
-	return true;
-}
-
-bool operator != (const provided_object &x, const provided_object &y)
-{
-	return !(x == y);
-}
-
 }}

@@ -63,7 +63,4 @@ private:
 
 };
 
-INJEQT_INTERNAL_API bool operator == (const provided_object &x, const provided_object &y);
-INJEQT_INTERNAL_API bool operator != (const provided_object &x, const provided_object &y);
-
 }}
