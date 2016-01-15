@@ -146,10 +146,10 @@ void injector_core::instantiate_implementation(const type &implementation_type)
 
 	auto types_to_instantiate = required_to_satisfy(implementation_type_dependencies(implementation_type), _types_model, _objects);
 	types_to_instantiate.add(implementation_type);
-	instantiate_dependencies(types_to_instantiate);
+	instantiate_all(types_to_instantiate);
 }
 
-dependencies injector_core::implementation_type_dependencies(const type &implementation_type)
+dependencies injector_core::implementation_type_dependencies(const type &implementation_type) const
 {
 	assert(!implementation_type.is_empty());
 	assert(!implementation_type.is_qobject());
@@ -159,12 +159,12 @@ dependencies injector_core::implementation_type_dependencies(const type &impleme
 			: dependencies{};
 }
 
-void injector_core::instantiate_dependencies(const types &types_to_instantiate)
+void injector_core::instantiate_all(const types &interface_types)
 {
-	instantiate_required_types_for(types_to_instantiate);
+	instantiate_required_types_for(interface_types);
 
-	auto provided_objects = provide_objects(providers_for(non_instantiated(types_to_instantiate)));
-	_objects.merge(implementations{objects_to_store(provided_objects)});
+	auto provided_objects = provide_objects(providers_for(non_instantiated(interface_types)));
+	_objects.merge(implementations{objects_to_store(extract_implementations(provided_objects))});
 	resolve_objects(objects_to_resolve(provided_objects));
 }
 
@@ -175,7 +175,7 @@ void injector_core::instantiate_required_types_for(const types &types_to_instant
 			instantiate_interface(required_type);
 }
 
-std::vector<type> injector_core::non_instantiated(const types &to_filter)
+std::vector<type> injector_core::non_instantiated(const types &to_filter) const
 {
 	auto result = std::vector<type>{};
 	result.reserve(to_filter.size());
@@ -198,7 +198,7 @@ std::vector<provided_object> injector_core::provide_objects(const std::vector<pr
 	return result;
 }
 
-std::vector<implementation> injector_core::objects_to_resolve(const std::vector<provided_object> &provided_objects)
+std::vector<implementation> injector_core::objects_to_resolve(const std::vector<provided_object> &provided_objects) const
 {
 	auto result = std::vector<implementation>{};
 	result.reserve(provided_objects.size());
@@ -208,16 +208,25 @@ std::vector<implementation> injector_core::objects_to_resolve(const std::vector<
 	return result;
 }
 
-std::vector<implementation> injector_core::objects_to_store(const std::vector<provided_object> &provided_objects)
+std::vector<implementation> injector_core::extract_implementations(const std::vector<provided_object> &provided_objects) const
 {
 	auto result = std::vector<implementation>{};
+	result.reserve(provided_objects.size());
 	for (auto &&provided_object : provided_objects)
+		result.push_back(provided_object.object());
+	return result;
+}
+
+std::vector<implementation> injector_core::objects_to_store(const std::vector<implementation> &objects) const
+{
+	auto result = std::vector<implementation>{};
+	for (auto &&object : objects)
 	{
-		auto interfaces = extract_interfaces(provided_object.provided_by()->provided_type());
+		auto interfaces = extract_interfaces(object.interface_type());
 		auto matched = match(interfaces, _types_model.available_types()).matched;
 		for (auto &&m : matched)
 		{
-			auto i = implementation{m.first, provided_object.object().object()}; // no need to check preconditions again with make_implementation
+			auto i = implementation{m.first, object.object()}; // no need to check preconditions again with make_implementation
 			result.emplace_back(i);
 		}
 	}
@@ -233,13 +242,13 @@ void injector_core::resolve_objects(const std::vector<implementation> &objects)
 	_resolved_objects.merge(implementations{objects});
 }
 
-void injector_core::resolve_object(const implementation &object)
+void injector_core::resolve_object(const implementation &object) const
 {
-	auto object_dependencies = _types_model.mapped_dependencies().get(object.interface_type())->dependency_list();
+	auto object_dependencies = implementation_type_dependencies(object.interface_type());
 	resolve_object(object_dependencies, object);
 }
 
-void injector_core::resolve_object(const dependencies &object_dependencies, const implementation &object)
+void injector_core::resolve_object(const dependencies &object_dependencies, const implementation &object) const
 {
 	auto resolved_dependencies = resolve_dependencies(object_dependencies, _objects);
 	assert(resolved_dependencies.unresolved.empty());
@@ -256,7 +265,7 @@ void injector_core::inject_into(QObject *object)
 	auto object_implementation = implementation{type{object->metaObject()}, object};
 	auto dependencies = extract_dependencies(_known_types, object_implementation.interface_type());
 	auto types_to_instantiate = required_to_satisfy(dependencies, _types_model, _objects);
-	instantiate_dependencies(types_to_instantiate);
+	instantiate_all(types_to_instantiate);
 	resolve_object(dependencies, object_implementation);
 	call_init_methods(object);
 }
@@ -271,13 +280,13 @@ void injector_core::instantiate_all_immediate()
 	}
 }
 
-void injector_core::call_init_methods(QObject *object)
+void injector_core::call_init_methods(QObject *object) const
 {
 	for (auto action : extract_actions("INJEQT_INIT", type{object->metaObject()}))
 		action.invoke(object);
 }
 
-void injector_core::call_done_methods(QObject *object)
+void injector_core::call_done_methods(QObject *object) const
 {
 	auto done_actions = extract_actions("INJEQT_DONE", type{object->metaObject()});
 	for (auto i = done_actions.rbegin(), e = done_actions.rend(); i != e; ++i)

@@ -156,49 +156,61 @@ private:
 	 */
 	types_model create_types_model() const;
 
+	/**
+	 * @brief Return type that implements @p interface_type.
+	 * @throw unknown_type if @p interface_type does not have corresponding implementation
+	 */
 	type implementation_for(const type &interface_type) const;
 
 	/**
-	 * @brief Create new list of implementation objects with object of type interface_type
-	 * @param objects list of already created objects
+	 * @brief Instantiate class of interface type @p interface_type and makes it available for use.
 	 * @param interface_type type of interface of object to create
 	 * @throw instantiation_failed if instantiation of one of required types failed
-	 * @throw unknown_type if interface_type does not have corresponding implementation
+	 * @throw unknown_type if @p interface_type does not have corresponding implementation
 	 *
-	 * This method first finds implementation_type valid for given interface_type. Then
-	 * objects_with_implementation_type(implementations, const type &) is called.
+	 * Instantiate class of interface type @p interface_type with all of its dependencies, then resolves them and
+	 * calls INJEQT_INIT slots.
 	 */
 	void instantiate_interface(const type &interface_type);
 
 	/**
-	 * @brief Create new list of implementation objects with object of type implementation_type
-	 * @param objects list of already created objects
-	 * @param implementation_type type of object to create
+	 * @brief Instantiate class of type @p implementation_type and makes it available for use.
+	 * @param interface_type type of interface of object to create
 	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
-	 * This method get list of all not-already created objects required to properly instantiate implementation_type
-	 * using required_to_satisfy(const type &, const types_model &, const implementations &) and then uses
-	 * objects_with(implementations, const types &) to create all these objects.
+	 * Instantiate class of exact type @p implementation_type with all of its dependencies, then resolves them and
+	 * calls INJEQT_INIT slots.
 	 */
 	void instantiate_implementation(const type &implementation_type);
 
-	dependencies implementation_type_dependencies(const type &implementation_type);
+	/**
+	 * @brief Return all dependencies for @p implementation_type.
+	 */
+	dependencies implementation_type_dependencies(const type &implementation_type) const;
 
 	/**
-	 * @brief Create new list of implementation objects with objects of types implementation_types
-	 * @param objects list of already created objects
-	 * @param implementation_types set of types of object to create
+	 * @brief Instantiate classes of interface types from @p interface_types and makes them available for use.
+	 * @param interface_types types of interfaces of objects to create
+	 * @throw instantiation_failed if instantiation of one of required types failed
+	 * @pre No class from @p interface_types contains dependency that is not already resolved or not in @p interface_types
+	 *
+	 * Instantiate all classes of interface type @p interface_types without looking for dependencies.
+	 */
+	void instantiate_all(const types &interface_types);
+
+	/**
+	 * @brief Instantiate classes that are required before instantiating any of @p types_to_instantiate.
+	 * @param types_to_instantiate types that are checked for list of required types
 	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
-	 * For each type in the list this method check if that type requires other one using provider::required_types()
-	 * and if so, calls objects_with(implementations, const type &) to update list with that requires object.
-	 * After all these requiremens are met all types from implementation_types list that still were not instantiated
-	 * are instantiated. Last step is to resolve and apply dependencies on newly created objects.
+	 * Instantiate all classes that are returned from @see provider::required_type() methods of any provider
+	 * for these types.
 	 */
-	void instantiate_dependencies(const types &types_to_instantiate);
-
 	void instantiate_required_types_for(const types &types_to_instantiate);
 
+	/**
+	 * @brief Return list of providers required to instantiate types from @p for_types.
+	 */
 	template<typename T>
 	std::vector<provider *> providers_for(const T &for_types) const
 	{
@@ -215,34 +227,68 @@ private:
 		return result;
 	}
 
-	std::vector<type> non_instantiated(const types &to_filter);
-
-	std::vector<provided_object> provide_objects(const std::vector<provider *> &providers);
-
-	std::vector<implementation> objects_to_resolve(const std::vector<provided_object> &provided_objects);
-
-	std::vector<implementation> objects_to_store(const std::vector<provided_object> &provided_objects);
-
-	void resolve_objects(const std::vector<implementation> &objects);
-
-	void resolve_object(const implementation &object);
-
-	void resolve_object(const dependencies &object_dependencies, const implementation &object);
+	/**
+	 * @brief Filter list of types from @p to_filter to include only non already instantiated types.
+	 */
+	std::vector<type> non_instantiated(const types &to_filter) const;
 
 	/**
-	 * @brief Instantiate all objects with
+	 * @brief Instantiate types with @p providers.
+	 */
+	std::vector<provided_object> provide_objects(const std::vector<provider *> &providers);
+
+	/**
+	 * @brief Return objects that needs resolving from @p provided_objects.
+	 * @see provider::require_resolving()
+	 */
+	std::vector<implementation> objects_to_resolve(const std::vector<provided_object> &provided_objects) const;
+
+	/**
+	 * @brief Extract implementations from vector of @p provided_object.
+	 */
+	std::vector<implementation> extract_implementations(const std::vector<provided_object> &provided_objects) const;
+
+	/**
+	 * @brief Return objects to store in list of instantiated objects.
+	 *
+	 * Each implementation object is returned with set of @see implementation instances that contains all unique inferfaces
+	 * for that object, so it is later avaialble under all types it implements.
+	 */
+	std::vector<implementation> objects_to_store(const std::vector<implementation> &objects) const;
+
+	/**
+	 * @brief Resolve all @p objects dependencies, call all INJEQT_INIT slots and add types to list of resolved objects.
+	 *
+	 * This method assumes that all object dependencies are already instantiated.
+	 */
+	void resolve_objects(const std::vector<implementation> &objects);
+
+	/**
+	 * @brief Resolve all @p object dependencies.
+	 *
+	 * This method assumes that all object dependencies are already instantiated.
+	 */
+	void resolve_object(const implementation &object) const;
+
+	/**
+	 * @brief Resolve all @p object dependencies with @p object_dependencies.
+	 */
+	void resolve_object(const dependencies &object_dependencies, const implementation &object) const;
+
+	/**
+	 * @brief Instantiate all objects with INJEQT_INSTANCE_IMMEDIATE tag.
 	 */
 	void instantiate_all_immediate();
 
 	/**
 	 * @brief Call all INJEQT_INIT methods on given object in proper order.
 	 */
-	void call_init_methods(QObject *object);
+	void call_init_methods(QObject *object) const;
 
 	/**
 	 * @brief Call all INJEQT_DONE methods on given object in proper order.
 	 */
-	void call_done_methods(QObject *object);
+	void call_done_methods(QObject *object) const;
 
 };
 
