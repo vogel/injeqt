@@ -38,6 +38,8 @@
 
 namespace injeqt { namespace internal {
 
+class provided_object;
+
 /**
  * @brief Implementation of injector class.
  * @see injector
@@ -154,16 +156,6 @@ private:
 	 */
 	types_model create_types_model() const;
 
-	void instantiate(const type &interface_type);
-
-	void instantiate_required_types_for(const types &types_to_instantiate);
-
-	std::vector<provider *> providers_for(const types &for_types) const;
-
-	void resolve_objects(const std::vector<implementation> &objects, const implementations &with);
-
-	void resolve_object(const implementation &object, const implementations &with);
-
 	/**
 	 * @brief Create new list of implementation objects with object of type interface_type
 	 * @param objects list of already created objects
@@ -174,7 +166,7 @@ private:
 	 * This method first finds implementation_type valid for given interface_type. Then
 	 * objects_with_implementation_type(implementations, const type &) is called.
 	 */
-	std::pair<implementations, implementations> objects_with_interface_type(implementations objects, const type &interface_type);
+	void instantiate_interface(const type &interface_type);
 
 	/**
 	 * @brief Create new list of implementation objects with object of type implementation_type
@@ -186,7 +178,7 @@ private:
 	 * using required_to_satisfy(const type &, const types_model &, const implementations &) and then uses
 	 * objects_with(implementations, const types &) to create all these objects.
 	 */
-	std::pair<implementations, implementations> objects_with_implementation_type(implementations objects, const type &implementation_type);
+	void instantiate_implementation(const type &implementation_type);
 
 	/**
 	 * @brief Create new list of implementation objects with objects of types implementation_types
@@ -199,7 +191,33 @@ private:
 	 * After all these requiremens are met all types from implementation_types list that still were not instantiated
 	 * are instantiated. Last step is to resolve and apply dependencies on newly created objects.
 	 */
-	std::pair<implementations, implementations> objects_with(implementations objects, const types &implementation_types);
+	void instantiate_depdencies(const types &types_to_instantiate);
+
+	void instantiate_required_types_for(const types &types_to_instantiate);
+
+	template<typename T>
+	std::vector<provider *> providers_for(const T &for_types) const
+	{
+		auto result = std::vector<provider *>{};
+		result.reserve(for_types.size());
+		for (auto &&for_type : for_types)
+		{
+			auto provider_it = _available_providers.get(for_type);
+			assert(provider_it != end(_available_providers));
+
+			result.push_back(provider_it->get());
+		}
+
+		return result;
+	}
+
+	std::vector<type> non_instantiated(const types &to_filter);
+
+	std::vector<provided_object> provide_objects(const std::vector<provider *> &providers);
+
+	void resolve_objects(const std::vector<implementation> &objects);
+
+	void resolve_object(const implementation &object);
 
 	/**
 	 * @brief Instantiate all objects with

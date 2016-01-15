@@ -56,6 +56,7 @@ set (INJEQT_SRCS
 	internal/instantiate-type.cpp
 	internal/interfaces-utils.cpp
 	internal/module-impl.cpp
+	internal/provided-object.cpp
 	internal/provider-by-default-constructor.cpp
 	internal/provider-by-default-constructor-configuration.cpp
 	internal/provider-by-factory.cpp

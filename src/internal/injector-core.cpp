@@ -29,6 +29,7 @@
 #include "containers.h"
 #include "instantiate-type.h"
 #include "interfaces-utils.h"
+#include "provided-object.h"
 #include "provider-by-default-constructor.h"
 #include "provider-ready.h"
 #include "provider.h"
@@ -115,106 +116,106 @@ QObject * injector_core::get(const type &interface_type)
 	if (object_it != end(_objects))
 		return object_it->object();
 
-	instantiate(interface_type);
+	instantiate_interface(interface_type);
 	return _objects.get(interface_type)->object();
 }
 
-void injector_core::instantiate(const type &interface_type)
+void injector_core::instantiate_interface(const type &interface_type)
 {
-	auto result = objects_with_interface_type(_objects, interface_type);
-	_objects = result.first;
+	assert(!interface_type.is_empty());
+	assert(!interface_type.is_qobject());
 
-	for (auto &&resolved_object : result.second)
-		call_init_methods(resolved_object.object());
-}
-
-std::pair<implementations, implementations> injector_core::objects_with_interface_type(implementations objects, const type &interface_type)
-{
 	auto implementation_type_it = _types_model.available_types().get(interface_type);
 	if (implementation_type_it == end(_types_model.available_types()))
 		throw exception::unknown_type{interface_type.name()};
 
-	return objects_with_implementation_type(objects, implementation_type_it->implementation_type());
+	instantiate_implementation(implementation_type_it->implementation_type());
 }
 
-std::pair<implementations, implementations> injector_core::objects_with_implementation_type(implementations objects, const type &implementation_type)
+void injector_core::instantiate_implementation(const type &implementation_type)
 {
+	assert(!implementation_type.is_empty());
+	assert(!implementation_type.is_qobject());
+
 	auto implementation_type_dependencies = _types_model.mapped_dependencies().contains_key(implementation_type)
 			? _types_model.mapped_dependencies().get(implementation_type)->dependency_list()
 			: dependencies{};
 
-	auto types_to_instantiate = required_to_satisfy(implementation_type_dependencies, _types_model, objects);
+	auto types_to_instantiate = required_to_satisfy(implementation_type_dependencies, _types_model, _objects);
 	types_to_instantiate.add(implementation_type);
-	return objects_with(objects, types_to_instantiate);
+	instantiate_depdencies(types_to_instantiate);
 }
 
-std::pair<implementations, implementations> injector_core::objects_with(implementations objects, const types &types_to_instantiate)
+void injector_core::instantiate_depdencies(const types &types_to_instantiate)
 {
 	instantiate_required_types_for(types_to_instantiate);
+	auto provided_objects = provide_objects(providers_for(non_instantiated(types_to_instantiate)));
 
 	auto objects_to_resolve = std::vector<implementation>{};
 	auto objects_to_store = std::vector<implementation>{};
 
-	for (auto &&type_to_instantiate : types_to_instantiate)
+	for (auto &&provided_object : provided_objects)
 	{
-		if (objects.get(type_to_instantiate) != end(objects))
-			continue;
+		if (provided_object.provided_by()->require_resolving())
+			objects_to_resolve.push_back(provided_object.object());
 
-		auto provider_it = _available_providers.get(type_to_instantiate);
-		auto instance = provider_it->get()->provide(*this);
-
-		auto i = make_implementation(type_to_instantiate, instance);
-		if (provider_it->get()->require_resolving())
-			objects_to_resolve.emplace_back(i);
-
-		auto interfaces = extract_interfaces(type_to_instantiate);
+		auto interfaces = extract_interfaces(provided_object.provided_by()->provided_type());
 		auto matched = match(interfaces, _types_model.available_types()).matched;
 		for (auto &&m : matched)
 		{
-			auto i = implementation{m.first, instance}; // no need to check preconditions again with make_implementation
+			auto i = implementation{m.first, provided_object.object().object()}; // no need to check preconditions again with make_implementation
 			objects_to_store.emplace_back(i);
 		}
 	}
 
-	objects.merge(implementations{objects_to_store});
+	_objects.merge(implementations{objects_to_store});
 	_resolved_objects.merge(implementations{objects_to_resolve});
-	resolve_objects(objects_to_resolve, objects);
+	resolve_objects(objects_to_resolve);
 
-	return std::make_pair(objects, implementations{objects_to_resolve});
+	for (auto &&resolved_object : objects_to_resolve)
+		call_init_methods(resolved_object.object());
 }
 
 void injector_core::instantiate_required_types_for(const types &types_to_instantiate)
 {
 	for (auto &&provider : providers_for(types_to_instantiate))
 		for (auto &&required_type : provider->required_types())
-			instantiate(required_type);
+			instantiate_interface(required_type);
 }
 
-std::vector<provider *> injector_core::providers_for(const types &for_types) const
+std::vector<type> injector_core::non_instantiated(const types &to_filter)
 {
-	auto result = std::vector<provider *>{};
-	result.reserve(for_types.size());
-	for (auto &&for_type : for_types)
-	{
-		auto provider_it = _available_providers.get(for_type);
-		assert(provider_it != end(_available_providers));
-
-		result.push_back(provider_it->get());
-	}
-
+	auto result = std::vector<type>{};
+	result.reserve(to_filter.size());
+	for (auto &&type : to_filter)
+		if (_objects.get(type) == end(_objects))
+			result.push_back(type);
 	return result;
 }
 
-void injector_core::resolve_objects(const std::vector<implementation> &objects, const implementations &with)
+std::vector<provided_object> injector_core::provide_objects(const std::vector<provider *> &providers)
 {
-	for (auto &&object : objects)
-		resolve_object(object, with);
+	auto result = std::vector<provided_object>{};
+	result.reserve(providers.size());
+	for (auto &&provider : providers)
+	{
+		auto instance = provider->provide(*this);
+		auto i = make_implementation(provider->provided_type(), instance);
+		result.push_back(provided_object{provider, i});
+	}
+	return result;
 }
 
-void injector_core::resolve_object(const implementation &object, const implementations &with)
+void injector_core::resolve_objects(const std::vector<implementation> &objects)
+{
+	for (auto &&object : objects)
+		resolve_object(object);
+}
+
+void injector_core::resolve_object(const implementation &object)
 {
 	auto to_resolve = _types_model.mapped_dependencies().get(object.interface_type())->dependency_list();
-	auto resolved_dependencies = resolve_dependencies(to_resolve, with);
+	auto resolved_dependencies = resolve_dependencies(to_resolve, _objects);
 	assert(resolved_dependencies.unresolved.empty());
 
 	for (auto &&resolved : resolved_dependencies.resolved)
@@ -229,11 +230,7 @@ void injector_core::inject_into(QObject *object)
 	auto object_type = type{object->metaObject()};
 	auto dependencies = extract_dependencies(_known_types, object_type);
 	auto types_to_instantiate = required_to_satisfy(dependencies, _types_model, _objects);
-	auto result = objects_with(_objects, types_to_instantiate);
-	_objects = result.first;
-
-	for (auto &&resolved_object : result.second)
-		call_init_methods(resolved_object.object());
+	instantiate_depdencies(types_to_instantiate);
 
 	auto resolved_dependencies = resolve_dependencies(dependencies, _objects);
 	for (auto &&resolved : resolved_dependencies.resolved)
@@ -251,7 +248,7 @@ void injector_core::instantiate_all_immediate()
 	{
 		auto type = provider->provided_type();
 		if (get_instantiate_type(type) == instantiate_type::immediate)
-			get(type);
+			instantiate_interface(type);
 	}
 }
 
