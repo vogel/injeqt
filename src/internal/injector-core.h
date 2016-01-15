@@ -154,6 +154,16 @@ private:
 	 */
 	types_model create_types_model() const;
 
+	void instantiate(const type &interface_type);
+
+	void instantiate_required_types_for(const types &types_to_instantiate);
+
+	std::vector<provider *> providers_for(const types &for_types) const;
+
+	void resolve_objects(const std::vector<implementation> &objects, const implementations &with);
+
+	void resolve_object(const implementation &object, const implementations &with);
+
 	/**
 	 * @brief Create new list of implementation objects with object of type interface_type
 	 * @param objects list of already created objects
@@ -164,7 +174,7 @@ private:
 	 * This method first finds implementation_type valid for given interface_type. Then
 	 * objects_with_implementation_type(implementations, const type &) is called.
 	 */
-	implementations objects_with_interface_type(implementations objects, const type &interface_type);
+	std::pair<implementations, implementations> objects_with_interface_type(implementations objects, const type &interface_type);
 
 	/**
 	 * @brief Create new list of implementation objects with object of type implementation_type
@@ -176,7 +186,7 @@ private:
 	 * using required_to_satisfy(const type &, const types_model &, const implementations &) and then uses
 	 * objects_with(implementations, const types &) to create all these objects.
 	 */
-	implementations objects_with_implementation_type(implementations objects, const type &implementation_type);
+	std::pair<implementations, implementations> objects_with_implementation_type(implementations objects, const type &implementation_type);
 
 	/**
 	 * @brief Create new list of implementation objects with objects of types implementation_types
@@ -189,7 +199,7 @@ private:
 	 * After all these requiremens are met all types from implementation_types list that still were not instantiated
 	 * are instantiated. Last step is to resolve and apply dependencies on newly created objects.
 	 */
-	implementations objects_with(implementations objects, const types &implementation_types);
+	std::pair<implementations, implementations> objects_with(implementations objects, const types &implementation_types);
 
 	/**
 	 * @brief Instantiate all objects with
