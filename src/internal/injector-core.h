@@ -156,6 +156,8 @@ private:
 	 */
 	types_model create_types_model() const;
 
+	type implementation_for(const type &interface_type) const;
+
 	/**
 	 * @brief Create new list of implementation objects with object of type interface_type
 	 * @param objects list of already created objects
@@ -180,6 +182,8 @@ private:
 	 */
 	void instantiate_implementation(const type &implementation_type);
 
+	dependencies implementation_type_dependencies(const type &implementation_type);
+
 	/**
 	 * @brief Create new list of implementation objects with objects of types implementation_types
 	 * @param objects list of already created objects
@@ -191,7 +195,7 @@ private:
 	 * After all these requiremens are met all types from implementation_types list that still were not instantiated
 	 * are instantiated. Last step is to resolve and apply dependencies on newly created objects.
 	 */
-	void instantiate_depdencies(const types &types_to_instantiate);
+	void instantiate_dependencies(const types &types_to_instantiate);
 
 	void instantiate_required_types_for(const types &types_to_instantiate);
 
@@ -215,9 +219,15 @@ private:
 
 	std::vector<provided_object> provide_objects(const std::vector<provider *> &providers);
 
+	std::vector<implementation> objects_to_resolve(const std::vector<provided_object> &provided_objects);
+
+	std::vector<implementation> objects_to_store(const std::vector<provided_object> &provided_objects);
+
 	void resolve_objects(const std::vector<implementation> &objects);
 
 	void resolve_object(const implementation &object);
+
+	void resolve_object(const dependencies &object_dependencies, const implementation &object);
 
 	/**
 	 * @brief Instantiate all objects with

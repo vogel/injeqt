@@ -125,11 +125,18 @@ void injector_core::instantiate_interface(const type &interface_type)
 	assert(!interface_type.is_empty());
 	assert(!interface_type.is_qobject());
 
+	instantiate_implementation(implementation_for(interface_type));
+}
+
+type injector_core::implementation_for(const type &interface_type) const
+{
+	assert(!interface_type.is_empty());
+	assert(!interface_type.is_qobject());
+
 	auto implementation_type_it = _types_model.available_types().get(interface_type);
 	if (implementation_type_it == end(_types_model.available_types()))
 		throw exception::unknown_type{interface_type.name()};
-
-	instantiate_implementation(implementation_type_it->implementation_type());
+	return implementation_type_it->implementation_type();
 }
 
 void injector_core::instantiate_implementation(const type &implementation_type)
@@ -137,43 +144,28 @@ void injector_core::instantiate_implementation(const type &implementation_type)
 	assert(!implementation_type.is_empty());
 	assert(!implementation_type.is_qobject());
 
-	auto implementation_type_dependencies = _types_model.mapped_dependencies().contains_key(implementation_type)
-			? _types_model.mapped_dependencies().get(implementation_type)->dependency_list()
-			: dependencies{};
-
-	auto types_to_instantiate = required_to_satisfy(implementation_type_dependencies, _types_model, _objects);
+	auto types_to_instantiate = required_to_satisfy(implementation_type_dependencies(implementation_type), _types_model, _objects);
 	types_to_instantiate.add(implementation_type);
-	instantiate_depdencies(types_to_instantiate);
+	instantiate_dependencies(types_to_instantiate);
 }
 
-void injector_core::instantiate_depdencies(const types &types_to_instantiate)
+dependencies injector_core::implementation_type_dependencies(const type &implementation_type)
+{
+	assert(!implementation_type.is_empty());
+	assert(!implementation_type.is_qobject());
+
+	return _types_model.mapped_dependencies().contains_key(implementation_type)
+			? _types_model.mapped_dependencies().get(implementation_type)->dependency_list()
+			: dependencies{};
+}
+
+void injector_core::instantiate_dependencies(const types &types_to_instantiate)
 {
 	instantiate_required_types_for(types_to_instantiate);
+
 	auto provided_objects = provide_objects(providers_for(non_instantiated(types_to_instantiate)));
-
-	auto objects_to_resolve = std::vector<implementation>{};
-	auto objects_to_store = std::vector<implementation>{};
-
-	for (auto &&provided_object : provided_objects)
-	{
-		if (provided_object.provided_by()->require_resolving())
-			objects_to_resolve.push_back(provided_object.object());
-
-		auto interfaces = extract_interfaces(provided_object.provided_by()->provided_type());
-		auto matched = match(interfaces, _types_model.available_types()).matched;
-		for (auto &&m : matched)
-		{
-			auto i = implementation{m.first, provided_object.object().object()}; // no need to check preconditions again with make_implementation
-			objects_to_store.emplace_back(i);
-		}
-	}
-
-	_objects.merge(implementations{objects_to_store});
-	_resolved_objects.merge(implementations{objects_to_resolve});
-	resolve_objects(objects_to_resolve);
-
-	for (auto &&resolved_object : objects_to_resolve)
-		call_init_methods(resolved_object.object());
+	_objects.merge(implementations{objects_to_store(provided_objects)});
+	resolve_objects(objects_to_resolve(provided_objects));
 }
 
 void injector_core::instantiate_required_types_for(const types &types_to_instantiate)
@@ -206,16 +198,50 @@ std::vector<provided_object> injector_core::provide_objects(const std::vector<pr
 	return result;
 }
 
+std::vector<implementation> injector_core::objects_to_resolve(const std::vector<provided_object> &provided_objects)
+{
+	auto result = std::vector<implementation>{};
+	result.reserve(provided_objects.size());
+	for (auto &&provided_object : provided_objects)
+		if (provided_object.provided_by()->require_resolving())
+			result.push_back(provided_object.object());
+	return result;
+}
+
+std::vector<implementation> injector_core::objects_to_store(const std::vector<provided_object> &provided_objects)
+{
+	auto result = std::vector<implementation>{};
+	for (auto &&provided_object : provided_objects)
+	{
+		auto interfaces = extract_interfaces(provided_object.provided_by()->provided_type());
+		auto matched = match(interfaces, _types_model.available_types()).matched;
+		for (auto &&m : matched)
+		{
+			auto i = implementation{m.first, provided_object.object().object()}; // no need to check preconditions again with make_implementation
+			result.emplace_back(i);
+		}
+	}
+	return result;
+}
+
 void injector_core::resolve_objects(const std::vector<implementation> &objects)
 {
 	for (auto &&object : objects)
 		resolve_object(object);
+	for (auto &&object : objects)
+		call_init_methods(object.object());
+	_resolved_objects.merge(implementations{objects});
 }
 
 void injector_core::resolve_object(const implementation &object)
 {
-	auto to_resolve = _types_model.mapped_dependencies().get(object.interface_type())->dependency_list();
-	auto resolved_dependencies = resolve_dependencies(to_resolve, _objects);
+	auto object_dependencies = _types_model.mapped_dependencies().get(object.interface_type())->dependency_list();
+	resolve_object(object_dependencies, object);
+}
+
+void injector_core::resolve_object(const dependencies &object_dependencies, const implementation &object)
+{
+	auto resolved_dependencies = resolve_dependencies(object_dependencies, _objects);
 	assert(resolved_dependencies.unresolved.empty());
 
 	for (auto &&resolved : resolved_dependencies.resolved)
@@ -227,18 +253,11 @@ void injector_core::resolve_object(const implementation &object)
 
 void injector_core::inject_into(QObject *object)
 {
-	auto object_type = type{object->metaObject()};
-	auto dependencies = extract_dependencies(_known_types, object_type);
+	auto object_implementation = implementation{type{object->metaObject()}, object};
+	auto dependencies = extract_dependencies(_known_types, object_implementation.interface_type());
 	auto types_to_instantiate = required_to_satisfy(dependencies, _types_model, _objects);
-	instantiate_depdencies(types_to_instantiate);
-
-	auto resolved_dependencies = resolve_dependencies(dependencies, _objects);
-	for (auto &&resolved : resolved_dependencies.resolved)
-	{
-		assert(implements(object_type, resolved.setter().object_type()));
-		resolved.apply_on(object);
-	}
-
+	instantiate_dependencies(types_to_instantiate);
+	resolve_object(dependencies, object_implementation);
 	call_init_methods(object);
 }
 
