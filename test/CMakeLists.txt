@@ -103,6 +103,7 @@ set (INTEGRATION_TESTS
 	inject-into-during-init-test
 	instantiate-type-behavior-test
 	ready-object-behavior-test
+	super-sub-dependency-test
 )
 
 foreach (UNIT_TEST ${UNIT_TESTS})
