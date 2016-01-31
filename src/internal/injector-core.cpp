@@ -107,16 +107,22 @@ std::vector<type> injector_core::provided_types() const
 	return result;
 }
 
-QObject * injector_core::get(const type &interface_type)
+void injector_core::instantiate(const type &interface_type)
 {
 	assert(!interface_type.is_empty());
 	assert(!interface_type.is_qobject());
 
 	auto object_it = _objects.get(interface_type);
-	if (object_it != end(_objects))
-		return object_it->object();
+	if (object_it == end(_objects))
+		instantiate_interface(interface_type);
+}
 
-	instantiate_interface(interface_type);
+QObject * injector_core::get(const type &interface_type)
+{
+	assert(!interface_type.is_empty());
+	assert(!interface_type.is_qobject());
+
+	instantiate(interface_type);
 	return _objects.get(interface_type)->object();
 }
 

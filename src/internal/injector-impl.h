@@ -110,7 +110,18 @@ public:
 	std::vector<type> provided_types() const;
 
 	/**
-	 * @brief Returns pointer to object of given type interface_type
+	 * @brief Instantiates object of given type @p interface_type
+	 * @param interface_type type of object to instantiate.
+	 * @throw unknown_type if @p interface_type was not configured in instantiate
+	 * @throw instantiation_failed if instantiation of one of required types failed
+	 * @pre !interface_type.is_empty()
+	 * @pre !interface_type.is_qobject()
+	 * @see injector::get<T>()
+	 */
+	void instantiate(const type &interface_type);
+
+	/**
+	 * @brief Returns pointer to object of given type @p interface_type
 	 * @param interface_type type of object to return.
 	 * @throw unknown_type if @p interface_type was not configured in injector
 	 * @throw instantiation_failed if instantiation of one of required types failed

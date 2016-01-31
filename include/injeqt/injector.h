@@ -119,6 +119,27 @@ public:
 	injector & operator = (injector &&x);
 
 	/**
+	 * @brief Instantiates object of given type @p interface_type
+	 * @tparam T type of object to instantiate
+	 * @param interface_type type of object to instantiate.
+	 * @throw unknown_type if @p interface_type was not configured in injector
+	 * @throw instantiation_failed if instantiation of one of required types failed
+	 *
+	 * When object of given type is instantiated by instantiate<T>() method, injector first check if T is in set of
+	 * available types. If not, an exception is thrown. Next an unique configured type U that implements T
+	 * is found. If object of type U was already created, method returns. If not, it is created with all
+	 * dependencies it requires. Depending on configuration of U it can be created directly by U default
+	 * constructor or it can be created by factory that is assigned to that type (note: injector will
+	 * create itself all required factories with the same alghoritm). After U with all its dependencies
+	 * is created all dependency setters are called with proper arguments. Then U object is added to cache.
+	 */
+	template<typename T>
+	void instantiate()
+	{
+		instantiate(make_type<T>());
+	}
+
+	/**
 	 * @brief Returns pointer to object of given type T.
 	 * @tparam T type of object to return
 	 * @throw qobject_type if T is QObject
@@ -139,6 +160,16 @@ public:
 	{
 		return qobject_cast<T *>(get(make_type<T>()));
 	}
+
+	/**
+	 * @brief Instantiates object of given type @p interface_type
+	 * @param interface_type type of object to return
+	 * @throw empty_type if interface_type is empty
+	 * @throw qobject_type if interface_type represents QObject
+	 * @throw unknown_type if @p interface_type was not configured in injector
+	 * @throw instantiation_failed if instantiation of one of required types failed
+	 */
+	void instantiate(const type &interface_type);
 
 	/**
 	 * @brief Returns pointer to object of given type interface_type.

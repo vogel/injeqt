@@ -90,6 +90,14 @@ std::vector<type> injector_impl::provided_types() const
 	return _core.provided_types();
 }
 
+void injector_impl::instantiate(const type &interface_type)
+{
+	assert(!interface_type.is_empty());
+	assert(!interface_type.is_qobject());
+
+	_core.instantiate(interface_type);
+}
+
 QObject * injector_impl::get(const type &interface_type)
 {
 	assert(!interface_type.is_empty());

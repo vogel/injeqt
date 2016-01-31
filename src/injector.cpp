@@ -66,6 +66,16 @@ injector & injector::operator = (injector &&x)
 	return *this;
 }
 
+void injector::instantiate(const type &interface_type)
+{
+	assert(!interface_type.is_empty());
+
+	if (interface_type.is_qobject())
+		throw exception::qobject_type{};
+
+	_pimpl->instantiate(interface_type);
+}
+
 QObject * injector::get(const type &interface_type)
 {
 	assert(!interface_type.is_empty());
