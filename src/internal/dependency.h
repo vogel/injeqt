@@ -77,5 +77,9 @@ private:
 
 INJEQT_INTERNAL_API bool operator == (const dependency &x, const dependency &y);
 INJEQT_INTERNAL_API bool operator != (const dependency &x, const dependency &y);
+INJEQT_INTERNAL_API bool operator < (const dependency &x, const dependency &y);
+INJEQT_INTERNAL_API bool operator > (const dependency &x, const dependency &y);
+INJEQT_INTERNAL_API bool operator <= (const dependency &x, const dependency &y);
+INJEQT_INTERNAL_API bool operator >= (const dependency &x, const dependency &y);
 
 }}

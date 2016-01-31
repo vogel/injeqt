@@ -36,10 +36,19 @@ namespace injeqt { namespace internal {
 
 /**
  * @brief Extract type from dependency for storting purposes.
+ * @brief Identity function.
  */
 INJEQT_INTERNAL_API inline type type_from_dependency(const dependency &d)
 {
 	return d.required_type();
+}
+
+/**
+ * @brief Identity function.
+ */
+INJEQT_INTERNAL_API inline dependency dependency_from_dependency(const dependency &d)
+{
+	return d;
 }
 
 /**
@@ -52,13 +61,12 @@ INJEQT_INTERNAL_API inline type type_from_dependency(const dependency &d)
  *
  * The best way to create instance of this type is to call make_validated_dependencies(const type &).
  */
-using dependencies = sorted_unique_vector<type, dependency, type_from_dependency>;
+using dependencies = sorted_unique_vector<dependency, dependency, dependency_from_dependency>;
 
 /**
  * @brief Extract set of dependencies from type.
  * @param for_type type to extract dependencies from.
  * @pre !for_type.is_empty()
- * @throw dependency_duplicated when one type occurs twice as a dependency.
  * @throw dependency_on_self when type depends on self.
  * @throw dependency_on_subtype when type depends on own supertype.
  * @throw dependency_on_subtype when type depends on own subtype.

@@ -95,7 +95,7 @@ public slots:
 
 };
 
-class duplicate_dependency_invalid_injected_type : public QObject
+class duplicate_dependency_injected_type : public QObject
 {
 	Q_OBJECT
 
@@ -107,7 +107,7 @@ public slots:
 
 };
 
-class invalid_injected_type_with_superclass : public QObject
+class injected_type_with_superclass : public QObject
 {
 	Q_OBJECT
 
@@ -119,7 +119,7 @@ public slots:
 
 };
 
-class invalid_injected_type_with_superclass_inverted : public QObject
+class injected_type_with_superclass_inverted : public QObject
 {
 	Q_OBJECT
 
@@ -227,9 +227,9 @@ private slots:
 	void should_find_all_valid_dependencies();
 	void should_find_all_valid_dependencies_in_hierarchy();
 	void should_find_dependencies_with_common_superclass();
-	void should_fail_when_duplicate_dependency();
-	void should_fail_with_superclass_dependency();
-	void should_fail_with_superclass_inverted_dependency();
+	void should_accept_duplicate_dependency();
+	void should_accept_superclass_dependency();
+	void should_accept_superclass_inverted_dependency();
 	void should_fail_when_depends_on_self();
 	void should_fail_when_depends_on_subtype();
 	void should_fail_when_depends_on_supertype();
@@ -257,9 +257,9 @@ dependencies_test::dependencies_test()
 		make_type<valid_injected_type>(),
 		make_type<inheriting_valid_injected_type>(),
 		make_type<valid_injected_type_with_common_superclass>(),
-		make_type<duplicate_dependency_invalid_injected_type>(),
-		make_type<invalid_injected_type_with_superclass>(),
-		make_type<invalid_injected_type_with_superclass_inverted>(),
+		make_type<duplicate_dependency_injected_type>(),
+		make_type<injected_type_with_superclass>(),
+		make_type<injected_type_with_superclass_inverted>(),
 		make_type<invalid_injected_type_depends_on_self>(),
 		make_type<invalid_injected_type_depends_on_subtype_subtype>(),
 		make_type<invalid_injected_type_depends_on_subtype>(),
@@ -304,31 +304,33 @@ void dependencies_test::should_find_all_valid_dependencies_in_hierarchy()
 void dependencies_test::should_find_dependencies_with_common_superclass()
 {
 	auto dependencies = extract_dependencies(known_types, make_type<valid_injected_type_with_common_superclass>());
-
 	QCOMPARE(dependencies.size(), size_t{2});
 	verify_dependency(dependencies, dependency{make_test_setter_method<valid_injected_type_with_common_superclass, sub_injectable_type1a>("setter_1(sub_injectable_type1a*)")});
 	verify_dependency(dependencies, dependency{make_test_setter_method<valid_injected_type_with_common_superclass, sub_injectable_type1b>("setter_2(sub_injectable_type1b*)")});
 }
 
-void dependencies_test::should_fail_when_duplicate_dependency()
+void dependencies_test::should_accept_duplicate_dependency()
 {
-	expect<exception::dependency_duplicated>({"injectable_type1"}, [&]{
-		auto dependencies = extract_dependencies(known_types, make_type<duplicate_dependency_invalid_injected_type>());
-	});
+	auto dependencies = extract_dependencies(known_types, make_type<duplicate_dependency_injected_type>());
+	QCOMPARE(dependencies.size(), size_t{2});
+	verify_dependency(dependencies, dependency{make_test_setter_method<duplicate_dependency_injected_type, injectable_type1>("setter_1(injectable_type1*)")});
+	verify_dependency(dependencies, dependency{make_test_setter_method<duplicate_dependency_injected_type, injectable_type1>("setter_2(injectable_type1*)")});
 }
 
-void dependencies_test::should_fail_with_superclass_dependency()
+void dependencies_test::should_accept_superclass_dependency()
 {
-	expect<exception::dependency_duplicated>({"injectable_type1"}, [&]{
-		auto dependencies = extract_dependencies(known_types, make_type<invalid_injected_type_with_superclass>());
-	});
+	auto dependencies = extract_dependencies(known_types, make_type<injected_type_with_superclass>());
+	QCOMPARE(dependencies.size(), size_t{2});
+	verify_dependency(dependencies, dependency{make_test_setter_method<injected_type_with_superclass, injectable_type1>("setter_1(injectable_type1*)")});
+	verify_dependency(dependencies, dependency{make_test_setter_method<injected_type_with_superclass, sub_injectable_type1a>("setter_2(sub_injectable_type1a*)")});
 }
 
-void dependencies_test::should_fail_with_superclass_inverted_dependency()
+void dependencies_test::should_accept_superclass_inverted_dependency()
 {
-	expect<exception::dependency_duplicated>({"injectable_type1"}, [&]{
-		auto dependencies = extract_dependencies(known_types, make_type<invalid_injected_type_with_superclass_inverted>());
-	});
+	auto dependencies = extract_dependencies(known_types, make_type<injected_type_with_superclass_inverted>());
+	QCOMPARE(dependencies.size(), size_t{2});
+	verify_dependency(dependencies, dependency{make_test_setter_method<injected_type_with_superclass_inverted, sub_injectable_type1a>("setter_2(sub_injectable_type1a*)")});
+	verify_dependency(dependencies, dependency{make_test_setter_method<injected_type_with_superclass_inverted, injectable_type1>("setter_1(injectable_type1*)")});
 }
 
 void dependencies_test::should_fail_when_depends_on_self()

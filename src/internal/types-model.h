@@ -98,7 +98,6 @@ private:
  * @post result.get_unresolvable_dependencies().empty()
  * @throw ambiguous_types if one or more types is ambiguous (@see make_type_relations)
  * @throw unresolvable_dependencies if a type has a dependency type not in @p all_types set
- * @throw dependency_duplicated when one type occurs twice as a dependency
  * @throw dependency_on_self when type depends on self
  * @throw dependency_on_subtype when type depends on own supertype
  * @throw dependency_on_subtype when type depends on own subtype

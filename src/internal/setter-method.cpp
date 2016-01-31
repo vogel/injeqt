@@ -124,6 +124,38 @@ bool operator != (const setter_method &x, const setter_method &y)
 	return !(x == y);
 }
 
+bool operator < (const setter_method &x, const setter_method &y)
+{
+	if (x.object_type() < y.object_type())
+		return true;
+
+	if (x.object_type() > y.object_type())
+		return false;
+
+	if (x.parameter_type() < y.parameter_type())
+		return true;
+
+	if (x.parameter_type() > y.parameter_type())
+		return false;
+
+	return x.meta_method().methodSignature() < y.meta_method().methodSignature();
+}
+
+bool operator > (const setter_method &x, const setter_method &y)
+{
+	return y < x;
+}
+
+bool operator <= (const setter_method &x, const setter_method &y)
+{
+	return !(y < x);
+}
+
+bool operator >= (const setter_method &x, const setter_method &y)
+{
+	return !(x < y);
+}
+
 setter_method make_setter_method(const types_by_name &known_types, const QMetaMethod &meta_method)
 {
 	auto parameter_type = meta_method.parameterCount() == 1

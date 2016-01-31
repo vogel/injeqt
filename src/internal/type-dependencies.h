@@ -77,7 +77,6 @@ INJEQT_INTERNAL_API bool operator != (const type_dependencies &x, const type_dep
  * @brief Create valid type_dependencies from given type.
  * @param dependent_type type to get dependecies from.
  * @pre !dependent_type.is_empty()
- * @throw dependency_duplicated when one type occurs twice as a dependency
  * @throw dependency_on_self when type depends on self
  * @throw dependency_on_subtype when type depends on own supertype
  * @throw dependency_on_subtype when type depends on own subtype

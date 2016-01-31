@@ -28,7 +28,7 @@ namespace injeqt { namespace internal {
 
 resolve_dependencies_result resolve_dependencies(const dependencies &to_resolve, const implementations &resolve_with)
 {
-	auto match_result = match(to_resolve, resolve_with);
+	auto match_result = match(to_resolve, resolve_with, type_from_dependency, type_from_implementation, match_increment_mode::left);
 	auto resolved = std::vector<resolved_dependency>{};
 
 	for (auto &&match : match_result.matched)

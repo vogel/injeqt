@@ -68,7 +68,6 @@ public:
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
 	 * @throw ambiguous_types if one or more types in @p modules is ambiguous
 	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p modules
-	 * @throw dependency_duplicated when one type occurs twice as a dependency
 	 * @throw dependency_on_self when type depends on self
 	 * @throw dependency_on_subtype when type depends on own supertype
 	 * @throw dependency_on_subtype when type depends on own subtype
@@ -89,7 +88,6 @@ public:
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
 	 * @throw ambiguous_types if one or more types in @p modules is ambiguous
 	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p modules
-	 * @throw dependency_duplicated when one type occurs twice as a dependency
 	 * @throw dependency_on_self when type depends on self
 	 * @throw dependency_on_subtype when type depends on own supertype
 	 * @throw dependency_on_subtype when type depends on own subtype

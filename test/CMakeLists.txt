@@ -97,6 +97,7 @@ set (UNIT_TESTS
 
 set (INTEGRATION_TESTS
 	default-constructor-behavior-test
+	duplicate-dependencies-test
 	factory-behavior-test
 	init-done-test
 	inject-into-behavior-test

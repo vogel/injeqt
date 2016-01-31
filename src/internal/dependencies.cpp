@@ -20,7 +20,6 @@
 
 #include "dependencies.h"
 
-#include <injeqt/exception/dependency-duplicated.h>
 #include <injeqt/exception/dependency-on-self.h>
 #include <injeqt/exception/dependency-on-subtype.h>
 #include <injeqt/exception/dependency-on-supertype.h>
@@ -43,11 +42,6 @@ namespace injeqt { namespace internal {
 
 namespace {
 
-std::string exception_message(const QMetaObject *meta_object, const QMetaObject *dependency_meta_object)
-{
-	return std::string{meta_object->className()} + "::" + dependency_meta_object->className();
-}
-
 std::vector<setter_method> extract_setters(const types_by_name &known_types, const type &for_type)
 {
 	assert(!for_type.is_empty());
@@ -62,17 +56,6 @@ std::vector<setter_method> extract_setters(const types_by_name &known_types, con
 		if (setter_method::is_setter_tag(maybe_setter.tag()))
 			result.emplace_back(make_setter_method(known_types, maybe_setter));
 	}
-
-	return result;
-}
-
-std::vector<type> extract_parameter_types(const std::vector<setter_method> &setters)
-{
-	auto result = std::vector<type>{};
-
-	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),
-		[](const setter_method &setter){ return setter.parameter_type(); }
-	);
 
 	return result;
 }
@@ -96,13 +79,6 @@ dependencies extract_dependencies(const types_by_name &known_types, const type &
 		if (std::find(std::begin(parameter_interfaces), std::end(parameter_interfaces), for_type) != std::end(parameter_interfaces))
 			throw exception::dependency_on_subtype{};
 	}
-
-	auto parameter_types = extract_parameter_types(setters);
-	auto relations = make_type_relations(parameter_types);
-
-	auto matches = match(types{parameter_types}, relations.ambiguous());
-	if (!matches.matched.empty())
-		throw exception::dependency_duplicated{exception_message(for_type.meta_object(), matches.matched.begin()->first.meta_object())};
 
 	auto result = std::vector<dependency>{};
 	std::transform(std::begin(setters), std::end(setters), std::back_inserter(result),

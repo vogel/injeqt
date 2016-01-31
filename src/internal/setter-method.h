@@ -148,6 +148,10 @@ private:
 
 INJEQT_INTERNAL_API bool operator == (const setter_method &x, const setter_method &y);
 INJEQT_INTERNAL_API bool operator != (const setter_method &x, const setter_method &y);
+INJEQT_INTERNAL_API bool operator < (const setter_method &x, const setter_method &y);
+INJEQT_INTERNAL_API bool operator > (const setter_method &x, const setter_method &y);
+INJEQT_INTERNAL_API bool operator <= (const setter_method &x, const setter_method &y);
+INJEQT_INTERNAL_API bool operator >= (const setter_method &x, const setter_method &y);
 
 INJEQT_INTERNAL_API setter_method make_setter_method(const types_by_name &known_types, const QMetaMethod &meta_method);
 

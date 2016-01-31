@@ -25,7 +25,8 @@
 namespace injeqt { namespace v1 { namespace exception {
 
 /**
- * @brief Exception throw when two identical dependencies are found in type.
+ * @brief Exception is not thrown in Injeqt 1.1.
+ * @todo Remove in Injeqt 2.0
  */
 class INJEQT_API dependency_duplicated : public invalid_dependency
 {

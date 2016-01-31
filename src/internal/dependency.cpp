@@ -53,4 +53,30 @@ bool operator != (const dependency &x, const dependency &y)
 	return !(x == y);
 }
 
+bool operator < (const dependency &x, const dependency &y)
+{
+	if (x.required_type() < y.required_type())
+		return true;
+
+	if (x.required_type() > y.required_type())
+		return false;
+
+	return x.setter() < y.setter();
+}
+
+bool operator > (const dependency &x, const dependency &y)
+{
+	return y < x;
+}
+
+bool operator <= (const dependency &x, const dependency &y)
+{
+	return !(y < x);
+}
+
+bool operator >= (const dependency &x, const dependency &y)
+{
+	return !(x < y);
+}
+
 }}

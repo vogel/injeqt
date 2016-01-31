@@ -72,7 +72,6 @@ public:
 	 * @see injector::injector(std::vector<std::unique_ptr<module>>)
 	 * @throw ambiguous_types if one or more types in @p providers is ambiguous
 	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p providers
-	 * @throw dependency_duplicated when one type occurs twice as a dependency
 	 * @throw dependency_on_self when type depends on self
 	 * @throw dependency_on_subtype when type depends on own supertype
 	 * @throw dependency_on_subtype when type depends on own subtype
@@ -145,14 +144,12 @@ private:
 	 * @brief Extract all provided types and makes a types_model from them.
 	 * @throw ambiguous_types if one or more types in @p all_providers is ambiguous
 	 * @throw unresolvable_dependencies if a type with unresolvable dependency is found in @p all_providers
-	 * @throw dependency_duplicated when one type occurs twice as a dependency
 	 * @throw dependency_on_self when type depends on self
 	 * @throw dependency_on_subtype when type depends on own supertype
 	 * @throw dependency_on_subtype when type depends on own subtype
 	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
 	 * @throw invalid_setter if any tagged setter has parameter that is a QObject pointer
 	 * @throw invalid_setter if any tagged setter has other number of parameters than one
-	 * @todo can be moved outside of class
 	 */
 	types_model create_types_model() const;
 
