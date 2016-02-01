@@ -172,6 +172,12 @@ public:
 	void instantiate(const type &interface_type);
 
 	/**
+	 * @brief Instantiate all objects with given @p type_role.
+	 * @throw instantiation_failed if instantiation of one of found types failed
+	 */
+	void instantiate_all_with_type_role(const std::string &type_role);
+
+	/**
 	 * @brief Returns pointer to object of given type interface_type.
 	 * @param interface_type type of object to return
 	 * @throw empty_type if interface_type is empty

@@ -73,7 +73,6 @@ set (UNIT_TESTS
 	implemented-by-test
 	injector-core-test
 	injector-test
-	instantiate-type-test
 	interfaces-utils-test
 	module-impl-test
 	module-test
@@ -89,8 +88,9 @@ set (UNIT_TESTS
 	setter-method-test
 	sorted-unique-vector-test
 	type-dependencies-test
-	type-test
 	type-relations-test
+	type-role-test
+	type-test
 	types-by-name-test
 	types-model-test
 )
@@ -102,7 +102,7 @@ set (INTEGRATION_TESTS
 	init-done-test
 	inject-into-behavior-test
 	inject-into-during-init-test
-	instantiate-type-behavior-test
+	instantiate-all-with-type-role-test
 	ready-object-behavior-test
 	super-sub-dependency-test
 )

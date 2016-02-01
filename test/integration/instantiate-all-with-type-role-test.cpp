@@ -28,40 +28,42 @@
 using injeqt::make_type;
 using injeqt::type;
 
+#define ROLE_1 "role1"
+#define ROLE_2 "role2"
+
 std::set<type> instantiated_types;
 
-class on_demand : public QObject
+class role_1_type : public QObject
 {
 	Q_OBJECT
-	INJEQT_INSTANCE_ON_DEMAND
 
 public:
-	Q_INVOKABLE on_demand() { instantiated_types.insert(make_type<on_demand>()); }
+	Q_INVOKABLE role_1_type() { instantiated_types.insert(make_type<role_1_type>()); }
 };
 
-class on_demand_required_by_immediate : public QObject
+class no_role_required_by_role_1 : public QObject
 {
 	Q_OBJECT
-	INJEQT_INSTANCE_ON_DEMAND
+	INJEQT_TYPE_ROLE(ROLE_1)
 
 public:
-	Q_INVOKABLE on_demand_required_by_immediate() { instantiated_types.insert(make_type<on_demand_required_by_immediate>()); }
+	Q_INVOKABLE no_role_required_by_role_1() { instantiated_types.insert(make_type<no_role_required_by_role_1>()); }
 };
 
-class immediate : public QObject
+class role_2_type : public QObject
 {
 	Q_OBJECT
-	INJEQT_INSTANCE_IMMEDIATE
+	INJEQT_TYPE_ROLE(ROLE_2)
 
 public:
-	Q_INVOKABLE immediate() { instantiated_types.insert(make_type<immediate>()); }
+	Q_INVOKABLE role_2_type() { instantiated_types.insert(make_type<role_2_type>()); }
 
 private slots:
-	INJEQT_SET void set_on_demand_required_by_immediate(on_demand_required_by_immediate *) {}
+	INJEQT_SET void set_no_role_required_by_role_1(no_role_required_by_role_1 *) {}
 
 };
 
-class instantiate_type_behavior_test : public QObject
+class instantiate_all_with_type_role_test : public QObject
 {
 	Q_OBJECT
 
@@ -69,11 +71,11 @@ private:
 	injeqt::injector create_injector();
 
 private slots:
-	void should_only_create_immediate_types_on_start_and_on_demand_when_requsted();
+	void should_create_all_role_instances_with_dependencied_when_requested();
 
 };
 
-injeqt::injector instantiate_type_behavior_test::create_injector()
+injeqt::injector instantiate_all_with_type_role_test::create_injector()
 {
 	instantiated_types.clear();
 
@@ -82,9 +84,9 @@ injeqt::injector instantiate_type_behavior_test::create_injector()
 	public:
 		m()
 		{
-			add_type<on_demand>();
-			add_type<on_demand_required_by_immediate>();
-			add_type<immediate>();
+			add_type<role_1_type>();
+			add_type<no_role_required_by_role_1>();
+			add_type<role_2_type>();
 		}
 		virtual ~m() {}
 	};
@@ -94,14 +96,16 @@ injeqt::injector instantiate_type_behavior_test::create_injector()
 	return injeqt::injector{std::move(modules)};
 }
 
-void instantiate_type_behavior_test::should_only_create_immediate_types_on_start_and_on_demand_when_requsted()
+void instantiate_all_with_type_role_test::should_create_all_role_instances_with_dependencied_when_requested()
 {
 	auto injector = create_injector();
-	QCOMPARE((std::set<type>{make_type<immediate>(), make_type<on_demand_required_by_immediate>()}), instantiated_types);
+	injector.instantiate_all_with_type_role(ROLE_2);
+	QCOMPARE((std::set<type>{make_type<role_2_type>(), make_type<no_role_required_by_role_1>()}), instantiated_types);
 
-	injector.get<on_demand>();
-	QCOMPARE((std::set<type>{make_type<immediate>(), make_type<on_demand_required_by_immediate>(), make_type<on_demand>()}), instantiated_types);
+	injector.get<role_1_type>();
+	injector.instantiate_all_with_type_role(ROLE_1);
+	QCOMPARE((std::set<type>{make_type<role_2_type>(), make_type<no_role_required_by_role_1>(), make_type<role_1_type>()}), instantiated_types);
 }
 
-QTEST_APPLESS_MAIN(instantiate_type_behavior_test)
-#include "instantiate-type-behavior-test.moc"
+QTEST_APPLESS_MAIN(instantiate_all_with_type_role_test)
+#include "instantiate-all-with-type-role-test.moc"

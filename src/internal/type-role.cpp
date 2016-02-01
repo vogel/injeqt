@@ -18,22 +18,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#pragma once
+#include "type-role.h"
 
-#include <injeqt/exception/exception.h>
+#include <QtCore/QMetaClassInfo>
+#include <QtCore/QMetaObject>
 
-namespace injeqt { namespace v1 { namespace exception {
+namespace injeqt { namespace internal {
 
-/**
- * @brief Exception throw when an invalid instantiate type is found.
- */
-class INJEQT_API invalid_instantiate_type : public exception
+bool has_type_role(type for_type, const std::string &role)
 {
+	auto meta_object = for_type.meta_object();
+	auto class_info_count = meta_object->classInfoCount();
+	for (decltype(class_info_count) i = 0; i < class_info_count; i++)
+	{
+		auto class_info = meta_object->classInfo(i);
+		auto name = std::string{class_info.name()};
+		auto value = std::string{class_info.value()};
+		if (name == INJEQT_TYPE_ROLE_CLASSINFO_NAME && value == role)
+			return true;
+	}
 
-public:
-	explicit invalid_instantiate_type(std::string what = std::string{});
-	virtual ~invalid_instantiate_type();
+	return false;
+}
 
-};
-
-}}}
+}}

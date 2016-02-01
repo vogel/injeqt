@@ -18,36 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "instantiate-type.h"
+#pragma once
 
-#include <injeqt/exception/invalid-instantiate-type.h>
+#include <injeqt/type.h>
 
-#include <QtCore/QMetaClassInfo>
-#include <QtCore/QMetaObject>
+#include "internal.h"
+
+#include <string>
 
 namespace injeqt { namespace internal {
 
-instantiate_type get_instantiate_type(type for_type)
-{
-	auto result = instantiate_type::on_demand;
-	auto meta_object = for_type.meta_object();
-	auto class_info_count = meta_object->classInfoCount();
-	for (decltype(class_info_count) i = 0; i < class_info_count; i++)
-	{
-		auto class_info = meta_object->classInfo(i);
-		if (std::string{INJEQT_INSTANTIATE_CLASSINFO_NAME} == class_info.name())
-		{
-			auto value = std::string{class_info.value()};
-			if (value == INJEQT_INSTANTIATE_IMMEDIATE_CLASSINFO_VALUE)
-				result = instantiate_type::immediate;
-			else if (value == INJEQT_INSTANTIATE_ON_DEMAND_CLASSINFO_VALUE)
-				result = instantiate_type::on_demand;
-			else
-				throw exception::invalid_instantiate_type{value};
-		}
-	}
+INJEQT_INTERNAL_API bool has_type_role(type for_type, const std::string &role);
 
-	return result;
+template<typename T>
+inline bool has_type_role(const std::string &role)
+{
+	return has_type_role(make_type<T>(), role);
 }
 
 }}

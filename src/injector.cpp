@@ -76,6 +76,11 @@ void injector::instantiate(const type &interface_type)
 	_pimpl->instantiate(interface_type);
 }
 
+void injector::instantiate_all_with_type_role(const std::string &type_role)
+{
+	_pimpl->instantiate_all_with_type_role(type_role);
+}
+
 QObject * injector::get(const type &interface_type)
 {
 	assert(!interface_type.is_empty());

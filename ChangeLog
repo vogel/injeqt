@@ -1,3 +1,8 @@
+2016-02-01  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
+
+	* 1.1: replaced INJEQT_INSTANCE_* with INJEQT_TYPE_ROLE macros
+	* 1.1: add instantiate_all_with_type_role method to injector
+
 2016-01-30  Rafał Przemysław Malinowski  <rafal.przemyslaw.malinowski@gmail.com>
 
 	* 1.1: allow for duplicate dependencies

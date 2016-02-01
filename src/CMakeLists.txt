@@ -35,7 +35,6 @@ set (INJEQT_SRCS
 	exception/interface-not-implemented.cpp
 	exception/invalid-action.cpp
 	exception/invalid-dependency.cpp
-	exception/invalid-instantiate-type.cpp
 	exception/invalid-qobject.cpp
 	exception/invalid-setter.cpp
 	exception/qobject-type.cpp
@@ -53,7 +52,6 @@ set (INJEQT_SRCS
 	internal/implemented-by.cpp
 	internal/injector-core.cpp
 	internal/injector-impl.cpp
-	internal/instantiate-type.cpp
 	internal/interfaces-utils.cpp
 	internal/module-impl.cpp
 	internal/provided-object.cpp
@@ -71,6 +69,7 @@ set (INJEQT_SRCS
 	internal/setter-method.cpp
 	internal/type-dependencies.cpp
 	internal/type-relations.cpp
+	internal/type-role.cpp
 	internal/types-by-name.cpp
 	internal/types-model.cpp
 )

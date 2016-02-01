@@ -27,7 +27,6 @@
 
 #include "action-method.h"
 #include "containers.h"
-#include "instantiate-type.h"
 #include "interfaces-utils.h"
 #include "provided-object.h"
 #include "provider-by-default-constructor.h"
@@ -37,6 +36,7 @@
 #include "required-to-satisfy.h"
 #include "resolve-dependencies.h"
 #include "resolved-dependency.h"
+#include "type-role.h"
 
 #include <cassert>
 
@@ -74,8 +74,6 @@ injector_core::injector_core(types_by_name known_types, std::vector<std::unique_
 		}
 		throw exception::unavailable_required_types{message};
 	}
-
-	instantiate_all_immediate();
 }
 
 injector_core::~injector_core()
@@ -115,6 +113,16 @@ void injector_core::instantiate(const type &interface_type)
 	auto object_it = _objects.get(interface_type);
 	if (object_it == end(_objects))
 		instantiate_interface(interface_type);
+}
+
+void injector_core::instantiate_all_with_type_role(const std::string &type_role)
+{
+	for (auto &&provider : _available_providers)
+	{
+		auto type = provider->provided_type();
+		if (has_type_role(type, type_role))
+			instantiate_interface(type);
+	}
 }
 
 QObject * injector_core::get(const type &interface_type)
@@ -274,16 +282,6 @@ void injector_core::inject_into(QObject *object)
 	instantiate_all(types_to_instantiate);
 	resolve_object(dependencies, object_implementation);
 	call_init_methods(object);
-}
-
-void injector_core::instantiate_all_immediate()
-{
-	for (auto &&provider : _available_providers)
-	{
-		auto type = provider->provided_type();
-		if (get_instantiate_type(type) == instantiate_type::immediate)
-			instantiate_interface(type);
-	}
 }
 
 void injector_core::call_init_methods(QObject *object) const

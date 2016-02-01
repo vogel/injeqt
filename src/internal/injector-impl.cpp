@@ -98,6 +98,11 @@ void injector_impl::instantiate(const type &interface_type)
 	_core.instantiate(interface_type);
 }
 
+void injector_impl::instantiate_all_with_type_role(const std::string &type_role)
+{
+	_core.instantiate_all_with_type_role(type_role);
+}
+
 QObject * injector_impl::get(const type &interface_type)
 {
 	assert(!interface_type.is_empty());
