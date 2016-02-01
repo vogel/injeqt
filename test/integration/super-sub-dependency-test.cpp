@@ -83,7 +83,6 @@ private:
 private slots:
 	void should_set_valid_super_dependencies();
 	void should_set_valid_sub_dependencies();
-	void should_fail();
 
 };
 
@@ -132,17 +131,6 @@ void super_sub_dependency_test::should_set_valid_sub_dependencies()
 	QVERIFY(super != nullptr);
 	QVERIFY(c->v == super);
 	QVERIFY(c->v == sub);
-}
-
-void super_sub_dependency_test::should_fail()
-{
-	auto injector = get_injector();
-	auto c = injector.get<super_dependnecies>();
-	auto super = injector.get<injectable_super>();
-
-	QVERIFY(c != nullptr);
-	QVERIFY(super != nullptr);
-	QVERIFY(c->v == super);;
 }
 
 QTEST_APPLESS_MAIN(super_sub_dependency_test)
