@@ -229,7 +229,7 @@ method.
 
 Last, `world_service`, is added as a ready object - provided from outside of injeqt scope.
 
-In `main` method list of conifguration modules are passwed to newly created `injector` instance.
+In `main` method list of conifguration modules are passed to newly created `injector` instance.
 From that moment, we can use `injector` to create and manage our services. Just one line below
 an `hello_client` instance is required. This is what happens next:
 
