@@ -40,7 +40,7 @@ namespace injeqt { namespace internal {
  * @param f transforming function
  */
 template<typename S, typename T>
-inline INJEQT_INTERNAL_API std::vector<T> transform(const std::vector<S> &source, std::function<T(S)> f)
+inline std::vector<T> transform(const std::vector<S> &source, std::function<T(S)> f)
 {
 	auto result = std::vector<T>{};
 	std::transform(std::begin(source), std::end(source), std::back_inserter(result), f);
@@ -54,7 +54,7 @@ inline INJEQT_INTERNAL_API std::vector<T> transform(const std::vector<S> &source
  * @param f function returning vector for each item in source
  */
 template<typename S, typename T>
-inline INJEQT_INTERNAL_API std::vector<T> extract(const std::vector<S> &sources, std::function<std::vector<T>(const S &)> f)
+inline std::vector<T> extract(const std::vector<S> &sources, std::function<std::vector<T>(const S &)> f)
 {
 	auto result = std::vector<T>{};
 	for (auto &&source : sources)

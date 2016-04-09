@@ -38,7 +38,7 @@ namespace injeqt { namespace internal {
  * @brief Extract type from dependency for storting purposes.
  * @brief Identity function.
  */
-INJEQT_INTERNAL_API inline type type_from_dependency(const dependency &d)
+inline type type_from_dependency(const dependency &d)
 {
 	return d.required_type();
 }
@@ -46,7 +46,7 @@ INJEQT_INTERNAL_API inline type type_from_dependency(const dependency &d)
 /**
  * @brief Identity function.
  */
-INJEQT_INTERNAL_API inline dependency dependency_from_dependency(const dependency &d)
+inline dependency dependency_from_dependency(const dependency &d)
 {
 	return d;
 }
