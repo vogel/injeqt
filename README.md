@@ -72,7 +72,7 @@ Status
 Injeqt is mature library that only does one thing - and does it well. Currently no specific plans are
 made for next versions of Injeqt, but there are several features that I would like to implement.
 
-Injeqt is currently use in one large project - [Kadu IM](http://www.kadu.im/] - and proved to be
+Injeqt is currently use in one large project - [Kadu IM](http://www.kadu.im/) - and proved to be
 very usefull in decoupling and testing.
 
 Example
