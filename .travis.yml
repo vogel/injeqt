@@ -1,0 +1,7 @@
+dist: trusty
+language: cpp
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install qtbase5-dev-tools qtbase5-dev libqt5core5a cmake
+script:
+  - mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && make test
