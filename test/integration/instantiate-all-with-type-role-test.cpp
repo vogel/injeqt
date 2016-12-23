@@ -36,18 +36,18 @@ std::set<type> instantiated_types;
 class role_1_type : public QObject
 {
 	Q_OBJECT
+	INJEQT_TYPE_ROLE(ROLE_1)
 
 public:
 	Q_INVOKABLE role_1_type() { instantiated_types.insert(make_type<role_1_type>()); }
 };
 
-class no_role_required_by_role_1 : public QObject
+class no_role_required_by_role_2 : public QObject
 {
 	Q_OBJECT
-	INJEQT_TYPE_ROLE(ROLE_1)
 
 public:
-	Q_INVOKABLE no_role_required_by_role_1() { instantiated_types.insert(make_type<no_role_required_by_role_1>()); }
+	Q_INVOKABLE no_role_required_by_role_2() { instantiated_types.insert(make_type<no_role_required_by_role_2>()); }
 };
 
 class role_2_type : public QObject
@@ -59,7 +59,7 @@ public:
 	Q_INVOKABLE role_2_type() { instantiated_types.insert(make_type<role_2_type>()); }
 
 private slots:
-	INJEQT_SET void set_no_role_required_by_role_1(no_role_required_by_role_1 *) {}
+	INJEQT_SET void set_no_role_required_by_role_2(no_role_required_by_role_2 *) {}
 
 };
 
@@ -77,15 +77,13 @@ private slots:
 
 injeqt::injector instantiate_all_with_type_role_test::create_injector()
 {
-	instantiated_types.clear();
-
 	class m : public injeqt::module
 	{
 	public:
 		m()
 		{
 			add_type<role_1_type>();
-			add_type<no_role_required_by_role_1>();
+			add_type<no_role_required_by_role_2>();
 			add_type<role_2_type>();
 		}
 		virtual ~m() {}
@@ -99,12 +97,13 @@ injeqt::injector instantiate_all_with_type_role_test::create_injector()
 void instantiate_all_with_type_role_test::should_create_all_role_instances_with_dependencied_when_requested()
 {
 	auto injector = create_injector();
+	instantiated_types.clear();
 	injector.instantiate_all_with_type_role(ROLE_2);
-	QCOMPARE((std::set<type>{make_type<role_2_type>(), make_type<no_role_required_by_role_1>()}), instantiated_types);
+	QCOMPARE(instantiated_types, (std::set<type>{make_type<role_2_type>(), make_type<no_role_required_by_role_2>()}));
 
-	injector.get<role_1_type>();
+	instantiated_types.clear();
 	injector.instantiate_all_with_type_role(ROLE_1);
-	QCOMPARE((std::set<type>{make_type<role_2_type>(), make_type<no_role_required_by_role_1>(), make_type<role_1_type>()}), instantiated_types);
+	QCOMPARE(instantiated_types, (std::set<type>{make_type<role_1_type>()}));
 }
 
 QTEST_APPLESS_MAIN(instantiate_all_with_type_role_test)

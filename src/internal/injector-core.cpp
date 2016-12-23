@@ -134,6 +134,19 @@ QObject * injector_core::get(const type &interface_type)
 	return _objects.get(interface_type)->object();
 }
 
+std::vector<QObject *> injector_core::get_all_with_type_role(const std::string &type_role)
+{
+	auto result = std::vector<QObject *>{};
+	for (auto &&provider : _available_providers)
+	{
+		auto type = provider->provided_type();
+		if (has_type_role(type, type_role))
+			result.push_back(get(type));
+	}
+
+	return result;
+}
+
 void injector_core::instantiate_interface(const type &interface_type)
 {
 	assert(!interface_type.is_empty());

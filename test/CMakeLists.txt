@@ -99,6 +99,7 @@ set (INTEGRATION_TESTS
 	default-constructor-behavior-test
 	duplicate-dependencies-test
 	factory-behavior-test
+	get-all-with-type-role-test
 	init-done-test
 	inject-into-behavior-test
 	inject-into-during-init-test

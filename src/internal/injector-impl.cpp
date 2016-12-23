@@ -111,6 +111,11 @@ QObject * injector_impl::get(const type &interface_type)
 	return _core.get(interface_type);
 }
 
+std::vector<QObject *> injector_impl::get_all_with_type_role(const std::string &type_role)
+{
+	return _core.get_all_with_type_role(type_role);
+}
+
 void injector_impl::inject_into(QObject *object)
 {
 	assert(object);

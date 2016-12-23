@@ -119,10 +119,9 @@ public:
 	injector & operator = (injector &&x);
 
 	/**
-	 * @brief Instantiates object of given type @p interface_type
+	 * @brief Instantiates object of given type @tparam T
 	 * @tparam T type of object to instantiate
-	 * @param interface_type type of object to instantiate.
-	 * @throw unknown_type if @p interface_type was not configured in injector
+	 * @throw unknown_type if @@tparam T was not configured in injector
 	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
 	 * When object of given type is instantiated by instantiate<T>() method, injector first check if T is in set of
@@ -146,7 +145,7 @@ public:
 	 * @throw unknown_type if @p interface_type was not configured in injector
 	 * @throw instantiation_failed if instantiation of one of required types failed
 	 *
-	 * When object of given type is requested by get<T>() method, injector first check if T is in set of
+	 * When object of given type is requested by get&lt;T&gt;() method, injector first check if T is in set of
 	 * available types. If not, an exception is thrown. Next an unique configured type U that implements T
 	 * is found. If object of type U was already created, it is returned. If not, it is created with all
 	 * dependencies it requires. Depending on configuration of U it can be created directly by U default
@@ -160,6 +159,12 @@ public:
 	{
 		return qobject_cast<T *>(get(make_type<T>()));
 	}
+
+	/**
+	 * @brief Returns all objects with given @p type_role.
+	 * @throw instantiation_failed if instantiation of one of found types failed
+	 */
+	std::vector<QObject *> get_all_with_type_role(const std::string &type_role);
 
 	/**
 	 * @brief Instantiates object of given type @p interface_type

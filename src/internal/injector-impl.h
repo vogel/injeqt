@@ -138,6 +138,12 @@ public:
 	QObject * get(const type &interface_type);
 
 	/**
+	 * @brief Returns all objects with given @p type_role.
+	 * @throw instantiation_failed if instantiation of one of found types failed
+	 */
+	std::vector<QObject *> get_all_with_type_role(const std::string &type_role);
+
+	/**
 	 * @brief Inject dependencies into @p object.
 	 * @param object object to inject dependencies into.
 	 * @throw invalid_setter if any tagged setter has parameter that is not a QObject-derived pointer
