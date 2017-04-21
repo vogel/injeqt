@@ -121,21 +121,12 @@ void action_method_test::should_invoke_have_results()
 void action_method_test::should_throw_when_empty_method()
 {
 	expect<exception::invalid_action>({"action does not have enclosing meta object"}, [&]{
-		action_method{QMetaMethod{}};
-	});
-	expect<exception::invalid_action>({"action does not have enclosing meta object"}, [&]{
 		make_action_method(QMetaMethod{});
 	});
 }
 
 void action_method_test::should_throw_when_arguments()
 {
-	expect<exception::invalid_action>({"invalid parameter count"}, [&]{
-		action_method{get_method<test_type>("invalid_init_action_arguments(int)")};
-	});
-	expect<exception::invalid_action>({"invalid parameter count"}, [&]{
-		action_method{get_method<test_type>("invalid_done_action_arguments(int)")};
-	});
 	expect<exception::invalid_action>({"invalid parameter count"}, [&]{
 		make_action_method(get_method<test_type>("invalid_init_action_arguments(int)"));
 	});
@@ -147,9 +138,6 @@ void action_method_test::should_throw_when_arguments()
 void action_method_test::should_throw_when_invalid_tag()
 {
 	expect<exception::invalid_action>({"action does not have valid tag"}, [&]{
-		action_method{get_method<test_type>("invalid_action_invalid_tag()")};
-	});
-	expect<exception::invalid_action>({"action does not have valid tag"}, [&]{
 		make_action_method(get_method<test_type>("invalid_action_invalid_tag()"));
 	});
 }
@@ -157,21 +145,12 @@ void action_method_test::should_throw_when_invalid_tag()
 void action_method_test::should_throw_when_no_tag()
 {
 	expect<exception::invalid_action>({"action does not have valid tag"}, [&]{
-		action_method{get_method<test_type>("invalid_action_no_tag()")};
-	});
-	expect<exception::invalid_action>({"action does not have valid tag"}, [&]{
 		make_action_method(get_method<test_type>("invalid_action_no_tag()"));
 	});
 }
 
 void action_method_test::should_throw_when_signal()
 {
-	expect<exception::invalid_action>({"action is signal"}, [&]{
-		action_method{get_method<test_type>("invalid_init_action_signal()")};
-	});
-	expect<exception::invalid_action>({"action is signal"}, [&]{
-		action_method{get_method<test_type>("invalid_done_action_signal()")};
-	});
 	expect<exception::invalid_action>({"action is signal"}, [&]{
 		make_action_method(get_method<test_type>("invalid_init_action_signal()"));
 	});
@@ -182,9 +161,6 @@ void action_method_test::should_throw_when_signal()
 
 void action_method_test::should_throw_when_constructor()
 {
-	expect<exception::invalid_action>({"action is constructor"}, [&]{
-		action_method{get_constructor<test_type>("test_type(int)")};
-	});
 	expect<exception::invalid_action>({"action is constructor"}, [&]{
 		make_action_method(get_constructor<test_type>("test_type(int)"));
 	});
