@@ -91,7 +91,6 @@ private slots:
 	void should_throw_when_no_tag();
 	void should_throw_when_signal();
 	void should_throw_when_constructor();
-	void should_throw_when_non_matching_parameters();
 
 };
 
@@ -150,18 +149,12 @@ void setter_method_test::should_invoke_have_results()
 void setter_method_test::should_throw_when_empty_method()
 {
 	expect<exception::invalid_setter>({"setter does not have enclosing meta object"}, [&]{
-		setter_method{make_type<injectable_type1>(), QMetaMethod{}};
-	});
-	expect<exception::invalid_setter>({"setter does not have enclosing meta object"}, [&]{
 		make_setter_method(_known_types, QMetaMethod{});
 	});
 }
 
 void setter_method_test::should_throw_when_multiple_arguments()
 {
-	expect<exception::invalid_setter>({"invalid parameter count"}, [&]{
-		setter_method{make_type<injectable_type1>(), get_method<test_type>("invalid_setter_multi_arguments(injectable_type1*,injectable_type2*)")};
-	});
 	expect<exception::invalid_setter>({"invalid parameter count"}, [&]{
 		make_setter_method(_known_types, get_method<test_type>("invalid_setter_multi_arguments(injectable_type1*,injectable_type2*)"));
 	});
@@ -170,18 +163,12 @@ void setter_method_test::should_throw_when_multiple_arguments()
 void setter_method_test::should_throw_when_invalid_tag()
 {
 	expect<exception::invalid_setter>({"setter does not have valid tag"}, [&]{
-		setter_method{make_type<injectable_type1>(), get_method<test_type>("invalid_setter_invalid_tag(injectable_type1*)")};
-	});
-	expect<exception::invalid_setter>({"setter does not have valid tag"}, [&]{
 		make_setter_method(_known_types, get_method<test_type>("invalid_setter_invalid_tag(injectable_type1*)"));
 	});
 }
 
 void setter_method_test::should_throw_when_no_tag()
 {
-	expect<exception::invalid_setter>({"setter does not have valid tag"}, [&]{
-		setter_method{make_type<injectable_type1>(), get_method<test_type>("invalid_setter_no_tag(injectable_type1*)")};
-	});
 	expect<exception::invalid_setter>({"setter does not have valid tag"}, [&]{
 		make_setter_method(_known_types, get_method<test_type>("invalid_setter_no_tag(injectable_type1*)"));
 	});
@@ -190,9 +177,6 @@ void setter_method_test::should_throw_when_no_tag()
 void setter_method_test::should_throw_when_signal()
 {
 	expect<exception::invalid_setter>({"setter is signal"}, [&]{
-		setter_method{make_type<injectable_type1>(), get_method<test_type>("invalid_setter_signal(injectable_type1*)")};
-	});
-	expect<exception::invalid_setter>({"setter is signal"}, [&]{
 		make_setter_method(_known_types, get_method<test_type>("invalid_setter_signal(injectable_type1*)"));
 	});
 }
@@ -200,17 +184,7 @@ void setter_method_test::should_throw_when_signal()
 void setter_method_test::should_throw_when_constructor()
 {
 	expect<exception::invalid_setter>({"setter is constructor"}, [&]{
-		setter_method{make_type<injectable_type1>(), get_constructor<test_type>("test_type(injectable_type1*)")};
-	});
-	expect<exception::invalid_setter>({"setter is constructor"}, [&]{
 		make_setter_method(_known_types, get_constructor<test_type>("test_type(injectable_type1*)"));
-	});
-}
-
-void setter_method_test::should_throw_when_non_matching_parameters()
-{
-	expect<exception::invalid_setter>({"invalid parameter"}, [&]{
-		setter_method{make_type<injectable_type2>(), get_method<test_type>("tagged_setter_slot_1(injectable_type1*)")};
 	});
 }
 
