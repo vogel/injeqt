@@ -22,7 +22,7 @@ project (injeqt)
 cmake_minimum_required (VERSION 2.8)
 
 set (INJEQT_SOVERSION "1")
-set (INJEQT_VERSION "1.1.90")
+set (INJEQT_VERSION "1.2")
 
 option (DISABLE_TESTS "Do not build tests" OFF)
 option (DISABLE_EXAMPLES "Do not build examples" OFF)
