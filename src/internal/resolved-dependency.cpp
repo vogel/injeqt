@@ -68,4 +68,29 @@ bool operator != (const resolved_dependency &x, const resolved_dependency &y)
 	return !(x == y);
 }
 
+bool operator < (const resolved_dependency &x, const resolved_dependency &y)
+{
+	if (x.resolved_with() < y.resolved_with())
+		return true;
+	if (x.resolved_with() > y.resolved_with())
+		return false;
+
+	return x.setter() < y.setter();
+}
+
+bool operator > (const resolved_dependency &x, const resolved_dependency &y)
+{
+	return y < x;
+}
+
+bool operator <= (const resolved_dependency &x, const resolved_dependency &y)
+{
+	return !(y < x);
+}
+
+bool operator >= (const resolved_dependency &x, const resolved_dependency &y)
+{
+	return !(x < y);
+}
+
 }}

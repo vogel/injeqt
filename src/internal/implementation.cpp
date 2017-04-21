@@ -69,6 +69,31 @@ bool operator != (const implementation &x, const implementation &y)
 	return !(x == y);
 }
 
+bool operator < (const implementation &x, const implementation &y)
+{
+	if (x.interface_type() < y.interface_type())
+		return true;
+	if (x.interface_type() > y.interface_type())
+		return false;
+
+	return x.object() < y.object();
+}
+
+bool operator > (const implementation &x, const implementation &y)
+{
+	return y < x;
+}
+
+bool operator <= (const implementation &x, const implementation &y)
+{
+	return !(y < x);
+}
+
+bool operator >= (const implementation &x, const implementation &y)
+{
+	return !(x < y);
+}
+
 implementation make_implementation(type interface_type, QObject *object)
 {
 	if (interface_type.is_empty())

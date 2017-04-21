@@ -71,6 +71,10 @@ private:
 
 INJEQT_INTERNAL_API bool operator == (const implementation &x, const implementation &y);
 INJEQT_INTERNAL_API bool operator != (const implementation &x, const implementation &y);
+INJEQT_INTERNAL_API bool operator < (const implementation &x, const implementation &y);
+INJEQT_INTERNAL_API bool operator > (const implementation &x, const implementation &y);
+INJEQT_INTERNAL_API bool operator <= (const implementation &x, const implementation &y);
+INJEQT_INTERNAL_API bool operator >= (const implementation &x, const implementation &y);
 
 /**
  * @brief Check if @p interface_type and @p object met implementation preconditions and return new instance if true

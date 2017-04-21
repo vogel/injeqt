@@ -135,12 +135,16 @@ void resolve_dependencies_test::should_resolve_all_dependencies()
 		dependency{injectable_type2_setter},
 		dependency{injectable_type3_setter}
 	};
+	auto expected = std::vector<resolved_dependency>{
+		resolved_dependency{objects.at(0), injectable_type1_setter},
+		resolved_dependency{objects.at(1), injectable_type2_setter},
+		resolved_dependency{objects.at(2), injectable_type3_setter}
+	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), size_t{3});
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type2_setter}));
-	QCOMPARE(result.resolved.at(2), (resolved_dependency{objects.at(2), injectable_type3_setter}));
+	std::sort(std::begin(expected), std::end(expected));
+	std::sort(std::begin(result.resolved), std::end(result.resolved));
+	QCOMPARE(result.resolved, expected);
 	QVERIFY(result.unresolved.empty());
 }
 
@@ -159,12 +163,15 @@ void resolve_dependencies_test::should_resolve_available_dependencies()
 		dependency{injectable_type2_setter},
 		dependency{injectable_type3_setter}
 	};
+	auto expected = std::vector<resolved_dependency>{
+		resolved_dependency{objects.at(0), injectable_type1_setter},
+		resolved_dependency{objects.at(1), injectable_type3_setter}
+	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), size_t{2});
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(1), injectable_type3_setter}));
-	QCOMPARE(result.unresolved.size(), size_t{1});
+	std::sort(std::begin(expected), std::end(expected));
+	std::sort(std::begin(result.resolved), std::end(result.resolved));
+	QCOMPARE(result.resolved, expected);
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 }
 
@@ -187,12 +194,15 @@ void resolve_dependencies_test::should_resolve_available_dependencies_using_exac
 		dependency{injectable_type2_setter},
 		dependency{injectable_type3_setter}
 	};
+	auto expected = std::vector<resolved_dependency>{
+		resolved_dependency{objects.at(0), injectable_type1_setter},
+		resolved_dependency{objects.at(2), injectable_type3_setter}
+	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), size_t{2});
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
-	QCOMPARE(result.unresolved.size(), size_t{1});
+	std::sort(std::begin(expected), std::end(expected));
+	std::sort(std::begin(result.resolved), std::end(result.resolved));
+	QCOMPARE(result.resolved, expected);
 	QCOMPARE(*result.unresolved.begin(), to_resolve.at(1));
 	QVERIFY(&object1 != &object1b);
 	QVERIFY(&object3 != &object3b);
@@ -217,11 +227,15 @@ void resolve_dependencies_test::should_resolve_available_dependencies_using_exac
 		dependency{injectable_type2_setter},
 		dependency{injectable_type3_setter}
 	};
+	auto expected = std::vector<resolved_dependency>{
+		resolved_dependency{objects.at(0), injectable_type1_setter},
+		resolved_dependency{objects.at(2), injectable_type3_setter}
+	};
 
 	auto result = resolve_dependencies(dependencies{to_resolve}, implementations{objects});
-	QCOMPARE(result.resolved.size(), size_t{2});
-	QCOMPARE(result.resolved.at(0), (resolved_dependency{objects.at(0), injectable_type1_setter}));
-	QCOMPARE(result.resolved.at(1), (resolved_dependency{objects.at(2), injectable_type3_setter}));
+	std::sort(std::begin(expected), std::end(expected));
+	std::sort(std::begin(result.resolved), std::end(result.resolved));
+	QCOMPARE(result.resolved, expected);
 	QCOMPARE(result.unresolved.size(), size_t{1});
 	QVERIFY(result.unresolved.contains(to_resolve.at(1)));
 	QVERIFY(&object1 != &subobject1);
