@@ -77,14 +77,14 @@ public:
 	/**
 	 * @return empty set of object - this provider does not require another object to instantiate
 	 */
-	virtual types required_types() const { return types{}; }
+	virtual types required_types() const override { return types{}; }
 
 	/**
 	 * @return true
 	 *
 	 * Objects created by injector will have its dependencies resolved.
 	 */
-	virtual bool require_resolving() const;
+	virtual bool require_resolving() const override;
 
 	/**
 	 * @return constructor object passed in constructor
