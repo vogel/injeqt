@@ -22,6 +22,10 @@ find_package (Qt5Test 5.2 REQUIRED)
 
 option (DISABLE_COVERAGE "Do not gather coverage data" OFF)
 
+if (NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+	set (DISABLE_COVERAGE ON)
+endif (NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+
 include_directories (
 	${CMAKE_SOURCE_DIR}/src
 )
