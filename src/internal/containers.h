@@ -23,6 +23,7 @@
 #include "internal.h"
 
 #include <algorithm>
+#include <functional>
 #include <vector>
 
 /**
