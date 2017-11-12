@@ -161,7 +161,7 @@ an `hello_client` instance is required. This is what happens next:
 * injeqt looks for dependencies of `hello_client` and found that it first needs to create `hello_factory`
 * injeqt creates `hello_factory` without problems, as it does not have dependencies of its own
 * injeqt adds new instance to object pool
-* injeqt calls `hello_factory::create_service()` methods and ads its result to object pool
+* injeqt calls `hello_factory::create_service()` methods and adds its result to object pool
 * now all dependencies of `hello_client` are available, so new instance of it is created with
   default constructor and its added to objec tpool
 * all methods of `hello_client` marked with `INJEQT_SET` are called with proper objects from pool
